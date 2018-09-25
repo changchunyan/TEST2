@@ -1,0 +1,133 @@
+<script src="js/controllers/hr/InitDomElement.js"></script>
+<div class="modal-tab-panel">
+	<div class="row">
+		<div class="col-sm-6 form-group">
+			<label for="ethnic" class="col-sm-4 control-label">民族：</label>
+			<div class="col-sm-8">
+				<input type="text" id="ethnic" class="form-control" ng-model="hrTalent.ethnic" disabled/>
+			</div>
+		</div>
+		<div class="col-sm-6 form-group">
+			<label for="grade" class="col-sm-4 control-label">年级段：</label>
+			<div class="col-sm-8">
+				<select id="grade"  ng-model="hrTalent.teacher_grade" class="form-control selectpicker show-tick" multiple
+						ng-options="option.name for option in grades track by option.id" disabled>
+					<option value="">------请选择------</option>
+				</select>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-6 form-group">
+			<label for="age" class="col-sm-4 control-label">年龄：</label>
+			<div class="col-sm-8">
+				<input type="text" id="age" class="form-control" ng-model="hrTalent.age" disabled/>
+			</div>
+		</div>
+		<div class="col-sm-6 form-group">
+			<label for="highest_education_institute" class="col-sm-4 control-label">毕业院校：</label>
+			<div class="col-sm-8">
+				<input type="text" id="highest_education_institute" class="form-control" ng-model="hrTalent.highest_education_institute" disabled/>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-6 form-group">
+			<label for="major" class="col-sm-4 control-label">专业：</label>
+			<div class="col-sm-8">
+				<input type="text" name="major" id="major" class="form-control" ng-model="hrTalent.major" disabled/>
+			</div>
+		</div>
+		<div class="col-sm-6 form-group">
+			<label for="entrance_date" class="col-sm-4 control-label">入学时间：</label>
+			<div class="col-sm-8">
+				<input type="text" name="entrance_date" id="entrance_date" datePicker ng-model="hrTalent.entrance_date"
+					   class="form-control" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  onchange="" readonly/>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-6 form-group">
+			<label for="graduation_date" class="col-sm-4 control-label">毕业时间：</label>
+			<div class="col-sm-8">
+				<input type="text" name="graduation_date" id="graduation_date" datePicker ng-model="hrTalent.graduation_date"
+					   class="form-control" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  onchange="" disabled/>
+			</div>
+		</div>
+		<div class="col-sm-6 form-group">
+			<label for="education_degree" class="col-sm-4 control-label">学历：</label>
+			<div class="col-sm-8">
+				<select ng-model="hrTalent.educationDegree" name="education_degree" id="education_degree" ng-options="item.name for item in educationDegrees track by item.id" class="form-control" disabled>
+					<option value="">------请选择------</option>
+				</select>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-6 form-group">
+			<label for="education_degree_type" class="col-sm-4 control-label">学位取得方式：</label>
+			<div class="col-sm-8">
+				<select ng-model="hrTalent.educationType" name="education_degree_type" id="education_degree_type" ng-options="item.name for item in educationDegreeTypes track by item.id" class="form-control" disabled>
+					<option value="">------请选择------</option>
+				</select>
+			</div>
+		</div>
+		<div class="col-sm-6 form-group">
+			<label for="registered_residence_type" class="col-sm-4 control-label">户口性质：</label>
+			<div class="col-sm-8">
+				<select ng-model="hrTalent.residenceDegree" name="registered_residence_type" id="registered_residence_type" ng-options="item.name for item in registeredResidenceTypes track by item.id" class="form-control" disabled>
+					<option value="">------请选择------</option>
+				</select>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-6 form-group">
+			<label for="registered_residence" class="col-sm-4 control-label">户口所在地：</label>
+			<div class="col-sm-8">
+				<input type="text" name="registered_residence" id="registered_residence" class="form-control" ng-model="hrTalent.registered_residence" disabled/>
+			</div>
+		</div>
+	</div>
+	<!-- 省市县-->
+	<div class="row">
+		<div class="col-sm-12 form-group">
+			<label for="province" class="col-sm-2 control-label">家庭住址：</label>
+			<div id="province" class="col-sm-4 form-group">
+				<div class="col-sm-10">
+					<select ng-model="hrTalent.province_code" name="provinceCode" id="provinceCode" class="form-control"
+							ng-options="option.provinceCode as option.provinceName for option in provinces" ng-change="getCityByProvince(hrTalent.province_code)" disabled>
+						<option value="">请选择省份</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-sm-3 form-group">
+				<div class="col-sm-10">
+					<select ng-model="hrTalent.city_code" name="cityCode" id="cityCode" class="form-control"
+							ng-options="option.cityCode as option.cityName for option in cities" ng-change="getAreaByCity(hrTalent.city_code)" disabled>
+						<option value="">请选择市</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-sm-3 form-group">
+				<div class="col-sm-10">
+					<select ng-model="hrTalent.area_code" name="areaCode" id="areaCode" class="form-control"
+							ng-options="option.areaCode as option.areaName for option in areas" disabled>
+						<option value="">请选择区/县</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 详细地址 -->
+	<div class="row">
+		<div class="col-sm-12 form-group">
+			<label for="address" class="col-sm-2 text-right">详细地址：</label>
+			<div id="address" class="col-sm-10 form-group">
+				<input type="text" ng-model="hrTalent.address" class="form-control" disabled>
+			</div>
+		</div>
+
+	</div>
+
+</div>

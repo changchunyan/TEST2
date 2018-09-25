@@ -1,0 +1,30 @@
+<div class="modal oms-courseType-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form name="CourseTypeform" role="form" class="form-horizontal showcase-form" novalidate="">
+        <div class="modal-header">
+          <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" ng-bind="modalTitleForCourseType"></h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-group" ng-class="{ 'has-error': CourseTypeform.CourseType.omsProductTypeId.$dirty && CourseTypeform.CourseType.omsProductTypeId.$error.required }">
+              <label for="CourseType.omsProductTypeId">产品类型名称</label>
+              <select ng-model="CourseType.omsProductTypeId" name="CourseType.omsProductTypeId" id="CourseType.omsProductTypeId" class="input-sm form-control"
+                      ng-options="option.id as option.name for option in ProductTypeList" required>
+                <option value="">-- 请选择 --</option>
+              </select>
+            </div>
+            <div class="form-group" ng-class="{ 'has-error': CourseTypeform.CourseType.name.$dirty && CourseTypeform.CourseType.name.$error.required }">
+                <label for="CourseType.name">课程类型名称</label>
+                <input type="text" name="CourseType.name" id="CourseType.name" class="form-control" ng-model="CourseType.name" ng-maxlength="20" required />
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+          <button type="submit" class="btn btn-success c5-lable" ng-click="saveCourseType()" ng-disabled="CourseTypeform.$invalid">保存</button>
+          <img ng-if="dataLoadingForCourseType" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

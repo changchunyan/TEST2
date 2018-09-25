@@ -1,0 +1,36 @@
+<div class="modal admin-permission-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="form">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle">编辑帮助主题</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="addTheme_input" style="height: 100px;margin-top: 50px">
+                        主题名称:<input class="willeditorTheme" style="width: 200px;border: none;border-bottom: 1px solid #000" type="text" value="{{$scope.editorTheme.row}}" >
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="$hide()">关闭</button>
+                    <button type="button" class="btn btn-success" ng-click="">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!--<div id="addHelpThemebox" class="help_addHelpTheme">-->
+    <!--<div class="help_addHelpTheme_content">-->
+        <!--<div class="addTheme_title">添加帮助主题</div>-->
+        <!--<div class="addTheme_input">-->
+            <!--主题名称:<input type="text" placeholder="请输入" >-->
+        <!--</div>-->
+        <!--<button id="cancelAddTheme" class="addTheme_cancle">取消</button>-->
+        <!--<button  id="saveAddTheme" class="addTheme_save">保存</button>-->
+    <!--</div>-->
+<!--</div>-->

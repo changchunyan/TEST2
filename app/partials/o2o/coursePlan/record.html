@@ -1,0 +1,179 @@
+<div class="view-frame"
+	ng-controller="O2oCoursePlanController as cpc">
+
+
+	<div class="view-left">
+		<nav-side menu-data="menu.subMenu"></nav-side>
+	</div>
+
+
+	<div ng-show="!isAdding" class="view-content">
+		<div>
+			<ul class="breadcrumb">
+				<li><a href="#">首页</a> <span class="divider"></span></li>
+
+				<li class="active">排课查询</li>
+			</ul>
+		</div>
+
+		<div>
+			<div class="table-responsive"
+				style="overflow: scroll; overflow-y: hidden">
+
+				<tabs>
+            <pane title="未消课记录">
+
+
+                <div class="table-responsive" style="overflow:scroll;overflow-y:hidden">
+                    <table class="table table-bordered table-striped table-condensed" st-pipe="callServer" st-table="displayed">
+                        <thead>
+                        <tr>
+                            <th>操作</th>
+                            <th>订单号</th>
+                            <th>学生姓名</th>
+                            <th>课程名称</th>
+                            <th>上课方式</th>
+                            <th>上课地点</th>
+                            <th>上课时间</th>
+                            <th>下课时间</th>
+                            <th>上课课时</th>
+                            <th>任课老师</th>
+                        </tr>
+                        <tr>
+		                <th></th>
+		                <th><input st-search="order_no" placeholder="订单号" class="input-sm form-control" type="search"/></th>
+		                <th><input st-search="student_name" placeholder="学生姓名" class="input-sm form-control" type="search"/></th>
+		                <th><input st-search="coursename" placeholder="课程名称" class="input-sm form-control" type="search"/></th>
+		                <th><input st-search="class_type" placeholder="上课方式" class="input-sm form-control" type="search"/></th>
+		                <th><input st-search="class_address" placeholder="上课地点" class="input-sm form-control" type="search"/></th>
+		                <th><input st-search="start_time" placeholder="" type="date" class="input-sm form-control" type="search"/></th>
+		                <th><input st-search="end_time" placeholder="" type="date" class="input-sm form-control" type="search"/></th>
+		                <th><input st-search="course_num" placeholder="课时" class="input-sm form-control" type="search"/></th>
+		                <th><input st-search="teacher_name" placeholder="任课老师" class="input-sm form-control" type="search"/></th>
+		            </tr>
+                        </thead>
+                        <tbody ng-show="!isLoading">
+                        <tr ng-repeat="row in displayed">
+                            <td>
+                                <a ng-click="remove(row)"><span class="glyphicon glyphicon-delete" title="删除排课"></span></a>
+                            </td>
+                            <td>{{ row.order_no }}</td>
+                            <td>{{row.student_name}}</td>
+                            <td>{{row.coursename}}</td>
+                            <td >
+						<div ng-if="row.class_type==1">老师上门</div>
+						<div ng-if="row.class_type==2">学生到店</div>
+						<div ng-if="row.class_type==3">选择校区</div>
+						<div ng-if="row.class_type==4">协商地点</div>
+					        </td>
+                            <td>{{row.class_address}}</td>
+                            <td>{{row.start_time | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                            <td>{{row.end_time | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                            <td>{{row.course_num}}</td>
+                           <td>{{row.teacher_name}}</td>
+                        </tr>
+                        </tbody>
+                        <tbody ng-show="isLoading">
+                        <tr>
+                            <td colspan="10" class="text-center"><div class="loading-indicator"></div></td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="10">
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+            </pane>
+
+            <pane title="已消课记录">
+				<div class="table-responsive" style="overflow:scroll;overflow-y:hidden">
+                    <table class="table table-bordered table-striped table-condensed" st-pipe="callServerrecord" st-table="displayedrecord">
+                        <thead>
+                        <tr>
+
+                            <th>订单号</th>
+                            <th>学生姓名</th>
+                            <th>课程名称</th>
+                            <th>任课老师</th>
+                            <th>上课时间</th>
+                            <th>下课时间</th>
+                            <th>上课课时</th>
+                           <!--  <th>学生评论</th> -->
+                          <!--   <th>学生打分</th> -->
+                          <!--   <th>教师反馈</th> -->
+                          <!--   <th>评审状态</th> -->
+                         <!--    <th>操作</th> -->
+                        </tr>
+                        <tr>
+
+		                <th><input st-search="order_no" placeholder="订单号" class="input-sm form-control" type="search"/></th>
+		                <th><input st-search="student_name" placeholder="学生姓名" class="input-sm form-control" type="search"/></th>
+		                <th><input st-search="coursename" placeholder="查询" class="input-sm form-control" type="search"/></th>
+		                <th><input st-search="teacher_name" placeholder="教师姓名" class="input-sm form-control" type="search"/></th>
+		                <th><input st-search="start_time" placeholder="" type="date" class="input-sm form-control" type="search"/></th>
+		                <th><input st-search="end_time" placeholder="" type="date" class="input-sm form-control" type="search"/></th>
+		                <th><input st-search="course_num" placeholder="课时" class="input-sm form-control" type="search"/></th>
+		               <!--  <th><input st-search="custom_comment" placeholder="学生评论" class="input-sm form-control" type="search"/></th>
+		                <th><input st-search="student_grade" placeholder="学生评分" class="input-sm form-control" type="search"/></th>
+                        <th><input st-search="user_comment" placeholder="老师反馈" class="input-sm form-control" type="search"/></th> -->
+                       <!--   <th><select st-search="audit_pass" placeholder="审核是否通过" class="input-sm form-control">
+                                <option value=""></option>
+                                <option value="1">审核通过</option>
+                                <option value="0">审核未通过</option>
+                                <option value="3">待审核</option>
+                            </select></th> -->
+                        <th></th>
+
+		            </tr>
+                        </thead>
+                        <tbody ng-show="!isrendLoading">
+                        <tr ng-repeat="row in displayedrecord">
+
+                            <td>{{row.order_no}}</td>
+                            <td>{{row.student_name}}</td>
+                            <td>{{row.coursename}}</td>
+                            <td>{{row.teacher_name}}</td>
+                            <td>{{row.start_time | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                            <td>{{row.end_time | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                            <td>{{row.course_num}}</td>
+                          <!--  <td class="td_big">{{row.custom_comment}}</td>
+                           <td>{{row.student_grade}}</td>
+                           <td class="td_big">{{row.user_comment}}</td> -->
+                           <!-- <td ng-if="row.audit_pass">审核通过</td>
+                           <td ng-if="row.audit_pass==null">待审核</td>
+                           <td ng-if="row.audit_pass==0">审核未通过</td> -->
+                           <!-- <td style="width:150px">
+						       <button ng-if="row.audit_pass==null&&row.state==3" type="button" class="btn btn-default" ng-click="addUnsatisfied(row,false)">审核不通过</button>
+						       <button ng-if="row.audit_pass==null&&row.state==3"  type="button" class="btn btn-default" ng-click="auditPass(row.id,true)">审核通过</button>
+						   </td> -->
+
+                        </tr>
+                        </tbody>
+                        <tbody ng-show="isrendLoading">
+                        <tr>
+                            <td colspan="12" class="text-center"><div class="loading-indicator"></div></td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                          <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="10">
+                         </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </pane>
+            </tabs>
+
+
+			</div>
+		</div>
+
+
+
+</div>
+</div>

@@ -1,0 +1,17 @@
+<span>
+            {{tm.start_time|date:"HH:mm"}}-{{tm.end_time|date:"HH:mm"}}
+            <p class="c3">{{tm.student_name}}</p>
+            </span>
+<div class="mt-time-toolTip" ng-if="tm.isShow" ng-class="{'has-class':isHasClass(tm.pasttype,1)}">
+    <span class="tool-left"></span>
+    <!--无排课记录-->
+    <ul class="of" ng-if="!isHasClass(tm.pasttype,1)">
+        <li ng-click="tcl.showPlanDetail(tm)" ng-class="{'h-50':tm.pasttype==2&&!tm.is_satisfied}">查看</li>
+        <li ng-click="addUnsatisfied(tm,0,1)" ng-if="tm.pasttype==2&&tm.is_satisfied">取消</li>
+        <li ng-click="yesconsume(tm,1)" ng-if="tm.pasttype==1">消课</li>
+        <li ng-click="showEditCoursePlan(tm,1)" ng-if="tm.pasttype==1">编辑</li>
+        <li ng-click="remove(tm,1)" ng-if="tm.pasttype==1">删除</li>
+    </ul>
+    <!--有排课记录-->
+    <ul class="of" ng-if="isHasClass(tm.pasttype,1)" ng-include="'partials/sos/coursePlan/modal.planTimeDetail.html?v='+vDateTime"></ul>
+</div>

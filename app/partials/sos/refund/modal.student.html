@@ -1,0 +1,210 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content" style="height:600px;overflow: scroll">
+			<form name="refundApplyForm" role="form" class="form-horizontal showcase-form" novalidate="">
+				<div class="modal-header">
+					<button type="button" class="close" aria-label="Close" ng-click="$hide(1)"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" ng-bind="studentModalTitle"></h4>
+				</div>
+				<div class="modal-body">
+					<div>
+						<div class="c-select-text">
+							<input hidden="true" id="">
+							<label for="name" class="search-form-label" style="width: 100px;font-size: 18px">姓名或电话</label>
+							<input  ng-model="myCrmCustomerStudentFilter.nameOrPhone" type="text" name="name" id="name" value="{{nameOrphone}}" autocomplete="off" class="search-form-input" style="width:300px;font-size: 18px" ng-change="mohuSearch()"/>
+							<ul class="order_mess_show" ng-show="hasresult" style="margin-top: -4px;margin-left: 100px;width: 300px;font-size: 18px;line-height: 24px">
+								<li ng-repeat="row in MyCrmCustomerStudentList" ng-click="doRefundToSelectedStudent(row)" style="color: #1a2b3c;font-size: 12px;width: 100%;text-indent: 0;background-image: none;">
+									<span style="margin: 0;display: inline;">{{row.name}} &nbsp;&nbsp;&nbsp;{{row.phone}}</span>
+								</li>
+							</ul>
+
+							<!--<label for="phone" class="search-form-label" style="width: 25px;">电话</label>-->
+							<!--<input ng-model="myCrmCustomerStudentFilter.phoneAll" type="text" name="phone" id="phone" class="search-form-input"  ng-change="mohuSearch()"/>-->
+							<!--<div class="c_center">-->
+							<!--<button class="btn btn-primary" ng-click="MyCrmCustomerStudentListByFilter()">查询</button>-->
+							<!--<button class="btn" ng-click="reset()">重置</button>-->
+							<!--</div>-->
+						</div>
+						<div class="table-responsive c-select-text">
+							<!--<div class="table-top-button">
+                                <button class="btn btn-success" ng-click="doRefundToSelectedStudent()">对选中学生退费</button>
+                                <button class="btn btn-success" ng-click="$hide()">取消</button>
+                            </div>-->
+							<div class="c-tab-title" style="margin-top:10px;">列表</div>
+							<form name="refundApplyForm" role="form" class="form-horizontal showcase-form" novalidate="" id="myform">
+								<table st-pipe="callServerNormalOrderTab" st-table="refundAbleOrders" class="table table-bordered table-striped c-tab-content">
+									<thead>
+									<tr>
+										<th>选择</th>
+										<th>合同编号</th>
+										<th>学员姓名</th>
+										<th>签约时间</th>
+										<th>总价</th>
+										<th>折扣率</th>
+										<th>已上课时</th>
+										<th>剩余课时</th>
+										<th>充值金额</th>
+										<th>剩余金额</th>
+										
+									</tr>
+									</thead>
+									<tbody>
+									<tr ng-repeat="row in refundAbleOrders track by $index">
+										<td>
+											<input type="checkbox" ng-model="row.selected" ng-change="applyRefund(row,num)"></input>
+										</td>
+										<td ng-if="row.orderNo==row.originalOrderNo"></td>
+										<td ng-if="row.orderNo!=row.originalOrderNo">{{row.orderNo}}</td>
+										<td>{{selectedStudentName}}</td>
+										<td>{{row.contractStartDate | date : "yyyy-MM-dd"}}</td>
+										<td>{{row.realTotalAmount+row.privilegeAmount}}</td>
+										<td>{{row.realTotalAmount/(row.realTotalAmount+row.privilegeAmount)*100 | number:2}}%</td>
+										<td>{{row.originalNumSum - row.courseNumSum | number:1}}</td>
+										<td>{{row.courseNumSum | number:1}}</td>
+										<td ng-if="row.orderCategory == 1"></td>
+										<td ng-if="row.orderCategory == 2">{{row.realTotalAmount}}</td>
+										<td ng-if="row.orderCategory == 3">{{row.totalPrice}}</td>
+										<!-- 剩余金额 -->
+										<td ng-if="row.orderCategory == 1"></td>
+										<td ng-if="row.orderCategory == 2">{{row.realTotalAmount}}</td>
+										<td ng-if="row.orderCategory == 3">{{row.additionalAmount}}</td>
+									</tr>
+									</tbody>
+									<tbody ng-show="isLoading">
+									<tr>
+										<td colspan="7" class="text-center"><div class="loading-indicator"></div>
+										</td>
+									</tr>
+									</tbody>
+								</table>
+
+
+							</form>
+						</div>
+					</div>
+				</div>
+				<form name="myform">
+				<div class="modal-body mt-modal-order pb-20 " ng-repeat="arrnext in chongzhi">
+					<div class="overflow-x" ng-if="arrnext.orderCategory != 3" >
+						<table class="table table-bordered table-striped" st-table="orderTransferAvailableOrders">
+							<thead>
+							<tr>
+								<th>课程名称</th>
+								<th>科目</th>
+								<th>课时性质</th>
+								<th>购买数量</th>
+								<th>购买单价</th>
+								<th>总价</th>
+								<th>剩余课时/次</th>
+								<th>待分配课时/次</th>
+								<th>扣减课时</th>
+								<th>扣减金额</th>
+							</tr>
+							</thead>
+							<tr ng-repeat="row in arrnext.orderCourses" name="orderCourse">
+								<td>{{row.course_name}}</td>
+								<td>{{row.subject_name}}</td>
+								<td ng-show="row.course_property == 1">正课</td>
+								<td ng-show="row.course_property == 2">赠课</td>
+								<td ng-show="row.course_property == 3">返课</td>
+								<td ng-show="row.course_property == 4">试听课</td>
+								<td ng-show="row.course_property == null || row.course_property == 0 ">其他</td>
+								<td>{{row.original_num}}</td>
+								<td ng-show="row.courseBuyUnit!=3">{{row.actual_price}}</td>
+								<td ng-show="row.courseBuyUnit==3">{{row.actual_price/row.original_num}}</td>
+								<td ng-show="row.courseBuyUnit!=3">{{row.original_num * row.actual_price | number:2}}</td>
+								<td ng-show="row.courseBuyUnit==3">{{row.original_num * row.actual_price/row.original_num | number:2}}</td>
+								<td>{{row.course_num}}</td>
+								<td>{{row.plan_available_num}}</td>
+								<td><input ng-model="row.refundCourseNum" type="number"
+										   required class="input-sm" ng-pattern="doubleNumReg"
+										   ng-change="changeRefundCourseNum(row,arrnext,$index)" ng-readonly="arrnext.okonclick"/>
+								</td>
+								<td>{{row.refundCourseAmout*arrnext.privilegeRatio/100>0?row.refundCourseAmout*arrnext.privilegeRatio/100:0 | number:2 }}</td><!-- 通过退费课时*单价而来 -->
+							</tr>
+							<tr >
+								<td colspan="7"></td>
+								<td>扣减总课时</td>
+								<td colspan="2">{{arrnext.reduceCourseNum}}</td>
+							</tr>
+						</table>
+					</div>
+					<hr ng-if="arrnext.orderCategory != 3">
+						<div class="row ">
+							<div class="col-sm-6  form-group">
+								<label for="orderNo" class="fl control-label ti-14"> 合同编号</label>
+								<div class="col-sm-6">
+									<input type="text"  name="orderNo" id="orderNo" ng-model="arrnext.orderNo"
+										   ng-readonly="true" class="input-sm form-control" />
+								</div>
+							</div>
+							<div class="col-sm-3  form-group">
+								<div class="col-sm-6">
+									<input type="checkbox"   ng-model="arrnext.allreturncheck" ng-click="allreturncheck(arrnext)"
+									/>全部退费
+								</div>
+							</div>
+
+						</div>
+					<div class="row" >
+						<div class="col-sm-6  form-group">
+							<label for="orderNo" class="fl control-label ti-14"> 退费金额</label>
+							<div class="col-sm-6">
+								<input type="number" placeholder = "此处减少校区实收" ng-change="islegalRefundAmount(arrnext)"  ng-model="arrnext.refundAmount"
+									   required class="input-sm" style="width:90%;" min="0" ng-readonly="arrnext.okonclick"/>
+							</div>
+						</div>
+						<div class="col-sm-6  form-group" ng-if="arrnext.orderCategory == 3">
+							<label for="orderNo" class="fl control-label ti-14"> 扣减充值</label>
+							<div class="col-sm-6">
+								<input type="number" placeholder = "此处减少学生账户余额"  ng-model="arrnext.reduceAccountAmount"
+									   required class="input-sm" style="width:90%;" ng-change="koujianchong(arrnext)" ng-readonly="arrnext.okonclick"/>
+							</div>
+						</div>
+
+					</div>
+						<div class="row ">
+							<div class="col-sm-6  form-group">
+								<label for="orderNo" class="fl control-label ti-14"> 退款日期</label>
+								<div class="col-sm-6">
+									<input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"
+										   onchange="" readonly ng-value="refundOrder.refundDate | date:'yyyy-MM-dd' "
+										   ng-model="arrnext.refundDate" required class="form-control"/>
+								</div>
+							</div>
+							<div class="col-sm-6  form-group">
+								<label for="orderNo" class="fl control-label ti-14"> 退款原因</label>
+								<div class="col-sm-6">
+									<select ng-model="arrnext.refundReasonType" ng-change="changing(arrnext)"  name="refundReasonType" id="refundReasonType" class="input-sm form-control" required>
+										<option value="">-- 请选择退费原因 --</option>
+										<option value="1" selected>高三毕业</option>
+										<option value="2">效果不明显</option>
+										<option value="3">回老家</option>
+										<option value="4">出国留学</option>
+										<option value="5">班主任不满意</option>
+										<option value="6">家庭经济原因</option>
+										<option value="7">孩子个人原因</option>
+										<option value="8">环境不满意</option>
+										<option value="9">其他原因</option>
+									</select>
+
+								</div>
+							</div>
+						</div>
+						<div class="row" ng-if="arrnext.remark">
+								<textarea name="refundReason" id="refundReason" placeholder="请输入原因(限30字)" class="form-control" ng-maxlength="30"  ng-model="arrnext.refundReason" required onfocus="this.placeholder=''" onblur="this.placeholder='请输入原因(限30字)'" />
+						</div>
+				</div>
+					<div class="modal-footer">
+						<div class="text-center yws-container margin-bottom-10">
+							<div class="yws-right">
+								<button type="button" class="btn btn-default" ng-click="$hide();huifu()">取消</button>
+								<button type="submit" class="btn btn-success"  ng-click="refundConfirm();huifu()"  ng-disabled="myform.$invalid || noclick || legalFlag" form="myform">申请退费</button>
+							</div>
+						</div>
+					</div>
+			</form>
+
+
+	</div>
+</div>

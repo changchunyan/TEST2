@@ -1,0 +1,130 @@
+<div class="view-frame">
+    <div class="view-left">
+		<nav-side menu-data="menu.subMenu"></nav-side>
+	</div>
+    <div class="view-content">
+        <div class="yws-nav">
+            <div>
+                <ul class="breadcrumb">
+                   	<li><a href="">系统管理</a> <span class="divider"></span></li>
+					<li class="active">基础参数设置</li>
+                </ul>
+            </div>
+            <div class="mt-10 mt-t-20">
+                <div class="tabs-title border-1">
+                    <span class="br-l-2" ng-class="{'active':isSelectedProductSetting==1}" ng-click="setSelectedProductSetting(1)">项目设置</span>
+                    <span ng-class="{'active':isSelectedProductSetting==2}" ng-click="setSelectedProductSetting(2)">科目设置</span>
+                </div>
+            </div>
+            <div class="br-gray mt-list" ng-if="isSelectedProductSetting==1">
+                <div class="overflow-x">
+                	<div class="mt-student-m" style="height:50px;">
+                		<ul class="f14 cf bb-1">
+	                		<li class="ng-scope">
+	                			<a class="mt-blue" ng-click="addProjectSetting(1)">新增项目</a>
+	                		</li>
+	                	</ul>
+                	</div>
+                    <table class="table table-bordered table-striped table-condensed mt-table1" st-pipe="getProjectSettings"
+                           st-table="CourseList">
+                        <thead>
+	                        <tr class="br-gray-t">
+	                            <th>项目名称</th>
+	                            <th>科目</th>
+	                            <th>操作</th>
+	                        </tr>
+                        </thead>
+                        <tbody ng-show="!isProjectSettingLoading">
+	                        <tr ng-repeat="row in projectSettingList">
+	                            <td>{{row.projectName}}</td>
+	                            <td>{{row.projectSubjectNames}}</td>
+	                            <td>
+	                                <a class="showUI" id="nw2+{{$index}}" ng-click="nw2[$index]=true">
+	                                    <span class="glyphicon glyphicon-caozuo" title="操作"></span>
+	                                </a>
+	                                <bubble ng-if="nw2[$index]" for="nw2+{{$index}}" align="bottom" close="nw2[$index]=false"
+	                                        close-action="outerchick " ng-mouseleave="nw2[$index]=false;">
+	                                    <ul>
+	                                    	<li ng-if="showPermissions('projectSettingManagement')">
+	                                            <a ng-click="editProjectSetting(row)">编辑</a>
+	                                        </li>
+	                                        <li ng-if="showPermissions('projectSettingManagement')">
+	                                            <a ng-click="remove(row)">删除</a>
+	                                        </li>
+	                                      
+	                                    </ul>
+	                                </bubble>
+	                            </td>
+	                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-items-by-page="10"
+                                st-template="partials/util/pagination.custom.html" colspan="3"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="br-gray mt-list" ng-if="isSelectedProductSetting==2">
+                <div class="mt-student-m" style="height:50px;">
+               		<ul class="f14 cf bb-1">
+                		<li class="ng-scope">
+                			<a class="mt-blue" ng-click="addProjectSetting(2)">新增科目</a>
+                		</li>
+                	</ul>
+               	</div>
+                <div class="overflow-x">
+                    <table class="table table-bordered table-striped table-condensed mt-table1" st-pipe="getSubjectList"
+                           st-table="subjectList">
+                        <thead>
+                        <tr class="br-gray-t">
+                            <th>科目名称</th>
+                            <th>排序</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody ng-show="!isSubjectListLoading">
+                        <tr ng-repeat="row in subjectList">
+                            <td>{{row.name}}</td>
+                            <td><span ng-if="row.orderId != 999999999">{{row.orderId}}</span>
+                            	<span ng-if="row.orderId == 999999999"></span>
+                            </td>
+                            <td>
+                                <a class="showUI" id="nw1+{{$index}}" ng-click="nw1[$index]=true">
+                                    <span class="glyphicon glyphicon-caozuo" title="操作"></span>
+                                </a>
+                                <bubble ng-if="nw1[$index]" for="nw1+{{$index}}" align="bottom" close="nw1[$index]=false"
+                                        close-action="outerchick " ng-mouseleave="nw1[$index]=false;">
+                                    <ul>
+                                        <li ng-if="showPermissions('subjectManagement')">
+                                            <a ng-click="editSubject(row)">编辑</a>
+                                        </li>
+                                        <li ng-if="showPermissions('subjectManagement')">
+                                            <a ng-click="removeSubject(row)">删除</a>
+                                        </li>
+                                    </ul>
+                                </bubble>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tbody ng-show="isSubjectListLoading">
+                        <tr>
+                            <td colspan="3" class="text-center">
+                                <div class="loading-indicator"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-items-by-page="10"
+                                st-template="partials/util/pagination.custom.html" colspan="3"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

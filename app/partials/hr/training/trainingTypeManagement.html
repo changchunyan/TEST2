@@ -1,0 +1,54 @@
+<div class="view-frame">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="yws-container view-content">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="">培训管理</a> <span class="divider"></span></li>
+                <li class="active">培训类别管理</li>
+            </ul>
+        </div>
+        <tabs>
+            <pane title="培训管理">
+                <div class="row">
+                    <div class="c-select-text padding-0-20 form-horizontal yws-container min-height900">
+                        <div class="col-sm-3">
+                            <div><h4>总培训</h4></div>
+                            <div class="box-with-right-border">
+                                <treecontrol class="tree-classic"
+                                             tree-model="trainingTypes"
+                                             options="treeOptions"
+                                             on-selection="selectNode(node)"
+                                             selected-node="node1">
+                                    {{node.name}}
+                                </treecontrol>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-9">
+                            <div class="row operations-panel" style="margin-right:10px;" ng-if="canManageTrainingType()">
+                                <button class="btn btn-success" ng-click="addRoot()">添加一级培训</button>
+                                <button class="btn btn-success" ng-click="addChild()" ng-if="selectedNode">增加下级培训</button>
+                                <button class="btn btn-danger" ng-click="remove()" ng-if="selectedNode">删除</button>
+                                <button class="btn btn-success c5-lable" ng-click="save()" ng-if="selectedNode">保存</button>
+                            </div>
+                            <hr />
+                            <div ng-if="selectedNode">
+                                <h5 class="breadcrumb">当前的位置：{{path}}</h5>
+                                <div>
+                                    <label for="selectedTrainingId">培训类别编号： </label>
+                                    <input type="text" id="selectedTrainingId" ng-model="selectedTrainingType.id" disabled/>
+                                    <br/>
+                                    <label for="selectedTrainingName">培训类别名称： </label>
+                                    <input type="text" id="selectedTrainingName" ng-model="selectedTrainingType.name" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </pane>
+        </tabs>
+    </div>
+
+</div>

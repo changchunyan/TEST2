@@ -1,0 +1,86 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <form class="modal-dialog form-horizontal" name="coursePlan">
+        <div class="modal-content mt-label-h2">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">选则班级</h4>
+            </div>
+            <div class="modal-body" st-pipe="queryUpgradeClassList" st-table="queryUpgradeClassListList">
+                <div class="row form-option">
+                    <div class="mt-input-group">
+                        <input ng-model="selectName"><a ng-click="queryUpgradeClassList()" class="search-btn">查询</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="br-gray pl-0">
+                            <table class="table table-bordered table-striped table-condensed mt-table1"
+                                   ng-if="_setType()===0">
+                                <thead>
+                                <tr>
+                                    <th>选择</th>
+                                    <th>班级名称</th>
+                                    <th>课程</th>
+                                    <th>招生人数</th>
+                                    <th>开班日期</th>
+                                    <th>上课教师</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="row in selectList" style="border: none !important;">
+                                    <td>
+                                        <label ng-class="{'active':isCourseSelected(row)}" class="checkbox-bg" ng-click="selectOneCourse(row)" ></label>
+                                    </td>
+                                    <td>{{row.name}}</td>
+                                    <td>{{row.subjectName}}</td>
+                                    <td style="white-space: nowrap;">
+				                 <span class="yws-tiao" style="border: none;border-radius: 0">
+				                     <div class="text" style="width:100%;text-align: left;position:inherit;">{{row.appliedCount}} / {{row.planCount}}</div>
+				                     <div style="width:100%;height:6px;background-color: #ccc;overflow:hidden;border-radius: 3px;">
+				                         <i class="bg" ng-if="row.planCount==0"
+                                            style="height: 6px;position: relative;top: -6px;"></i>
+				                         <i class="bg" ng-if="row.planCount!=0"
+                                            style="height: 6px;position: relative;top: -6px;"
+                                            ng-style="{  'width': ((row.appliedCount)/(row.planCount))*100 + '%'}"
+                                            ng-class="{'c1-i':((row.appliedCount)/(row.planCount))<0.5,'c2-i': 0.5<=((row.appliedCount)/(row.planCount))&&((row.appliedCount)/(row.planCount))<0.8,'c3-i':0.8<=((row.appliedCount)/(row.planCount))}"></i>
+				                     </div>
+				                 </span>
+                                    </td>
+                                    <td>{{row.startTime|date:"yyyy-MM-dd"}}</td>
+                                    <td>{{row.teacherName}}</td>
+                                </tr>
+                                </tbody>
+                                <tfoot style="border-top: 1px solid #ccc">
+                                <tr>
+                                    <td class="text-center" st-pagination="" st-items-by-page="10"
+                                        st-template="partials/util/pagination.custom.html" colspan="6">
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="yws-right border-ccc br-gray pl-0" style="height:498px;width:100%;overflow-y: auto">
+                            <div class="padding10"><span class="width80 tc inline-block">已选择（<a class="c2f">{{selected.length||0}}</a>）</span>
+                                <a ng-click="deleteSelectedAllCourses()"><span class="glyphicon glyphicon-delete"
+                                                                               title="删除全部"></span></a></div>
+                            <div ng-repeat="row in selected" class="border-top1">
+                                <div>
+                                    <span class="width80 tl inline-block">{{row.name}}</span>
+                                    <a ng-click="deleteOneCourse(row)"><span class="glyphicon glyphicon-delete"
+                                                                             title="删除"></span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 20px">
+                <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                <button type="button" class="btn btn-success c5-lable" ng-click="determineUp()">确定</button>
+            </div>
+        </div>
+    </form>
+</div>

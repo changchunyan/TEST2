@@ -1,0 +1,65 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" ng-bind="courseOrderTitle"></h4>
+            </div>
+            <div class="modal-body pb-20">
+                <div>
+                <span class="glyphicon glyphicon-yichang ml15 caveat"
+                      style="background-position: center 4px"></span>
+                    <span style="color:#f8d398;">系统默认选中签约时间最早的订单</span>
+                </div>
+                <div class="br-gray pl-0 mt-0">
+                    <table class="table table-bordered table-striped table-condensed mt-table1">
+                        <thead>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>合同编号</th>
+                            <th>订单类型</th>
+                            <th>签约时间</th>
+                            <th>增加账户金额</th>
+                            <th>账户余额</th>
+                            <th>计费方案</th>
+                            <th>师资档位</th>
+                            <th>本年级单价</th>
+                            <th ng-if="detail.type!=2">可排课时</th>
+                            <th ng-if="detail.type!=2">课程规格</th>
+                        </tr>
+                        </thead>
+                        <tbody id="orderInfo">
+                        <tr ng-click="updateChargeIndex($index)" ng-repeat="row in CustomerStoredOrderList"
+                            style="height:40px;line-height: 40px;" ng-class="{'bgd':$index==0}">
+                            <td><img src="img/icon/sos/icon-done.png" ng-if="$index==getNowSelectOrder({crm_student_id:row.studentId})"
+                                     style="width:24px;"><span ng-if="$index!=0">&nbsp;</span></td><!--getNowSelectOrder({crm_student_id:row.studentId})-->
+                            <td>{{row.order_no}}</td>
+                            <td>{{row.order_type | orderType:row.order_type}}</td>
+                            <td>{{row.contract_start_date | date:'yyyy-MM-dd'}}</td>
+                            <td>{{row.total_price}}</td>
+                            <td>{{row.accountBalance||row.additional_amount}}</td>
+                            <td>{{row.scheme_name}}</td>
+                            <td>{{row.order_teacher_level_name}}</td>
+                            <td>{{row.order_charge}}</td>
+                            <td ng-if="detail.type!=2">{{row.plan_available_num_int}}</td>
+                            <td ng-if="detail.type!=2">{{row.order_rule_name}}</td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" ng-click="cancle()">关闭</button>
+                <!-- ng-if="detail.type != 2"-->
+                <button type="button" class="btn btn-success"
+                        ng-click="showPaikeView(1,recordModal)">确认
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+

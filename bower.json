@@ -1,0 +1,40 @@
+{
+  "name": "yws",
+  "description": "YWS",
+  "version": "0.0.1",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "1.4.x",
+    "angular-mocks": "1.4.x",
+    "angular-cookies": "1.4.x",
+    "jquery": "~2.1.1",
+    "bootstrap": "~3.1.1",
+    "angular-route": "1.4.x",
+    "angular-resource": "1.4.x",
+    "angular-animate": "1.4.x",
+    "angular-base64": "2.0.x",
+    "angular-strap": "2.3.x",
+    "angular-local-storage": "0.2.x",
+    "angular-smart-table": "2.1.x",
+    "sweetalert": "1.1.x",
+    "angular-sweetalert": "1.1.x",
+    "angular-tree-control": "0.2.x",
+    "angular-bootstrap": "^0.11.2",
+    "angular-echarts": "^0.3.5",
+    "angular-file-upload": "v2.2.0",
+    "angulartics-google-analytics": "~0.1.4",
+    "mobile-angular-ui": "~1.2.1",
+    "angular-chart.js": "1.1.x",
+    "angular-bootstrap-calendar": "0.29.3"
+  },
+  "resolutions": {
+    "angular": "^1.2.21"
+  }
+}

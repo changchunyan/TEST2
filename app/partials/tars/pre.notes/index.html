@@ -1,0 +1,216 @@
+<style>
+    .tars-left ul {
+        padding-left: 26px;
+    }
+
+    .tars-left ul.one {
+        padding-left: 0px;
+    }
+</style>
+<div class="view-frame" ng-controller="PreNotesController" ng-if="true">
+    <div class="view-left">
+        <nav-side menu-data="menu.subMenu"></nav-side>
+    </div>
+    <div class="view-content user-love" ng-if="nowMap == '备课笔记库'">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="#/tars">教研系统</a> <span class="divider"></span></li>
+                <li class="active">{{nowMap}}</li>
+            </ul>
+        </div>
+        <div class="tabs-title br-gray-t c3">
+            {{nowMap}}<i>?</i>
+        </div>
+
+
+        <div style="background:#fff; height:50px; display:flex; align-items:center; padding:0 30px;" class="mt-input-group pra" ng-if="!pdfUrl">
+            <label style="color:#000000; font-weight:400;">学段</label>
+            <select ng-model="$mtTarget.cwTableState.stageId" ng-options="option.id as option.name for option in stageList" style="margin-right:30px;width:200px;color:#74748b;">
+                <!-- <option value="">请选择</option> -->
+            </select>
+            <label style="color:#000000; font-weight:400;">科目</label>
+            <select ng-model="$mtTarget.cwTableState.subjectId" ng-options="option.id as option.name for option in noteSubjectList" style="margin-right:30px;width:200px;color:#74748b;">
+                <option value="">请选择</option>
+            </select>
+            <div style="flex:1;">
+
+            </div>
+            <div class="fr">
+                <input name="" placeholder="请输入关键字" ng-model="$mtTarget.cwTableState.query" style="width:200px;color:#74748b;">
+                <a><i class="glyphicon glyphicon-search"></i> </a>
+            </div>
+        </div>
+        <div ng-if="!pdfUrl">
+            <div class="of mt-20 form-option">
+                <div class="of fl tars-left">
+
+                    <div class="left-tragger">
+                        <h3 class="c3 f16 strong">
+                            同步
+                        </h3>
+                        <div style="display:flex;">
+                            <select ng-model="$mtTarget.cwTableState.versionId" ng-options="option.id as option.name for option in versionList" class="col-sm-6"
+                                name="" id="" style="margin-right:10px;">
+                            <option value="">教材版本</option>
+                        </select>
+                            <select ng-model="$mtTarget.cwTableState.directoryId" ng-options="option.id as option.gradeName for option in gradeList"
+                                class="col-sm-6" name="" id="">
+                            <option value="">分册</option>
+                        </select>
+                        </div>
+                        <h3 class="f14"><a ng-click="$mtTarget.clickOpen(1,'note')">展开</a><a>&nbsp;|&nbsp;</a><a ng-click="$mtTarget.clickOpen(0,'note')">收缩</a>
+                            <a class="mt-clear fr" ng-click="$mtTarget.clickClear('note')">清除已选</a>
+                        </h3>
+
+
+                        <div style="overflow-y: auto !important;min-height: 113px;max-height: 345px">
+                            <div ng-repeat="one in KnowledgePointsList" ng-init="one.index = $index">
+                                <h4 ng-if="one.children" class="f14" ng-class="{'active':one.open}" ng-click="$mtTarget.clickOpenOne(one)">
+                                    {{one.name}}</h4>
+                                <ul class="one" ng-if="!one.children">
+                                    <li ng-if="!one.children" ng-class="{'active':one.select}" class="min-ht23 f14" ng-click="$mtTarget.clickSelect(one,one.index,one.index,$index)">
+                                        {{one.name}}</li>
+                                </ul>
+                                <ul class="f12" ng-show="one.open">
+                                    <li ng-class="{'active':two.select}" class="min-ht23" ng-repeat="two in one.children" ng-click="$mtTarget.clickSelect(two,one.index,one.index,$index)">{{two.name}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- <div style="overflow-y: auto !important;min-height: 113px;max-height: 345px">
+                        <div ng-repeat="one in KnowledgePointsList" ng-init="one.index = $index">
+                            <h4 ng-if="one.children" class="f14" ng-class="{'active':one.open}" ng-click="$mtTarget.noteClickOpenOne(one)">
+                                {{one.name}}</h4>
+                            <ul ng-if="!one.children">
+                                <li ng-if="!one.children" ng-class="{'active':one.select}" class="min-ht23 f14" ng-click="$mtTarget.noteClickSelect(one,one.index,one.index,$index)">
+                                    {{one.name}}</li>
+                            </ul>
+                            <ul class="f12" ng-show="one.open">
+                                <li ng-class="{'active':two.select}" class="min-ht23" ng-repeat="two in one.children" ng-click="$mtTarget.noteClickSelect(two,one.index,one.index,$index)">{{two.name}}
+                                </li>
+                            </ul>
+                            <ul class="thirdList">
+                                <li ng-class="{'active':two.select}" class="min-ht23"></li>
+                            </ul>
+                        </div>
+                    </div> -->
+                    </div>
+                </div>
+                <div class="of fr mt-tars-r">
+                    <div class="of tars-right" ng-if="!pdfUrl">
+                        <h3 style="padding-left:20px;">
+                            资料表
+                        </h3>
+                        <div class="notes-lib" ng-include="url"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-include="$url.pdf" ng-if="pdfUrl">13213</div>
+    </div>
+
+    <div class="view-content user-love" ng-if="nowMap == '试题库'">
+        <div>
+            <ul class="breadcrumb ">
+                <li><a href="#/tars ">教研系统</a> <span class="divider "></span></li>
+                <li class="active ">{{nowMap}}</li>
+            </ul>
+        </div>
+        <div class="tabs-title br-gray-t c3 ">
+            {{nowMap}}<i>?</i>
+        </div>
+
+
+
+        <!--备课笔记和试题库公用-->
+        <div class="of mt-20 form-option ">
+            <div class="of fl tars-left ">
+                <div class="mt-input-group pra tc "><label>学科学段</label><select ng-model="$mtTarget.cwTableState.subject" ng-options="option.id as option.name for option in subjectList ">
+                            <option>请选择</option>
+                        </select></div>
+                <div class="left-tragger ">
+                    <h2 class="c3 f16 strong ">知识点</h2>
+                    <h3 class="f14 "><a ng-click="$mtTarget.clickOpen(1) ">展开</a><a>&nbsp;|&nbsp;</a><a ng-click="$mtTarget.clickOpen(0) ">收缩</a>
+                        <a class="mt-clear fr " ng-click="$mtTarget.clickClear() ">清除已选</a>
+                    </h3>
+                    <div style="overflow-y: auto !important;min-height: 113px;max-height: 345px ">
+                        <div ng-repeat="one in moduleTopic" ng-init="one.index=$index ">
+                            <h4 class="f14 " ng-class="{ 'active':one.open} " ng-click="$mtTarget.clickOpenOne(one) ">
+                                {{one.name}}</h4>
+                            <div ng-repeat="two in one.units " ng-show="one.open " ng-init="two.index=$index ">
+                                <h5 class="f12 " ng-class="{ 'active':two.open} " ng-click="$mtTarget.clickOpenOne(two) ">
+                                    {{two.name}}</h5>
+                                <ul class="f12 " ng-show="two.open ">
+                                    <li ng-class="{ 'active':three.select} " class="min-ht23 " ng-repeat="three in two.topics " ng-click="$mtTarget.clickSelect(three,one.index,two.index,$index) ">{{three.name}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="of fr mt-tars-r ">
+                <div class="of tars-right " ng-if="!pdfUrl ">
+                    <div class="notes-lib " ng-include="url "></div>
+                </div>
+                <div ng-include="$url.pdf " ng-if="pdfUrl "></div>
+            </div>
+
+
+            <!-- <div class="of fr mt-tars-r ">
+                <div class="of tars-right " ng-if="!pdfUrl ">
+                    <h3>
+                        资料表
+                    </h3>
+                    <div class="notes-lib " ng-include="url "></div>
+                </div>
+                <div ng-include="$url.pdf " ng-if="pdfUrl "></div>
+            </div> -->
+        </div>
+        <div class="tars-fixed " ng-if="nowMap==='试题库' ||nowMap==='备课笔记库' ">
+            <nav class="tars-nav " ng-click="$mtTarget.knowledgeHover() ">
+                <h2 class="h2-i ">
+                    <i class="msg-bg-nav zsd "></i>
+                    <p style="margin-top: 10px ">已选知识点</p>
+                    <a class="cf f14 tc tars-num ">{{$mtTarget.KnowledgePoints.data.length}}</a>
+                </h2>
+            </nav>
+            <nav class="tars-nav " ng-if="nowMap==='试题库' " ng-click="$queLib.queHover() ">
+                <h2 class="h2-i ">
+                    <i class="cart "></i>
+                    <p class="mt-15 ">试题框</p>
+                    <a class="cf f14 tc tars-num ">{{$queLib.cart.data.length}}</a>
+                </h2>
+            </nav>
+            <div class="tars-detail " ng-if="skop ">
+                <div class="skop detail-item ">
+                    <h2 class="mt-input-group pra f14 ">
+                        <label class="c3 f16 strong ">知识点</label>
+                    </h2>
+                    <ul class="s-item p-mt-0 ">
+                        <li ng-repeat="el in $mtTarget.KnowledgePoints.data ">
+                            <p>{{el.name}}</p><a class="fr s-close " ng-click="$mtTarget.deleteOne(el) ">x</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="tars-detail " ng-if="sque ">
+                <div class="sque detail-item ">
+                    <h2 class="mt-input-group pra f14 ">
+                        <a style="display: inline-block; " class="c5-lable br-4 ti-0 " ng-click="$paperLib.pre() ">创建组卷</a><br>
+                        <label class="c3 f16 strong ">已选题目：</label>
+                    </h2>
+                    <ul class="s-item li-mt-10 ">
+                        <li ng-repeat="(key,value) in selectedCart ">
+                            <h6 class="m0 "><a class="tl ">{{key}}</a></h6>
+                            <div ng-repeat="el in value ">
+                                <p>{{el.paperName}}</p><a class="fr s-close " ng-click="$queLib.delete(el) ">x</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

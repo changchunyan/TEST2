@@ -1,0 +1,36 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal-dialog">
+	<div class="modal-content">
+          <form name="form" role="form" class="form-horizontal showcase-form" novalidate="">
+              <div class="modal-header">
+                  <button type="button" class="close" aria-label="Close" ng-click="coefficientModalHide()"><span
+                          aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" ng-bind="coefficientTitle"></h4>
+              </div>
+              <div class="modal-body pb-20">
+                  <!-- <div class="br-gray pl-0" style="overflow-x: auto"> -->
+                  <div class="pl-0" style="overflow-x: auto">
+                      <div st-pipe="getCoefficientList" st-table="coefficientList">
+                      	<ul>
+                      		<li class="col-sm-6" ng-repeat="row in coefficientList">
+                      			<label class="col-sm-6" for="coefficientName" readonly >{{row.name}}</label>
+                                <div class="col-sm-6">
+                                    <input type="text" ng-model="row.coefficientValue" data='{{row.coefficientValue}}'  ng-pattern="/^(([0-1]{1}(\.[0-9]{0,2}))|2|1)$/"  type="text" required   
+                                    class="form-control" style="padding:0;width:100px;height:22px"/>
+                                </div>
+                      		</li>
+                      	</ul>
+                      </div>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-default" ng-click="coefficientModalHide()">取消</button>
+                  <button type="button" class="btn btn-success c5-lable" ng-disabled="form.$invalid" ng-click="saveCoefficient()">保存
+                  </button>
+              </div>
+          </form>
+	</div>
+</div>
+</div>
+
+

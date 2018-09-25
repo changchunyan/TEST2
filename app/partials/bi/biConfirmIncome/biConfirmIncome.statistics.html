@@ -1,0 +1,61 @@
+<search on-department-clicked="showSelectDepartment()"
+        department="selectdDepartment"
+        search-model="searchModel"
+        is-school-user="isSchoolUser"
+        provinces="provinces"
+        on-province-changed="getCitysByProvinceCode(searchModel.schoolProvince)"
+        cities="cities"
+        on-reset="reset(isQ)"
+        on-search="argJudgement(getSchoolIncome)"/>
+
+<div class="default-box">
+    <h4 class="bi-search-result-title">校区确认收入
+        <button class="btn btn-success bi-list-head" ng-click="exportSchoolIncome()">导出列表</button>
+    </h4>
+    <br/>
+    <div class="table-responsive">
+        <div class="row bi-confirm-income-chart-container" ng-show="isSchoolUser && labelsSummary">
+            <canvas class="chart chart-line" chart-data="dataSummary" chart-labels="labelsSummary"
+                    chart-series="seriesSummary" chart-click="" legend="true" chart-options="options"
+                    chart-legend="true"></canvas>
+        </div>
+        <table st-pipe="getStatisticsForST" st-table="tableModel" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+            	<span style="color:red">说明：<br>
+            		消课课时：每节课的[排课的起始时间至结束时间的分钟数 × 排课系数  ÷ 订单课时规格60分钟或40分钟] 的总和；<br>
+               <!-- 消课时长：每节课的[排课的起始时间至结束时间换算成小时数] 的总和；<br>
+            		确认收入：按照学员每节课的消课课时数 × 这节课对应的订单换算成每节课的折后金额的总和；-->
+            		 <!--消课时长：每节课的[排课的起始时间至结束时间换算成小时数] 的总和；<br>-->
+            	</span>
+                <th style="font-weight: bold;" rowspan="1">校区</th>
+                <th style="font-weight: bold;" rowspan="1">消课课时</th>
+                <!--  th style="font-weight: bold;" rowspan="1">消课时长</th>-->
+                <th style="font-weight: bold;min-width:200px" rowspan="1">确认收入</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="schoolIncome in statisticsModelsNew ">
+                <td><a style="color: blue" ng-click="getDetail(schoolIncome)">{{schoolIncome.schoolName}}</a></td>
+                <td>总计：{{schoolIncome.courseNum+schoolIncome.shiTingCourseNum+schoolIncome.oneToMultipleShiTingCourseNum}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ 正课+赠课={{schoolIncome.courseNum}}
+                <span ng-if="schoolIncome.shiTingCourseNum">&nbsp;&nbsp;|&nbsp;&nbsp;一对一试听课={{schoolIncome.shiTingCourseNum}}</span>
+                <span ng-if="schoolIncome.oneToMultipleShiTingCourseNum">&nbsp;&nbsp;|&nbsp;&nbsp;一对多试听课={{schoolIncome.oneToMultipleShiTingCourseNum}} </span>]
+                 <!--   <td>正课+赠课={{schoolIncome.courseHoursCount}}&nbsp;&nbsp;<span
+                        ng-if="schoolIncome.shiTingCourseHoursCount">|&nbsp;&nbsp;一对一试听课={{schoolIncome.shiTingCourseHoursCount}}</span>&nbsp;&nbsp;<span ng-if="schoolIncome.oneToMultipleShiTingCourseHoursCount">|&nbsp;&nbsp;
+                    一对多试听课={{schoolIncome.oneToMultipleShiTingCourseHoursCount}}</span><br>总计：{{schoolIncome.courseHoursCount+schoolIncome.shiTingCourseHoursCount+schoolIncome.oneToMultipleShiTingCourseHoursCount}}
+                </td> -->
+                <td>{{schoolIncome.confirmIncome}}</td>
+            </tr>
+            </tbody>
+
+            <tfoot>
+            <tr>
+                <td colspan="30" class="text-center" st-pagination="" st-items-by-page="10"
+                    st-template="partials/util/pagination.custom.html">
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+
+    </div>
+</div>

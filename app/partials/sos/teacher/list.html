@@ -1,0 +1,80 @@
+<div class="view-frame" ng-controller="TeacherManagementController as tCtrl">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content mt-new-ui user-love">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="#/">首页</a> <span class="divider"></span></li>
+                <li><a href="#/sos-admin">学员教务</a> <span class="divider"></span></li>
+                <li><a ng-click="sos-admin/teacher">APP展示管理</a> <span class="divider"></span></li>
+                <li class="active">教师列表</li>
+            </ul>
+        </div>
+        <div class="mt-10">
+            <div class="tabs-title border-1 c3">APP展示管理</div>
+        </div>
+        <div class="br-gray mt-list">
+            <h2 class="pl-20 c3">教师列表</h2>
+            <div class="overflow-x">
+                <table class="table table-bordered table-striped table-condensed mt-table1"
+                       st-pipe="getTeachersListController" st-table="teachersListTable">
+                    <thead>
+                    <tr class="br-gray-t">
+                        <th>教师姓名</th>
+                        <th>性别</th>
+                        <th>电话</th>
+                        <!--<th>科目</th>-->
+                        <th>订单量</th>
+                        <!--<th>差评记录</th>-->
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    <tr>
+                        <th colspan="2"><input st-search="name" placeholder="教师姓名" class="input-sm form-control"
+                                               type="search"/></th>
+                        <th colspan="4"><input st-search="mobile" placeholder="电话" class="input-sm form-control"
+                                               type="search"/></th>
+                    </tr>
+                    </thead>
+                    <tbody ng-if="!tCtrl.isLoadingTeachersList">
+                    <tr ng-repeat="row  in teachersList">
+                        <td>{{row.name}}</td>
+                        <td ng-if="row.gender==1">男</td>
+                        <td ng-if="row.gender==0">女</td>
+                        <td ng-if="row.gender!=0 && row.gender!=1">未知</td>
+                        <td>{{row.mobile}}</td>
+                        <td>{{row.orderNoNum}}</td>
+                        <td ng-show="row.employment_status == 0">在职</td>
+                        <td ng-show="row.employment_status != 0">离职</td>
+                        <td>
+                            <!--<a ng-click="showDetailCourseView(row)" title="查看详细"><span class="glyphicon glyphicon-plus"></span></a> &nbsp;-->
+                            <a ng-click="showTeacherCourseView(row)" title="课表" analytics-on="click"
+                               analytics-event="Button 2" analytics-category="courses"><span
+                                    class="glyphicon glyphicon-ke-biao"></span></a>&nbsp;
+                            <a ng-click="showEditCourseView(row)" title="详情" analytics-on analytics-category="Commands"
+                               analytics-action="Button 2" analytics-label="Lable2"><span
+                                    class="glyphicon glyphicon-pencil"></span></a> &nbsp;
+                            <!--<a ng-click="removeTeacher(row)" title="删除"><span class="glyphicon glyphicon-delete"></span></a>&nbsp;-->
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tbody ng-if="tCtrl.isLoading">
+                    <tr>
+                        <td colspan="24" class="text-center">
+                            <div class="loading-indicator"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td class="text-center" st-pagination="" st-items-by-page="10"
+                            st-template="partials/util/pagination.custom.html"
+                            st-template="partials/util/pagination.custom.html" colspan="6"></td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

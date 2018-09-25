@@ -1,0 +1,56 @@
+<!-- 筛选条件 -->
+<search on-department-clicked="showSelectDepartment()"
+        department="selectdDepartment"
+        search-model="searchModel"
+        is-school-user="isSchoolUser"
+        provinces="provinces"
+        on-province-changed="getCitysByProvinceCode(searchModel.schoolProvince)"
+        cities="cities"
+        on-reset="reset(isQ)"
+        hide-province-and-city="true"
+        hide-school-type="true"
+        on-search="argJudgement(getChannelGradeSummary)"/>
+
+<!-- 表格 -->
+<div class="default-box">
+    <h4>渠道年级汇总
+      <div class="btn-group" role="group" style="float:right;margin-right:20px;margin-top: -5px">
+        <button type="button" class="{{buttonStyle('签单数')}}" style="margin: 1px 0; border-right:none" ng-click="setDataType('签单数')">签单数</button>
+        <button type="button" class="{{buttonStyle('实收金额')}}" style="margin: 1px 0; border-right:none" ng-click="setDataType('实收金额')">实收金额</button>
+        <button type="button" class="{{buttonStyle('平均单底')}}" style="margin: 1px 0" ng-click="setDataType('平均单底')">平均单底</button>
+      </div>
+      <div class="btn-group" role="group" style="float:right;margin-right:20px;margin-top: -5px">
+        <button type="button" class="{{viewButtonStyle('年级')}}" style="margin: 1px 0; border-right:none" ng-click="setViewType('年级')">年级</button>
+        <button type="button" class="{{viewButtonStyle('学段')}}" style="margin: 1px 0;" ng-click="setViewType('学段')">学段</button>
+      </div>
+    </h4>
+    <br/>
+    <div class="row bi-confirm-income-chart-container" ng-show="labelsSummary">
+      <canvas class="chart chart-bar" chart-data="dataSummary" chart-labels="labelsSummary" chart-series="seriesSummary" chart-click="" legend="true" chart-options="options" chart-legend="true"></canvas>
+    </div>
+    <div id="exportable" class="table-responsive" style="margin-top:20px;width:100%">
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>渠道</th>
+                <th ng-repeat="grade in gradesOrSegments()">{{grade}}</th>
+                <th class="cell-total">总计</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="channel in channels">
+                <td>{{channel.name}}</td>
+                <td ng-repeat="grade in gradesOrSegments()">
+                  {{cellData(channel.grades[grade])}}
+                </td>
+                <td class="cell-total">{{channelTotalCellData(channel.name)}}</td>
+            </tr>
+            <tr>
+             <td class="cell-total">总计</td>
+             <td ng-repeat="grade in gradesOrSegments()" class="cell-total">{{gradeTotalCellData(grade)}}</td>
+             <td class="cell-total">{{cellData(everythingTotal)}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

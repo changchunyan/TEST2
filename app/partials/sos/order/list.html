@@ -1,0 +1,591 @@
+<div class="view-frame" ng-controller="OrderManagementController as omc">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div ng-show="!isAdding" class="view-content mt-new-ui user-love" st-pipe="callServerOneTab" st-table="oneOrders">
+        <div class="yws-nav">
+            <ul class="breadcrumb">
+                <li><a href="#/">首页</a> <span class="divider"></span></li>
+                <li><a href="#/fb-admin">前台业务</a> <span class="divider"></span></li>
+                <li><a ng-click="fb-admin/order">普通订单管理</a> <span class="divider"></span></li>
+                <li class="active">普通订单列表</li>
+            </ul>
+        </div>
+        <div class="mt-10">
+            <div class="tabs-title border-1 c3">普通订单管理</div>
+            <div class="mt-student-m">
+                <ul class="f14 cf">
+                    <li ng-if="showPermissions('LeadsOrderAdd')">
+                        <a class="mt-purple" ng-click="addstudentOrderV2(0)">新增订单</a>
+                    </li>
+                    <!--<li ng-if="showPermissions('LeadsOrderAdd')">
+                        <a class="mt-purple" ng-click="addstudentOrder(0)">新增订单</a>
+                    </li>-->
+                    <li ng-if="showPermissions('LeadsOrderAdd')">
+                        <a class="bg-green-add" ng-click="showChargeModal()">先收费</a>
+                    </li>
+                    <li ng-if="showPermissions('OrderExport')">
+                        <a class="mt-export" ng-click="exportUnreviewedOrders()" style="padding-right: 15px">导出未审核订单明细</a>
+                    </li>
+                    <li ng-if="showPermissions('OrderExport')">
+                        <a class="mt-export" ng-click="exportReviewedOrders()" style="padding-right: 15px">导出已审核订单明细</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 筛选 -->
+        <div class="mt-student-m br-gray h-auto no-media ml-0 span-20">
+            <ul class="one h-auto pr-0">
+                <div class="mt-select" style="min-height: 35px">
+                    <div class="rbg mt-0" style="border: none;">
+                        <ul class="h-auto" style="padding-right: 0">
+                            <div class="of" style="float:left;">
+                                <li style="margin-left: 0">
+                                    <label class="bg-none">学员姓名</label>
+                                    <input placeholder="请输入" ng-model="orderFilter.name">
+                                </li>
+                                <li style="margin-right: 15px">
+                                    <label class="bg-none">订单状态类型</label>
+                                    <select style="margin-top: -5px" class="input-sm form-control" st-search="orderFilter.orderStatusType" ng-model="orderFilter.orderStatusType"
+                                            type="search" ng-change="orderStatusTypeChange()">
+                                        <option value="">未生效订单</option>
+                                        <option value="2">进行中订单</option>
+                                        <option value="3">已结束订单</option>
+                                        <option value="4">待处理订单</option>
+                                        <option value="5">转平台订单</option>
+                                    </select>
+                                </li>
+                                <li style="margin-right: 15px">
+                                    <label class="bg-none">订单状态</label>
+                                    <select style="margin-top: -5px" class="input-sm form-control" st-search="orderFilter.orderStatus" ng-model="orderFilter.orderStatus"
+                                        type="search"  ng-options="option.id as option.name for option in orderStatusList">
+                                        <option value="">&#45;&#45;  全部&#45;&#45;</option>
+                                    </select>
+                                </li>
+                            </div>
+                            <ul class="inline-block time-show lh-auto span-54 pl-0">
+                                <li class="mt-three option no-mar" vr-select data-mt="{{QYDatas}}" changefun="callServerOneTab">
+                                    <label class="bg-none">签约时间:</label>
+                                    <input class="three-1" ng-model="orderFilter.ceate_at" st-search="orderFilter.ceate_at">
+                                    <div class="three-1">不限</div>
+                                    <input class="three-2" readonly type="search" placeholder="" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})"
+                                        ng-model="orderFilter.contract_start_time_begin">
+                                    <div class="three-2"></div><span class="dao bg-none">到</span>
+                                    <input class="three-2" readonly type="search" name="" placeholder="" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})"
+                                        ng-model="orderFilter.contract_end_time_end">
+                                    <div class="three-2"></div>
+                                </li>
+                                <li>
+                                    <a id="keydown-query" class="mt-btn cf bg-color-blue br ti-0 li-btn-1 pr-0 mt-0" href="javascript:void (0);" ng-click="callServerOneTabGo()">
+                                        查询
+                                    </a>
+                                    <a class="mt-btn ml15 brc3 li-btn-1 pr-0 mt-0 ti-0" id="resetInputAll" ng-click="resetSelectOrder()">
+                                        重置
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="more mr-14" style="color:#428bca;padding-right: 0;margin-right: 0;" ng-click="changeSelectMore(1,1)">
+                                        {{selectMoreText}}
+                                    </a>
+                                </li>
+                                <!--<li>
+                                    <a class="guolv ml-0 mr-14" style="color:#428bca;padding-right: 0;margin-right: 0;" ng-class="{'now':isguoLvWuWeiKuan}" ng-click="guoLvWuWeiKuan()">
+                                        过滤无尾款订单
+                                    </a>
+                                </li>-->
+                            </ul>
+                            <!--更多选项-->
+                            <li class="w1" style="min-width:100%;" ng-if="!selectMore">
+                                <a ng-click="changeSelectMore(1)" style="margin-top: 33px" href="javascript:void(0);" class="mt-more">
+                                    &nbsp;
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </ul>
+            <!-- 点击向下箭头，显示更多 -->
+            <div class="rbg mt-select" ng-show="selectMore" style="border-top: 1px dotted #ccc;">
+                <ul class="h-auto">
+                    <li class="no-mar ml-0"><label class="bg-none">合同编号</label>
+                        <input placeholder="请输入" ng-model="orderFilter.orderNo">
+                    </li>
+                    <li><label class="bg-none">联系方式</label>
+                        <input placeholder="请输入" ng-model="orderFilter.phone">
+                    </li>
+                    <li style="line-height: 28px"><label class="bg-none">订单类型</label>
+                        <select st-search="orderFilter.orderType" ng-model="orderFilter.orderType">
+                            <option value="">&#45;&#45; 请选择 &#45;&#45;</option>
+                            <option value="1">新签</option>
+                            <option value="2">续费</option>
+                            <option value="4">转课</option>
+                            <option value="5">推荐</option>
+                            <option value="7">线上O2O</option>
+                            <option value="8">赠课</option>
+                        </select>
+                    </li>
+                    <li style="line-height: 28px"><label class="bg-none">方式</label><select st-search="orderFilter.orderCategory" ng-model="orderFilter.orderCategory"
+                            type="search">
+                        <option value="">&#45;&#45; 请选择 &#45;&#45;</option>
+                        <option value="3">充值</option>
+                        <option value="2">app</option>
+                        <option value="1">买课</option></select></li>
+                   <!-- <li style="line-height: 28px">
+                        <div class="rbg" style="border:none;margin-top:0px;">
+                    <ul class="inline-block time-show lh-auto span-54 pl-0">
+                    <li class="option mt-clear" vr-select data-mt="{{mediaChannel1List}}" style="margin-right:30px;margin-left:0;margin-top:0px;min-width: 130px;">
+                        <label>一级渠道：</label>
+                        <input st-search="orderFilter.mediaChannelId1"
+                               ng-model="orderFilter.mediaChannelId1" type="search"  ng-change="orderMediaChannel1Change()">
+                        <div>请选择</div>
+                    </li>
+                    </ul>
+                        </div>
+                    </li>-->
+                    <li style="line-height: 28px" ng-if="!isO2OOperationSpecialist()">
+                        <label class="bg-none">一级渠道</label>
+                        <select st-search="orderFilter.mediaChannelId1" ng-model="orderFilter.mediaChannelId1" name="mediaChannelId1" ng-change="orderMediaChannel1Change()" ng-options="option.id as option.name for option in mediaChannel1List" >
+                        <option value="">请选择</option>
+                        </select>
+                    </li>
+                    <li style="line-height: 28px">
+                        <label class="bg-none">二级渠道</label>
+                        <select st-search="orderFilter.mediaChannelId2" ng-model="orderFilter.mediaChannelId2" name="mediaChannelId2" ng-change="orderMediaChannel2Change()" ng-options="option.id as option.name for option in mediaChannel2List">
+                        <option value="">请选择</option>
+                        </select>
+                    </li>
+                    <li style="line-height: 28px">
+                        <label class="bg-none">渠道详情</label>
+                        <select st-search="orderFilter.mediaChannelId3" ng-model="orderFilter.mediaChannelId3" name="mediaChannelId3" ng-options="option.id as option.name for option in mediaChannel3List">
+                            <option value="">请选择</option>
+                        </select>
+                    </li>
+                    <li><label class="bg-none">业绩所属人</label><input placeholder="请输入" ng-model="orderFilter.achievementPerson"></li>
+                    <li><label class="bg-none">校区</label><input placeholder="请输入" ng-model="orderFilter.belongSchoolName"></li>
+                </ul>
+                <div class="rbg br0">
+                    <ul class="inline-block time-show lh-auto span-54 pl-0">
+                        <li class="mt-three option no-mar" vr-select data-mt="{{KSDatas}}" changefun="callServerOneTab" style="margin-right: 15px;"><label class="bg-none">课时总数:</label>
+                            <input class="three-1" ng-model="orderFilter.ksz" st-search="orderFilter.ksz">
+                            <div class="three-1">不限</div>
+                            <input type="number" class="three-2 bg-none" ng-model="orderFilter.total_original_num_begin">
+                            <span class="dao bg-none">到</span>
+                            <input type="number" class="three-2 bg-none" ng-model="orderFilter.total_original_num_end">
+
+                        </li>
+                        <li class="mt-three option no-mar" vr-select data-mt="{{KSDatas}}" changefun="callServerOneTab"><label class="bg-none">剩余课时数:</label>
+                            <input class="three-1" ng-model="orderFilter.ksy" st-search="orderFilter.ksy">
+                            <div class="three-1">不限</div>
+                            <input type="number" class="three-2 bg-none" ng-model="orderFilter.total_course_num_begin">
+                            <span class="dao bg-none">到</span>
+                            <input type="number" class="three-2 bg-none" ng-model="orderFilter.total_course_num_end">
+
+                        </li>
+                        <br/>
+                        <li class="mt-three option no-mar" vr-select data-mt="{{JEDatas}}" changefun="callServerOneTab"><label class="bg-none">优惠后金额:</label>
+                            <input class="three-1" ng-model="orderFilter.yh" st-search="orderFilter.yh">
+                            <div class="three-1">不限</div>
+                            <input type="number" class="three-2 bg-none" ng-model="orderFilter.real_total_amount_begin">
+                            <span class="dao bg-none">到</span>
+                            <input type="number" class="three-2 bg-none" ng-model="orderFilter.real_total_amount_end">
+                        </li>
+                        <li class="mt-three option no-mar" style="margin-left: 15px" vr-select data-mt="{{JEDatas}}" changefun="callServerOneTab"><label class="bg-none">尾款金额:</label>
+                            <input class="three-1" ng-model="orderFilter.wk" st-search="orderFilter.wk">
+                            <div class="three-1">不限</div>
+                            <input type="number" class="three-2 bg-none" ng-model="orderFilter.pay_due_amount_begin">
+                            <span class="dao bg-none">到</span>
+                            <input type="number" class="three-2 bg-none" ng-model="orderFilter.pay_due_amount_end">
+                        </li>
+                    </ul>
+                    <ul style="min-height:92px;">
+                        <!--隐藏更多-->
+                        <li class="w1 down" style="min-width: 100%">
+                            <a ng-click="changeSelectMore(0)" style="margin-top: 33px" class="mt-more">&nbsp;</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- 订单列表 -->
+        <div class="br-gray mt-list">
+            <h2>
+                <span class="h2-span">订单列表</span>
+                <!--<a class="mt-blue select-col cf f14" ng-click="showCol(1)">选择列</a>-->
+            </h2>
+            <!-- 这里有个判断，在控制器里没找到_showCol变量 -->
+            <div class="br-gray edit-col" ng-if="_showCol" ng-style="$editColCss" event-listener-scroll="" data-parent-fixed="mt-list">
+                <h2 class="cf">
+                    编辑列
+                    <a class="close glyphicon glyphicon-remove" ng-click="showCol(0)"></a>
+                </h2>
+                <ul class="select-col-list">
+                    <h2 ng-class="{'active':isAll}" ng-click="selectColAll()">全选</h2>
+                    <div style="height:298px;overflow-y: auto;border-bottom: 1px #ccc solid">
+                        <li ng-repeat="colList in lEditColList" ng-class="{'active':colList.select}" ng-click="selectCol($index)">{{colList.name}}</li>
+                    </div>
+                    <a class="btn reast" ng-click="reastCol()">恢复默认</a>
+                </ul>
+            </div>
+            <div class="overflow-x ">
+                <table class="table table-bordered table-striped table-condensed mt-table1 mt-scroll">
+                    <thead>
+                    <tr class="br-gray-t">
+                        <th st-sort="orderNo">合同编号</th>
+                        <th>学员姓名</th>
+                        <th>手机号</th>
+                        <th>校区</th>
+                        <th>订单类型</th>
+                        <th>方式</th>
+                        <th>订单状态</th>
+                        <th>签约时间</th>
+                        <th>主从关系</th>
+                        <th>来源</th>
+                        <th>总课时/次</th>
+                        <th>剩余课时/次</th>
+                        <th>充值金额</th>
+                        <th>剩余金额</th>
+                        <th>优惠后金额</th>
+                        <th>尾款金额</th>
+                        <th>业绩所属人</th>
+                        <th>转平台</th>
+                        <th>师资档位</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody ng-show="!isLoading">
+                    <tr ng-repeat="row in oneOrders" ng-init="getMoreDataByOrderId(row)">
+                        <td>
+                            <div ng-if="row.hasSlaveInfos" ng-click="getSuborders(row)"><img src="img/more.png?v=1.0" style="width: 20px;">&nbsp;{{row.orderNo}}</div>
+                            <div ng-if="!row.hasSlaveInfos" >{{row.orderNo}}</div>
+                            <!--row.orderNo!=row.originalOrderNo?row.orderNo:' '-->
+                        </td>
+                        <td>{{row.name}}</td>
+                        <td>{{row.phone}}</td>
+                        <td>{{row.belongSchoolName}}</td>
+                        <td>{{row.orderType | orderType}}</td>
+                        <td>{{row.orderCategory|categoryF:row.orderCategory}}</td>
+                        <td>{{row.orderStatus|orderStatusF:row.orderStatus}}</td>
+                        <td ng-if="row.orderStatus != 14 && row.orderCategory != null">{{row.contractStartDate | date:'yyyy-MM-dd' }}</td>
+                        <td ng-if="row.orderStatus == 14 || row.orderCategory == null"></td>
+                        <td ng-if="row.masterSlaveRelation==1">主合同</td>
+                        <td ng-if="row.masterSlaveRelation==2">附加协议</td>
+                        <td ng-if="!row.masterSlaveRelation">未标记</td>
+                        <td>
+                        {{row.mediaChannelId1Name}}<span ng-if="row.mediaChannelId2Name">-</span>{{row.mediaChannelId2Name}}<span ng-if="row.mediaChannelId3Name">-</span>{{row.mediaChannelId3Name}}
+                        </td>
+                        <td><a ng-click="getDetail(row)"><!--{{row.totalOriginalNum}}-->{{row.more&&row.more.allOriginalNum}}</a></td>
+                        <td><!--{{row.totalCourseNum}}-->{{row.more&&row.more.allCourseNum}}</td>
+                        <td><!--{{row.orderCategory == 3?row.totalPrice:''}}-->{{row.more&&row.more.allTotalPrice}}</td>
+                        <td><!--{{row.additionalAmount}}-->{{row.more&&row.more.allAdditionalAmount}}</td>
+                        <td><!--<span ng-if="row.orderStatus != 14 && row.orderCategory != null">
+                        		{{row.orderCategory != 2?row.realTotalAmount:row.realPayAmount}}
+                        	</span>-->
+                            {{row.more&&row.more.allRealTotalAmount}}
+                        </td>
+                        <td><!--<span ng-if="row.orderStatus != 14 && row.orderCategory != null">{{row.payDueAmount}}</span>-->
+                            {{row.more&&row.more.allPayDueAmount}}
+                        </td>
+                        <td>{{row.achievementPerson}}</td>
+                        <td>
+                        	<span ng-if="row.changePlatformStatus == 1 && row.belongSchoolId == currentUser.department.id">转出</span>
+                        	<span ng-if="row.changePlatformStatus == 1 && row.belongSchoolId != currentUser.department.id">转入</span>
+                        </td>
+                        <td>{{row.orderTeacherLevelName}}</td>
+                        <td style="position: absolute; right: 28px;">
+                            <a class="showUI" id="nw+{{$index}}" ng-click="nw[$index]=true"><span
+                                    class="glyphicon glyphicon-caozuo" title="操作"></span></a>
+                            <bubble ng-if="nw[$index]" for="nw+{{$index}}" align="bottom" close="nw[$index]=false"
+                                    close-action="outerchick " ng-mouseleave="nw[$index]=false;">
+                                <ul>
+                                	<!-- 未签约订单 操作 -->
+                                	<li ng-if="row.orderStatus == 14" ng-click="detailOrderFirstCharge(row)">
+                                        <a>查看</a>
+                                    </li>
+                                    <li style="padding: 5px 10px;" ng-if="row.masterSlaveRelation == 1 && row.orderStatus == 3 && isUseEContract" ng-click="handleDownload(row)">
+                                        <a>生成合同</a>
+                                    </li>
+                                    <!-- 未签约直接退单，只显示查看操作 -->
+                                    <li ng-if="row.orderCategory == null &&row.orderStatus == 5" ng-click="detailOrderFirstCharge(row)">
+                                        <a>查看</a>
+                                    </li>  
+                                    <li ng-if="row.orderStatus == 14" ng-click="signOrder(row)">
+                                    	<a>签约</a>
+                                    </li>
+                                    <li ng-if="row.orderStatus == 14" ng-click="editOrderFirstCharge(row)">
+                                        <a>修改</a>
+                                    </li>
+                                    <li  ng-if="row.orderStatus == 14 && row.payAllDueAmount>0" ng-click="ordersMoreChargeInit(row)">
+                                    	<a>收费</a><!--row.payAllDueAmount!==0-->
+                                    </li>
+                                    <!--<li  ng-if="row.orderStatus == 14 && row.payDueAmount!==0" ng-click="chargeOrder(row)">
+                                    	<a>收费</a>
+                                    </li>-->
+                                    <li  ng-if="row.orderStatus == 14"  ng-click="detailOrder(row,8)"><!--ng-click="chargeBackOrderFirst(row)"-->
+                                    	<a>退单</a>
+                                    </li>
+                                    <!-- 线下买课程订单  操作-->
+                                    <li ng-if="row.orderCategory == 1" ng-click="detailOrder(row)">
+                                        <!--<a>查看3</a>-->
+                                        <a>查看</a>
+                                    </li>
+                                    <li ng-if="row.orderCategory == 1 && (row.orderStatus == 1 || row.orderStatus == 2) && row.orderType != 4 && showPermissions('OrderEdit') && row.payAllDueAmount!==0"
+                                        ng-click="ordersMoreChargeInit(row)">
+                                        <a>收费</a>
+                                    </li>
+                                    <!--<li ng-if="row.orderCategory == 1 && (row.orderStatus == 1 || row.orderStatus == 2) && row.orderType != 4 && showPermissions('OrderEdit') && row.payDueAmount!==0"
+                                        ng-click="chargeOrder(row)">
+                                        <a>收费</a>
+                                    </li>-->
+                                    <li ng-if="row.orderCategory == 1 && (row.orderStatus == 1 || row.orderStatus == 2) && row.orderType != 4 && showPermissions('OrderEdit')"
+                                        ng-click="editOrder(row)">
+                                        <a>修改</a>
+                                    </li>
+
+                                        <li ng-if="row.orderCategory == 1 && (row.orderStatus == 1 || row.orderStatus == 2) && row.orderType != 4 && showPermissions('OrderAudit')  && canOperateMore"
+                                            ng-click="detailOrder(row,7)">
+                                            <!--ng-click="auditOrder(row)"-->
+                                            <a>审核</a>
+                                        </li>
+                                        <li ng-if="row.orderFlag != 1 && row.orderCategory == 1 && (row.orderStatus == 1 || row.orderStatus == 2 || (row.orderStatus == 3 && hasChargeBackOrderPermission ) ) && row.orderType != 4 && showPermissions('OrderAudit')"
+                                            ng-click="detailOrder(row,8)"
+                                            >
+                                            <!--ng-click="chargeBackOrder(row)"-->
+                                            <a>退单</a>
+                                        </li>
+
+                                        <li ng-if="row.orderCategory == 2" ng-click="detailOrderOTO(row)">
+                                            <a>查看</a>
+                                        </li>
+
+                                        <!--<li ng-if="row.orderCategory == 3" ng-click="detailOrderTopup(row)">
+                                            <a>查看</a>
+                                        </li>--> <li ng-if="row.orderCategory == 3" ng-click="detailOrder(row)">
+                                            <a>查看</a>
+                                        </li>
+                                        <!-- 充值订单操作 -->
+                                        <li ng-if="row.orderCategory == 3 && (row.orderStatus == 1 || row.orderStatus == 2) && row.orderType != 4 && showPermissions('OrderEdit') && row.payAllDueAmount!==0"
+                                            ng-click="ordersMoreChargeInit(row)">
+                                            <a>收费</a>
+                                        </li>
+                                        <!--<li ng-if="row.orderCategory == 3 && (row.orderStatus == 1 || row.orderStatus == 2) && row.orderType != 4 && showPermissions('OrderEdit') && row.payDueAmount!==0"
+                                            ng-click="chargeOrderTopup(row)">
+                                            <a>收费</a>
+                                        </li>-->
+                                        <li ng-if="row.orderCategory == 3 && (row.orderStatus == 1 || row.orderStatus == 2) && row.orderType != 4 && showPermissions('OrderEdit')"
+                                            ng-click="editOrderTopup(row)">
+                                            <a>修改</a>
+                                        </li>
+
+                                        <li ng-if="row.orderCategory == 3 && (row.orderStatus == 1 || row.orderStatus == 2) && row.orderType != 4 && showPermissions('OrderAudit') && canOperateMore"
+                                            ng-click="detailOrder(row,7)"
+                                            >
+                                            <!--ng-click="auditOrderTopup(row)"-->
+                                            <a>审核</a>
+                                        </li>
+                                        <li ng-if="row.orderFlag != 1 && row.orderCategory == 3 && (row.orderStatus == 1 || row.orderStatus == 2 || (row.orderStatus == 3 && hasChargeBackOrderPermission ) ) && row.orderType != 4 && showPermissions('OrderAudit')"
+                                            ng-click="detailOrder(row,8)"         >
+                                            <!--ng-click="chargeBackOrderTopup(row)"-->
+                                            <a>退单</a>
+                                        </li>
+                                        <li ng-if="row.orderType != 7 && row.orderStatus == 11" ng-click=auditTransferCommonOrderBack(row)>
+                                            <a>撤销转课</a>
+                                        </li>
+                                    </ul>
+                                </bubble>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody ng-show="isLoading">
+                    <tr>
+                        <td colspan="12" class="text-center"><div class="loading-indicator"></div></td>
+                    </tr>
+                    </tbody>
+                    <!-- 分页 -->
+                    <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="16">
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- add view -->
+    <div ng-show="isOrderAdding" class="view-content">
+        <div>
+            <div>
+                <ul class="breadcrumb">
+                    <li><a href="#">首页</a> <span class="divider"></span></li>
+                    <li><a href="#/fb-admin">前台业务</a> <span class="divider"></span></li>
+                    <li><a href="#">普通订单管理管理</a> <span class="divider"></span></li>
+                    <li class="active">普通订单列表</li>
+                    <li class="active">新增订单</li>
+                </ul>
+            </div>
+        </div>
+        <form name="form" role="form" class="form-horizontal showcase-form" novalidate="">
+            <div class="tab-panel">
+                <div class="row">
+                    <div class="col-sm-4 form-group">
+                        <label for="orderNo" class="col-sm-4 control-label"> 合同编号</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="orderNo" id="orderNo" class="form-control" ng-model="order.orderNo" />
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group">
+                        <label for="crmStudentId" class="col-sm-4 control-label">* 学员leadsId</label>
+                        <div class="col-sm-8">
+                            <input type="text" id="crmStudentId" class="form-control" ng-model="order.crmStudentId" placeholder="1到10个字符" ng-maxlength="20"
+                                ng-minlength="1" required/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group">
+                        <label for="orderType" class="col-sm-4 control-label">* 订单类型</label>
+                        <div class="col-sm-8">
+                            <select ng-model="order.orderType" name="orderType" id="orderType" class="form-control">
+                                <option value="1">新签</option>
+                                <option value="2">续费</option>
+                                <option value="3">返课</option>
+                                <option value="5">推荐</option>
+                                <option value="8">赠课</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 form-group">
+                        <label for="contractStartDate" class="col-sm-4 control-label">* 签约时间</label>
+                        <div class="col-sm-8">
+                            <input type="date" name="contractStartDate" id="contractStartDate" class="form-control" ng-model="order.contractStartDate"
+                                required/>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label for="contractEndDate" class="col-sm-4 control-label">* 到期时间</label>
+                        <div class="col-sm-8">
+                            <input type="date" name="contractEndDate" id="contractEndDate" class="form-control" ng-model="order.contractEndDate" required/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div>
+                <div class="row">
+                    <div class="col-sm-3 form-group">
+                        <label for="courseTypeId" class="col-sm-4 control-label">课程类型</label>
+                        <div class="col-sm-8">
+                            <select ng-model="courseTypeId" name="courseTypeId" id="courseTypeId" class="form-control" ng-options="option.id as option.name for option in courseTypeIds">
+                                <option value="">-- 请选择 --</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3 form-group">
+                        <label for="subjectId" class="col-sm-4 control-label">课程年级</label>
+                        <div class="col-sm-8">
+                            <select ng-model="gradeId" name="gradeId" id="gradeId" class="form-control" ng-options="option.id as option.name for option in gradeIds">
+                                <option value="">-- 请选择 --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 form-group">
+                        <label for="gradeId" class="col-sm-4 control-label"> 产品科目</label>
+                        <div class="col-sm-8">
+                            <select ng-model="subjectId" name="subjectId" id="subjectId" class="form-control" ng-options="option.id as option.name for option in subjectIds">
+                                <option value="">-- 请选择 --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 form-group">
+                        <label for="originalNum" class="col-sm-4 control-label">* 产品课时</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="originalNum" id="originalNum" class="form-control" ng-model="originalNum" />
+                        </div>
+                    </div>
+                    <button class="btn btn-success" ng-click="addOrderCourse()">添加课程</button>
+                </div>
+            </div>
+            <hr>
+            <div>
+                <!-- 课程列表 -->
+                <table class="table table-bordered table-striped" st-table="order.orderCourses">
+                    <thead>
+                        <tr>
+                            <th>课程ID</th>
+                            <th>课程类型</th>
+                            <th>年级</th>
+                            <th>科目</th>
+                            <th>标准单价</th>
+                            <th>课时量</th>
+                            <th>总价</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tr ng-repeat="row in order.orderCourses">
+                        <td>{{row.courseId}}</td>
+                        <td>{{row.courseTypeName}}</td>
+                        <td>{{row.gradeName}}</td>
+                        <td>{{row.subjectName}}</td>
+                        <td>
+                            <input type="text" ng-value="row.standardPrice" ng-model="row.standardPrice" placeholder="1到10个字符" ng-maxlength="10" ng-minlength="1"
+                                required class="input-sm form-control" />
+                        </td>
+                        <td>{{row.originalNum}}</td>
+                        <td>{{row.standardPrice*row.originalNum}}</td>
+                        <td><a ng-click="delOrderCourse(row)" title="删除"><span
+                                class="glyphicon glyphicon-delete"></span></a></td>
+                    </tr>
+                </table>
+            </div>
+            <hr>
+            <div>
+                <!-- 订单课程汇总信息-->
+                <div class="row">
+                    <div class="col-sm-4 form-group">
+                        <label for="realStandardPrice" class="col-sm-4 control-label">* 实际单价</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="realStandardPrice" id="realStandardPrice" class="form-control" ng-model="order.realStandardPrice"
+                                ng-maxlength="10" required/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group">
+                        <label for="realTotalAmount" class="col-sm-4 control-label">* 实际总价</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="realTotalAmount" id="realTotalAmount" class="form-control" ng-model="order.realTotalAmount" ng-maxlength="10"
+                                required/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group">
+                        <label for="privilegeAmount" class="col-sm-4 control-label">* 优惠金额</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="privilegeAmount" id="privilegeAmount" class="form-control" ng-model="order.privilegeAmount" ng-maxlength="10"
+                                required/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 form-group">
+                        <label for="realPayAmount" class="col-sm-4 control-label">* 实付价格</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="realPayAmount" id="realPayAmount" class="form-control" ng-model="order.realPayAmount" ng-maxlength="10"
+                                required/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group">
+                        <label for="payDueAmount" class="col-sm-4 control-label">* 尾款金额</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="payDueAmount" id="payDueAmount" class="form-control" ng-model="order.payDueAmount" ng-maxlength="10"
+                                required/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="operations-panel">
+                <button class="btn btn-success" ng-disabled="form.$invalid" ng-click="saveOrder()">提交</button>
+                <button class="btn btn-default" ng-click="hideOrderAddView()">取消</button>
+            </div>
+        </form>
+    </div>
+    <script src="js/jqDom.js"></script>
+</div>

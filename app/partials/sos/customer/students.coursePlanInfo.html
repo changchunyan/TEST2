@@ -1,0 +1,269 @@
+<div class=“row” ng-controller="CustomerStudentCourseController as cscc">
+	<div class="view-left">
+	        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+	</div>
+	<div class="view-content">
+		 <div>
+             <ul class="breadcrumb">
+                 <li><a href="#/">首页</a> <span class="divider"></span></li>
+                 <li><a href="#/sos-admin">学员教务</a> <span class="divider"></span></li>
+                 <li>
+                    <a ng-if="type == 1 || type == 2" href="#/sos-admin/customer_student">学员管理</a>
+                    <a ng-if="type == 3" href="#/fb-admin/leads_student">学员leads管理</a>
+                    <span class="divider"></span></li>
+             	 <li class="active">排课详情</li>
+             </ul>
+         </div>
+		<div class="details-title">排课详情</div>
+		<div class="plan-details">
+			<div class="plan-contents">
+				<div class="plan-details-title">排课</div>
+				<div>
+					<div class="plan-part">
+						<div class="plan-part-title"><span>1</span>查看学员信息</div>
+						<table class="table table-bordered table-striped table-condensed">
+							<thead>
+								<tr>
+									<th>姓名</th>
+									<th>年级</th>
+									<th>性别</th>
+									<th>电话</th>
+									<th ng-if="type == 1 || type == 2">剩余课时</th>
+								</tr>
+							</thead>
+							<tbody>
+								 <tr ng-if="type == 1">
+									<td>{{detail.customer_name}}</td>
+									<td>{{detail.grade_name}}</td>
+									<td><p ng-if="!detail.gender && detail.gender == false">女</p>
+										<p ng-if="detail.gender">男</p>
+									</td>
+									<td>{{detail.customer_phone}}</td>
+									<td>{{detail.not_ok_course_num}}</td>
+								 </tr>
+								  <tr ng-if="type == 3">
+									<td>{{detail.customer_name}}</td>
+									<td>{{detail.grade_name}}</td>
+									<td><p ng-if="!detail.gender && detail.gender == false">女</p>
+										<p ng-if="detail.gender">男</p>
+									</td>
+									<td>{{detail.customer_phone}}</td>
+								 </tr>
+								 <tr ng-if = "type == 2" ng-repeat="detail in CGoupStudentCourseList">
+									<td>{{detail.name}}</td>
+									<td>{{detail.grade_name}}</td>
+									<td><p ng-if="!detail.gender && detail.gender == false">女</p>
+										<p ng-if="detail.gender">男</p>
+									</td>
+									<td>{{detail.phone}}</td>
+									<td>{{detail.not_ok_course_num}}</td>
+								 </tr>
+
+							</tbody>
+						</table>
+					</div>
+					<div class="plan-part">
+						<div class="plan-part-title"><span>2</span>选择产品类型</div>
+						<table class="table table-bordered table-striped table-condensed">
+							<thead>
+								<tr>
+									<th></th>
+									<th ng-if = "type == 1" >合同编号</th>
+									<th ng-if = "type == 1" >签约日期</th>
+									<th ng-if = "type == 1" >订单类型</th>
+									<th>产品类型</th>
+									<th>年级</th>
+									<!-- <th ng-if = "type == 1" >科目</th> -->
+									<th>排课科目(可更改)</th>
+									<th>可选课时</th>
+								</tr>
+							</thead>
+							<tbody id="orderInfo">
+								<tr ng-if = "type == 2 || type == 1" ng-repeat="row in CustomerStudentCourseList" >
+									<td>	
+									    <div ng-if="!row.disabled">
+											<input type="radio" name="cscourse" ng-click="selectIt($index)" ng-checked="row.isChecked" ng-disabled="row.disabled" 
+											ng-model="formData.cscourse" value="{{$index}}"/>
+										</div>
+										<div ng-if="row.disabled" title="请先排签约日期更早的订单中的课时"  data-toggle="tooltip">
+											<input type="radio" name="cscourse" ng-click="selectIt($index)" ng-checked="row.isChecked" ng-disabled="row.disabled" 
+											ng-model="formData.cscourse" value="{{$index}}"/>
+										</div>
+									</td>
+									<td ng-if="type == 1">{{row.order_no}}</td>
+									<td ng-if="type == 1">{{row.contract_start_date | date:'yyyy-MM-dd'}}</td>
+									<td ng-if="type == 1">
+										<span ng-if="row.order_type == 1">新签</span>
+										<span ng-if="row.order_type == 2">续费</span>
+										<span ng-if="row.order_type == 3">返课</span>
+										<span ng-if="row.order_type == 4">转课</span>
+										<span ng-if="row.order_type == 5">推荐</span>
+										<span ng-if="row.order_type == 6">试听</span>
+									</td>
+									<td>{{row.course_type_name}}</td>
+									<td>{{row.grade_name}}</td>
+									<!-- <td ng-if ="type == 1">{{row.subject_name}}</td> -->
+									<td ng-if ="type == 1">
+										<select class="input-sm form-control" ng-model="sub" ng-change="selectSubject()" style="width:120px;">
+											<option ng-repeat="row1 in row.omsSubject" value="{{row1.id}}" ng-selected="row1.id == row.subject_id" >{{row1.name}}</option>
+										</select>
+									</td>
+									<td ng-if ="type == 2">
+										<select class="input-sm form-control"  ng-model="subjectId" ng-change="selectSubjectGroup()" style="width:120px;" required>
+											<option ng-repeat="row1 in omsSubject" value="{{row1.id}}" >{{row1.name}}</option>
+										</select>
+									</td>
+									<td>{{row.plan_available_num}}</td>
+								</tr>
+								<tr ng-if = "type == 3" >
+									<td><input type="radio" name="cscourseSt"  ng-model="formData.cscourseSt"  value="shiTing"/></td>
+									<td>试听课</td>
+									<td>
+										<select  class="input-sm form-control"   name="gradeId" id="gradeId" ng-model="gradeId" ng-change="selectGrade(gradeId)" style="width:100px;">
+											<option ng-repeat="row in omsGrade" value="{{row.id}}" ng-selected="row.id == detail.grade_id">{{row.name}}</option>
+										</select>
+									</td>
+									<td>
+										<select class="input-sm form-control"  ng-model="subSt" ng-change="selectSubjectSt()" style="width:120px;" required>
+											<option ng-repeat="row1 in omsSubject" value="{{row1.id}}" >{{row1.name}}</option>
+										</select>
+									</td>
+									<td>{{classTime}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="plan-part">
+					    <div class="plan-part-title" style="position:relative">
+					        <span>3</span>选择教师
+					        <div style="text-align:right;width:100%;hight:30%;position: absolute;top: 5px;right: 20px;" class="ng-binding">
+					        	{{startEndTime}}&nbsp;&nbsp;&nbsp;&nbsp;
+					        	<button style="align:right" type="button" class="btn "  ng-disabled="!canSelectTime" ng-click="showTimeDialog()">按排课时间段查询可用教师</button>
+					    	</div>
+					    </div>
+						<div class="table-responsive"  >
+						  <table class="table table-bordered table-striped table-condensed" st-pipe="getCSShooleTeacherByFilters" st-table="CStudentSchoolTeacherList">
+							<thead class="table table-bordered table-striped table-condensed">
+								 <tr>
+									 <th>老师姓名</th>
+									 <th>手机</th>
+									 <th>全职/兼职</th>
+									 <th>校区</th>
+									 <th>科目</th>
+									 <th>年级段</th>
+									 <th>排课</th>
+								 </tr>
+								 <tr>
+								 	<th>
+								 		<input type="search" name="teacherName" id="teacherName" ng-model="teacherName" placeholder="姓名查询" st-search="teacherName" class="input-sm form-control"  />
+								 	</th>
+								 	<th>
+								 		<input type="search" name="mobile" id="mobile" ng-model="mobile" placeholder="手机号查询" st-search="mobile" class="input-sm form-control" />
+								 	</th>
+								 	<th>
+								 		<select name="partFull" id="partFull" ng-model="partFull" st-search="partFull" class="input-sm form-control" style="width:120px;">
+											<option value ="" >--请选择--</option>
+											<option value ="1">兼职</option>
+											<option value ="2">全职</option>
+										</select>
+								 	</th>
+								 	<th>
+								 		<input type="search" name="schoolName" id="schoolName" ng-model="schoolName" st-search="schoolName" style="display: inline-block;" class="input-sm form-control" />
+								 		<img src="img/icon/util/wen.png" class="icon-wen" style="width: 16px;height: 16px" title="可输入其他校区进行查询"/>
+								 	</th>
+								 	<th>
+								 		
+								 	</th>
+								 	<th>
+								 		<select name="teacherGrade" id="teacherGrade" ng-model="teacherGrade" st-search="teacherGrade"  class="input-sm form-control"  style="width:120px;">
+								 			<option value="" >--请选择--</option>
+								 			<option value="1">小学</option>
+								 			<option value="2">初中</option>
+								 			<option value="3">高中</option>
+								 		</select>
+								 	</th>
+								 	<th>
+								 		<!--  <button type="button" class="btn btn-success" ng-click="getCSShooleTeacherByFilters()">查询</button>-->
+								 		
+								 	</th>
+								 </tr>
+							 </thead>
+							 <tbody>
+								<tr ng-repeat="row in CStudentSchoolTeacherList.list">
+									<td>{{row.username}}</td>
+									<td>{{row.mobile}}</td>
+									<td><span ng-if="row.part_full == 1">兼职</span>
+										<span ng-if="row.part_full == 2">全职</span>
+									</td>
+									<td>{{row.deptname}}</td>
+									<td>{{row.subject_name}}</td>
+									<td>{{row.teacher_grade}}</td>
+									<td>
+									    <button type="button" class="btn " ng-click="showPlanDialog(row)">只排此时段</button>
+										<button type="button" class="btn " ng-click="forwardCoursePlan(row)">排课</button>
+									</td>
+								</tr>
+							 </tbody>
+							 <tbody ng-show="isRemindLoading">
+								  <tr>
+									  <td colspan="5" class="text-center"><div class="loading-indicator"></div></td>
+								  </tr>
+							 </tbody>
+							 <tfoot>
+								<tr>
+									<td class="text-center" st-pagination="t1" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="7">
+									</td>
+								</tr>
+							 </tfoot>
+						 </table>
+						 </div>
+					</div>
+					<div class="plan-part">
+						<div class="plan-part-title"><span>4</span>已排课课时</div>
+						<div class="table-responsive"  >
+							<table class="table table-bordered table-striped table-condensed" st-pipe="getCRMCourseBySomething" st-table="CStudentCoursePlanList">
+								 <thead>
+									 <tr>
+										　　　　　　　<!--<th>操作</th>-->
+										 <th>上课日期</th>
+										 <th>上课时间</th>
+										 <th>下课时间</th>
+										 <th>课程类别</th>
+										 <th>科目</th>
+										 <th>任课老师</th>
+									 </tr>
+								 </thead>
+								 <tbody>
+									<tr ng-repeat="row in CStudentCoursePlanList.list">
+										<!--
+										<td>
+											<a ng-click="removeCoursePlanByFilter(row)"><span class="glyphicon glyphicon-delete" title="删除排课"></span></a>&nbsp;
+										</td>-->
+										<td>{{row.start_time | date:'yyyy-MM-dd'}}</td>
+										<td>{{row.start_time | date:'HH:mm:ss'}}</td>
+										<td>{{row.end_time | date:'HH:mm:ss'}}</td>
+										<td ng-if = "type != 3" >{{row.type_name}}</td><td ng-if = "type == 3" >试听课程</td>
+
+										<td>{{row.subject_name}}</td>
+										<td>{{row.user_name}}</td>
+									</tr>
+								 </tbody>
+								 <tbody ng-show="isRemindLoading">
+									  <tr>
+										  <td colspan="6" class="text-center"><div class="loading-indicator"></div></td>
+									  </tr>
+								 </tbody>
+								 <tfoot>
+									<tr>
+										<td class="text-center" st-pagination="t2" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="6">
+										</td>
+									</tr>
+								 </tfoot>
+							 </table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+ 	</div>
+</div>

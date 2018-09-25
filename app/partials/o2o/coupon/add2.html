@@ -1,0 +1,301 @@
+<div class="view-frame" >
+
+	<div class="view-left">
+		<nav-side menu-data="menu.subMenu"></nav-side>
+	</div>
+
+	<div class="view-content">
+		<div>
+			<div>
+				<ul class="breadcrumb">
+					<li><a href="#/">首页</a> <span class="divider"></span></li>
+					<li><a href="#/o2o-admin">o2o系统管理</a> <span class="divider"></span></li>
+					<li class="active">优惠券添加</li>
+				</ul>
+			</div>
+			<div class="tabs-title">添加优惠券
+				<div class="leads-top-btn">
+					<div class="operations-panel" >
+						<button class="btn btn-primary col-xs-offset-8" ng-click="toList()" style="width:90px;">返回</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="tabs-wrap">
+			<form name="editForm" role="form" class="form-horizontal showcase-form table-responsive" novalidate="">
+				<div class="tab-panel">
+					<h3 class="row ">基本信息:</h3>
+					<div class="row">
+						<div class="col-sm-4 form-group">
+							<label for="coupon.couponName" class="col-sm-4 control-label">* 优惠券名称</label>
+							<div class="col-sm-8">
+								<input type="text" name="coupon.couponName" id="coupon.couponName" ng-model="coupon.couponName" placeholder="1到10个字符" class="form-control" ng-maxlength="10" ng-minlength="1" required/>
+							</div>
+						</div>
+						<div class="col-sm-4 form-group">
+							<label for="coupon.limitAmount" class="col-sm-4 control-label">发放数量</label>
+							<div class="col-sm-8">
+								<input ng-disabled="coupon.key" type="number" name="coupon.limitAmount" id="coupon.limitAmount" class="form-control" ng-model="coupon.limitAmount" min="0"  ng-maxlength="6"  style="width: 80%;float: left"/>
+								&nbsp;<span id="showAmountLimit" class="glyphicon glyphicon-yichang2"></span>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-4 form-group" >
+							<label for="coupon.isShelve" class="col-sm-4 control-label">* 优惠券状态</label>
+							<div class="col-sm-8">
+								<select ng-model="coupon.isShelve"  name="coupon.isShelve" id="coupon.isShelve" class="form-control" ng-options="option.id as option.name for option in shelfStatusList">
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-8 form-group" >
+							<label for="coupon.preferentialPolicy" class="col-sm-2 control-label">* 优惠方式</label>
+							<div class="col-sm-10" >
+								订单金额 满
+								<div class="inline-block" ng-if="coupon.preferentialPolicy == 1">
+									<input type="number" name="coupon.couponReductionActivation" id="coupon.couponReductionActivation" class="form-control inline-block" required ng-model="coupon.couponReductionActivation" ng-pattern="/^[0-9]*$/" min="1"  ng-maxlength="6" />
+								</div>
+								<div class="inline-block" ng-if="coupon.preferentialPolicy == 2">
+									<input type="number" name="coupon.couponDiscountActivation" id="coupon.couponDiscountActivation" class="form-control inline-block" required ng-model="coupon.couponDiscountActivation" ng-pattern="/^[0-9]*$/" min="1"  ng-maxlength="6" />
+								</div>
+								<select ng-model="coupon.preferentialPolicy"  name="coupon.preferentialPolicy" id="coupon.preferentialPolicy" class="yws-form-control inline-block" ng-options="option.id as option.name for option in preferentialPolicyList">
+								</select>
+								<div class="inline-block" ng-if="coupon.preferentialPolicy == 1">
+									<input type="number" name="coupon.couponReduction" placeholder="输入数字"  id="coupon.couponReduction" class="yws-form-control inline-block" required ng-model="coupon.couponReduction" ng-pattern="/^[0-9]*$/" min="1"  style="width: 200px;outline-color: invert;"  ng-maxlength="6" />元
+								</div>
+								<div class="inline-block" ng-if="coupon.preferentialPolicy == 2">
+									<input type="number" name="coupon.couponDiscount" placeholder="可用小数点，如9.5折"  id="coupon.couponDiscount" ng-pattern="/^([1-9]\d*|0)(\.\d{1,2})?$/" class="yws-form-control inline-block" required style="width: 200px;outline-color: invert;" ng-model="coupon.couponDiscount" min="0.01" max="9.99"  ng-maxlength="6" />折
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<h3 class="row ">使用规则:</h3>
+					<div class="row">
+						<div class="col-sm-4 form-group" >
+							<label class="col-sm-4 control-label">* 限制领取</label><!-- for="coupon.isAmountLimit"-->
+							<div class="col-sm-8">
+								<div class="col-sm-4">
+									<input type="radio" name="coupon.isAmountLimit" ng-model="coupon.isAmountLimit" value="0" class="ng-pristine ng-untouched ng-valid needsclick">不限
+									<input type="radio" name="coupon.isAmountLimit" ng-model="coupon.isAmountLimit" value="1" class="ng-pristine ng-untouched ng-valid needsclick">限制
+								</div>
+								<div class="col-sm-8" ng-if="coupon.isAmountLimit == 1">
+									<input type="number" name="coupon.amountPerPerson" id="coupon.amountPerPerson" class="form-control col-sm-8" ng-model="coupon.amountPerPerson" required min="1" ng-maxlength="4" style="width: 65%"/>
+									<span  class="col-sm-4 control-label">张/账号</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-4 form-group" >
+							<label class="col-sm-4 control-label">* 开始时间</label><!-- for="coupon.validitystarttime"-->
+							<div class="col-sm-8">
+								<input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'2015-01-01 00:00:00',maxDate:'2030-12-31 23:59:59'})"   name="coupon.validitystarttime"  class="form-control"
+									   ng-model="coupon.validitystarttime" ng-value="coupon.validitystarttime" onchange=""  readonly  required/>
+							</div>
+						</div>
+						<div class="col-sm-4 form-group" >
+							<label class="col-sm-4 control-label">* 结束时间</label><!-- for="coupon.validityendtime"-->
+							<div class="col-sm-8">
+								<input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'2015-01-01 00:00:00',maxDate:'2030-12-31 23:59:59'})"   name="coupon.validityendtime"  class="form-control"
+									   ng-model="coupon.validityendtime" ng-value="coupon.validityendtime" onchange=""  readonly  required/>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-4 form-group" >
+							<label class="col-sm-4 control-label">* 可使用课程</label><!-- for="coupon.isCourseLimit"-->
+							<div class="col-sm-8">
+								<div class="col-sm-8">
+									<input type="radio" name="coupon.isCourseLimit" ng-model="coupon.isCourseLimit" value="0" class="ng-pristine ng-untouched ng-valid needsclick">所有课程
+									<input type="radio" name="coupon.isCourseLimit" ng-model="coupon.isCourseLimit" value="1" class="ng-pristine ng-untouched ng-valid needsclick">指定课程
+								</div>
+								<div class="col-sm-2" ng-if="coupon.isCourseLimit == 1">
+									<button class="btn btn-primary col-xs-offset-8" ng-click="selectCourse()" style="width:90px;">添加课程</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-4 form-group" >
+							<label class="col-sm-4 control-label"></label>
+							<div class="col-sm-8" ng-if="coupon.isCourseLimit == 1">
+								<table class="table table-bordered table-striped table-condensed" st-pipe="getSelectCourseList" st-table="selectCourseList">
+									<thead></thead>
+									<tbody>
+									<tr ng-repeat="row in selectCourseList">
+										<td>{{row.name}}</td>
+										<td>
+											<a ng-click="deleteCourse(row)"><span class="glyphicon glyphicon-delete" title="删除"></span></a>
+										</td>
+									</tr>
+									</tbody>
+									<tfoot>
+									<tr>
+										<td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="20">
+										</td>
+									</tr>
+									</tfoot>
+								</table>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-4 form-group" >
+							<label class="col-sm-4 control-label">* 可使用地区</label><!-- for="coupon.isRegionLimit"-->
+							<div class="col-sm-8">
+								<div class="col-sm-8" >
+									<input type="radio" name="coupon.isRegionLimit" ng-model="coupon.isRegionLimit" value="0" class="ng-pristine ng-untouched ng-valid needsclick">所有地区
+									<input type="radio" name="coupon.isRegionLimit" ng-model="coupon.isRegionLimit" value="1" class="ng-pristine ng-untouched ng-valid needsclick">指定地区
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+					<div class="row">
+						<div class="col-sm-4 form-group"  ng-if="coupon.isRegionLimit == 1">
+							<label class="col-sm-4 control-label"></label>
+							<select ng-model="district.provinceCode" name="district.provinceCode" id="district.provinceCode" class="col-sm-4 form-control"
+									ng-options="option.provinceCode as option.provinceName for option in provinceList" ng-change="provinceChange()" style="width: 25%">
+								<option value="">-- 请选择 --</option>
+							</select>
+							<select ng-model="district.cityCode" name="district.cityCode" id="district.cityCode" class="col-sm-4 form-control" style="width: 25%"
+									ng-options="option.cityCode as option.cityName for option in cityList">
+								<option value="">-- 请选择 --</option>
+							</select>
+							<div class="col-sm-2">
+								<button class="btn btn-primary col-xs-offset-8" ng-click="selectRegion()" style="width:90px;">添加地区</button>
+
+							</div>
+
+						</div>
+
+
+					</div>
+					<div class="row">
+						<div class="col-sm-4 form-group" >
+							<label class="col-sm-4 control-label"></label>
+							<div class="table-responsive col-sm-4" ng-if="coupon.isRegionLimit == 1">
+								<div ng-repeat="row in selectRegionList" class="border-top1">
+									<div>
+										<span>{{row.name}}</span>
+										<a ng-click="deleteRegion(row)"><span class="glyphicon glyphicon-delete" title="删除"></span></a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<h3 class="row ">获取条件:</h3>
+					<div class="row">
+						<div class="col-sm-4 form-group" >
+							<label for="coupon.gainConditionType" class="col-sm-4 control-label">* </label>
+							<div class="col-sm-8">
+								<select ng-disabled="isEdit" ng-model="coupon.gainConditionType"  name="coupon.gainConditionType" id="coupon.gainConditionType" class="form-control" ng-options="option.id as option.name for option in gainConditionTypeList">
+								</select>
+							</div>
+						</div>
+
+						<div class="col-sm-8" ng-if="coupon.gainConditionType == 3">
+							<div class="col-sm-2" ng-if="coupon.key">
+								<input type="text" class="form-control"  readonly value="模板已上传" />
+							</div>
+
+						</div>
+
+						<div class="col-sm-4 form-group"  >
+							<div class="col-sm-8">
+								<input type="hidden" name="coupon.key" ng-model="coupon.key" class="ng-pristine ng-untouched ng-valid needsclick"/>
+							</div>
+						</div>
+					</div>
+					<div ng-if="coupon.gainConditionType == 3">
+						<div nv-file-drop="" uploader="uploader" filters="queueLimit, customFilter">
+							<div class="row" style="margin: 0 20px">
+								<div style="position: relative">
+									<input type="file" nv-file-select="" uploader="uploader" multiple/>
+									<div style="position: absolute; top: -15px;right: 20px;"> <a class="btn btn-primary" ng-href="{{domain}}/指定用户模板.xlsx">下载指定用户列表导入模版</a></div>
+								</div>
+								<div style="margin-bottom: 40px">
+									<!-- <h3>上传队列</h3>
+                                    <p>队列长度: {{ uploader.queue.length }}</p> -->
+									<table class="table">
+										<thead>
+										<tr>
+											<th width="30%">名称</th>
+											<th ng-show="uploader.isHTML5">大小</th>
+											<th width="30%" ng-show="uploader.isHTML5">进度</th>
+											<th>状态</th>
+											<th>操作</th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr ng-repeat="item in uploader.queue">
+											<td><strong>{{ item.file.name }}</strong></td>
+											<td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+											<td ng-show="uploader.isHTML5">
+												<div class="progress" style="margin-bottom: 0;">
+													<div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+												</div>
+											</td>
+											<td class="text-center">
+												<span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+												<span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+												<span ng-show="item.isError"><i class="glyphicon glyphicon-delete"></i></span>
+											</td>
+											<td nowrap>
+												<button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+													<span class="glyphicon glyphicon-upload"></span> 上传文件
+												</button>
+												<button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
+													<span class="glyphicon glyphicon-ban-circle"></span> 取消上传
+												</button>
+												<button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
+													<span class="glyphicon glyphicon-trash"></span> 删除文件
+												</button>
+											</td>
+										</tr>
+										</tbody>
+									</table>
+
+									<div>
+										<div>
+											总上传进度:
+											<div class="progress" style="">
+												<div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div class="text-center">
+					<input type="hidden" ng-model="coupon.id"/>
+					<button class="btn btn-success c5-lable" ng-disabled="editForm.$invalid" ng-click="saveCoupon()">保存</button>
+					<button class="btn btn-default" ng-click="toList()">取消</button>
+				</div>
+			</form>
+		</div>
+
+	</div>
+</div>
+
+<script type="text/javascript">
+	window.load = pause();
+	function pause(){
+		window.setTimeout("tooltipShow()", 1000);
+	}
+	function tooltipShow() {
+		var node = $("#showAmountLimit");
+		var content = '1. 给指定用户发放优惠券时，可不填； <br/>2. 对优惠券的发放数量无要求时，可不填。';
+		node.webuiPopover({content:content,trigger:'hover'});
+	}
+</script>

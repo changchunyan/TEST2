@@ -1,0 +1,282 @@
+<div class="modal oms-record-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content update-class">
+            <form name="form">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="channleEdit()"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle"></h4>
+                </div>
+                <div class="modal-body pb-20">
+                    <h2 class="modal-h2 modal-update">修改科目</h2>
+                    <div st-pipe="SubjectList" st-table="Subjectdisplayed" class="pt-10 of">
+                        <label>科目</label>
+                        <select class="input-sm form-control lh20" ng-model="OmsCoursePlanVoForEdit.subjectId"
+                                ng-change="selectSubject()" style="width:120px;float:left">
+                            <option ng-repeat="row in Subjectdisplayed" value="{{row.id}}"
+                                    ng-selected="row.id == OmsCoursePlanVoForEdit.subject_id">{{row.name}}
+                            </option>
+
+                        </select>
+                    </div>
+                    <div class="brt-dashed">
+                        <h2 class="modal-h2 modal-user">修改老师</h2>
+                        <div class="br-gray pl-0">
+                            <h2 class="br-gray-h2">当前教师</h2>
+                            <table class="table table-bordered table-striped table-condensed mt-table1"
+                                   st-pipe="teachernow"
+                                   st-table="teacherdisplayed">
+                                <thead>
+                                <tr>
+                                    <th>教师姓名</th>
+                                    <th>手机</th>
+                                    <th>供职状态</th>
+                                    <th>校区</th>
+                                    <th>科目</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="row in teacherdisplayed">
+                                    <td style="line-height: 28px">{{row.username}}</td>
+                                    <td>{{row.mobile}}</td>
+                                    <td><span ng-if="row.part_full == 1">兼职</span>
+                                        <span ng-if="row.part_full == 2">全职</span>
+                                    </td>
+                                    <td>{{row.deptname}}</td>
+                                    <td>{{row.subject_name}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    <div class="br-gray pl-0">
+                        <h2 class="br-gray-h2">待选教师列表</h2>
+                        <table class="table table-bordered table-striped table-condensed mt-table1"
+                               st-pipe="getCSShooleTeacherByFilters" st-table="CStudentSchoolTeacherList">
+                            <thead class="table table-bordered table-striped table-condensed">
+                            <tr>
+                                <th>选择</th>
+                                <th>老师姓名</th>
+                                <th>手机</th>
+                                <th>全职/兼职</th>
+                                <th>校区</th>
+                                <th>科目</th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th>
+                                    <input type="search" name="teacherName" id="teacherName" ng-model="teacherName"
+                                           placeholder="姓名查询" st-search="teacherName" class="input-sm form-control"/>
+                                </th>
+                                <th>
+                                    <input type="search" name="mobile" id="mobile" ng-model="mobile" placeholder="手机号查询"
+                                           st-search="mobile" class="input-sm form-control"/>
+                                </th>
+                                <th>
+                                    <select name="partFull" id="partFull" ng-model="partFull" st-search="partFull"
+                                            class="input-sm form-control" style="width:120px;">
+                                        <option value="">--请选择--</option>
+                                        <option value="1">兼职</option>
+                                        <option value="2">全职</option>
+                                    </select>
+                                </th>
+                                <th>
+                                    <input type="search" name="schoolName" id="schoolName" ng-model="schoolName"
+                                           st-search="schoolName" style="display: inline-block;"
+                                           class="input-sm form-control"/>
+                                    <!-- 	<img src="img/icon/util/wen.png" class="icon-wen" style="width: 16px;height: 16px" title="可输入其他校区进行查询"/> -->
+                                </th>
+                                <!--<th>
+
+                                </th>-->
+                                <th>
+                                    <!--  <button type="button" class="btn btn-success" ng-click="getCSShooleTeacherByFilters()">查询</button>-->
+
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="row in displayed">
+                                <td>
+                                    <input type="radio" name="cscourse" ng-click="selectIt($index)"
+                                           ng-disabled="row.disabled"
+                                           ng-model="formData.cscourse" value="{{$index}}"
+                                           ng-checked="showSelect(row)"/>
+                                </td>
+                                <td>{{row.username}}</td>
+                                <td>{{row.mobile}}</td>
+                                <td><span ng-if="row.part_full == 1">兼职</span>
+                                    <span ng-if="row.part_full == 2">全职</span>
+                                </td>
+                                <td>{{row.deptname}}</td>
+                                <td>{{row.subject_name}}</td>
+                            </tr>
+                            </tbody>
+                            <tbody ng-show="isRemindLoading">
+                            <tr>
+                                <td colspan="5" class="text-center">
+                                    <div class="loading-indicator">&nbsp;</div>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="text-center" st-pagination="t1" st-items-by-page="10"
+                                    st-template="partials/util/pagination.custom.html"
+                                    st-template="partials/util/pagination.custom.html" colspan="6">
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <!--<div class="table-responsive">
+                        <table class="table table-bordered table-striped table-condensed"
+                               st-pipe="getCSShooleTeacherByFilters" st-table="CStudentSchoolTeacherList">
+                            <thead class="table table-bordered table-striped table-condensed">
+                            <tr>
+                                <th>选择</th>
+                                <th>老师姓名</th>
+                                <th>手机</th>
+                                <th>全职/兼职</th>
+                                <th>校区</th>
+                                <th>科目</th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th>
+                                    <input type="search" name="teacherName" id="teacherName" ng-model="teacherName"
+                                           placeholder="姓名查询" st-search="teacherName" class="input-sm form-control"/>
+                                </th>
+                                <th>
+                                    <input type="search" name="mobile" id="mobile" ng-model="mobile" placeholder="手机号查询"
+                                           st-search="mobile" class="input-sm form-control"/>
+                                </th>
+                                <th>
+                                    <select name="partFull" id="partFull" ng-model="partFull" st-search="partFull"
+                                            class="input-sm form-control" style="width:120px;">
+                                        <option value="">&#45;&#45;请选择&#45;&#45;</option>
+                                        <option value="1">兼职</option>
+                                        <option value="2">全职</option>
+                                    </select>
+                                </th>
+                                <th>
+                                    <input type="search" name="schoolName" id="schoolName" ng-model="schoolName"
+                                           st-search="schoolName" style="display: inline-block;"
+                                           class="input-sm form-control"/>
+                                    &lt;!&ndash; 	<img src="img/icon/util/wen.png" class="icon-wen" style="width: 16px;height: 16px" title="可输入其他校区进行查询"/> &ndash;&gt;
+                                </th>
+                                &lt;!&ndash;<th>
+
+                                </th>&ndash;&gt;
+                                <th>
+                                    &lt;!&ndash;  <button type="button" class="btn btn-success" ng-click="getCSShooleTeacherByFilters()">查询</button>&ndash;&gt;
+
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="row in displayed">
+                                <td>
+                                    <input type="radio" name="cscourse" ng-click="selectIt($index)"
+                                           ng-disabled="row.disabled"
+                                           ng-model="formData.cscourse" value="{{$index}}" ng-checked="showSelect(row)"/>
+                                </td>
+                                <td>{{row.username}}</td>
+                                <td>{{row.mobile}}</td>
+                                <td><span ng-if="row.part_full == 1">兼职</span>
+                                    <span ng-if="row.part_full == 2">全职</span>
+                                </td>
+                                <td>{{row.deptname}}</td>
+                                <td>{{row.subject_name}}</td>
+                            </tr>
+                            </tbody>
+                            <tbody ng-show="isRemindLoading">
+                            <tr>
+                                <td colspan="5" class="text-center">
+                                    <div class="loading-indicator"></div>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="text-center" st-pagination="t1" st-items-by-page="10"
+                                    st-template="partials/util/pagination.custom.html"
+                                    st-template="partials/util/pagination.custom.html" colspan="7">
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>-->
+                    <h2 class="modal-h2 modal-time">修改时间</h2>
+                    <div class="of mt-10">
+                        <div class="row m0">
+                            <div class="col-sm-6 col-md-5 col-lg-4 form-group">
+                                <label class="control-label" for="startTime">上课日期</label>
+                                <div class="col-sm-8">
+                                    <input type="date" name="startDate" id="startDate" ng-model="select.startDate"
+                                           class="form-control" ng-change="show.getEndTime()" onfocus="(this.type='date')"
+                                           value="{{ select.startDate | date:'yyyy-MM-dd' }}" required/>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-5 col-lg-4 form-group">
+                                <label class="control-label">上课时间</label>
+                                <div class="col-sm-7">
+                                    <input ype="text" datepicker="" onclick="WdatePicker({dateFmt:'H:mm'})" onchange=""
+                                           readonly="" name="leadsName"
+                                           ng-model="select.time" placeholder="上课时间" class="form-control ng-pristine "
+                                           required="" ng-change="show.getEndTime()" ng-focus="show.getEndTime()">
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-5 col-lg-4 form-group">
+                                <label class="control-label">上课时长</label>
+                                <div class="col-sm-7" ng-init="initIs30Or20Min(select.timeSize,TIME_SIZE)">
+                                    <select ng-model="select.timeSize" ng-if="!is30Or20Min"
+                                            name="select.timeSize" class="input-sm form-control"
+                                            ng-options="option.id as option.name for option in TIME_SIZE" type="search"
+                                            required="" ng-change="show.getEndTime()">
+                                        <option value="">请选择</option>
+                                    </select>
+                                    <input readonly  ng-if="is30Or20Min" class="input-sm form-control"
+                                           required=""
+                                           ng-model="hoursText">
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-5 col-lg-4 form-group">
+                                <label class="control-label">下课时间</label>
+                                <div class="col-sm-7">
+                                    <input ype="text" readonly="" name=timeEnd
+                                           ng-model="select.timeEnd" placeholder="自动生成" class="form-control ng-pristine "
+                                           required="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 20180825添加上课途径 -->
+                    <h2 class="modal-h2 modal-time">修改上课途径</h2>
+                    <div class="of mt-10">
+                        <div class="row m0">
+                            <div class="col-sm-6 col-md-5 col-lg-4 form-group ">
+                                <label class="control-label">上课途径</label>
+                                <select
+                                        ng-model="OmsCoursePlanVoForEdit.typeO2o" class=" input-sm form-control"
+                                        ng-options="option.id as option.name for option in inClassOptions" required>
+                                    <option value="">请选择</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 20180825添加上课途径 -->
+                </div>
+                <div class="modal-footer">
+                    <div class="text-center">
+                        <button type="button" class="btn btn-default" ng-click="channleEdit()">取消</button>
+                        <button type="submit" class="btn btn-success" ng-click="EditCoursePlanNow()"
+                                ng-disabled="form.$invalid">确定
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

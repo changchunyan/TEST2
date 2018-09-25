@@ -1,0 +1,77 @@
+<div class="view-frame">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+
+    <div class="view-content">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="">人力资源系统管理</a> <span class="divider"></span></li>
+                <li class="active">岗位角色管理</li>
+            </ul>
+        </div>
+        <tabs>
+            <pane title="岗位角色管理">
+                <div class="row">
+                    <div class="c-select-text padding-0-20 form-horizontal yws-container">
+                        <div class="col-sm-3 form-group">
+                            <label class="col-sm-4 control-label" for="positionId">岗位编号</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control"  name="positionId" id="positionId"  ng-model="sf_position.id" />
+                            </div>
+                        </div>
+                        <div class="col-sm-3 form-group">
+                            <label class="col-sm-4 control-label" for="positionName">岗位名称</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control"  name="positionName" id="positionName"  ng-model="sf_position.name" />
+                            </div>
+                        </div>
+
+                        <div class="c_center col-sm-12">
+                            <button id="keydown-query" class="btn btn-primary" ng-click="getPositionRoleByFilter()">查询</button>
+                            <button class="btn" ng-click="reset()">重置</button>
+                        </div>
+
+                    </div>
+
+                    <div class="table-responsive c-select-text" style="overflow:scroll;overflow-y:hidden">
+                        <h4>岗位角色列表</h4>
+                        <table st-pipe="list" st-table="position_roles" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>岗位编号</th>
+                                <th>岗位名称</th>
+                                <th>角色名称</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="position_role in position_roles">
+                                <td>{{position_role.positionId}}</td>
+                                <td>{{position_role.positionName}}</td>
+                                <td>{{position_role.roles | nameList}}</td>
+                                <td>
+                                    <a ng-click="edit(position_role)" title="修改角色"><span class="glyphicon glyphicon-pencil"></span></a>
+                                    &nbsp;<a ng-click="remove(position_role)" title="删除角色"><span class="glyphicon glyphicon-delete"></span></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tbody ng-show="isLoading">
+                            <tr>
+                                <td colspan="13" class="text-center"><div class="loading-indicator"></div>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="4">
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </pane>
+        </tabs>
+    </div>
+</div>

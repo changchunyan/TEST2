@@ -1,0 +1,27 @@
+<div class="view-frame" ng-controller="BiBaseController">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content" ng-controller="BiSubjectGroupController">
+        <div style="margin-bottom: 10px">
+  		    <ul class="breadcrumb">
+  		        <li><a href="">教务报表</a><span class="divider"></span></li>
+  		        <li class="active">教务日常</li>
+  		    </ul>
+		    </div>
+        <search on-department-clicked="showSelectDepartment()"
+                department="selectdDepartment"
+                search-model="searchModel"
+                is-school-user="isSchoolUser"
+                provinces="provinces"
+                on-province-changed="getCitysByProvinceCode(searchModel.schoolProvince)"
+                cities="cities"
+                on-reset="reset(isQ)"
+                on-search="argJudgement(generateSubjectGroup)"/>
+        <tabs>
+        	<pane title="学科组汇总报表">
+        		<div ng-include="'partials/bi/biTeacherReport/biSubjectGroupSummaryReport.html'"></div>
+        	</pane>
+        </tabs>
+    </div>
+</div>

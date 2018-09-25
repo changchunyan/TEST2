@@ -1,0 +1,77 @@
+<div class="modal crm-invitationDetail-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-small">
+        <div class="modal-content">
+            <form name="form">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide();zhifangbianjisubmitfalse()"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle"></h4>
+                </div>
+
+                <div class="modal-body mt-yue">
+
+
+
+                <div class="form-group">
+                    邀约时间：{{CrmInvitationDetailVoForCreate.invitateTime | date:'yyyy-MM-dd'}}&nbsp;&nbsp;&nbsp;
+                    预计到访时间:{{CrmInvitationDetailVoForCreate.receiveTime | date:'yyyy-MM-dd'}}&nbsp;&nbsp;&nbsp;
+                    邀约内容:<span ng-if="laifangeditcontent==1">物料领取</span>
+                    <span ng-if="laifangeditcontent==2">活动</span>
+                    <span ng-if="laifangeditcontent==3">测评</span>
+                    <span ng-if="laifangeditcontent==4">讲座</span>
+                    <span ng-if="laifangeditcontent==5">托管自习</span>
+                </div>
+                <div class="form-group of">
+                    <input type="checkbox"   ng-click="edittablaifang()"  name="laifangtag1" ng-model="flaglaifang.lai">已到访
+                    <input type="checkbox"  ng-click="edittablaifangwei()" name="laifangtag2" ng-model="flaglaifang.wei">未到访
+                </div>
+                <div ng-if="edittablaifangflg">
+                    <div class="form-group of"
+                         ng-class="{ 'has-error': form.viewTime.$dirty && form.viewTime.$error.required }">
+                        <label for="viewTime" class="fl">* 到访时间</label>
+                        <div class="col-sm-6">
+                            <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange=""
+                                   name="receiveTime" id="viewTime" class="form-control col-sm-10"
+                                   ng-model="CrmInvitationDetailVoForCreate.viewTime"
+                                   value="{{ CrmInvitationDetailVoForCreate.viewTime | date:'yyyy-MM-dd'}}" readonly required/>
+                            <!-- <input type="text" name="receiveTime" id="receiveTime" datePicker ng-model="CrmInvitationDetailVoForCreate.receiveTime"
+                                 class="form-control" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})"  onchange="" />  -->
+                            <span ng-show="form.viewTime.$dirty && form.viewTime.$error.required"
+                                  class="help-block">请输入邀约时间</span>
+                        </div>
+                    </div>
+                    <div class="form-group of row"
+                    >
+                        <label for="invitationContent2" class="fl" style="padding-left:15px;">* {{laifanginnertexxt}}</label>&nbsp;&nbsp;
+                        <!--<textarea name="invitationContent" id="invitationContent" placeholder="邀约内容..."-->
+                        <!--class="form-control col-sm-12" ng-maxlength="100"-->
+                        <!--ng-model="CrmInvitationDetailVoForCreate.invitationContent" required/>-->
+                        <!--<span ng-show="form.invitationContent.$dirty && form.invitationContent.$error.required"-->
+                        <!--class="help-block">请输入邀约内容</span>-->
+                        <select id="invitationContent2" ng-model="CrmInvitationDetailVoForCreate.visitContentType" class="col-sm-4" required
+                                ng-value="{{CrmInvitationDetailVoForCreate.visitContentType }}" style="width:300px;">
+                            <option value="1">物料领取</option>
+                            <option value="2">活动</option>
+                            <option value="3">测评</option>
+                            <option value="4">讲座</option>
+                            <option value="5">托管自习</option>
+                        </select>
+                    </div>
+                </div>
+
+                </div>
+
+
+                <div class="modal-footer">
+                    <div class="text-center">
+                        <button type="button" class="btn btn-default" ng-click="$hide();zhifangbianjisubmitfalse()">取消</button>
+                        <button type="submit" ng-if='!zhifangbianjisubmit &&   !tachlaifang' class="btn btn-success c5-lable" ng-disabled="form.$invalid" ng-click="visit(CrmInvitationDetailVoForCreate)">保存</button>
+                        <button type="submit" ng-if='zhifangbianjisubmit &&  !tachlaifang' class="btn btn-success c5-lable" ng-disabled="form.$invalid" ng-click="updatezhifanig(CrmInvitationDetailVoForCreate)">保存</button>
+                        <!--<button type="submit" ng-if='!tachlaifang' class="btn btn-success c5-lable" ng-disabled="form.$invalid" ng-click="visit(CrmInvitationDetailVoForCreate);updatezhifanig(CrmInvitationDetailVoForCreate)">保存2</button>-->
+                        <button type="submit" ng-if='tachlaifang' class="btn btn-success c5-lable" ng-disabled="form.$invalid" ng-click="updatezhifanig(CrmInvitationDetailVoForCreate)">保存</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

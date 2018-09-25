@@ -1,0 +1,217 @@
+<script type="text/javascript">
+    $('.talent-star').raty({
+        path:"img/hr",
+        click: function(score, evt) {
+            $("#editStarValue").val(score);
+        },
+        half:true
+    });
+    $("#reset-star").click(function () {
+        $('#tableStars').raty('score', 0);
+        $("#editStarValue").val("");
+        $('#tableStarsReserve').raty('score', 0);
+    })
+</script>
+<div class="row">
+
+        <!-- 筛选条件 -->
+    <div class="form-horizontal c-select-text yws-container">
+        <div class="yws-container">
+            <div class="col-sm-4 form-group">
+                <label for="name" class="col-sm-4 control-label">姓名</label>
+                <div class="col-sm-8">
+                    <input ng-model="reserve.name" type="text" name="name" id="name" class="form-control" />
+                </div>
+            </div>
+            <div class="col-sm-4 form-group">
+                <label for="mail" class="col-sm-4 control-label">邮箱</label>
+                <div class="col-sm-8">
+                    <input ng-model="reserve.mail" type="text" name="mail" id="mail" class="form-control" />
+                </div>
+            </div>
+            <div class="col-sm-4 form-group">
+                <label for="tableStars" class="col-sm-4 control-label">符合度</label>
+                <div class="col-sm-8 " style="margin-bottom: 15px;">
+                    <span id="tableStars" class="talent-star "></span>
+                    <input hidden="true" id="editStarValue">
+                </div>
+            </div>
+            <div class="col-sm-4 form-group">
+                <label for="department" class="col-sm-4 control-label">应聘部门</label>
+                <div class="col-sm-8">
+                    <input id="department" type="text" class="form-control" ng-click="showSelectDepartment()" ng-model="hrTalent.department.name" />
+                </div>
+            </div>
+            <div class="col-sm-4 form-group">
+                <label for="position" class="col-sm-4 control-label">应聘岗位</label>
+                <div class="col-sm-8">
+                    <select name="position" id="position" ng-options="position.name for position in positions track by position.id" ng-model="hrTalent.position" class="form-control" >
+                        <option value="">------请选择------</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-4 form-group">
+                <label for="tel" class="col-sm-4 control-label">电话</label>
+                <div class="col-sm-8">
+                    <input ng-model="reserve.tel" type="text" name="tel" id="tel" placeholder="----请输入手机号----" class="form-control" />
+                </div>
+            </div>
+            <div class="col-sm-4 form-group">
+                <label for="created_at" class="col-sm-4 control-label">登记时间</label>
+                <div class="col-sm-8">
+                    <input type="text" name="created_at" id="created_at" datePicker ng-model="reserve.created_at"
+                           class="form-control" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  onchange="" />
+                </div>
+            </div>
+            <div class="col-sm-4 form-group">
+                <label for="is_deleted" class="col-sm-4 control-label">是否删除</label>
+                <div class="col-sm-8">
+                    <select ng-model="reserve.is_deleted" name="is_deleted" id="is_deleted"  class="form-control" readonly>
+                        <option value="">------请选择------</option>
+                        <option value="0">否</option>
+                        <option value="1">是</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-4 form-group">
+                <label for="recruitmentScheduleName" class="col-sm-4 control-label">流程节点</label>
+                <div class="col-sm-8">
+                    <select class="form-control" ng-model="reserve.recruitmentScheduleNode" id="recruitmentScheduleName"
+                            ng-options="p.name for p in allRecruitmentPoints track by p.name">
+                        <option value="">------请选择------</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-4 form-group">
+                <label for="id_number" class="col-sm-4 control-label">身份证号</label>
+                <div class="col-sm-8">
+                    <input type="text" name="id_number" id="id_number" ng-model="reserve.id_number" class="form-control" />
+                </div>
+            </div>
+            <div class="col-sm-4 form-group">
+                <label for="created_at" class="col-sm-4 control-label">流程节点时间</label>
+                <div class="col-sm-8">
+                    <input type="text" datePicker ng-model="reserve.scheduleDate" class="form-control" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  onchange="" />
+                </div>
+            </div>
+            <div class="col-sm-4 form-group">
+           		<label for="visitTime" class="col-sm-4 control-label">诺访日期</label>
+               	<div class="col-sm-8">
+               		<input id="visitTime" type="text" datePicker ng-model="reserve.visitTime" class="form-control" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  onchange="" />
+               	</div>
+           	</div>
+        </div>
+        <div class="c_center">
+            <a  class="btn btn-primary" ng-click="getTalentsByFilter(0)">查询</a>
+            <a id="keydown-query2"  ng-click="getTalentsByFilter(0)"></a>
+            <button class="btn" ng-click="reset()">重置</button>
+        </div>
+       <!-- <div class="c-select-text">
+            <label for="name" class="search-form-label">姓名</label>
+            <input ng-model="reserve.name" type="text" name="name" id="name" class="search-form-input" />
+            <label for="mail" class="search-form-label">邮箱</label>
+            <input ng-model="reserve.mail" type="text" name="mail" id="mail" class="search-form-input" />
+            <label for="tableStarsReserve" class="search-form-label">符合度</label>
+            <span id="tableStarsReserve" class="talent-star"></span>
+            <input hidden="true" id="editStarValue">
+            <br>
+            <label for="department" class="search-form-label">应聘部门</label>
+            <input id="department" type="text" class="search-form-input" ng-click="showSelectDepartment()" ng-model="hrTalent.department.name" />
+            <label for="position" class="search-form-label">应聘岗位</label>
+            <select name="position" id="position" ng-options="position.name for position in positions track by position.id" ng-model="hrTalent.position" class="search-form-input" >
+                <option value="">&#45;&#45;&#45;&#45;&#45;&#45;请选择&#45;&#45;&#45;&#45;&#45;&#45;</option>
+            </select>
+            <label for="tel" class="search-form-label">电话</label>
+            <input ng-model="reserve.tel" type="text" name="tel" id="tel" placeholder="&#45;&#45;&#45;&#45;请输入手机号&#45;&#45;&#45;&#45;" class="search-form-input" /><br/>
+
+            <label for="created_at" class="search-form-label">登记时间</label>
+            <input type="date" name="created_at" id="created_at" ng-model="reserve.created_at" class="search-form-input" />
+            <label for="is_deleted" class="search-form-label">是否删除</label>
+            <select ng-model="reserve.is_deleted" name="is_deleted" id="is_deleted"  class="search-form-input" >
+                <option value="">&#45;&#45;&#45;&#45;&#45;&#45;请选择&#45;&#45;&#45;&#45;&#45;&#45;</option>
+                <option value="0">否</option>
+                <option value="1">是</option>
+            </select>
+            <label for="recruitmentScheduleName" class="search-form-label">流程节点</label>
+            <select class="search-form-input" ng-model="reserve.recruitmentScheduleNode" id="recruitmentScheduleName"
+                    ng-options="p.name for p in allRecruitmentPoints track by p.name" required>
+                <option value="">&#45;&#45;&#45;&#45;&#45;&#45;请选择&#45;&#45;&#45;&#45;&#45;&#45;</option>
+            </select>
+            &lt;!&ndash;<select class="search-form-input" ng-model="reserve.recruitmentScheduleName" id="recruitmentScheduleName">
+				<option value="">-&#45;&#45;请选择-&#45;&#45;</option>
+				<option value="简历初选">简历初选</option>
+				<option value="转让">转让</option>
+				<option value="邀约诺访">邀约诺访</option>
+				<option value="邀约犹豫">邀约犹豫</option>
+				<option value="邀约拒绝">邀约拒绝</option>
+				<option value="首次到访未面试">首次到访未面试</option>
+				<option value="首次到访面试">首次到访面试</option>
+				<option value="复试">复试</option>
+				<option value="电话沟通">电话沟通</option>
+				<option value="待入职">入职</option>
+				<option value="结束">结束</option>
+			</select>&ndash;&gt;
+			<br>
+			<label for="id_number" class="search-form-label">身份证号</label>
+            <input type="text" name="id_number" id="id_number" ng-model="reserve.id_number" class="search-form-input" />
+            <label for="created_at" class="search-form-label">流程节点时间</label>
+            <input type="text" datePicker ng-model="reserve.scheduleDate" class="search-form-input" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  onchange=""/>
+            <div class="c_center">
+                <button class="btn btn-primary" ng-click="getTalentsByFilter(0)">查询</button>
+                <button class="btn" ng-click="reset()">重置</button>
+            </div>
+        </div>-->
+
+
+
+        <div class="table-responsive c-select-text">
+            <div class="c-tab-title">人才列表</div>
+            <table st-pipe="getTalentReserveList" st-table="talents" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>简历编号</th>
+                    <th>姓名</th>
+                    <th>手机号</th>
+                    <th>应聘岗位</th>
+                    <th>登记时间</th>
+                    <th>最初登记人</th>
+                    <th>流程状态</th>
+                    <th>流程节点时间</th>
+                    <th>邀约诺访时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="hrTalent in hrReserveTalents track by $index">
+                    <td>{{hrTalent.id}}</td>
+                    <td><a ng-click="showInfoView(hrTalent)">{{hrTalent.name}}</a></td>
+                    <td>{{hrTalent.tel}}</td>
+                    <td>{{hrTalent.position.name}}</td>
+                    <td>{{hrTalent.created_at | date : "yyyy-MM-dd HH:mm:ss"}}</td>
+                    <td>{{hrTalent.creator}}</td>
+                    <td>{{hrTalent.recruitmentSchedule[0].scheduleName}}</td>
+                    <td>{{hrTalent.recruitmentSchedule[0].scheduleDate | date : "yyyy-MM-dd HH:mm:ss"}}</td>
+                    <td>{{hrTalent.recruitmentSchedule[0].visitTime | date : "yyyy-MM-dd HH:mm:ss"}}</td>
+                    <td>
+                        <a ng-click="download(hrTalent)" download="{{hrTalent.displayFileName}}" title="下载简历"><span class="glyphicon glyphicon-yws-download"></span></a> &nbsp;
+                        <a ng-if="(hrTalent.talentRelatedEmployeeStatus == -1 || hrTalent.talentRelatedEmployeeStatus == 1)" ng-click="showEditView(hrTalent)" title="修改"><span class="glyphicon glyphicon-pencil"></span></a> &nbsp;
+                        <a ng-if="(hrTalent.talentRelatedEmployeeStatus == -1 || hrTalent.talentRelatedEmployeeStatus == 1)" ng-click="removeTalent(hrTalent)" title="删除"><span class="glyphicon glyphicon-delete"></span></a>
+                    </td>
+                </tr>
+                </tbody>
+                <tbody ng-show="isLoading">
+                <tr>
+                    <td colspan="13" class="text-center"><div class="loading-indicator"></div>
+                    </td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="10">
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+
+</div>

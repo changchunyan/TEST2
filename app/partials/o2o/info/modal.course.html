@@ -1,0 +1,103 @@
+<div class="modal orderModal"  tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" >
+            <form name="updateOrderForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitleForCourse"></h4>
+                </div>
+                <div class="modal-body" style="overflow:hidden;">
+                    <div class="col-sm-12">
+                                <div class="table-responsive" style="overflow-y:hidden;    background-color: #f6f6f6;">
+                                    <table st-pipe="getAllOnlineCourse" st-table="OnlineCourseList" class="table table-bordered table-striped mt-table1">
+                                        <thead>
+                                        <tr>
+                                            <th>选择</th>
+                                            <th>校区名称</th>
+                                            <th>产品名称</th>
+                                            <th>教师姓名</th>
+                                            <th>课程类型</th>
+                                            <th>科目</th>
+                                            <th>年级</th>
+                                            <th>订单量</th>
+                                            <th>上架时间</th>
+                                            <th>综合评分</th>
+                                        </tr>
+                                        <tr>
+                                        <th style="line-height: 30px;"><span>查询条件</span></th>
+                                          <th>
+                                            <input st-search="OnlineCourseListFilter.schoolName" placeholder="校区名称" ng-model="OnlineCourseListFilter.schoolName" class="input-sm form-control" type="search"/>
+                                          </th>
+                                          <th>
+                                          <input st-search="OnlineCourseListFilter.courseName" placeholder="产品名称" ng-model="OnlineCourseListFilter.courseName" class="input-sm form-control" type="search"/>
+                                          </th>
+                                          <th>
+                                            <input st-search="OnlineCourseListFilter.teacherName" placeholder="教师姓名" ng-model="OnlineCourseListFilter.teacherName" class="input-sm form-control" type="search"/>
+                                          </th>
+                                          <th>
+                                            <select st-search="OnlineCourseListFilter.courseTypeId" ng-model="OnlineCourseListFilter.courseTypeId" class="input-sm form-control"
+                                            ng-options="option.id as option.name for option in courseTypeIds">
+                                              <option value="">-- 请选择 --</option>
+                                            </select>
+                                          </th>
+                                          <th>
+                                            <select st-search="OnlineCourseListFilter.subjectId" ng-model="OnlineCourseListFilter.subjectId" class="input-sm form-control"
+                                            ng-options="option.id as option.name for option in subjectIds">
+                                              <option value="">-- 请选择 --</option>
+                                            </select>
+                                          </th>
+                                          <th>
+                                          <select st-search="OnlineCourseListFilter.gradeId" ng-model="OnlineCourseListFilter.gradeId" class="input-sm form-control"
+                                              ng-options="option.id as option.name for option in gradeIds" type="search">
+                                            <option value="">-- 请选择 --</option>
+                                          </select>
+                                          </th>
+                                          <th st-sort="1" class="sort-link">
+                                            订单量排序
+                                          </th>
+                                          <th st-sort="2" class="sort-link">
+                                            上架时间排序
+                                          </th>
+                                          <th st-sort="3" class="sort-link">
+                                            综合评分排序
+                                          </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody ng-if="!isOnlineCourseListLoading">
+                                        <tr ng-repeat="row in OnlineCourseList">
+                                            <td><input type="checkbox" ng-checked="isSelected(row)" ng-click="selectOne($event,row)" ></td>
+                                            <td>{{row.schoolName}}</td>
+                                            <td>{{row.courseName}}</td>
+                                            <td>{{row.teacherName}}</td>
+                                            <td>{{row.courseTypeName}}</td>
+                                            <td>{{row.subjectName}}</td>
+                                            <td>{{row.gradeName}}</td>
+                                            <td>{{row.orderNum}}</td>
+                                            <td>{{row.updated_at | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                                            <td>{{row.pingFen}}</td>
+                                        </tr>
+                                        </tbody>
+                                        <tbody ng-if="isOnlineCourseListLoading">
+                                        <tr>
+                                            <td colspan="10" class="text-center"><div class="loading-indicator"></div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="10"></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"  ng-click="$hide()">取消</button>
+                    <button type="button" class="btn btn-success c5-lable" ng-style="isShowSubmit" ng-disabled="updateOrderForm.$invalid"  ng-click="saveCourse()">保存</button><!--    -->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,14 @@
+<div class="view-frame" ng-controller="BiBaseController">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content" ng-controller="BiOutboundPhoneController">
+	    <div>
+		    <ul class="breadcrumb">
+		        <li><img ng-src="img/icon/bi/yingxiao.png" src="img/icon/bi/yingxiao.png"> 营销报表<span class="divider"></span></li>
+		        <li class="active">外呼统计</li>
+		    </ul>
+		</div>
+    <div ng-include="'partials/bi/biOutboundPhoneStatistics/biOutboundPhoneStatistics.statistics.html'"></div>
+    </div>
+</div>

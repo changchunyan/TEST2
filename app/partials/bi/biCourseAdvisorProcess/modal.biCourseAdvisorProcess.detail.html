@@ -1,0 +1,60 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="talent-add modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" ng-bind="infoModalTitle"></h4>
+				<span ng-if="!isDay">（从 {{statisticsStartTime | date : 'yyyy-MM-dd'}} 至 {{statisticsEndTime | date : 'yyyy-MM-dd'}}）</span>
+	        	<span ng-if="isDay">（{{statisticsEndTime | date : 'yyyy-MM-dd'}}）</span>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="table-responsive">
+							<table st-table="tableModel" class="table table-bordered table-striped">
+	                            <thead>
+	                            <tr>
+	                            	<td>业务类型</td>
+	                                <td>外呼量</td>
+	                                <td>通话量</td>
+	                                <td>邀约人数</td>
+	                                <!-- <td>邀约率</td> -->
+	                                <td>到访人数</td>
+	                                <td>到访人次</td>
+	                                <!-- <td>自呼邀约到访率</td> -->
+	                                <td>体验人数</td>
+	                                <td>体验人次</td>
+	                                <!-- <td>到访体验率</td> -->
+	                                <td>签约量</td>
+	                                <td>签约总金额</td>
+	                                <td>平均单底</td>
+	                                <!-- <td>体验签约率</td> -->
+	                            </tr>
+	                            </thead>
+	                            <tbody>
+	                                <tr ng-repeat="statisticsModel in detailModels">
+	                                	<td>{{statisticsModel.channelType}}</td>
+	                                    <td>{{statisticsModel.communicationCount}}</td>
+	                                    <td>{{statisticsModel.communicationSuccessCount}}</td>
+	                                    <td>{{statisticsModel.invitationCount}}</td>
+	                                    <!-- <td>{{statisticsModel.invitationRatio}}</td> -->
+	                                    <td>{{statisticsModel.visitCount}}</td>
+	                                    <td>{{statisticsModel.visitTimes}}</td>
+	                                    <!-- <td>{{statisticsModel.visitRatio}}</td> -->
+	                                    <td>{{statisticsModel.experienceCount}}</td>
+	                                    <td>{{statisticsModel.experienceTimes}}</td>
+	                                    <!-- <td>{{statisticsModel.experienceVisitRatio}}</td> -->
+	                                    <td>{{statisticsModel.orderCount}}</td>
+	                                    <td>{{statisticsModel.orderAmount}}</td>
+	                                    <td>{{statisticsModel.averageAmount}}</td>
+	                                    <!-- <td>{{statisticsModel.experienceOrderRatio}}</td> -->
+	                                 </tr>
+	                            </tbody>
+                        	</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

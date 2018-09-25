@@ -1,0 +1,105 @@
+<div class="view-frame" ng-controller="SNPCoursePlanController as cpc">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div ng-show="!isAdding" class="view-content user-love">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="#">首页</a> <span class="divider"></span></li>
+                <li><a href="#/sos-admin">排课消课管理</a> <span class="divider"></span></li>
+                <li class="active">托管记录</li>
+            </ul>
+        </div>
+        <div class="mt-10 br-gray">
+            <div class="tabs-title border-1 c3">托管记录</div>
+            <div class="mt-student-m" style="border-bottom:none;">
+                <ul class="f14 cf">
+                    <li  class="ml-0">
+                        <a class="mt-timeTable" ng-click="showSNPRecordModal()" style="margin-left: 20px;">添加托管记录</a>
+                    </li>
+                    </ul>
+            </div>
+        </div>
+        <div class="br-gray mt-list">
+            <h2 class="pl-20 c3">托管记录</h2>
+            <div class="overflow-x">
+                <table class="table table-bordered table-striped table-condensed mt-table1" st-pipe="ClasscallServerrecord" st-table="displayedrecord">
+                    <thead>
+                    <tr class="br-gray-t">
+                        <th>班级名称</th>
+                        <th>托管老师</th>
+                        <th colspan='2'>托管日期</th>
+                        <th>到校人数</th>
+                        <th>离校人数</th>
+                        <th>操作</th>
+                    </tr>
+                    <tr>
+                        <th><input st-search="student_name" placeholder="班级名称" class="input-sm form-control" type="search"/></th>
+                        <th><input st-search="teacher_name" placeholder="托管老师" class="input-sm form-control" type="search"/></th>
+                        <th><input st-search="start_time" placeholder="" class="input-sm form-control" type="date" style="margin-right:9%;"/></th>
+                        <th><input st-search="end_time" placeholder="" class="input-sm form-control" type="date"/></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody ng-show="!isrendLoading">
+                    <tr ng-if="!$last" ng-repeat="row in displayedrecord">
+                        <td><a ng-click="showSNPCourseDetails(row)">{{ row.classname }}</a></td>
+                        <td>{{row.teacher_name}}</td>
+                        <td colspan='2'>{{row.start_time | date:'yyyy-MM-dd'}}</td>
+                        <td>{{row.totalArrival}}/{{row.count_num}}</td>
+                        <td>{{row.totalLeave}}/{{row.count_num}}</td>
+                        <td>
+                            <div >
+                                <a class="showUI" id="nw+{{$index}}" ng-click="nw[$index]=true"><span
+                                        class="glyphicon glyphicon-caozuo" title="操作"></span></a>
+                                <bubble ng-if="nw[$index]" for="nw+{{$index}}" align="bottom" close="nw[$index]=false"
+                                        close-action="outerchick " ng-mouseleave="nw[$index]=false;">
+                                    <!--ng-mouseleave="nw[$index]=false;"-->
+                                    <ul>
+                                        <li ng-if="showPermissions('AttendClassCoursePlan')">
+                                            <a ng-click="showSNPRecordModalWithCoursePlan(row.classname, row.class_id, row.start_time)">继续记录</a>
+                                        </li>
+                                        <li ng-if="row.is_past==0 && showPermissions('deleteClassCoursePlan')" >
+                                            <a ng-click="remove(row,5)">删除</a>
+                                        </li>
+                                    </ul>
+                                </bubble>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tbody ng-show="isrendLoading">
+                    <tr>
+                        <td colspan="15" class="text-center">
+                            <div class="loading-indicator"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td class="text-center" st-pagination="" st-items-by-page="10"
+                            st-template="partials/util/pagination.custom.html" colspan="15">
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <div class="mt-layer" ng-if="mtLayer">
+        <div class="mt-alert">
+            <h1 class="f18 cf">通知<a class="fr" ng-click="recordClass(0)">&nbsp;</a></h1>
+            <h2 class="mt-h2">您要记录上课的课时是否在系统中已经进行排课？</h2>
+            <ul>
+                <a href="" class="c5" ng-click="recordClass(0)">取消</a>
+                <a href="" class="brbf c43" ng-click="planAlready()">不确定</a>
+                <a href="" class=" b9-lable" ng-click="showPaikeView(1,1)" ng-if="isShowPaikeViewAll()">没有排课</a>
+                <a href="" class=" b9-lable" ng-click="showPaikeView(3,1)" ng-if="!isShowPaikeViewAll()">没有排课</a>
+                <a href="" class=" c5-lable" ng-click="planAlready()">已经排课</a>
+            </ul>
+        </div>
+    </div>
+</div>

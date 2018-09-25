@@ -1,0 +1,61 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" aria-label="Close" ng-click="$hide();"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" ng-bind="modalTitle"></h4>
+      </div>
+      <div class="modal-body pb-20 mt-input-no-bg">
+         <!-- 筛选条件 -->
+         <div class="br-gray mt-modal-order">
+              <div class="">
+              	学生姓名：<input ng-model="searchModel.name" ng-keyup="getStudentsByFilter()" 
+              	type="text" id="studentName" style="width:120px;" name="searchModel.name" />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+                                               电话号码：<input ng-model="searchModel.phone" type="text" id="mobile" style="width:120px;"
+               	ng-keyup="getStudentsByFilter()" name="searchModel.phone" />
+               </div>
+          </div>
+          <!-- 表格 -->
+          <div class="br-gray pl-0" style="">
+	          <table st-pipe="getStudents" st-table="studentsTable" class="table table-bordered table-striped mt-table1">
+	               <thead>
+	                   <tr>
+	                       <th style="height:50px;">选择</th>
+	                       <th>姓名</th>
+	                       <th>性别</th>
+	                       <th>电话</th>
+	                       <th>公立学校</th>
+	                       <th>所属人</th>
+	                   </tr>
+	               </thead>
+	               <tbody>
+	                   <tr ng-repeat="row in studentsList">
+	                       <td class="vr">
+	                           <label for="input{{$index}}" class="radio-vr" ng-class="{'active':row.selectTrue}" style="width:28px;"></label>
+	                           <input type="radio" name="studentRadio" id="input{{$index}}" ng-click="forwardExperience('studentsList',$index)" 
+	                           		class="hide" value="{{$index}}"/>
+	                       </td>
+	                       <td>{{row.name}}</td>
+	                       <td><span ng-if="row.gender == false">女</span>
+	                           <span ng-if="row.gender == true">男</span>
+	                       </td>
+	                       <td><span>{{row.phone}}</span>
+	                           <span ng-if="row.mother_phone"><br>{{row.mother_phone}}</span>
+	                           <span ng-if="row.father_phone"><br>{{row.father_phone}}</span>
+	                       </td>
+	                       <td>{{row.school_name}}</td>
+	                       <td>{{row.belong_user_name}}</td>
+	                   </tr>
+	               </tbody>
+	               <tfoot>
+	                   <tr>
+	                       <td colspan="6" class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html"></td>
+	                   </tr>
+	               </tfoot>
+	          </table>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>

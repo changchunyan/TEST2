@@ -1,0 +1,61 @@
+<div class="view-frame" ng-controller="UserPrizeController">
+    <div class="view-left">
+        <nav-side menu-data="menu.subMenu"></nav-side>
+    </div>
+
+    <div class="view-content" st-pipe="queryForPage" st-table="userPrizes">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="">系统管理</a> <span class="divider"></span></li>
+                <li class="active">中奖查询</li>
+            </ul>
+        </div>
+        <div class="br-gray mt-select" style="min-height: 76px">
+            <div class="rbg br-0">
+                <ul>
+                    <li class="mt-three option no-mar fl" vr-select style="margin-right: 20px" changeFun="queryForPage" data-mt="{{nextCourseDatas}}"><label class="fl bg-none" style="width:auto;">消课日期</label>
+                        <input class="three-1">
+                        <div class="three-1 ml-5">不限</div>
+                        <input class="three-2" readonly type="search" placeholder="" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" ng-model="searchModel.searchStartTime">
+                        <div class="three-2"></div><span class="dao">到</span>
+                        <input class="three-2" readonly type="search" name="" placeholder="" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" ng-model="searchModel.searchEndTime">
+                        <div class="three-2"></div>
+                    </li>
+                    <li class="fl" style="width:70px;margin: 0;line-height: 0;"><a class="mt-btn cf bg-color-blue br ti-0 li-btn-1 pr-0 mt-0" href="javascript:void (0);" ng-click="queryForPage()">查询</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="br-gray pl-0">
+            <table class="table table-bordered table-striped mt-scroll mt-table1">
+                <thead>
+                <tr>
+                    <th>日期</th>
+                    <th>姓名</th>
+                    <th>电话号码</th>
+                    <th>所属校区</th>
+                    <th>岗位</th>
+                    <th>当日及时消课数</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="el in userPrizes">
+                    <td>{{el.createdAt | date:'yyyy-MM-dd'}}</td>
+                    <td>{{el.userName}}</td>
+                    <td>{{el.phone}}</td>
+                    <td>{{el.schoolName}}</td>
+                    <td>{{el.positionName}}</td>
+                    <td>{{el.courseNum | number : 1}}</td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td class="text-center" st-pagination="" st-items-by-page="10"
+                        st-template="partials/util/pagination.custom.html" colspan="6">
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+<script src="js/jqDom.js"></script>

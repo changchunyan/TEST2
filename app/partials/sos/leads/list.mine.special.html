@@ -1,0 +1,336 @@
+<div class="view-frame" ng-controller="LeadsStudentController as lsc">
+
+	<div class="view-left">
+		<div ng-include="'partials/common/common.indexLeft.html'"></div>
+		<!--<div ng-include="'partials/common/common.indexLeft.html'"></div>-->
+	</div>
+	<!--分配学员线索页面-->
+	<div class="view-content2">
+		<div>
+			<div>
+				<ul class="breadcrumb">
+					<li><a href="#/">首页</a> <span class="divider"></span></li>
+					<li><a href="#/fb-admin">前台业务</a> <span class="divider"></span></li>
+					<li><a href="#/fb-admin/leads_student_myself">我的意向客户</a><span class="divider"></span></li>
+					<li class="active">客户分配</li>
+				</ul>
+			</div>
+		</div>
+		<!--待分配学员列表-->
+		<div  class="details-title">客户分配
+			<div class="leads-top-btn">
+				<div class="operations-panel">
+					<button class="btn btn-success" ng-click="goToShowMineSpecialListView()">返回</button>
+				</div>
+			</div>
+		</div>
+			<div id="ppp">
+				<!-- <tabs>
+					<pane title="总部意向客户"> -->
+						<div class="details-body">
+							<div class="details-content">
+								<div class="table-responsive" >
+									<div class="table-title">客户分配列表</div>
+									<table class="table table-bordered table-striped table-condensed" st-pipe="getAllotCrmLeadsStudentList" st-table="allotCrmLeadsStudentList">
+										<thead>
+										<tr>
+											<!--<th><input type="checkbox" ng-checked="MyCrmCustomerStudentListForAddGroup.length == MyCrmCustomerStudentListOk.length" ng-click="checkAll()" >全选/反选</th>-->
+											<th>选择</th>
+											<th>学员姓名</th>
+											<th>学员电话</th>
+											<th>学员年级</th>
+											<th>渠道来源</th>
+											<th>渠道详情</th>
+											<th>所属校区</th>
+											<th>客户状态</th>
+											<th>意向程度</th>
+											<th>所属人</th>
+										</tr>
+										<tr>
+											<th><input type="checkbox" ng-checked="isSelectedAll(2)" ng-click="selectAll(2)" /></th>
+											<th>
+												<input st-search="allotCrmLeadsStudentFilter.name" placeholder="姓名查询" ng-model="allotCrmLeadsStudentFilter.name" class="input-sm form-control" type="search"/>
+											</th>
+											<th>
+												<input st-search="allotCrmLeadsStudentFilter.phone" placeholder="电话查询" ng-model="allotCrmLeadsStudentFilter.phone" class="input-sm form-control" type="search"/>
+											</th>
+											<th>
+												<select st-search="allotCrmLeadsStudentFilter.grade_id" ng-model="allotCrmLeadsStudentFilter.grade_id"
+														name="allotCrmLeadsStudentFilter.grade_id" id="allotCrmLeadsStudentFilter.grade_id" class="input-sm form-control"
+														ng-options="option.id as option.name for option in gradeIds" type="search">
+													<option value="">-- 请选择查询班级--</option>
+												</select>
+											</th>
+											<th>
+												<select st-search="allotCrmLeadsStudentFilter.media_channel_id_1" ng-model="allotCrmLeadsStudentFilter.media_channel_id_1"
+														name="allotCrmLeadsStudentFilter.media_channel_id_1" id="allotCrmLeadsStudentFilter.media_channel_id_1" class="input-sm form-control"
+														ng-options="option.id as option.name for option in mediaChannel1List" ng-change="mediaChannel1ChangeForAllot()" type="search">
+													<option value="">-- 请选择 --</option>
+												</select>
+											</th>
+											<th>
+												<select ng-model="allotCrmLeadsStudentFilter.media_channel_id_2" st-search="allotCrmLeadsStudentFilter.media_channel_id_2"
+														name="allotCrmLeadsStudentFilter.media_channel_id_2" id="allotCrmLeadsStudentFilter.media_channel_id_2" class="input-sm form-control"
+														ng-options="option.id as option.name for option in mediaChannel2ListForMyAllot" type="search">
+													<option value="">-- 请选择 --</option>
+												</select>
+											</th>
+											<th>
+												<input st-search="allotCrmLeadsStudentFilter.belong_school_name" placeholder="校区查询" ng-model="allotCrmLeadsStudentFilter.belong_school_name" class="input-sm form-control" type="search"/>
+											</th>
+											<th>
+												<select ng-model="allotCrmLeadsStudentFilter.state_id_1"
+														st-search="allotCrmLeadsStudentFilter.state_id_1"
+														name="allotCrmLeadsStudentFilter.state_id_1"
+														id="allotCrmLeadsStudentFilter.state_id_1"
+														class="input-sm form-control"
+														ng-options="option.id as option.name for option in state1List"
+														type="search">
+													<option value="">-- 请选择 --</option>
+												</select>
+											</th>
+											<th>
+												<select ng-model="allotCrmLeadsStudentFilter.purposeLevel"
+														st-search="allotCrmLeadsStudentFilter.purposeLevel"
+														name="allotCrmLeadsStudentFilter.purposeLevel"
+														id="allotCrmLeadsStudentFilter.purposeLevel"
+														class="input-sm form-control"
+														ng-options="option.value as option.name for option in purposeLevel"
+														type="search">
+													<option value="">-- 请选择 --</option>
+												</select>
+											</th>
+											<th>
+												<input st-search="allotCrmLeadsStudentFilter.belong_user_name" placeholder="所属人查询" ng-model="allotCrmLeadsStudentFilter.belong_user_name" class="input-sm form-control" type="search"/>
+											</th>
+										</tr>
+										</thead>
+										<tbody ng-show="!isAllotCrmLeadsStudentListLoading">
+										<tr ng-repeat="row in allotCrmLeadsStudentList">
+											<td><input type="checkbox" ng-checked="isSelected(row)" ng-click="selectOne(row)" ></td>
+											<td>{{row.name}}</td>
+											<td>{{row.phone}}</td>
+											<td>{{row.grade_name}}</td>
+											<td>{{row.channel1Name}}</td>
+											<td>{{row.channel2Name}}</td>
+											<th>{{row.belong_school_name}}</th>
+											<td>{{row.state1Name}}</td>
+											<td>
+												<span ng-if="row.purpose_level && row.purpose_level == 1">高</span>
+												<span ng-if="row.purpose_level && row.purpose_level == 2">中</span>
+												<span ng-if="row.purpose_level && row.purpose_level == 3">低</span>
+												<span ng-if="!row.purpose_level || (row.purpose_level && row.purpose_level == 4)">未标记</span>
+											</td>
+											<td>{{row.belong_user_name}}</td>
+										</tr>
+										</tbody>
+										<tbody ng-show="isAllotCrmLeadsStudentListLoading">
+										<tr>
+											<td colspan="10" class="text-center"><div class="loading-indicator"></div></td>
+										</tr>
+										</tbody>
+										<tfoot>
+										<tr>
+											<td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="10">
+											</td>
+										</tr>
+										</tfoot>
+									</table>
+								</div>
+								<div class="table-title">选择结果列表</div>
+								<table class="table table-bordered table-striped table-condensed">
+									<thead>
+									<tr>
+										<th>选择</th>
+										<th>学员姓名</th>
+										<th>学员电话</th>
+										<th>学员年级</th>
+										<th>渠道来源</th>
+										<th>渠道详情</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr ng-repeat="row in MyCrmLeadsStudentListOk">
+										<td><a ng-click="deleteOne(row)">删除</span></a></td>
+										<td>{{row.name}}</td>
+										<td>{{row.phone}}</td>
+										<td>{{row.grade_name}}</td>
+										<td>{{row.channel1Name}}</td>
+										<td>{{row.channel2Name}}</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					<!-- </pane> -->
+			</div>
+
+			<!--已添加学员客户列表-->
+			<div class="details-body">
+			<div class="details-content height-500">
+				<div class="table-responsive" >
+					<!--<div class="table-title">选择结果列表</div>-->
+					<!--<table class="table table-bordered table-striped table-condensed">-->
+						<!--<thead>-->
+						<!--<tr>-->
+							<!--<th>选择</th>-->
+							<!--<th>学员姓名</th>-->
+							<!--<th>学员电话</th>-->
+							<!--<th>学员年级</th>-->
+							<!--<th>渠道来源</th>-->
+							<!--<th>渠道详情</th>-->
+						<!--</tr>-->
+						<!--</thead>-->
+						<!--<tbody>-->
+						<!--<tr ng-repeat="row in MyCrmLeadsStudentListOk">-->
+							<!--<td><a ng-click="deleteOne(row)">删除</span></a></td>-->
+							<!--<td>{{row.name}}</td>-->
+							<!--<td>{{row.phone}}</td>-->
+							<!--<td>{{row.grade_name}}</td>-->
+							<!--<td>{{row.channel1Name}}</td>-->
+							<!--<td>{{row.channel2Name}}</td>-->
+						<!--</tr>-->
+						<!--</tbody>-->
+					<!--</table>-->
+					<div>
+						<tabs>
+							<pane title="本校区分配" ng-if="isSchoolUser()">
+								<table class="table text-center">
+									<tr>
+										<td style="line-height: 32px;">岗位</td>
+										<td>
+											<select ng-model="allotCrmLeadsStudentFilter.position_id"
+													name="allotCrmLeadsStudentFilter.position_id" id="allotCrmLeadsStudentFilter.position_id" class="input-sm form-control"
+													ng-options="option.id as option.name for option in allAllotPosition" ng-change="positionChangeForAllot()">
+												<option value="">-- 请选择岗位 --</option>
+											</select>
+										</td>
+										<td style="line-height: 32px;">员工</td>
+										<td>
+											<select ng-model="allotCrmLeadsStudentFilter.user_id"
+													name="allotCrmLeadsStudentFilter.user_id" id="allotCrmLeadsStudentFilter.user_id" class="input-sm form-control"
+													ng-options="option.id as option.name for option in allAllotUser">
+												<option value="">-- 请选择员工 --</option>
+											</select>
+										</td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr>
+								</table>
+								<br/><br/>
+								<div class="text-center">
+									<button type="button" class="btn btn-success" ng-click="saveAllotNetwork(1)">分配</button>
+								</div>
+							</pane>
+							<pane title="跨校区分配" ng-if="showPermissions('SchoolLeadsAllot')">
+								<table class="table table-bordered table-striped table-condensed" st-pipe="getAllSchoolMaster" st-table="schoolMasterList">
+									<thead>
+									<tr>
+										<th>选择</th>
+										<th>校区名称</th>
+										<th>校区校长</th>
+										<th>大区名称</th>
+										<th>区域名称</th>
+										<th>省名称</th>
+										<th>市名称</th>
+										<th>区县名称</th>
+									</tr>
+									<tr>
+										<th>查询条件</th>
+										<th></th>
+										<th>
+
+										</th>
+										<th>
+											<select st-search="schoolMasterFilter.district_id" ng-model="schoolMasterFilter.district_id"
+													name="schoolMasterFilter.district_id" id="schoolMasterFilter.district_id" class="input-sm form-control"
+													ng-options="option.districtId as option.companyName + '-' +option.districtName for option in DepartmentsOfDistrictList" type="search"
+													ng-change="getDepartmentsOfRegion()">
+												<option value="">-- 请选择大区 --</option>
+											</select>
+										</th>
+										<th>
+											<select st-search="schoolMasterFilter.region_id" ng-model="schoolMasterFilter.region_id"
+													name="schoolMasterFilter.region_id" id="schoolMasterFilter.region_id" class="input-sm form-control"
+													ng-options="option.regionId as option.regionName for option in DepartmentsOfRegion" type="search">
+												<option value="">-- 请选择区域 --</option>
+											</select>
+										</th>
+										<th>
+											<select st-search="schoolMasterFilter.province_code" ng-model="schoolMasterFilter.province_code" name="schoolMasterFilter.province_code" id="schoolMasterFilter.province_code" class="input-sm form-control"
+													ng-options="option.provinceCode as option.provinceName for option in provinceList" type="search" ng-change="provinceChangeForBatchAllot()">
+												<option value="">-- 请选择 --</option>
+											</select>
+										</th>
+										<th>
+											<select st-search="schoolMasterFilter.city_code" ng-model="schoolMasterFilter.city_code" name="schoolMasterFilter.city_code" id="schoolMasterFilter.city_code" class="input-sm form-control"
+													ng-options="option.cityCode as option.cityName for option in cityList" ng-change="cityChangeForBatchAllot()" type="search">
+												<option value="">-- 请选择 --</option>
+											</select>
+										</th>
+										<th>
+											<select st-search="schoolMasterFilter.area_code" ng-model="schoolMasterFilter.area_code" name="schoolMasterFilter.area_code" id="schoolMasterFilter.area_code" class="input-sm form-control"
+													ng-options="option.areaCode as option.areaName for option in areaList" type="search">
+												<option value="">-- 请选择 --</option>
+											</select>
+										</th>
+									</tr>
+
+									</thead>
+									<tbody>
+									<tr ng-repeat="row in schoolMasterList">
+										<td><input type="radio" id="allotCrmLeadsStudentFilter.school_master_id" name="allotCrmLeadsStudentFilter.school_master_id"
+												   ng-click="selectSchoolMaster(row)" ></td>
+										<td>{{row.dName}}</td>
+										<td>{{row.uName}}</td>
+										<td>{{row.districtPrarentName}}-{{row.districtName}}</td>
+										<td>{{row.regionName}}</td>
+										<td>{{row.dpName}}</td>
+										<td>{{row.dcName}}</td>
+										<td>{{row.daName}}</td>
+									</tr>
+									</tbody>
+									<tfoot>
+									<tr>
+										<td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="7">
+										</td>
+									</tr>
+									</tfoot>
+								</table>
+								<br/><br/>
+								<div class="text-center">
+									<button type="button" class="btn btn-success" ng-click="saveSchoolMasterAllotNetwork(1)">分配</button>
+								</div>
+							</pane>
+						</tabs>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+
+<script style="display:none" type="text/javascript" >
+    window.load = pause();
+    function pause(){
+        window.setTimeout("tooltipShow()", 1000);
+    }
+    function tooltipShow() {
+       /* var node = $("#goutong");
+        var content = '沟通记录在拨打电话30分钟后更新到系统中，因此沟通状态有延迟';
+        node.webuiPopover({content:content,trigger:'hover',placement:'top'});*/
+
+		var node2 = $("#fenpei");
+		var content2 = '如每人分配100条客户，共5人。将会把筛选结果的前500条按100条/人分配';
+		node2.webuiPopover({content:content2,trigger:'hover',placement:'top'});
+
+    }
+</script>

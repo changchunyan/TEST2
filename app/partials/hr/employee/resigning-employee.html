@@ -1,0 +1,139 @@
+<div ng-show="!isDetail">
+    <!-- search form -->
+    <form id="search-form" class="c-select-text pl-0 br-gray">
+        <table   rules="none">
+            <tr>
+                <td>
+                    <label for="name" class="search-form-label">姓名</label>
+                    <input ng-model="de.user.name" type="text" name="name" id="name" class="search-form-input" />
+                </td>
+                <td>
+                    <label for="id" class="search-form-label">工号</label>
+                    <input ng-model="de.id" type="text" name="id" id="id" class="search-form-input" />
+                </td>
+                <td>
+                    <label for="mobile" class="search-form-label">手机号</label>
+                    <input ng-model="de.mobile" type="text" name="mobile" id="mobile" class="search-form-input" />
+                </td>
+                <td>
+                    <label for="age" class="search-form-label">年龄</label>
+                    <input ng-model="de.age" type="text" name="age" id="age" class="search-form-input" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="starLevel" class="search-form-label">星级</label>
+                    <select ng-model="de.starLevel" name="starLevel" id="starLevel"
+                            class="search-form-input" ng-options="tl.id as tl.name for tl in dictData.starLevel">
+                        <option value="">------请选择------</option>
+                    </select>
+                </td>
+                <td><label for="subject" class="search-form-label">学科</label>
+                    <select ng-model="de.subject" name="subject" id="subject" class="search-form-input"
+                            ng-options="subject.name for subject in subjects">
+                        <option value="">------请选择------</option>
+                    </select>
+                </td>
+                <td>
+                    <label for="hiringDate"  class="search-form-label">入职日期</label>
+                    <input type="text" name="hiringDate" id="hiringDate" datePicker ng-model="de.hiringDate"
+                           class="search-form-input" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  onchange="" readonly/>
+                </td>
+                <td>
+                    <label for="contractType"  class="search-form-label">合同类型</label>
+                    <select ng-model="de.contractType" name="contractType" id="contractType"
+                            class="search-form-input" ng-options="tl.id as tl.name for tl in dictData.contractType">
+                        <option value="">------请选择------</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="employmentType"  class="search-form-label">在职状态</label>
+                    <select ng-model="de.employmentType" name="employmentType" id="employmentType"
+                            class="search-form-input" ng-options="tl.id as tl.name for tl in dictData.employmentType">
+                        <option value="">------请选择------</option>
+                    </select>
+                </td>
+                <td>
+                    <label for="employer"  class="search-form-label">合同签署单位</label>
+                    <select ng-model="de.employer" name="employer" id="employer"
+                            class="search-form-input" ng-options="tl.id as tl.name for tl in dictData.employer">
+                        <option value="">------请选择------</option>
+                    </select>
+                </td>
+                <td></td>
+            </tr>
+
+        </table>
+        <div class="c_center">
+            <button id="keydown-query2" class="btn btn-success btn-select btn-base" ng-click="getEmployeesByFilters(1)">查询</button>
+            <button  class="btn btn-reast btn-base" ng-click="reset(1)">重置</button>
+        </div>
+    </form>
+    <div class="table-responsive c-select-text pl-0 br-gray pt-0">
+        <h2 class="yws-left width100 mt-student-m"><span class="yws-left">列表</span>
+            <!--<ul class="f14 cf yws-left width80 ml15">
+                <li><a class="mt-purple" ng-click="showAddView()">添加员工</a></li>
+                <li><a class="mt-export" ng-click="exportToExcel()">导出花名册</a></li>
+            </ul>-->
+        </h2>
+        <table st-pipe="getDimissionEmployees" st-table="dimissionEmployees" class="table table-bordered table-striped">
+            <!--        <table st-table="rowCollection" class="table table-striped">-->
+            <thead>
+            <tr>
+                <th style="padding-left: 10px">员工工号</th>
+                <th>员工姓名</th>
+                <th>手机号</th>
+                <th>所属机构</th>
+                <th>所属岗位</th>
+                <th>工作身份</th>
+                <th>职级</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="employee in dimissionEmployees track by $index">
+                <td style="padding-left: 10px">{{employee.id}}</td>
+                <td>{{employee.user.name}}</td>
+                <td>{{employee.mobile}}</td>
+                <td>{{employee.department.name}}</td>
+                <td>{{employee.position.name}}</td>
+                <td>{{dictData.employmentType[employee.employmentType-1].name}}</td>
+                <td>{{dictData.employmentLevel[employee.employmentLevel].name}}</td>
+                <td>
+                    <a ng-click="showDetailView(employee)" title="查看详细"><span class="glyphicon glyphicon-plus"></span></a> &nbsp;
+                </td>
+            </tr>
+            </tbody>
+            <tbody ng-show="isLoading">
+            <tr>
+                <td colspan="13" class="text-center"><div class="loading-indicator"></div>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="8">
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<div ng-show="isDetail" class="employees-edit pl-0 br-gray">
+    <h4 style="color:red;">查看员工信息</h4>
+    <div class="operations-panel">
+        <button class="btn btn-default" ng-click="hideDetailView()">取消</button>
+    </div>
+    <form name="form" class="form-horizontal employee-form">
+        <tabs>
+            <pane ng-repeat="tab in tabs | orderBy : 'id'" title="{{tab.title}}">
+                <div ng-include="tab.template"></div>
+            </pane>
+        </tabs>
+        <!--<div ng-model="tabs.activeTab" bs-tabs>
+            <div ng-repeat="tab in tabs track by $index" title="{{ tab.title }}" ng-include="tab.template" bs-pane></div>
+        </div>-->
+    </form>
+</div>

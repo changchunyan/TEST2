@@ -1,0 +1,95 @@
+div.flyover .alert {
+    left: 50%;
+    top: 50%;
+    position: fixed;
+    z-index: 9999999;
+    margin-left: -38px;
+}
+div.m-top{
+    background: #fe9b00;
+}
+div.m-footer{
+    background: #fe9b00;
+}
+div.m-footer .active{
+    color: #ffffff;
+}
+.yws-xs-2{
+    width: 16.66666667%;
+}
+.yws-xs-3{
+    width: 25%;
+}
+.yws-xs-4{
+    width: 33.3333333333%;
+}
+.yws-xs-8{
+    width: 66.666666666%;
+}
+.width10{
+    width: 10%;
+}
+input.width40{
+    width: 40%;
+}
+input.width45{
+    width: 45%;
+}
+input.width48{
+    width: 48%;
+}
+.width60{
+width: 60%;
+}
+.yws-xs-2,.yws-xs-3,.yws-xs-4,.yws-xs-8,.width10��.width60,input.width40,input.width45,input.width48{
+    display: inline-block;
+   /* overflow: hidden;*/
+    text-align: center;
+}
+.text-h40{
+    height: 40px;
+    line-height: 40px;
+}
+.text-h32{
+    height: 32px;
+    line-height: 32px;
+}
+.top-left{
+    color: #ffffff;
+    font-size: 18px;
+    line-height: 40px;
+    height: 40px;
+    position: absolute;
+}
+ .exception-btn a.btn.active{
+    border: 1px solid #3e70c5;
+    color: #3e70c5;
+}
+    .exception-btn{
+        margin-top: 15px;
+    }
+a.btn{
+    border: 1px solid #CCCCCC;
+}
+a.btn-success:hover{
+    color: #fff;
+    background-color: #2ac845;
+    border-color: #24aa3b;
+}
+.login-bottom{
+    color: #ffffff;
+    text-align: center;
+    height: 45px;
+    line-height: 45px;
+}
+div.login-top{
+    background: #2f2f2f;
+    border: none;
+}
+div.lg-bottom{
+    background: #2f2f2f;
+    border: none;
+}
+divform-group .line-height50{
+    height: 50px;line-height: 50px;
+}

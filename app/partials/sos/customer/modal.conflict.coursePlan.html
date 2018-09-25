@@ -1,0 +1,48 @@
+<div class="modal oms-record-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <form name="form">
+        <div class="modal-header">
+          <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" ng-bind="confilctModalTitle"></h4>
+        </div>
+        <div class="modal-body yws-container pt-0 pb-20">
+            <div class="">
+            	<h2 >检测到与以下排课记录时间冲突</h2>
+                <div class="br-gray chongtu pl-0">
+                    <table class="table table-bordered table-striped table-condensed mt-table1">
+                        <thead class="table table-bordered table-striped table-condensed">
+                        <tr>
+                            <th>学生</th>
+                            <th>老师</th>
+                            <th>日期</th>
+                            <th>上课时间</th>
+                            <th>时长</th>
+                            <th>下课时间</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        
+                        <tr ng-repeat="row in warningStudentList ">
+                            <th>{{row.studentName}}</th>
+                            <th>{{row.teacherName}}</th>
+                            <th>{{row.startDate}}</th>
+                            <th>{{row.startTime}}</th>
+                            <th>{{row.classTime}}</th>
+                            <th>{{row.endTime}}</th>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="text-center">
+                <button class="btn btn-success c5-lable" ng-click="$hide()">确定</button>
+            </div>
+        </div>
+        </form>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,286 @@
+<div class="view-frame" ng-controller="BdLeadController as lsc">
+    <div class="view-left">
+        <nav-side menu-data="menu.subMenu"></nav-side>
+    </div>
+
+    <div class="view-content">
+        <div>
+            <div>
+                <ul class="breadcrumb">
+                    <li><a href="#/">首页</a> <span class="divider"></span></li>
+                    <li><a href="#/bd-admin">招商客户关系管理</a> <span class="divider"></span></li>
+                    <li ng-if="showPermissions('BdLeadsAdd')"><a href="#/bd-admin/leads_list">Leads管理</a> <span class="divider"></span></li>
+                    <li class="active">招商leads查看</li>
+                </ul>
+            </div>
+        </div>
+        <div class="leads-top-btn">
+
+
+			<div class="operations-panel" >
+				<button class="btn btn-success" ng-click="showListView()">返回</button>
+			</div>
+		</div>
+        <table class="table">
+            <tr>
+                <td ng-if="showPermissions('BdLeadsApplicationSend')" class="info" colspan="2" style="text-align: center;">
+                    <a ng-click="sendApplication()" target="_self" class="btn btn-primary">发送申请表</a>&nbsp;
+                </td>
+                <td class="info" colspan="2" style="text-align: center;" ng-if="showPermissions('BdLeadsEdit')">
+                    <button type="button" class="btn btn-primary" ng-click="editBdLead()">编辑</button>
+                </td>
+                <td ng-if="showPermissions('BdLeadsAllot')" class="info" colspan="2" style="text-align: center;">
+                    <button type="button" class="btn btn-primary" ng-click="gotolist()" >去列表分配</button>
+                </td>
+            </tr>
+        </table>
+        <table class="table table-bordered">
+            <tr>
+                <td colspan="10">基本信息</td>
+            </tr>
+            <tr>
+                <!--<td class="info">编号</td><td ng-bind="detail.number"></td>-->
+                <td style="width: 16.666%;" class="info">姓名</td><td style="width: 16.666%;" ng-bind="detail.name"></td>
+                <td class="info">备注信息</td><td ng-bind="detail.record"></td>
+            </tr>
+            <tr>
+                <td style="width: 16.666%;" class="info">电话</td><td style="width: 16.666%;" ng-bind="detail.phone"></td>
+                <td style="width: 16.666%;" class="info">性别</td><td style="width: 16.666%;" ng-bind="detail.gender_name"></td>
+                <td class="info">兴趣</td><td ng-bind="detail.interestName"></td>
+            </tr>
+            <tr>
+                <td class="info">邮箱</td><td ng-bind="detail.email"></td>
+                <td class="info">咨询项目</td><td ng-bind="detail.project_name"></td>
+                <td class="info">渠道来源</td><td ng-bind="detail.mediaOriginName"></td>
+            </tr>
+            <tr>
+                <td class="info">渠道详情</td><td ng-bind="detail.mediaDetailName"></td>
+                <td class="info">媒体影响</td><td ng-bind="detail.mediaEffectName"></td>
+                <td class="info">省</td><td ng-bind="detail.province_name"></td>
+            </tr>
+            <tr>
+                <td class="info">育否</td><td ng-bind="detail.haveChildName"></td>
+                <td class="info">婚否</td><td ng-bind="detail.marreyName"></td>
+                <td style="width: 16.666%;" class="info">沟通类型</td><td style="width: 16.666%;" ng-bind="detail.communicationTypeName"></td>
+            </tr>
+            <tr>
+                <td class="info">市</td><td ng-bind="detail.city_name"></td>
+                <td class="info">区（县）</td><td ng-bind="detail.area_name"></td>
+                <td class="info">意向地区</td><td ng-bind="detail.intentAddr"></td>
+            </tr>
+
+            <tr ng-if="showPermissions('BdLeadsAddDetail') || showPermissions('BdLeadsEditDetail')">
+                <td colspan="10">详细信息</td>
+            </tr>
+            <tr ng-if="showPermissions('BdLeadsAddDetail') || showPermissions('BdLeadsEditDetail')">
+                <td class="info">年龄</td><td ng-bind="detail.age"></td>
+                <td class="info">学历</td><td ng-bind="detail.education_name"></td>
+                <td class="info">职业背景</td><td ng-bind="detail.professionBackgroundName"></td>
+            </tr>
+            <tr ng-if="showPermissions('BdLeadsAddDetail') || showPermissions('BdLeadsEditDetail')">
+                <td class="info">拟投资性质</td><td ng-bind="detail.invest_prop_name"></td>
+                <td class="info">投资能力</td><td ng-bind="detail.investAbilityName"></td>
+                <td class="info">具体额度</td><td ng-bind="detail.investLimit"></td>
+            </tr>
+            <tr ng-if="showPermissions('BdLeadsAddDetail') || showPermissions('BdLeadsEditDetail')">
+            	<td class="info">拟投资项目</td><td ng-bind="detail.invest_type_name"></td>
+                <td class="info">客户类型</td><td ng-bind="detail.customer_type_name"></td>
+                <td class="info">客户状态</td><td ng-bind="detail.customer_status_name"></td>
+            </tr>
+            <tr ng-if="showPermissions('BdLeadsAddDetail') || showPermissions('BdLeadsEditDetail')">
+                <td class="info">回表时间</td><td>{{ detail.application_create_at | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+                <td class="info">申请表</td><td><a ng-if="detail.application_exist" href="#/bd-admin/application_detail/{{detail.application_key}}">查看申请表</a></td>
+                <td class="info">到访时间</td><td><div ng-if="detail.visit_at">{{ detail.visit_at | date:'yyyy-MM-dd HH:mm:ss' }}</div></td>
+            </tr>
+            <tr ng-if="showPermissions('BdLeadsAddDetail') || showPermissions('BdLeadsEditDetail')">
+                <td style="width: 16.666%;" class="info">加盟原因</td><td style="width: 16.666%;" ng-bind="detail.joinReasonName"></td>
+                <td style="width: 16.666%;" class="info">真实意向</td><td style="width: 16.666%;" ng-bind="detail.intentionName"></td>
+            </tr>
+            <tr>
+                <td class="info">客户需求</td>
+                <td colspan="5" >
+                    <textarea style=" width: 100%;height: 50px;" disabled="disabled" ng-bind="detail.customer_requirement"></textarea>
+                </td>
+            </tr>
+        </table>
+        <tabs ng-if="showPermissions('BdLeadsAddDetail')|| showPermissions('BdLeadsEditDetail')">
+            <!-- 去除消息提醒   -->
+            <!-- <pane title="提醒记录">
+                <div>
+                    <div class="operations-panel">
+                        <button class="btn btn-primary" ng-click="addRemind()"><span class="glyphicon glyphicon-plus"></span>&nbsp;新增提醒</button>
+                    </div>
+                </div>
+                <br/><br/><br/>
+                <div class="table-responsive" style="overflow:scroll;overflow-y:hidden">
+                    <table class="table table-bordered table-striped table-condensed" st-pipe="getRemindList" st-table="BdLeadsRemindList">
+                        <thead>
+                        <tr>
+                            <th>提醒操作</th>
+                            <th>提醒时间</th>
+                            <th>提醒内容</th>
+                            <th ng-if="false">创建人</th>
+                            <th ng-if="false">创建时间</th>
+                        </tr>
+                        </thead>
+                        <tbody ng-show="!isRemindLoading">
+                        <tr ng-repeat="row in BdLeadsRemindList">
+                           <td>
+                                <a ng-click="editRemind(row)"><span class="glyphicon glyphicon-pencil" title="编辑提醒"></span></a>&nbsp;
+                                <a ng-click="removeRemind(row)"><span class="glyphicon glyphicon-delete" title="删除提醒"></span></a>&nbsp;
+                            </td> 
+                            <td>{{ row.remindTime | date:'yyyy-MM-dd' }}</td>
+                            <td>{{row.remindContent}}</td>
+                            <td ng-if="false">{{row.createBy}}</td>
+                            <td ng-if="false">{{ row.createAt | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+                        </tr>
+                        </tbody>
+                        <tbody ng-show="isRemindLoading">
+                        <tr>
+                            <td colspan="7" class="text-center"><div class="loading-indicator"></div></td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-items-by-page="5" colspan="7">
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </pane> -->
+
+            <pane title="沟通记录">
+                <div>
+                    <div class="operations-panel">
+                        <button class="btn btn-primary" ng-click="addCommunication()"><span class="glyphicon glyphicon-plus"></span>&nbsp;新增沟通</button>
+                    </div>
+                </div>
+                <br/><br/><br/>
+                <div class="table-responsive" style="overflow:scroll;overflow-y:hidden">
+                    <table class="table table-bordered table-striped table-condensed" st-pipe="getCommunicationList" st-table="BdLeadsCommunicationList">
+                        <thead>
+                        <tr>
+                            <th>沟通操作</th>
+                            <th>沟通时间</th>
+                            <th>沟通内容</th>
+                            <th>沟通人</th>
+                            <th ng-if="false">创建人</th>
+                            <th ng-if="false">创建时间</th>
+                        </tr>
+                        </thead>
+                        <tbody ng-show="!isCommunicationLoading">
+                        <tr ng-repeat="row in BdLeadsCommunicationList">
+                            <td>
+                                <a ng-click="editCommunication(row)"><span class="glyphicon glyphicon-pencil" title="编辑沟通"></span></a>&nbsp;
+                                <a ng-click="removeCommunication(row)"><span class="glyphicon glyphicon-delete" title="删除沟通"></span></a>&nbsp;
+                            </td>
+                            <td>{{ row.communicateTime | date:'yyyy-MM-dd' }}</td>
+                            <td>{{row.communicateContent}}</td>
+                            <td>{{row.creator_name}}</td>
+                            <td ng-if="false">{{row.createBy}}</td>
+                            <td ng-if="false">{{ row.createAt | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+                        </tr>
+                        </tbody>
+                        <tbody ng-show="isCommunicationLoading">
+                        <tr>
+                            <td colspan="7" class="text-center"><div class="loading-indicator"></div></td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-items-by-page="5" colspan="7">
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </pane>
+
+
+            <pane title="邀约记录">
+                <div>
+                    <div class="operations-panel">
+                        <button class="btn btn-primary" ng-click="addInvitation()"><span class="glyphicon glyphicon-plus"></span>&nbsp;新增邀约</button>
+                    </div>
+                </div>
+                <br/><br/><br/>
+                <div class="table-responsive" style="overflow:scroll;overflow-y:hidden">
+                    <table class="table table-bordered table-striped table-condensed" st-pipe="getInvitationList" st-table="BdLeadsInvitationList">
+                        <thead>
+                        <tr>
+                            <th>邀约操作</th>
+                            <th>邀约时间</th>
+                            <th>预到访时间</th>
+                            <th ng-if="false">邀约内容</th>
+                            <th>邀约状态</th>
+                            <th>邀约人</th>
+                            <th ng-if="false">创建人</th>
+                            <th ng-if="false">创建时间</th>
+                        </tr>
+                        </thead>
+                        <tbody ng-show="!isInvitationLoading">
+                        <tr ng-repeat="row in BdLeadsInvitationList">
+                            <td>
+                                <a ng-click="editInvitation(row)"><span class="glyphicon glyphicon-pencil" title="编辑邀约"></span></a>&nbsp;
+                                <a ng-click="removeInvitation(row)"><span class="glyphicon glyphicon-delete" title="删除邀约"></span></a>&nbsp;
+                                <!--<a ng-click="visitInvitation(row)"><span class="glyphicon glyphicon-ok" title="已到访"></span></a>&nbsp;-->
+                            </td>
+                            <td>{{ row.invitateTime | date:'yyyy-MM-dd' }}</td>
+                            <td>{{ row.receiveTime | date:'yyyy-MM-dd' }}</td>
+                            <td ng-if="false">{{row.invitationContent}}</td>
+                            <td>{{row.state_name}}</td>
+                            <td>{{row.creator_name}}</td>
+                            <td ng-if="false">{{row.createBy}}</td>
+                            <td ng-if="false">{{ row.createAt | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+                        </tr>
+                        </tbody>
+                        <tbody ng-show="isInvitationLoading">
+                        <tr>
+                            <td colspan="7" class="text-center"><div class="loading-indicator"></div></td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-items-by-page="5" colspan="7">
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </pane>
+
+            <pane title="分配历史">
+                <div>
+                    <div class="operations-panel">
+                    </div>
+                </div>
+                <br/><br/><br/>
+                <div class="table-responsive" style="overflow:scroll;overflow-y:hidden">
+                    <table class="table table-bordered table-striped table-condensed">
+                        <thead>
+                        <tr>
+                            <th>分配时间</th>
+                            <th>分配人</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="row in transferList">
+                            <td>{{ row.createTime | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+                            <td>{{row.name}}</td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                    </table>
+                </div>
+            </pane>
+
+        </tabs>
+
+
+    </div>
+
+
+</div>
+

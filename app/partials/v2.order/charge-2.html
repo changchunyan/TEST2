@@ -1,0 +1,98 @@
+<div class="modal " tabindex="-1" role="dialog" aria-hidden="true" ng-controller="OrderChargeController">
+    <div class="modal-dialog" style="width:60%;min-width: 995px;">
+        <div class="modal-content">
+            <form name="chargeOrderForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header ">
+                    <button type="button" class="close" aria-label="Close" ng-click="ordersMoreChargeHide()"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle"></h4>
+                </div>
+                <div class="modal-body mt-modal-order">
+                    <table class="table table-bordered table-striped mt-table1" st-table="orderPayments">
+                        <thead>
+                        <tr>
+                            <th>选择</th>
+                            <th>合同编号</th>
+                            <th>方式</th>
+                            <th>正课/促销课程/赠课</th>
+                            <th>应收金额</th>
+                            <th>已付金额</th>
+                            <th>尾款金额</th>
+                        </tr>
+                        </thead>
+                        <tr ng-repeat="row in ordersMoreCharge">
+                            <td><input type="radio" name="chargeModel" ng-model="chargeModel" value="{{$index}}"
+                                       ng-disabled="{{(row.totalPrice - row.privilegeAmount - row.realPayAmount -row.supplementaryFee).toFixed(2)==0}}"
+                                       ng-click="chargeModel=$index">
+                            </td>
+                            <td>{{row.orderNo}}</td>
+                            <td>{{row.orderCategory|categoryF:row.orderCategory}}</td>
+                            <td>{{($index==0?'正课':row.slaveType)}}</td>
+                            <td>{{row.realTotalAmount}}</td>
+                            <td>{{row.realPayAmount}}</td>
+                            <td>
+                                <span ng-if="(row.totalPrice - row.privilegeAmount - row.realPayAmount
+                                -row.supplementaryFee).toFixed(2)<=0">0.00</span>
+                                <span ng-if="(row.totalPrice - row.privilegeAmount - row.realPayAmount
+                                -row.supplementaryFee).toFixed(2)>0">{{(row.totalPrice - row.privilegeAmount - row.realPayAmount
+                                -row.supplementaryFee).toFixed(2)}}</span>
+
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="row " ng-show="chargeModel>=0">
+                        <div class="col-sm-6 form-group">
+                            <label for="supplementaryFee" class="control-label" style="line-height: 4.5;
+    width: 110px;">* 本次收费金额</label>
+                            <div class="col-sm-8 col-md-5 col-lg-6" style="padding:10px;">
+                                <input type="number" name="supplementaryFee" id="supplementaryFee"
+                                       ng-pattern="/^[0-9]\d*\b|0$/"
+                                       ng-model="ordersMoreCharge[chargeModel].supplementaryFee"
+                                       ng-disabled="ordersMoreCharge[chargeModel].payDueAmount<=0"
+                                       ng-maxlength="10" required class="form-control"
+                                       ng-change="isSaveShowV3()"/>
+                                <input type="hidden" name="orderNo" id="orderNo"
+                                       ng-model="ordersMoreCharge[chargeModel].orderNo" class="input-sm form-control"
+                                       readonly/>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <label class="control-label" style="line-height: 3;
+    width: 110px;">* 交费日期</label>
+                            <div class="col-sm-8 col-md-5 col-lg-6" data-toggle="tooltip" data-placement="bottom"
+                                 data-original-title="按所选交费日期统计业绩">
+                                <!-- datepicker
+                                       onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  readonly onchange=""-->
+                                <input type="text" ng-disabled="!isModyfied"
+                                       ng-value="ordersMoreCharge[chargeModel].payDate | date:'yyyy-MM-dd HH:mm:ss' " datepicker
+                                       onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"  readonly onchange=""
+                                       name="ordersMoreCharge[chargeModel].payDate" id="ordersMoreCharge[chargeModel].payDate"
+                                       ng-model="ordersMoreCharge[chargeModel].payDate" required class="form-control"/>
+                                <!--<label class="control-label" style="    position: absolute;
+    top: 0;
+    right: 13px;">{{isModyfied}}</label>-->
+                                <!-- ( 收费日期可以修改 ) -->
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <table class="table "></table>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="ordersMoreChargeHide()">取消</button>
+                    <button type="button" class="btn btn-success"
+                            ng-if="isSaveShowFlag && (ordersMoreCharge[chargeModel].totalPrice - ordersMoreCharge[chargeModel].privilegeAmount - ordersMoreCharge[chargeModel].realPayAmount-ordersMoreCharge[chargeModel].supplementaryFee).toFixed(2)>=0"
+                            ng-disabled="chargeOrderForm.$invalid && !isModyfied" ng-click="chargeOrderV3(ordersMoreCharge[chargeModel])">保存
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $("[data-toggle='tooltip']").tooltip();
+    });
+
+</script>

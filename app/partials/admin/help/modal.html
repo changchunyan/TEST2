@@ -1,0 +1,22 @@
+<div class="modal admin-permission-modal editorTheme-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="form">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="editorThemehide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle">编辑帮助主题</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="addTheme_input" style="height: 100px;margin-top: 50px">
+                        主题名称:<input maxlength="40"  name="changeTopicFilter.title" style="width: 80%;border: none;border-bottom: 1px solid #000" type="text"  ng-model="changeTopicFilter.title">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="editorThemehide()">关闭</button>
+                    <button type="button" class="btn btn-success" ng-click="sureToSaveTheme()">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

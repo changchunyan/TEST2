@@ -1,0 +1,218 @@
+<div class="view-frame">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div ng-show="isList" class="view-content mt-new-ui user-love">
+        <div class="yws-nav">
+            <div>
+                <ul class="breadcrumb">
+                    <li><a href="#/">首页</a> <span class="divider"></span></li>
+                    <li><a href="#/sos-admin">学员教务</a> <span class="divider"></span></li>
+                    <li class="active">校区APP产品列表</li>
+                </ul>
+            </div>
+           <!--  <div class="mt-10 br-gray">
+                <div class="tabs-title border-1 c3">校区APP产品列表</div>
+
+            </div> -->
+            <div class="details-title">
+            <span class="details-title-left">校区APP产品列表</span>
+            <div class="details-title-right" >
+                 <div class="title-right-btn">
+                    <button class="btn btn-primary"  ng-click="showAddCourseViewOnline()">创建课程</button>
+                </div>
+               <!--  <div class="title-right-btn" >
+                    <button class="btn btn-primary" ng-click="tcc.showSelectedTeacherCourseView()">选择课程</button>
+                </div> -->
+               <!-- <div class="title-right-btn" >
+                    <button class="btn btn-success" ng-click="tcc.showTimeTeacherCourseView()">可上课时间</button>
+                </div>-->
+            </div>
+        </div>
+
+            <div class="br-gray mt-list">
+                <!-- <h2 class="pl-20 c3">产品课程列表</h2> -->
+                <div class="overflow-x">
+                    <table class="table table-bordered table-striped table-condensed mt-table1" st-pipe="getOnLineCourseListForSchool"
+                           st-table="CourseList1">
+                        <thead>
+                        <tr class="br-gray-t">
+                            <th>产品编号</th>
+                            <th>产品名称</th>
+                            <th>所属项目</th>
+                            <th>产品类型名称</th>
+                            <th>课程类型名称</th>
+
+                            <th>全科</th>
+                            <th>科目</th>
+                            <th>课程年级</th>
+                            <th>标准课时</th>
+                            <th>课程价格</th>
+                            <th>按期收费</th>
+                            <th>课程最小单价</th>
+                            <th>课程最大单价</th>
+                            <th>优惠方式</th>
+                            <th>创建部门</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                        <tr>
+                            <th>
+                                <input st-search="CourseListFilter.id" placeholder="编号查询" ng-model="CourseListFilter.id"
+                                       class="input-sm form-control" type="search"/>
+                            </th>
+                            <th>
+                                <input st-search="CourseListFilter.courseName" placeholder="名称查询"
+                                       ng-model="CourseListFilter.courseName" class="input-sm form-control"
+                                       type="search"/>
+                            </th>
+                             <th>
+                                <!--项目名称-->
+                                <select st-search="CourseListFilter.projectId"
+                                        ng-model="CourseListFilter.projectId"
+                                        name="CourseListFilter.projectId" id="CourseListFilter.projectId"
+                                        class="input-sm form-control"
+                                        ng-options="ProjectSetting.projectName for ProjectSetting in projectList"
+                                        type="search" >
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </th>
+                            <th>
+                            <select st-search="CourseListFilter.productTypeId"
+                                            ng-model="CourseListFilter.productTypeId"
+                                            name="CourseListFilter.productTypeId" id="CourseListFilter.productTypeId"
+                                            class="input-sm form-control"
+                                            ng-options="option.id as option.name for option in ProductTypeList"
+                                            type="search" ng-change="onProductIdSelect()" disabled="disabled">
+                                        <option value="">优胜教育线上产品</option>
+                                    </select>
+                            </th>
+
+                            <th>
+                                <!--课程类型名称-->
+                                  <select
+                                            ng-model="CourseListFilter.course_type_id"
+                                            name="CourseListFilter.course_type_id" id="CourseListFilter.course_type_id"
+                                            class="input-sm form-control"
+                                            ng-options="option.id as option.name for option in courseTypeIds"
+                                             ng-change="onCourseTypeIdSelect1()">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                            </th>
+
+                            <th>
+                                <select st-search="CourseListFilter.is_fullsubject"  class="input-sm form-control" ng-model="CourseListFilter.is_fullsubject">
+                                    <option value="">-- 请选择 --</option>
+                                    <option value=1>是</option>
+                                    <option value=0>否</option>
+                                </select>
+                            </th>
+                            <th>
+                                <!--学科-->
+                                <select st-search="CourseListFilter.subjectId" ng-model="CourseListFilter.subject_id" name="Course.subject_id" id="Course.subjectId"  class="input-sm form-control"
+                                            ng-options="option.id as option.name for option in subjectIds" >
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                            </th>
+
+                            <th>
+                                <!--课程年级-->
+                                 <select st-search="CourseListFilter.grade_id" ng-model="CourseListFilter.grade_id"
+                                            name="CourseListFilter.grade_id" id="CourseListFilter.grade_id"
+                                            class="input-sm form-control"
+                                            ng-options="option.id as option.name for option in gradeIdSelectes1"
+                                            type="search">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                            </th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th><input st-search="CourseListFilter.schoolName" placeholder="部门查询"
+                                       ng-model="CourseListFilter.schoolName" class="input-sm form-control"
+                                       type="search"/></th>
+                            <th> <select st-search="CourseListFilter.isShelve"  class="input-sm form-control" ng-model="CourseListFilter.isShelve">
+                                    <option value="">-- 全部 --</option>
+                                    <option value=1>上架</option>
+                                    <option value=0>下架</option>
+                                </select></th>
+                            <th style="line-height: 30px;"><span> </span></th>
+                        </thead>
+                        <tbody ng-show="!isCourseListLoading">
+                        <tr ng-repeat="row in CourseList">
+                            <td>{{row.id}}</td>
+                            <td>{{row.name}}</td>
+                            <td>{{row.projectNames}}</td>
+                            <td>{{row.productTypeName}}</td>
+                            <td>{{row.courseTypeName}}</td>
+
+                            <td ng-if="row.is_fullsubject == 1">是</td>
+                            <td ng-if="row.is_fullsubject != 1">否</td>
+                            <td>{{row.subject_name}}</td>
+                            <td>{{row.gradeName}}</td>
+                            <td>{{row.standardNum}}</td>
+                            <td>
+                                {{row.standardPrice}}
+                                <span ng-if="row.isRegularCharge">元/期</span>
+                                <span ng-if="!row.isRegularCharge && row.courseUnit == 1">元/课时</span>
+                                <span ng-if="!row.isRegularCharge && row.courseUnit == 2">元/次</span>
+                            </td>
+                            <td>
+                                <span ng-if="row.isRegularCharge">
+                                    {{row.regularTimes}}<span ng-if="row.courseUnit == 1">课时</span><span ng-if="row.courseUnit == 2">次</span>/期
+                                </span>
+                            </td>
+                            <td>{{row.minPrice}}</td>
+                            <td>{{row.maxPrice}}</td>
+                            <td>{{row.favorable}}</td>
+                            <td>{{row.schoolName}}</td>
+                            <td ng-show="row.isShelve == 1">上架</td>
+                            <td ng-show="row.isShelve != 1">下架</td>
+                            <td>
+                                <a class="showUI" id="nw2+{{$index}}" ng-click="nw2[$index]=true">
+                                    <span class="glyphicon glyphicon-caozuo" title="操作"></span>
+                                </a>
+                                <bubble ng-if="nw2[$index]" for="nw2+{{$index}}" align="bottom" close="nw2[$index]=false"
+                                        close-action="outerchick " ng-mouseleave="nw2[$index]=false;">
+                                    <ul>
+                                        <li>
+                                            <a ng-click="showEditCourseView(row)">编辑</a>
+                                        </li>
+                                        <li ng-if="!row.isShelve == 1&&row.omsProductTypeId==8" >
+                                         <a ng-click="upordwonCourse(row)">上架</a>
+                                        </li>
+                                       <li ng-if="row.isShelve == 1&&row.omsProductTypeId==8" >
+                                         <a ng-click="upordwonCourse(row)">下架</a>
+                                        </li>
+                                        <li >
+                                            <a ng-click="removeCourse(row)">删除</a>
+                                        </li>
+                                    </ul>
+                                </bubble>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tbody ng-show="isCourseListLoading">
+                        <tr>
+                            <td colspan="16" class="text-center">
+                                <div class="loading-indicator"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-items-by-page="10"
+                                st-template="partials/util/pagination.custom.html" colspan="16"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>

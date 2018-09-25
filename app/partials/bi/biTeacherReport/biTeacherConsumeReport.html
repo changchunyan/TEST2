@@ -1,0 +1,56 @@
+<div class="default-box">
+    <h4 class="bi-search-result-title">教师消课数据统计 <button class="btn btn-success bi-list-head" ng-click="exportTeacherConsumeReport()">导出列表</button></h4>
+    <br/>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped" id="teacherConsumeReportTable">
+            <thead>
+                <tr>
+                     <th style="font-weight: bold;" rowspan="1">组号</th>
+                     <th style="font-weight: bold;" rowspan="1">主管或负责人</th>
+                     <th style="font-weight: bold;" rowspan="1">教师</th>
+                     <th style="font-weight: bold;" rowspan="1">科目</th>
+                     <th style="font-weight: bold;" rowspan="1">本平台学生数</th>
+                     <th style="font-weight: bold;" rowspan="1">本平台优质课时</th>
+                     <th style="font-weight: bold;" rowspan="1">外平台学生数</th>
+                     <th style="font-weight: bold;" rowspan="1">外平台优质课时</th>
+                     <th style="font-weight: bold;" rowspan="1">学生总数</th>
+                     <th style="font-weight: bold;" rowspan="1">周中正常课时</th>
+                     <th style="font-weight: bold;" rowspan="1">周中体验课时</th>
+                     <th style="font-weight: bold;" rowspan="1">周末正常课时</th>
+                     <th style="font-weight: bold;" rowspan="1">周末体验课时</th>
+                     <th style="font-weight: bold;" rowspan="1">周体验课时</th>
+                     <th style="font-weight: bold;" rowspan="1">周中课时总数</th>
+                     <th style="font-weight: bold;" rowspan="1">课时总数</th>
+                     <th style="font-weight: bold;" rowspan="1">数据结论</th>
+                     <th style="font-weight: bold;" rowspan="1">新签体验单数</th>
+                     <th style="font-weight: bold;" rowspan="1">新签体验成功单数</th>
+                     <th style="font-weight: bold;" rowspan="1">试用期/实习</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="report in teacherConsumeReportData ">
+                <td>{{report.groupId}}</td>
+                <td>{{report.role}}</td>
+                <td>{{report.teacherName}}</td>
+                <td>{{report.subjectGroup}}</td>
+                <td>{{report.selfStudentNumber}}</td>
+                <td>{{report.selfCourseHour}}</td>
+                <td>{{report.otherStudentNumber}}</td>
+                <td>{{report.otherCourseHour}}</td>
+                <td>{{report.totalStudentNumber}}</td>
+                <td>{{report.weekdayCourseHour}}</td>
+                <td>{{report.weekdayTrialCourseHour}}</td>
+                <td>{{report.weekendCourseHour}}</td>
+                <td>{{report.weekendTrialCourseHour}}</td>
+                <td>{{report.totalTrialCourseHour}}</td>
+                <td>{{report.weekdayTotalCourseHour}}</td>
+                <td>{{report.totalCourseHour}}</td>
+                <td style="background-color: {{judgementBackgroundColor(report)}};"><span style="color: {{judgementColor(report)}};">{{judgement(report)}}</span></td>
+                <td>{{report.trialOrderNumber}}</td>
+                <td>{{report.successTrialOrderNumber}}</td>
+                <td>{{report.employmentType}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

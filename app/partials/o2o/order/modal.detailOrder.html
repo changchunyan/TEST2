@@ -1,0 +1,203 @@
+<div class="modal orderModal"  tabindex="-1" role="dialog" aria-hidden="true" ng-controller="O2OOrderDetailController2">
+    <div class="modal-dialog">
+        <div class="modal-content" >
+            <form name="updateOrderForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle"></h4>
+                </div>
+                <div class="modal-body" set-no-edit="" is-edit="view.isEditView">
+                    <div >
+                        <div class="row ">
+                            <div class="col-sm-4 " >
+                                <label for="orderStatus" class="col-sm-4 control-label"> 订单状态</label>
+                                <div class="col-sm-8">
+                                    <!--<input type="text"   name="orderStatus" id="orderStatus"  ng-model="order.orderStatus" class="input-sm form-control" />-->
+                                    <select     ng-model="order.orderStatus" name="orderStatus" id="orderStatus" class="input-sm form-control"
+                                            ng-options="o.id as o.name for o in orderStatusSELECT">
+                                        <option  value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 " >
+                                <label for="donateCourseNum" class="col-sm-4 control-label"> 补课/赠课</label>
+                                <div class="col-sm-8">
+                                    <input type="text"  name="donateCourseNum" id="donateCourseNum" ng-model="order.donateCourseNum" required  class="input-sm form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 " >
+                                <label for="studentName" class="col-sm-4 control-label"> 学员姓名</label>
+                                <div class="col-sm-8">
+                                    <input type="text"    name="studentName" id="studentName" ng-model="order.name"   class="input-sm form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 " >
+                                <label for="classAddress" class="col-sm-4 control-label">授课地点</label>
+                                <div class="col-sm-8">
+                                    <input type="text"   id="classAddress" name="classAddress" ng-model="order.classAddress"  class="input-sm form-control" >
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                        <hr>
+                        <div  class="row " set-no-edit="" is-edit="view.isEdit">
+                            <div class="row">
+
+                                <div class="col-sm-4 " >
+                                    <label for="gender" class="col-sm-4 control-label"> 性别</label>
+                                    <div class="col-sm-8">
+                                        <select   ng-model="order.gender" name="gender" id="gender" class="input-sm form-control"
+                                                  ng-options="o.id as o.name for o in genderSELECT">
+                                            <option value="">未知</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 " >
+                                    <label for="phone" class="col-sm-4 control-label"> 手机</label>
+                                    <div class="col-sm-8">
+                                        <input type="text"     name="phone" id="phone" ng-model="order.phone"  class="input-sm form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 " >
+                                    <label for="name" class="col-sm-4 control-label">* 教师姓名</label>
+                                    <div class="col-sm-8">
+
+                                        <input type="text" disabled="disabled" name="name" id="name" ng-model="order.teacherName"   class="input-sm form-control">
+                                        <!--当前查询教师关闭-->
+                                       <!-- <a  ng-style="isShowSubmit" ng-click="searchTeachers()"><span class="glyphicon glyphicon-search"></span></a>-->
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 " >
+                                    <label for="teacherID" class="col-sm-4 control-label">教师id</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" disabled  name="teacherId" id="teacherId" ng-model="order.teacherId" class="input-sm form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 " >
+                                    <label for="courseTypeId" class="col-sm-4 control-label">* 课程类型</label>
+                                    <div class="col-sm-8">
+                                        <select   ng-model="order.courseTypeId" name="courseTypeId" id="courseTypeId" class="input-sm form-control"
+                                                ng-options="option.id as option.typeName for option in coursesType1">
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+
+                                        <!--<select  name="coursesType"  class="form-control" id="coursesTypeID"
+                                                 ng-options="c.courseTypeId as c.typeName for c in CoursesType" >
+                                            <option value="">&#45;&#45; 请选择 &#45;&#45;</option>
+                                        </select>-->
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 " >
+                                    <label for="courseId" class="col-sm-4 control-label">* 课程名称</label>
+                                    <div class="col-sm-8">
+                                        <select   ng-model="order.courseId" name="courseId" id="courseId" class="input-sm form-control"
+                                                ng-options="c.id as c.name for c in courses1">
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 " >
+                                    <label for="realTotalAmount" class="col-sm-4 control-label">* 课程总价</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" name="realTotalAmount" id="realTotalAmount"   class="input-sm form-control" ng-model="order.realTotalAmount" />
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 " >
+                                    <label for="classType" class="col-sm-4 control-label">上课方式</label>
+                                    <div class="col-sm-8">
+                                        <select   ng-model="order.classType" name="classType" id="classType" class="input-sm form-control"
+                                                ng-options="o.id as o.name for o in classTypeSELECT">
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <!--<div>-->
+                                <!--<div class="col-sm-4 " >-->
+                                    <!--<label for="" class="col-sm-4 control-label">可使用优惠信息</label>-->
+                                    <!--<div class="col-sm-8">-->
+                                        <!--<select  name="" class="form-control"-->
+                                                <!--ng-options="">-->
+                                            <!--<option value="">&#45;&#45; 请选择 &#45;&#45;</option>-->
+                                        <!--</select>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        </div>
+                        <div>
+                            <tabs>
+                                <pane title="课程状态">
+                                    <div class="table-responsive" style="overflow:scroll;overflow-y:hidden">
+                                        <table class="table table-bordered table-striped table-condensed" st-pipe="callOrderCourses" st-table="orderCourses">
+                                            <thead>
+                                            <tr>
+                                                <!--<th>操作</th>-->
+                                                <th>课程名称</th>
+                                                <th>课程状态</th>
+                                                <th>评价</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody ng-show="!isLoading">
+                                            <tr ng-repeat="row in orderCourses">
+                                                <td>第{{$index+1}}课时</td>
+                                                <td>
+                                                    <select  ng-model="row.state" ng-style=""
+                                                            name="state" id="state" class="input-sm form-control"
+                                                            ng-options="option.id as option.name for option in orderCourseStatusSelect" ng-change="changOrderCourseStatus(row)" >
+                                                        <option value="">-- 请选择 --</option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                     <span id="courseStars" class="img-10" >
+                                                          <img ng-if="(row.attireGrade || 5)" src="img/hr/star-on.png" alt="1" title="bad">
+                                                        <img ng-if="(row.attireGrade >= 1)" src="img/hr/star-on.png" alt="1" title="bad">
+                                                        <img ng-if="(row.attireGrade < 1)" src="img/hr/star-off.png" alt="1" title="bad">
+                                                        <img ng-if="(row.attireGrade >= 2)" src="img/hr/star-on.png" alt="2" title="poor">
+                                                        <img ng-if="(row.attireGrade < 2)" src="img/hr/star-off.png" alt="2" title="poor">
+                                                        <img ng-if="(row.attireGrade >= 3)" src="img/hr/star-on.png" alt="3" title="regular">
+                                                        <img ng-if="(row.attireGrade < 3)" src="img/hr/star-off.png" alt="3" title="regular">
+                                                        <img ng-if="(row.attireGrade >= 4)" src="img/hr/star-on.png" alt="4" title="good">
+                                                        <img ng-if="(row.attireGrade < 4)" src="img/hr/star-off.png" alt="4" title="good">
+                                                        <img ng-if="(row.attireGrade >= 5)" src="img/hr/star-on.png" alt="5" title="gorgeous">
+                                                        <img ng-if="(row.attireGrade < 5)" src="img/hr/star-off.png" alt="5" title="gorgeous">
+                                                     </span>
+                                                </td>
+                                               <!-- <td>{{row.start_time | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                                                <td>{{row.end_time | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                                                <td>{{row.course_num}}</td>-->
+                                            </tr>
+                                            </tbody>
+                                            <tbody ng-show="isLoading">
+                                            <tr>
+                                                <td colspan="9" class="text-center"><div class="loading-indicator"></div></td>
+                                            </tr>
+                                            </tbody>
+                                            <tfoot>
+                                            <tr>
+                                                <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="10">
+                                                </td>
+                                            </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+
+                                </pane>
+
+                            </tabs>
+                        </div>
+                    </div>
+                <div class="modal-footer">
+                        <button type="button" class="btn btn-default"  ng-click="$hide()">取消</button>
+                        <button type="button" class="btn btn-success c5-lable" ng-style="isShowSubmit" ng-disabled="updateOrderForm.$invalid ||isLoading "  ng-click="modalSubmit()">保存</button><!--    -->
+                        <!--<button ng-if="showPermissions('OrderEditSave')" type="button" class="btn btn-success" ng-disabled="updateOrderForm.$invalid"  ng-click="updateOrder()">保存</button>&lt;!&ndash;    &ndash;&gt;-->
+                        <!--<img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />-->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

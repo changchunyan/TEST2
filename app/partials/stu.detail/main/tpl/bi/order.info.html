@@ -1,0 +1,61 @@
+<style>
+.mt-tabs li{width:150px!important;}
+</style>
+<div class="modal-body mt-modal-recording"> 
+   <button class="btn btn-success bi-list-head" style="float: right;position: relative;right: 14px;top: -39px;margin-left: -102px;" ng-click="getPageAll()">导出列表</button>
+  
+            <div class="table-responsive">
+                <!--<div class="table-title">订单列表</div>-->
+                <table class="table table-bordered table-striped table-condensed mt-table1"
+                       st-pipe="callServerNormalOrderTab" st-table="normalOrders">
+                    <thead>
+                    <tr>
+                        <th>合同号</th>
+                         <th>姓名</th>
+                        <th>订单类型</th>
+                        <th>实收金额</th>
+                        <th>产品名称</th>
+                        <th>课时原单价</th>
+                        <th>折后单价</th>
+                        <th>消课课时</th>
+                        <th>消课时长</th>
+                        <th>确认收入</th>
+                        <th>累计消课课时</th>
+                        <th>累计确认收入</th> 
+                         <th>剩余金额</th> 
+                    </tr>
+                    </thead>
+                    <tbody >
+                    <tr ng-repeat="row in normalOrdersModelNew">
+                        <td>{{row.orderNo}}</td>
+                        <td>{{row.studentName}}</td> 
+                        <td ng-show="row.orderType == 1">新签</td>
+                        <td ng-show="row.orderType == 2">续费</td>
+                        <td ng-show="row.orderType == 3">返课</td>
+                        <td ng-show="row.orderType == 4">转课</td>
+                        <td ng-show="row.orderType == 5">推荐</td>
+                        <td ng-show="row.orderType == 6">试听</td>
+                        <td ng-show="row.orderType == 8">赠课</td>
+                        <td >{{row.realIncomeAmount}}</td>
+                        <td >{{row.courseName}}</td> 
+                        <td >{{row.actualPrice}}</td>
+                        <td >{{row.discountPrice}}</td>
+                        <td >{{row.courseNum}}</td>
+                        <td >{{row.courseHoursCount}}</td>
+                        <td >{{row.confirmIncome}}</td>
+                        <td >{{row.cumulativeCourseNum}}</td>
+                        <td >{{row.cumulativeConfirmIncome}}</td>
+                        <td >{{row.surplusAmount}}</td>
+                    </tr>
+                    </tbody> 
+                    <tfoot>
+                    <tr>
+                        <td class="text-center" st-pagination="" st-items-by-page="10"
+                               st-template="partials/util/pagination.custom.html" colspan="30">
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+       
+</div>

@@ -1,0 +1,216 @@
+<style>
+
+    .progressBar{
+        position:relative;
+    }
+    .steps{
+        display:flex;
+        z-index:2;
+        position:relative;
+    }
+    .steps li a {
+        cursor:default;
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        border: 2px solid #dfdfdf;
+        background: #dfdfdf;
+        border-radius: 50%;
+        color: #fff;
+        font-size: 16px;
+    }
+    .fileName{
+        cursor:pointer;
+        width:200px;
+    }
+    .spacing{
+        flex:1;
+    }
+    .steps li.success a{
+        background:#67ba2f;
+    }
+    .percentageBar{
+        position:absolute;
+        top:40px;
+        left:0;
+        width:100%;
+        background:#dfdfdf;
+        height:8px;
+        z-index:1;
+        padding:0 20px;
+        box-sizing:border-box;
+        background-clip: content-box;
+    }
+    .percentage{
+        top:0px;
+        left:0;
+        background:#67ba2f;
+        height:8px;
+        display:block
+    }
+    .percentageSpacing{
+        width:20px;
+    }
+    .percentageBar ul{
+        display:flex;
+        width:100%;
+        height:100%;
+    }
+    .percentageLabel{
+        font-size: 18px;
+    }
+    .percentageLabelTxt{
+        width:82px;
+        text-align: center;
+    }
+</style>
+<style>
+    .modal-body{
+        background-color: #f9f9f9;
+        padding: 20px;
+    }
+    .modal-li{
+        /*margin: 20px 0;*/
+        padding: 20px;
+    }
+    .modal-li-title{
+        font-size: 20px;
+    }
+    .form-horizontal .form-group{
+        margin: 0 0 20px 0;
+    }
+    .bg-f1{
+        background-color: #f1f4f9;
+        margin-left: -15px;
+        margin-right: -15px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+</style>
+<div class="modal crm-importLeads-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" style="min-width:800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide();hideUploadModal()"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" ng-bind="modalLeadingInTitle"></h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="modal-li progressBar">
+
+                    <ul class="steps">
+                        <li class="firstStep" ng-class="{'success':step >= '1'}">
+                            <a href="javascript:;">1</a>
+                        </li>
+                        <li class="spacing"></li>
+                        <li class="secondStep" ng-class="{'success':step >= '2'}">
+                            <a href="javascript:;">2</a>
+                        </li>
+                        <li class="spacing"></li>
+                        <li class="thirdStep" ng-class="{'success':step >= '3'}">
+                            <a href="javascript:;">3</a>
+                        </li>
+                        <li class="spacing"></li>
+                        <li class="fourthStep" ng-class="{'success':step >= '4'}">
+                            <a href="javascript:;">4</a>
+                        </li>
+                    </ul>
+
+                    <div class="percentageBar">
+                        <ul>
+                            <li class="percentageSpacing" ></li>
+                            <li style="flex:1;height:100%;">
+                                <span class="percentage" style="width:{{percentage+'%'}};"></span>
+                            </li>
+                            <li class="percentageSpacing"></li>
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="modal-li" style="padding:0;">
+                    <ul style="display:flex;" class="percentageLabel">
+                        <li class="percentageLabelTxt">上传文档</li>
+                        <li class="spacing"></li>
+                        <li class="percentageLabelTxt">数据校验</li>
+                        <li class="spacing"></li>
+                        <li class="percentageLabelTxt">导入数据</li>
+                        <li class="spacing"></li>
+                        <li class="percentageLabelTxt">完成</li>
+                    </ul>
+                </div>
+                <div class="modal-li">
+                    <dl class="list-group" ng-if="step == 1">
+                        <dt class="list-group-item">说明：请按照要求填写模板文件，文件大小不要超过2M</dt>
+                        <dd class="list-group-item">
+                            1.
+                            <!--<a class="downloadTemp" ng-href="http://yes.youwinedu.com/意向客户导入模板.xlsx" download="" href="http://yes.youwinedu.com/意向客户导入模板.xlsx">点击下载</a>-->
+                            <a class="downloadTemp" ng-href="{{domain}}/意向客户导入模板.xlsx" download="" href="{{domain}}/意向客户导入模板.xlsx">点击下载</a>
+                            《意向客户导入模板》
+                        </dd>
+                        <dd class="list-group-item">2.填写模板文件，选择文件开始导入</dd>
+                        <dd class="list-group-item">
+                            <form name="uploadFileForm">
+                                <input class="hide" type="file" nv-file-select="" uploader="uploader1"/>
+                                <input class="fileName" type="text" ng-click="chooseFile()" placeholder="请选择文件" ng-model="fileName" style="border:1px solid #ccc;" />
+                                <!--<span>{{uploader.progress}}</span>-->
+                                <button class="btn btn-sm " style="background:#67ba2f; color:#fff; margin-left:10px;" ng-click="chooseFile()">选择文件</button>
+                            </form>
+
+
+                        </dd>
+                    </dl>
+
+                    <ul class="list-group" ng-if="step == 2">
+                        <li class="list-group-item" ng-show="checkStatus == 4 || checkStatus == 6">数据校验完毕，共{{checkTotalCount}}条意向客户，错误信息{{checkFormatErrorCount}}条</li>
+                        <li class="list-group-item" ng-show="checkStatusDescription">{{checkStatusDescription}}</li>
+                        <li class="list-group-item" ng-if="checkStatus == 4 || (checkFormatErrorCount != 0 && checkStatus == 6)">
+                            <button class="btn btn-success" ng-click="exportErrorInfo()">导出错误信息</button>
+                        </li>
+                    </ul>
+                    <ul class="list-group" ng-if="step == 4">
+                        <li class="list-group-item">{{importStatusDescription}}</li>
+                        <li class="list-group-item" ng-if="checkStatus == 4 || (checkFormatErrorCount != 0 && checkStatus == 6)">
+                            <button class="btn btn-success" ng-click="exportErrorInfo()">导出错误信息</button>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="text-center">
+                    <!--ng-disabled="uploadFileForm.$invalid"-->
+                    <button class="btn btn-success" ng-if="!checkSuccess" ng-disabled="uploader1.queue.length == 0" ng-click="uploader1.uploadAll()">导入</button>
+                    <button class="btn btn-success" ng-if="(checkSuccess || importComplete) && !importSuccess" ng-disabled="listStu.length == 0 || checkStatus < 6 || importComplete || checkError" ng-click="confirmImportFile()">确认导入</button>
+                    <button class="btn btn-default" ng-if="!importComplete" ng-click="$hide();hideUploadModal()">取消</button>
+                    <button class="btn btn-success" ng-if="importComplete && importSuccess" ng-click="$hide();hideUploadModal()">完成</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<!--<script style="display:none">-->
+<!--$(function(){-->
+<!--$(".yes-radio").on("click",function() {-->
+<!--if (!$(this).hasClass("radio-checked")) {-->
+<!--$(this).parents('.modal-body').find(".radio-checked").removeClass("radio-checked");-->
+<!--$(this).addClass("radio-checked");-->
+<!--}-->
+<!--})-->
+<!--});-->
+<!--</script>-->
+<!--<script type="text/javascript">-->
+<!--window.load = pause();-->
+<!--function pause(){-->
+<!--window.setTimeout("tooltipShow()", 1000);-->
+<!--}-->
+<!--function tooltipShow() {-->
+<!--var node = $("#hint");-->
+<!--var content = '1. 步骤：填写默认信息 -> 上传文件（可下载处理过的excel查看无法解析部分） -> 确认导入（如有重复或异常数据可下载excel查看）。<br/>2. 系统将按照手机号（客户、母亲、父亲）、年级、省、姓名（客户、母亲、父亲）、性别尽量解析数据，少数顺序错乱不影响。<br/>3. 录入人、录入地点等无效信息请删除，以免影响数据正确性。<br/> ';-->
+<!--node.webuiPopover({content:content,trigger:'hover'});-->
+<!--}-->
+<!--</script>-->

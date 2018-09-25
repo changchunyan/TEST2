@@ -1,0 +1,41 @@
+<!--备课笔记库操作列表-->
+
+<div st-pipe="$mtTarget.getStudyStage" st-table="cwAllList">
+    <!--top-->
+    <!-- <div class="mt-input-group pra"><label>年级段</label>
+        <select ng-model="$mtTarget.cwTableState.grade" ng-options="option.id as option.name for option in gradeList">
+            <option value="">请选择</option>
+        </select>
+        <a class="ml15 mr-14">|</a>
+        <input name="" placeholder="输入笔记名称" ng-model="$mtTarget.cwTableState.query">
+        <a><i class="glyphicon glyphicon-search"></i> </a>
+    </div> -->
+    <!--content-->
+    <div class="tars-content of">
+        <div class="tars-item" ng-repeat="el in cwAllList">
+            <!-- <h3><a ng-click="Pdf.setUrl(el,1)">{{el.name}}</a><a class="fr mt-clear f12 ml15" ng-click="_modal.pre(el)">应用</a> -->
+            <!--  -->
+            <h3 style="display:flex; height:auto; padding:6px;"><a style="line-height:1.5; flex:1;" ng-click="Pdf.setUrl(el,1)">{{el.name}}</a>
+                <a style="width:45px; height:24px; margin-top:5px;" class="fr mt-clear f12 ml15" ng-click="_modal.pre(el)">应用</a>
+                <a style="width:45px; height:24px; margin-top:5px;" class="fr mt-clear f12 ml15" ng-click="_modal.correction(el,2)">纠错</a>
+                <a style="width:45px; height:24px; display:block; margin-top:5px;" class="fr mt-clear f12 ml15" ng-click="downloadReName(el.name,el.path,el.id,1)"
+                    href="javascript:void(0)">下载</a>
+
+            </h3>
+            <p class="cf8 f14">
+                <span class="mt-user">上传人：{{el.uploaderName}}</span>
+                <span class="ml-10 pl-0 cf8">|</span>
+                <span class="mt-time ml-10">上传时间：{{el.uploadTime}}</span>
+                <span class="ml-10 pl-0 cf8">|</span>
+                <span class="mt-view ml-10">浏览次数：{{el.viewTimes}}</span>
+                <span class="ml-10 pl-0 cf8">|</span>
+                <span class="mt-download ml-10">下载次数：{{el.downloadTimes}}</span>
+            </p>
+        </div>
+    </div>
+    <!--分页-->
+    <div class="mt-page f14" id="mt_page">
+
+    </div>
+    <!-- ng-if="totalPages"-->
+</div>

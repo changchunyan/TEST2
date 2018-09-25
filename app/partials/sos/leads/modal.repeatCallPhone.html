@@ -1,0 +1,55 @@
+<style>
+    .warn{
+        display: inline-block;
+        color: #428bca;
+        position: absolute;
+        /*right: 80px;*/
+    }
+    .warn a{
+        width: 400px;
+        display: inline-block;
+    }
+    .modal-body{
+        text-align: center;
+    }
+</style>
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="title"></h4>
+                </div>
+                <div class="modal-body" >
+                    <div >
+                        <h4>此学生在本校区已存在，且您没有查看的权限</h4>
+                        学生姓名：{{studnetDetail.name}} &nbsp;&nbsp;
+                        所属人：{{studnetDetail.belong_user_name}}&nbsp;&nbsp;
+                        <div style="display: inline-block" ng-if="studnetDetail.state ==1">学生状态：
+                            <span ng-if="studnetDetail.status==1">在读</span>
+                            <span ng-if="studnetDetail.status==2">结课</span>
+                            <span ng-if="studnetDetail.status==3">停课</span>
+                            <span ng-if="studnetDetail.status==4">退费</span>
+                            <span ng-if="studnetDetail.status==5">转课</span>
+                        </div>
+                    </div>
+
+                </div>
+            <div class="modal-footer">
+                <div class="text-center">
+                    <button class="btn btn-success" ng-click="$hide()" >确定</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script style="display:none">
+    $(function(){
+        setTimeout(function(){
+            $("[data-toggle='tooltip']").tooltip();
+        },200);
+    })
+
+</script>

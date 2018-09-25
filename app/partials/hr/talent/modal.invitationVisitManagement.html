@@ -1,0 +1,74 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" ng-bind="visitModalTitle"></h4>
+            </div>
+            <div class="modal-body modal-tabs">
+                <div class="c-select-text">
+                    <input hidden="true" id="">
+                    <label for="name" class="search-form-label">姓名</label>
+                    <input ng-model="visitFilter.name" type="text" name="name" id="name" class="search-form-input" />
+
+                    <label for="mail" class="search-form-label">电话</label>
+                    <input ng-model="visitFilter.tel" type="text" name="mail" id="mail" class="search-form-input" />
+
+                    <label for="visitTime" class="search-form-label">诺访日期</label>
+                    <input id="visitTime" type="text" datePicker ng-model="visitFilter.visitTime" class="search-form-input" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  onchange=""/>
+                    <br/>
+                    <div class="c_center">
+                        <button class="btn btn-primary" ng-click="getTalentsByFilter(2)">查询</button>
+                        <button class="btn" ng-click="reset2()">重置</button>
+                    </div>
+                </div>
+                <div class="table-responsive c-select-text">
+                    <div class="c-tab-title">诺访列表</div>
+                    <table st-pipe="getVisitTalentList" st-table="talents" class="table table-bordered table-striped c-tab-content">
+                        <thead>
+                        <tr>
+                            <th>姓名</th>
+                            <th>手机号</th>
+                            <th>应聘部门</th>
+                            <th>应聘岗位</th>
+                            <th>诺访日期</th>
+                            <th>处理人</th>
+                            <th>状态</th>
+                            <th>沟通内容</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="talent in visitTalentList track by $index">
+                            <td>{{talent.name}}</td>
+                            <td>{{talent.tel}}</td>
+                            <td>{{talent.department.name}}</td>
+                            <td>{{talent.position.name}}</td>
+                            <td>{{talent.recruitmentSchedule[0].visitTime | date : "yyyy-MM-dd HH:mm"}}</td>
+                            <td>{{talent.executors}}</td>
+                            <td>{{talent.scheduleStatus}}</td>
+                            <td>{{talent.recruitmentSchedule[0].scheduleDescription}}</td>
+                        </tr>
+                        </tbody>
+                        <tbody ng-show="isLoading">
+                        <tr>
+                            <td colspan="13" class="text-center"><div class="loading-indicator"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="8">
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+            </div>
+        </div>
+    </div>
+</div>

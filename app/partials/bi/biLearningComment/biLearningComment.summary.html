@@ -1,0 +1,134 @@
+<div>
+	<div class="col-sm-12">
+		<button class="btn" ng-click="backDivisionList()" ng-if="canQueryChildDivisions && !viewDivision">返回全国列表</button>
+		<button class="btn" ng-click="backDistrictList()" ng-if="canQueryChildDistricts && !viewDivision && !viewDistrict">返回大区列表</button>
+		<button class="btn" ng-click="backRegionList()" ng-if="canQueryChildRegions && !viewDivision && !viewDistrict && !viewRegion">返回区域列表</button>
+		<button class="btn" ng-click="backSchoolList()" ng-if="canQueryChildSchools && !viewDivision && !viewDistrict && !viewRegion && !viewSchool">返回校区列表</button>
+	</div>
+    <div class="default-box form-horizontal yws-container">
+        <div class="yws-container default-box-top">
+            <div class="col-sm-3 form-group">
+                <span class="square square-green"></span>
+                <label data-content="算法说明：本月本地区范围内，提交评分学员的分数总和，与没有评论消课次数乘以4（未评论默认为4分）的总和；
+                		除以上月消课次数总量；（评分只统计当天上课，当天消课数据；"
+                		data-placement="right" webui-popover>本月{{presentLabel}}评论均分：{{presentTotal.averageGrade}}</label>
+            </div>
+            <div class="col-sm-3 form-group">
+                <span class="square square-zi"></span>
+                <label>本月{{presentLabel}}总消课数：{{presentTotal.courseCount}}</label>
+            </div>
+            <div class="col-sm-3 form-group">
+                <span class="square square-zi2"></span>
+                <label>本月实际评价数：{{presentTotal.commentCount}}</label>
+            </div>
+            <div class="col-sm-3 form-group">
+                <span class="square square-zi2"></span>
+                <label data-content="该数据为您显示：优胜教育在相应地区范围内，根据上月日消课，学员打分；所计算出每节课，每位教师的平均得分；
+						算法说明：本月本地区范围内，提交评分学员的分数总和，与没有评论人数乘以4（未评论默认为4分）的总和；除以上月消课学员数量
+						（上月消课学员数量=本月提交评分学员数量+未提交评论数量；评分只统计当天上课，当天消课数据；）"	 
+						data-placement="bottom" webui-popover>本月{{presentLabel}}月评反馈率：{{presentTotal.feedBackGrade}}</label>
+            </div>
+        </div>
+    </div>
+    <!-- 表格 -->
+    <div class="default-box">
+    	<h4>
+	    	 学管评价
+	      	<span> - 月评汇总</span>
+        	<button class="btn btn-success bi-list-head" ng-click="getSummaryAll()" >导出列表</button>
+    	</h4>
+    	<br>
+        <div class="table-responsive">
+            <table st-pipe="getSummary" st-table="summaryModels" class="table table-bordered table-striped" 
+            	ng-if="dataPrepareReady && currentTab===3">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th ng-if="viewDivision">事业部</th>
+                    <th ng-if="viewDistrict">大区</th>
+                    <th ng-if="viewRegion">区域</th>
+                    <th ng-if="viewSchool">校区</th>
+                    <th ng-if="viewTeacher">学管姓名</th>
+                    <th id="pjyjf">月均分</th>
+                    <th id="pjyfkl">反馈率</th>
+                    <th ng-if="(canQueryChildDivisions || canQueryChildDistricts 
+                    	|| canQueryChildRegions || canQueryChildSchools) && !viewTeacher">操作</th>
+                </tr>
+                <tr>
+					<th></th>
+					<th ng-if="viewDivision">
+						<select st-search="schoolDivision" ng-model="searchSummaryModel.divisionId" class="form-control" ng-disabled="!canQueryChildDivisions"
+							ng-options="row.id as row.name for row in divisions"
+							ng-change="getDistrictsByDivision(searchSummaryModel.schoolDivision)">
+							<option value="">------全部------</option>
+		                </select>
+					</th>
+					<th ng-if="viewDistrict">
+						<select st-search="schoolArea" ng-model="searchSummaryModel.districtId" class="form-control" ng-disabled="!canQueryChildDistricts"
+							ng-options="row.id as row.name for row in departmentAreas"
+							ng-change="getRegionByDistrict(searchSummaryModel.schoolArea)">
+							<option value="">------全部------</option>
+		                </select>
+					</th>
+					<th ng-if="viewRegion">
+						<select st-search="schoolRegion" ng-model="searchSummaryModel.regionId" class="form-control" ng-disabled="!canQueryChildRegions"
+							ng-options="row.id as row.name for row in regions"
+							ng-change="getSchoolsByArea(searchSummaryModel.schoolRegion)">
+							<option value="">------全部------</option>
+		                </select>
+					</th>
+					<th ng-if="viewSchool">
+						<select st-search="schoolName" ng-model="searchSummaryModel.schoolId" class="form-control" ng-disabled="!canQueryChildSchools"
+							ng-options="row.id as row.name for row in departmentSchools">
+							<option value="">------全部------</option>
+		                </select>
+					</th>
+					<th ng-if="viewTeacher">
+						<input st-search="teacherName" ng-model="searchSummaryModel.teacherName" class="form-control" />
+					</th>
+					<th>
+						<select st-search="averageGrade" ng-model="searchSummaryModel.averageGrade" name="averageGrade" id="averageGrade" class="form-control">
+				            <option value="">------全部------</option>
+			                <option value="1">0-1</option>
+			                <option value="2">1-2</option>
+			                <option value="3">2-3</option>
+			                <option value="4">3-4</option>
+			                <option value="5">4-5</option>
+				        </select>
+					</th>
+					<th>
+						<select st-search="feedBackGrade" ng-model="searchSummaryModel.feedBackRatio" name="feedBackGrade" id="feedBackGrade" class="form-control">
+				            <option value="">------全部------</option>
+			                <option value="1">0-30%</option>
+			                <option value="2">30%-50%</option>
+			                <option value="3">50%-100%</option>
+				        </select>
+					</th>
+				</tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="row in summaryModels">
+                	<td>{{$index+1+summaryTableState.pagination.start}}</td>
+                    <td ng-if="viewDivision">{{row.schoolDivision}}</td>
+                    <td ng-if="viewDistrict">{{row.schoolArea}}</td>
+                    <td ng-if="viewRegion">{{row.schoolRegion}}</td>
+                    <td ng-if="viewSchool">{{row.schoolName}}</td>
+                    <td ng-if="viewTeacher">{{row.teacherName}}</td>
+                    <td>{{row.averageGrade}}</td>
+                    <td>{{row.feedBackGrade}}</td>
+                    <td ng-if="canQueryChildDivisions && viewDivision && row.schoolDivision"><a ng-click="showDistrictDetailView(row)">大区列表</a></td>
+                    <td ng-if="canQueryChildDistricts && viewDistrict && row.schoolArea"><a ng-click="showRegionDetailView(row)">区域列表</a></td>
+                    <td ng-if="canQueryChildRegions && viewRegion && row.schoolRegion"><a ng-click="showSchoolDetailView(row)">校区列表</a></td>
+                    <td ng-if="canQueryChildSchools && viewSchool && row.schoolName"><a ng-click="showTeacherDetailView(row)">教师列表</a></td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="30" class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" >
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>

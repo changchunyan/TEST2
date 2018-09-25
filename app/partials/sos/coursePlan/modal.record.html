@@ -1,0 +1,58 @@
+<div class="modal" ng-controller="CoursePlanController as cp" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" ng-bind="coursePlanRecordTitle"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive" >
+                    <table class="table table-bordered table-striped table-condensed" st-pipe="GroupInfoCoursePlanServer" st-table="GroupInfoCoursePlanServer">
+                        <thead>
+                        <tr>
+                            <th>学生姓名</th>
+							<th>订单类型</th>
+                            <th>课程类型</th>
+                            <!--<th ng-if="Groupdetail.type == 9">合同编号</th>
+                            <th ng-if="Groupdetail.type == 9">计费方案</th>
+                            <th ng-if="Groupdetail.type == 9">师资档位</th>
+                           <!--  <th ng-if="type == 8">师资档位</th> -->
+                            <th>年级</th>
+                            <!-- <th ng-if="type == 8">课时价格</th> -->
+                            <th ng-if="Groupdetail.type == 2">课程方式</th>
+                            <th ng-if="Groupdetail.type == 2">课程性质</th>
+                            
+                            <!--<th ng-if="Groupdetail.type == 9">计费金额</th>-->
+                        </tr>
+                        </thead>
+                        <tbody ng-show="!isLoading">
+                        <tr ng-repeat="row in GroupInfoCoursePlandisplayed">
+                            <td>{{ row.student_name }}</td>
+							<td ng-if="Groupdetail.type==9">储值订单</td>
+                            <td ng-if="Groupdetail.type==2">课时订单</td>
+                            <td>{{row.coursename}}</td>
+                            <!--<td ng-if="Groupdetail.type == 9">{{row.order_no}}</td>
+                            <td ng-if="Groupdetail.type == 9">{{row.chargingName}}</td>
+                            <td ng-if="Groupdetail.type == 9">{{row.coursename}}</td>-->
+                            <td>{{row.grade_name}}</td>
+
+                            <td ng-if="Groupdetail.type == 2">{{row.group_type}}</td>
+                            <td ng-if="Groupdetail.type == 2">{{row.course_property}}</td>
+                            
+                            <!--<td ng-if="Groupdetail.type == 9">{{row.new_price}}</td>-->
+
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

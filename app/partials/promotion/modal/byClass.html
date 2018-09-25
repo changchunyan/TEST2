@@ -1,0 +1,30 @@
+<div class="form-option" style="padding: 20px;">
+    <div><a class="mt-back ti-0 tc" style="background: #2fb0ee !important;" ng-click="addModalPre()">增加</a>
+        <a class="mt-back ti-0 tc" style="background: #999 !important;" ng-click="deleteClass()">删除</a></div>
+    <div class="br-gray pl-0">
+        <table class="table mt-table1" st-pipe="getByClassList" st-table="byClassListTable">
+            <thead>
+            <tr>
+                <th style="width:30px;"><label ng-class="{'active':ClassListSelect}" class="checkbox-bg" ng-click="selectClassList()" ></label></th>
+                <th style="width:150px;">原班级</th>
+                <th>升班班级</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="row in byClassList">
+                <td><label ng-class="{'active':row.select}" class="checkbox-bg" ng-click="selectClassList(row)" ></label></td>
+                <td>{{row.name}}</td>
+                <td>
+                    {{row.classes|omittedList:row.classes}}</td>
+            </tr>
+            </tbody>
+            <tfoot>
+	             <tr>
+	                 <td class="text-center" st-pagination="" st-items-by-page="10"
+	                     st-template="partials/util/pagination.custom.html" colspan="15">
+	                 </td>
+	             </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,287 @@
+<div class="mt-input-group pra br-0"
+     ng-class="{'is-select':_flag_&&(!showPermissions('LeadsEdit')  || !canEditAndDelete(detailForUpdate.belong_user_id))}">
+    <div class="mt-modal-group" style="border-bottom: 0">
+        <div class="col-sm-4">
+            <label class="col-sm-4">姓名:</label>
+            <div class="col-sm-8 form-group">
+                <input style="width:200px" ng-value="detailForUpdate.name" readonly="true">
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <label class="col-sm-4">手机号:</label>
+            <div class="col-sm-8 form-group">
+                <input style="width:200px" ng-value="detailForUpdate.phone" readonly="true">
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <label class="col-sm-4">来源:</label>
+            <div class="col-sm-8 form-group">
+                <!--{{detailForUpdate.channel1Name}}<span ng-if="detailForUpdate.channel2Name">-{{detailForUpdate.channel2Name}}</span>-->
+
+                <input ng-if='detailForUpdate.channel3Name' style="width:200px"
+                       ng-model="detailForUpdate.channel1Name+'-'+detailForUpdate.channel2Name+'-'+detailForUpdate.channel3Name"
+                       readonly="true">
+                <input ng-if='detailForUpdate.channel2Name && !detailForUpdate.channel3Name' style="width:200px"
+                       ng-model="detailForUpdate.channel1Name+'-'+detailForUpdate.channel2Name" readonly="true">
+                <input ng-if='!detailForUpdate.channel3Name && !detailForUpdate.channel2Name' style="width:200px"
+                       ng-model="detailForUpdate.channel1Name" readonly="true">
+
+            </div>
+        </div>
+    </div>
+    <div style="margin-top:20px;">
+        <div class="col-sm-4 cl">
+            <label class="col-sm-4">意向程度:</label>
+            <div class="col-sm-8 form-group">
+                <input ng-if="detailForUpdate.purposeLevel==1" style="width:200px" value="高" readonly="true">
+                <input ng-if="detailForUpdate.purposeLevel==2" style="width:200px" value="中" readonly="true">
+                <input ng-if="detailForUpdate.purposeLevel==3" style="width:200px" value="低" readonly="true">
+                <input ng-if="detailForUpdate.purposeLevel==4" style="width:200px" value="未标记" readonly="true">
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <label class="col-sm-4">客户状态:</label>
+            <div class="col-sm-8 form-group">
+                <input style="width:200px" ng-value="detailForUpdate.state1Name" readonly="true">
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <label class="col-sm-4">下次跟进:</label>
+            <div class="col-sm-8 form-group">
+                <input style="width:200px" ng-model="detailForUpdate.followUpAt" readonly="true">
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <label class="col-sm-4">会员级别:</label>
+            <div class="col-sm-8 form-group">
+                <input style="width:200px" ng-model="detailForUpdate.membershipLevel"
+                       ng-value="detailForUpdate.membershipLevel|memberFilter" readonly="true">
+            </div>
+        </div>
+    </div>
+    <div style="margin-top:20px;">
+        <div class="cl" style="text-align: center;cursor:pointer;padding-top:15px;padding-bottom:15px;">
+            <p style="text-align: center;"><a class="glyphicon glyphicon-align-justify" ng-click="changegengduo()">
+                <span style="cursor:pointer;font-size:14px;">{{chakangengduo}}</span></a></p>
+        </div>
+    </div>
+    <div ng-if="apprealaifang">
+        <div class="mt-modal-group" style="padding-top:10px;padding-bottom: 10px;border-bottom: 0">
+            <div class="col-sm-4 cl">
+                <label class="col-sm-4">预计到访时间:</label>
+                <div class="col-sm-8 form-group">
+                    <input style="width:200px" ng-model="detailForUpdate.receiveTime | date:'yyyy-MM-dd'"
+                           readonly="true">
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <label class="col-sm-4">创建人:</label>
+                <div class="col-sm-8 form-group">
+                    <input style="width:200px" ng-value="detailForUpdate.create_by_name" readonly="true">
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <label class="col-sm-4">所属人:</label>
+                <div class="col-sm-8 form-group">
+                    <input style="width:200px" ng-value="detailForUpdate.belong_user_name" readonly="true">
+                </div>
+            </div>
+
+
+            <!--<div class="col-25 tr">-->
+            <!--<a class="btn-com btn-cb9" ng-click="addInvitationDetailByList(detailForUpdate)">邀约</a>-->
+            <!--<a class="btn-com btn-cb6" ng-click="addCoursePlanInfo(detailForUpdate,3)" ng-if="showPermissions('FreeListening')">试听</a>-->
+            <!--</div>-->
+        </div>
+        <!--<div class="mt-modal-group" style="padding-top:20px;">-->
+        <!--<div class="col-25">-->
+        <!--<label>客户类型:</label>-->
+        <!--<select ng-model="detailForUpdate.leadsProperty" ng-options="option.id as option.name for option in LEADS_PROPERTYS"><option value="">请选择</option></select>-->
+        <!--</div>-->
+        <!--<div class="col-25">-->
+        <!--<label>上次沟通:</label>-->
+        <!--<span>{{detailForUpdate.goutong|getDays:detailForUpdate.goutong}}</span>-->
+        <!--</div>-->
+        <!--<div class="col-25">-->
+        <!--<label>咨询科目:</label>-->
+        <!--<select ng-model="detailForUpdate.subject_id" ng-options="option.id as option.name for option in subjectIds">-->
+        <!--<option value="">请选择</option>-->
+        <!--</select>-->
+        <!--</div>-->
+        <!--<div class="col-33 mt-date">-->
+        <!--<label style="width:33%;">下次跟进时间:</label>-->
+        <!--<input style="width:63%;" type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" name="followUpAt" ng-model="detailForUpdate.followUpAt" ng-value="detailForUpdate.followUpAt" onchange="" readonly="">-->
+        <!--&lt;!&ndash;<input ng-model="detailForUpdate.followUpAt"  readonly onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})" ng-value="detailForUpdate.followUpAt.split(' ')[0]" name="followUpAt">&ndash;&gt;-->
+        <!--</div>-->
+        <!--<div class="col-25 tr" style="width:16.6%;" ng-if="showPermissions('LeadsOrderAdd')">-->
+        <!--<a class="btn-com btn-cb6"  ng-click="signContractOrder()">录订单</a>-->
+        <!--&lt;!&ndash; <a class="btn-com btn-cb6" ng-click="signTopupOrder()">充值</a>-->
+        <!--<a class="btn-com btn-cb2" style="padding: 4px 9px" ng-click="signContractOrder()">买课程</a>&ndash;&gt;-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--<div class="mt-modal-group" style="padding-top:20px;">-->
+        <!--<div class="col-25">-->
+        <!--<label>创建时间:</label>-->
+        <!--<span>{{detailForUpdate.create_at | date:'yyyy-MM-dd'}}</span>-->
+        <!--</div>-->
+        <!--<div class="col-25">-->
+        <!--<label>渠道详情:</label>-->
+        <!--<span>{{detailForUpdate.channel2Name}}</span>-->
+        <!--</div>-->
+        <!--<div class="col-25">-->
+        <!--<label>推荐人:</label>-->
+        <!--<span>{{detailForUpdate.inviter_name}}</span>-->
+        <!--</div>-->
+        <!--<div class="col-25 tr">-->
+        <!--<a class="btn-com btn-cb2" ng-if="showPermissions('LeadsAllot') || showPermissions('SchoolLeadsAllot')" ng-click="distributeLeadsStudent(detailForUpdate)">分配</a>-->
+        <!--<a class="btn-com btn-cb9" ng-if="showPermissions('LeadsDelete')  && canEditAndDelete(detailForUpdate.belong_user_id) && !(detailForUpdate.u_id)" ng-click="deleteCrmLeadsStudent(detailForUpdate)">删除</a>-->
+        <!--</div>-->
+
+        <!--</div>-->
+        <!--客户记录-->
+        <!--<div class="cl of mt-10" style="line-height: 20px;">-->
+        <!--<label class="fl tr" style="width: 11.5%;-->
+        <!--text-align: right;line-height: 30px;">客户记录:</label>-->
+        <!--<p class="fl tl f14" style="width: 85%;    word-wrap: break-word;"><textarea style="width:100%;" ng-model="detailForUpdate.customer_requirement" placeholder="用户需求..."></textarea></p>-->
+        <!--</div>-->
+        <!--家庭信息-->
+        <div class="mt-modal-group cl" style="padding-top:10px;padding-bottom: 10px;border-bottom: 0">
+            <!--<div class="col-25">-->
+            <!--<label>父亲姓名:</label>-->
+            <!--<input ng-model="detailForUpdate.father_name">-->
+            <!--</div>-->
+            <!--<div class="col-25">-->
+            <!--<label>父亲电话:</label>-->
+            <!--<input ng-model="detailForUpdate.father_phone">-->
+            <!--</div>-->
+            <div class="col-sm-4">
+                <label class="col-sm-4">亲属关系:
+                </label>
+                <div class="col-sm-8 form-group">
+                    <input ng-if="!detailForUpdate.relatives_type" style="width:200px" value="未标记" readonly="true">
+                    <input ng-if="detailForUpdate.relatives_type==1" style="width:200px" value="爸爸" readonly="true">
+                    <input ng-if="detailForUpdate.relatives_type==2" style="width:200px" value="妈妈" readonly="true">
+                    <input ng-if="detailForUpdate.relatives_type==3" style="width:200px" value="爷爷" readonly="true">
+                    <input ng-if="detailForUpdate.relatives_type==4" style="width:200px" value="奶奶" readonly="true">
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <label class="col-sm-4">家长姓名:</label>
+                <div class="col-sm-8 form-group">
+                    <input ng-model="detailForUpdate.mother_name" style="width:200px" readonly="true">
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <label class="col-sm-4">家长电话:</label>
+                <div class="col-sm-8 form-group">
+                    <input ng-model="detailForUpdate.mother_phone" style="width:200px" readonly="true">
+                </div>
+            </div>
+        </div>
+        <div class="mt-modal-group" style="padding-top:10px;padding-bottom: 10px;border-bottom: 0">
+            <div class="col-sm-4">
+                <label class="col-sm-4">所属省:</label>
+                <div class="col-sm-8 form-group">
+                    <select ng-model="detailForUpdate.province_code"
+                            ng-options="option.provinceCode as option.provinceName for option in provinceList"
+                            ng-change="provinceChangeForUpdate()" style="width:200px" disabled="true">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <label class="col-sm-4">所属市:</label>
+                <div class="col-sm-8 form-group">
+                    <select ng-model="detailForUpdate.city_code"
+                            ng-options="option.cityCode as option.cityName for option in cityList"
+                            ng-change="cityChangeForUpdate()"
+                            style="width:200px" disabled="true">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <label class="col-sm-4">所属区（县）:</label>
+                <div class="col-sm-8 form-group">
+                    <select ng-model="detailForUpdate.area_code"
+                            ng-options="option.areaCode as option.areaName for option in areaList" type="text"
+                            style="width:200px" disabled="true">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="mt-modal-group" style="padding-top:10px;padding-bottom: 10px;border-bottom: 0">
+            <div class="col-sm-4">
+                <label class="col-sm-4">详细地址:</label>
+                <div class="col-sm-8 form-group">
+                    <input ng-model="detailForUpdate.address" style="width:200px" readonly="true">
+                </div>
+            </div>
+            <div class="col-sm-4 ">
+                <label class="col-sm-4">客户需求:</label>
+                <div class="col-sm-8 form-group">
+                    <input ng-model="detailForUpdate.customer_requirement" placeholder="用户需求" style="width:200px"
+                           readonly="true">
+                </div>
+            </div>
+            <div class="col-sm-4 ">
+                <label class="col-sm-4">年龄:</label>
+                <div class="col-sm-8 form-group">
+                    <input ng-model="detailForUpdate.age" placeholder="年龄" style="width:200px" readonly="true">
+                </div>
+            </div>
+
+        </div>
+        <div class="mt-modal-group" style="padding-top:10px;padding-bottom: 10px;border-bottom: 0">
+            <div class="col-sm-4 ">
+                <label class="col-sm-4">在读学校:</label>
+                <div class="col-sm-8 form-group">
+                    <input ng-model="detailForUpdate.school_name" placeholder="在读学校..." style="width:200px"
+                           readonly="true">
+                </div>
+            </div>
+            <div class="col-sm-4 ">
+                <label class="col-sm-4">在读状态:</label>
+                <div class="col-sm-8 form-group">
+                    <input ng-if="!detailForUpdate.status" placeholder="未标记" style="width:200px" readonly="true">
+                    <input ng-if="detailForUpdate.status==1" placeholder="在读" style="width:200px" readonly="true">
+                    <input ng-if="detailForUpdate.status==2" placeholder="结课" style="width:200px" readonly="true">
+                    <input ng-if="detailForUpdate.status==3" placeholder="停课" style="width:200px" readonly="true">
+                    <input ng-if="detailForUpdate.status==4" placeholder="退费" style="width:200px" readonly="true">
+                    <input ng-if="detailForUpdate.status==5" placeholder="转课" style="width:200px" readonly="true">
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <label class="col-sm-4">年级:</label>
+                <div class="col-sm-8 form-group">
+                    <input ng-model="detailForUpdate.grade_name" placeholder="未标记" style="width:200px" readonly="true">
+                </div>
+
+            </div>
+        </div>
+        <div class="mt-modal-group" style="padding-top:10px;padding-bottom: 10px;border-bottom: 0">
+            <div class="col-sm-4 ">
+                <label class="col-sm-4">学生卡号:</label>
+                <div class="col-sm-8 form-group">
+                    <input ng-model="detailForUpdate.number" placeholder="..." style="width:200px" readonly="true">
+                </div>
+            </div>
+            <div class="col-sm-4 ">
+                <label class="col-sm-4">性别:</label>
+                <div class="col-sm-8 form-group">
+                    <input ng-if="detailForUpdate.gender" placeholder="男" style="width:200px" readonly="true">
+                    <input ng-if="!detailForUpdate.gender" placeholder="女" style="width:200px" readonly="true">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        setTimeout(function () {
+            $("[data-toggle='tooltip']").tooltip();
+        }, 1000);
+    </script>
+</div>

@@ -1,0 +1,45 @@
+<div class="modal admin-permission-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle">编辑帮助内容</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="creathelp-content-title ">
+                        <label for="helpTheme">
+                            编辑帮助标题：
+                            <input style="width: 200px;border: none;border-bottom: 1px solid #000;margin-bottom: 20px" id="helpTheme" type="text" class="input-medium input-block-level" value={{helpTitle}}>
+                        </label><br>
+                        <label for="belongTheme">
+                            所属主题：
+                            <select id="belongTheme" class="span3"  style="width: 200px;border: none;border-bottom: 1px solid #000">
+                                <option ng-repeat="row in helpContentLists" ng-class="{true:'selected',false:''}[{{helpTheme}}=={{row.topicTitle}}]">{{row.topicTitle}}</option>
+                            </select>
+                        </label>
+
+                    </div>
+                    <div class="creathelp-content-editor" >
+                        <!-- 加载编辑器的容器 -->
+                        <div id="summernote2"></div>
+                        <!--<summernote on-image-upload="imageUpload(files[0])" editable="editable" editor="editor" ng-model="articleListData.articleContent" height="300" required></summernote>-->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                    <button type="submit" class="btn btn-success" ng-click="changeInfoSave()" ng-disabled="form.$invalid">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $('#summernote2').summernote({
+        height:500,                 // set editor height
+        minHeight: 300,             // set minimum height of editor
+        maxHeight: null,             // set maximum height of editor
+        focus: true,                  // set focus to editable area after initializing summernote
+        lang:'zh-CN'
+    });
+</script>

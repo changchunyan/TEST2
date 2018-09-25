@@ -1,0 +1,19 @@
+<ul id="main-nav" class="nav nav-tabs nav-stacked mt-subMenu">
+    <img ng-src="{{currentUser.profile || 'img/logo/logo.png'}}" class="s_user_pic" >
+    <li ng-repeat="subMenu in menu.subMenu"  >
+        <img ng-src="{{subMenu.icon}}" class="s_little_icon">
+        <a data-target="#{{subMenu.name}}"  class="nav-header menu-first collapsed" data-toggle="collapse"   >
+
+            {{subMenu.text}}
+            <span class="pull-right glyphicon glyphicon-chevron-down"></span>
+        </a>
+        <!--去除class in 和style="height: 0px;"-->
+        <ul id="{{subMenu.name}}" class="nav nav-list secondmenu collapse in" ng-class="{true: 'in',false:''}[subMenu.active]" >
+            <li ng-repeat="thirdMenu in subMenu.subMenu">
+                <a href="{{thirdMenu.href}}" class="people_source_management"  ng-class="{active:thirdMenu.active && thirdMenu.active==true}">
+                    {{thirdMenu.text}}
+                </a>
+            </li>
+        </ul>
+    </li>
+</ul>

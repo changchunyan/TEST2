@@ -1,0 +1,116 @@
+<div class="view-frame" ng-controller="InvitationDetailController as idc">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div ng-show="!isAdding" class="view-content mt-new-ui user-love">
+        <div>
+            <div>
+                <ul class="breadcrumb">
+                    <li><a href="#/">首页</a> <span class="divider"></span></li>
+                    <li><a href="#/fb-admin">前台业务</a> <span class="divider"></span></li>
+                    <li><a ng-click="hideAddView()">邀约到访管理</a> <span class="divider"></span></li>
+                    <li class="active">校区邀约到访</li>
+                </ul>
+            </div>
+            <div class="operations-panel">
+            </div>
+        </div>
+        <div class="mt-10">
+            <div class="tabs-title border-1 c3">校区邀约到访</div>
+            <!--<div class="mt-student-m">
+                <ul class="f14 cf">
+                    <li><a class="mt-purple" ng-click="showStudentListModal()">新增邀约</a>
+                    </li>
+                </ul>
+            </div>-->
+        </div>
+<!--<a class="btn" ng-click="BrandOtherInvitationquick(1)" ng-class="{true:'btn-success',false:''}[BrandOtherquick[1]]">今日邀约</a>
+            <a class="btn" ng-click="BrandOtherInvitationquick(2)" ng-class="{true:'btn-success',false:''}[BrandOtherquick[2]]">今日到访</a>
+            <a class="btn" ng-click="BrandOtherInvitationquick(3)" ng-class="{true:'btn-success',false:''}[BrandOtherquick[3]]">明日到访</a>-->
+        <div class="br-gray mt-list">
+            <h2 class="pl-20 c3">邀约到访列表</h2>
+            <div class="overflow-x">
+                <table class="table table-bordered table-striped table-condensed mt-table1" st-pipe="getListBrandOther" st-table="displayed">
+                    <thead>
+                    <tr class="br-gray-t">
+                        <th>学生姓名</th>
+                        <th>电话</th>
+                        <th>所属校区</th>
+                        <th>渠道来源</th>
+                        <th>来源详情</th>
+                        <th>邀约人</th>
+                        <th>邀约时间</th>
+                        <th>预到访时间</th>
+                        <th>到访状态</th>
+                    </tr>
+                    <tr>
+                        <th>
+                            <input st-search="name" placeholder="" class="input-sm form-control" type="search"/></th>
+                        <th><input st-search="phone" placeholder="" class="input-sm form-control" type="search"/></th>
+                        <th>
+                            <input st-search="deptName" placeholder="" class="input-sm form-control" type="search"/>
+                        </th>
+                        <th>
+                            <select st-search="mediaChannelId1" ng-model="invitationFilter.mediaChannelId1" placeholder="渠道来源查询"
+                                    id="mediaChannelId1" name="mediaChannelId1"
+                                    ng-options="option.id as option.name for option in mediaChannel1List" ng-change="mediaChannel1Change()" type="search" class="input-sm form-control"
+                                    ng-disabled="mediaChannelDisabled">
+                                <option value="">-- 请选择 --</option>
+                            </select>
+                        </th>
+                        <th>
+                            <select ng-model="invitationFilter.mediaChannelId2" st-search="mediaChannelId2" placeholder="来源详情查询"
+                                    id="mediaChannelId2" name="mediaChannelId2"
+                                    ng-options="option.id as option.name for option in mediaChannel2List" type="search" class="input-sm form-control">
+                                <option value="">-- 请选择 --</option>
+                            </select>
+                        </th>
+                        <th><input st-search="username" placeholder="" class="input-sm form-control"/></th>
+                        <th><input st-search="invitateTime" placeholder="" type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="" readonly   class="input-sm form-control" type="search"/></th>
+                        <th><input st-search="receiveTime" placeholder="" type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="" readonly   class="input-sm form-control" type="search"/></th>
+                        <th>
+                            <select st-search="stateDaoFang" placeholder="到访确认查询" class="input-sm form-control">
+                                <option value="">请选择</option>
+                                <option value="0">待确认</option>
+                                <option value="1">已到访</option>
+                                <option value="2">未到访</option>
+                            </select>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody ng-show="!isLoading">
+                    <tr ng-repeat="row in displayed">
+                        <td>{{row.name}}</td>
+                        <td>{{row.phone}}</td>
+                        <td>{{row.deptName}}</td>
+                        <td>{{row.channel1Name}}</td>
+                        <td>{{row.channel2Name}}</td>
+                        <td>{{row.username}}</td>
+                        <td >{{ row.invitateTime | date:'yyyy-MM-dd' }}</td>
+                        <td >{{ row.receiveTime | date:'yyyy-MM-dd HH:mm' }}</td>
+                        <td >
+                            <div ng-if="row.stateDaoFang==0">待确认</div>
+                            <div ng-if="row.stateDaoFang==1">已到访</div>
+                            <div ng-if="row.stateDaoFang==2">未到访</div>
+                        </td>
+
+                    </tr>
+                    </tbody>
+                    <tbody ng-show="isLoading">
+                    <tr>
+                        <td colspan="8" class="text-center"><div class="loading-indicator"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html"  colspan="8">
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

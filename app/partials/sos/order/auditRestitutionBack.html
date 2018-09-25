@@ -1,0 +1,72 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true" style="overflow-y:auto" ng-controller="OrderAddAuditBakRestitutionController">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="addRestitutionForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle"></h4>
+                </div>
+                <div class="modal-body">
+                    <div><!-- 返课订单课程详情列表-->
+                        <table class="table table-bordered table-striped" st-table="orderRestitutionOrders" >
+                            <thead>
+                            <tr>
+                                <th>合同编号</th>
+                                <th>学员姓名</th>
+                                <th>签约时间</th>
+                                <th>总价</th>
+                                <th>已上课时</th>
+                                <th>剩余课时</th>
+                            </tr>
+                            </thead>
+                            <tr ng-repeat="row in orderRestitutionOrders">
+                                <td>{{row.orderNo}}</td>
+                                <td>{{row.name}}</td>
+                                <td>{{row.contractStartDate | date:'yyyy-MM-dd'  }}</td>
+                                <td>{{row.realTotalAmount}}</td>
+                                <td>{{row.totalCourseNum-row.consumeCourseNum}}</td>
+                                <td>{{row.consumeCourseNum}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <hr>
+                    <input type="hidden" name="agreementNo" id="agreementNo"  ng-model="order.agreementNo" class="form-control"/>
+                    <div><!-- 课程列表 -->
+                        <table class="table table-bordered table-striped" st-table="order.orderCourses" >
+                            <thead>
+                            <tr>
+                                <th>课程ID</th>
+                                <th>课程类型</th>
+                                <th>年级</th>
+                                <th>科目</th>
+                                <!--<th>性质</th>-->
+                                <th>课时量</th>
+                            </tr>
+                            </thead>
+                            <tr  ng-repeat="row in order.orderCourses">
+                                <td>{{row.courseId}}</td>
+                                <td>{{row.courseTypeName}}</td>
+                                <td>{{row.gradeName}}</td>
+                                <td>{{row.subjectName}}</td>
+                                <!--<td ng-show="row.courseProperty == 1">正课</td>
+                                <td ng-show="row.courseProperty == 2">赠课</td>
+                                <td ng-show="row.courseProperty == 3">返课</td>
+                                <td ng-show="row.courseProperty == 4">试听课</td>
+                                <td ng-show="row.courseProperty == null || row.courseProperty == 0 ">其他</td>-->
+                                <td>{{row.originalNum}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <hr>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" ng-click="auditOrderRestitutionBack()">退单</button>
+                    <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                    <img ng-if="dataLoading"
+                         src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,216 @@
+<div class="view-frame" ng-controller="RefundManagementController">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content mt-new-ui user-love">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="#/">首页</a> <span class="divider"></span></li>
+                <li><a href="#/sos-admin">学员教务</a> <span class="divider"></span></li>
+                <li><a ng-click="sos-admin/refund">退费管理</a> <span class="divider"></span></li>
+                <li class="active">退费列表</li>
+            </ul>
+        </div>
+        <div class="mt-10">
+            <div class="tabs-title border-1 c3">退费管理</div>
+            <div class="mt-student-m" ng-if="!isO2OOperationSpecialist()">
+                <ul class="f14 cf">
+                    <li><a class="mt-refund" ng-click="refundApply()">申请退费</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="br-gray mt-list">
+            <h2 class="pl-20 c3">退费列表</h2>
+            <div class="overflow-x">
+                <table class="table table-bordered table-striped table-condensed mt-table1" st-pipe="callServerOneTab"
+                       st-table="oneOrders">
+                    <thead>
+                    <tr class="br-gray-t">
+                        <th st-sort="orderNo">合同编号</th>
+                        <th>学员姓名</th>
+                        <th>手机号</th>
+                        <th>退费类型</th>
+                        <th>订单类型</th>
+                        <th>方式</th>
+                        <th>订单状态</th>
+                        <th>签约时间</th>
+                        <th>合同金额</th>
+                        <th>实付金额</th>
+                        <th>已消耗金额</th>
+                        <th>退费金额</th>
+                        <th>扣除储值</th>
+                        <th>扣除课时</th>
+                        <th>退费原因</th>
+                        <th>退费时间</th>
+                        <th>申请人</th>
+                        <th>操作</th>
+                    </tr>
+                    <tr>
+                        <th><input st-search="orderNo" placeholder="合同编号" class="input-sm form-control"/></th>
+                        <th><input st-search="name" placeholder="学员姓名" class="input-sm form-control"/></th>
+                        <th><input st-search="phone" placeholder="联系方式" class="input-sm form-control"/></th>
+                        <th><select st-search="orderRefundCategory" ng-model="orderRefundCategory"
+                                    class="input-sm form-control" type="search">
+                            <option value="">-- 请选择 --</option>
+                            <option value="1">退课程</option>
+                            <option value="3">退余额</option>
+                        </select>
+                        <th><select st-search="orderType" ng-model="orderType" class="input-sm form-control"
+                                    type="search">
+                            <option value="">-- 请选择 --</option>
+                            <option value="1">新签</option>
+                            <option value="2">续费</option>
+                            <option value="5">推荐</option>
+                            <option value="7">线上O2O</option>
+                        </select>
+                        </th>
+                        <th>
+                            <select st-search="orderRefundCategory" ng-model="orderRefundCategory"
+                                    class="input-sm form-control" type="search">
+                                <option value="">-- 请选择 --</option>
+                                <option value="3">充值</option>
+                                <option value="2">app</option>
+                                <option value="1">买课</option>
+                            </select>
+                        </th>
+                        <th ng-if="!isO2OOperationSpecialist()">
+                            <select st-search="orderStatus" ng-model="orderStatus" class="input-sm form-control"
+                                    type="search">
+                                <option value="">-- 请选择 --</option>
+                                <option value="1">录入订单</option>
+                                <option value="2">支付定金</option>
+                                <option value="3">审核通过</option>
+                                <option value="5">已退单</option>
+                                <option value="6">已转课</option>
+                                <option value="7">已生成合同</option>
+                                <option value="8">已结课</option>
+                                <option value="9">已退费</option>
+                                <option value="10">退费中</option>
+                            </select>
+                        </th>
+                        <th ng-if="isO2OOperationSpecialist()">
+                            <select st-search="orderStatus" ng-model="orderStatus" class="input-sm form-control" type="search">
+                                <option value="">-- 请选择 --</option>
+                                <option value="9">已退费</option>
+                                <option value="10">退费中</option>
+                            </select>
+                        </th>
+                        <th><input st-search="contractStartDate" type="text" datepicker
+                                   onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="" readonly
+                                   class="input-sm form-control"/></th>
+                        <th colspan="6"></th>
+                        <!--    退费原因 -->
+                        <th ng-if="!isO2OOperationSpecialist()">
+                            <select st-search="refundReasonType" ng-model="refundReasonType" class="input-sm form-control" type="search">
+                                <option value="">-- 请选择 --</option>
+                                <option value="1">高三毕业</option>
+                                <option value="2">效果不明显</option>
+                                <option value="3">回老家</option>
+                                <option value="4">出国留学</option>
+                                <option value="5">班主任不满意</option>
+                                <option value="6">家庭经济原因</option>
+                                <option value="7">孩子个人原因</option>
+                                <option value="8">环境不满意</option>
+                                <option value="9">其他原因</option>
+                            </select>
+                        </th>
+                        <th><input st-search="refundDate" type="text" datepicker
+                                   onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="" readonly
+                                   class="input-sm form-control"/></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody ng-show="!isLoading">
+                    <tr ng-repeat="row in oneOrders">
+                        <td ng-if="row.orderNo==row.originalOrderNo"></td>
+                        <td ng-if="row.orderNo!=row.originalOrderNo">{{row.orderNo}}</td>
+                        <td>{{row.name}}</td>
+                        <td>{{row.phone}}</td>
+                        <td ng-show="row.orderRefundCategory == 1">退课程</td>
+                        <td ng-show="row.orderRefundCategory == 2">退课程</td>
+                        <td ng-show="row.orderRefundCategory == 3">退余额</td>
+                        <td>{{row.orderType | orderType}}</td>
+                        <td>{{row.orderCategory|categoryF:row.orderCategory}}</td>
+                        <td>{{row.orderStatus|orderStatusF:row.orderStatus}}</td>
+                        <td>{{row.contractStartDate | date:'yyyy-MM-dd' }}</td>
+                        <td>{{row.realTotalAmount}}</td>
+                        <td>{{row.realPayAmount}}</td>
+                        <td ng-if="row.orderCategory != 3">{{row.consumeAmount}}</td>
+                        <td ng-if="row.orderCategory == 3">{{(row.totalPrice-row.additionalAmount)|number:2}}</td>
+                        <td>{{row.refundAmount}}</td>
+                        <td>{{row.reduceAccountAmount}}</td>
+                        <td>{{row.reduceCourseNum}}</td>
+                        <td ng-show="row.refundReasonType == 1">高三毕业</td>
+                        <td ng-show="row.refundReasonType == 2">效果不明显</td>
+                        <td ng-show="row.refundReasonType == 3">回老家</td>
+                        <td ng-show="row.refundReasonType == 4">出国留学</td>
+                        <td ng-show="row.refundReasonType == 5">班主任不满意</td>
+                        <td ng-show="row.refundReasonType == 6">家庭经济原因</td>
+                        <td ng-show="row.refundReasonType == 7">孩子个人问题</td>
+                        <td ng-show="row.refundReasonType == 8">环境不满意</td>
+                        <td ng-show="row.refundReasonType == 9"><a ng-class="{'black':row.refundReasonType!=9}"
+                                                                   title="{{row.refundReason}}" data-placement="bottom"
+                                                                   data-toggle="tooltip" tooltip>其他原因</a></td>
+                        <td>{{row.refundDate | date:'yyyy-MM-dd' }}</td>
+                        <td>{{row.operatorName}}</td>
+                        <td ng-if="showPermissions('RefundAudit') && qualityManagerId!=355"
+                            ng-show="row.refundStatus != 2 && !isO2OOperationSpecialist()">
+                            <a class="showUI" id="nw+{{$index}}" ng-click="nw[$index]=true"><span
+                                    class="glyphicon glyphicon-caozuo" title="操作"></span></a>
+                            <bubble ng-if="nw[$index]" for="nw+{{$index}}" align="bottom" close="nw[$index]=false"
+                                    close-action="outerchick " ng-mouseleave="nw[$index]=false;">
+                                <ul>
+                                    <li ng-click="auditOrder(row)" ng-if="row.customerSchoolId == currentUser.department.id" >
+                                        <a>审核</a>
+                                    </li>
+                                    <li ng-click="cancleRefund(row)" ng-if="row.customerSchoolId == currentUser.department.id" >
+                                        <a>撤销退费</a>
+                                    </li>
+                                    <li ng-if="showPermissions('RefundDetail')" ng-click="detailOrder(row)">
+                                        <a>查看</a>
+                                    </li>
+                                </ul>
+                            </bubble>
+                        </td>
+                        <td ng-show="row.refundStatus != 2 && isO2OOperationSpecialist()">
+                            <span>待审核</span>
+                        </td>
+                        <td ng-show="row.refundStatus == 2">
+                            <div ng-if="qualityManagerId==355">
+                                <!--<a class="showUI" id="nw2+{{$index}}" ng-click="nw2[$index]=true"><span-->
+                                        <!--class="glyphicon glyphicon-caozuo" title="操作"></span></a>-->
+                                <!--<bubble  for="nw2+{{$index}}" align="bottom" close="nw2[$index]=false"-->
+                                        <!--close-action="outerchick " ng-mouseleave="nw2[$index]=false;">-->
+                                    <!--<ul>-->
+                                        <!--<li ng-if="qualityManagerId==355 && (row.orderStatus == 9 || row.orderStatus == 3)" ng-click="Cancellation(row)">-->
+                                            <!--<a>撤销审核</a>-->
+                                        <!--</li>-->
+                                    <!--</ul>-->
+                                <!--</bubble>-->
+                                <span style='cursor: pointer' class="glyphicon glyphicon-tui" title="撤销审核" ng-if="qualityManagerId==355 && (row.orderStatus == 9 || row.orderStatus == 3)" ng-click="Cancellation(row)"></span>
+                            </div>
+                            <span ng-if="qualityManagerId!=355">已审核</span>
+                        </td>
+
+
+                    </tr>
+                    </tbody>
+                    <tbody ng-show="isLoading">
+                    <tr>
+                        <td colspan="14" class="text-center"><div class="loading-indicator"></div></td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td class="text-center" st-pagination="" st-items-by-page="10"
+                            st-template="partials/util/pagination.custom.html" colspan="14">
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,41 @@
+<div class="view-frame" ng-controller="BiBaseController">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content" ng-controller="BiSchoolManagementPerformenceController">
+	    <div>
+		    <ul class="breadcrumb">
+            <li><img ng-src="img/icon/bi/jiaowu.png" src="img/icon/bi/jiaowu.png"> 学管报表<span class="divider"></span></li>
+		        <li class="active">学管业绩</li>
+		    </ul>
+		</div>
+        <!-- 筛选条件 -->
+		<div ng-include="baseHtmlUrl" style="padding:0px 15px"></div>
+
+		<!-- 表格 -->
+		<div class=" default-box">
+		    <h4>
+		       	 学管业绩
+		       	<span ng-if="channelTab==='1'">- 续费</span>
+		       	<span ng-if="channelTab==='2'">- 推荐</span>
+		       	<span ng-if="channelTab==='3'">- 课时消耗</span>
+		        <span ng-if="!isDay">（从 {{modelStartTime | date : 'yyyy-MM-dd'}} 至 {{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+		        <span ng-if="isDay">（{{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+		        <span ng-if="presentTime">最新统计时间：{{presentTime}}</span>
+		        <button class="btn btn-success bi-list-head" ng-click="getStatisticsAll()">导出列表</button>
+		    </h4>
+		    <br/>
+		    <tabs pane-changed="getTabIndex(selectedPane)">
+	        	<pane title="续费">
+	        		<div ng-include="'partials/bi/biSchoolManagementPerformence/tab.renew.html'"></div>
+	        	</pane>
+	        	<pane title="推荐">
+	        		<div ng-include="'partials/bi/biSchoolManagementPerformence/tab.recommend.html'"></div>
+	        	</pane>
+	        	<pane title="课时消耗">
+	        		<div ng-include="'partials/bi/biSchoolManagementPerformence/tab.course.html'"></div>
+	        	</pane>
+        	</tabs>
+		</div>
+    </div>
+</div>

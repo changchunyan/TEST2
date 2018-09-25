@@ -1,0 +1,50 @@
+<div class="table-responsive" style=" overflow-y:hidden">
+	<!-- 表格  -->
+    <table st-pipe="getStatistics" st-table="o2oOrders" class="table table-bordered table-striped">
+        <thead>
+        <tr>
+        	<td>序号</td>
+        	<td style="font-weight: bold;">校区</td>
+        	<td style="font-weight: bold;" data-content="指定周期内，新增订单数" 
+        		data-placement="top" webui-popover>下单数</td>
+        	<td style="font-weight: bold;" data-content="指定周期内，下订单的用户数" 
+        		data-placement="top" webui-popover>下单人数</td>
+        	<td style="font-weight: bold;" data-content="指定周期内，支付完成的订单数" 
+        		data-placement="top" webui-popover>支付成功订单数</td>
+        	<td style="font-weight: bold;" data-content="指定周期内，订单支付成功的人数（一人多次完成支付，算一人）" 
+        		data-placement="top" webui-popover>支付成功人数</td>
+        	<td style="font-weight: bold;" data-content="指定周期内，订单支付成功的订单总金额" 
+        		data-placement="top" webui-popover>支付成功总金额</td>
+        	<td style="font-weight: bold;" data-content="指定周期内，支付完成的订单数/新增订单数" 
+        		data-placement="left" webui-popover>支付成功率</td>
+        </tr>
+        </thead>
+        <tbody>
+        	<tr>
+	        	<td colspan="2">总计</td>
+	         	<td>{{summaryModelForTotal.orderCount}}</td>
+	         	<td>{{summaryModelForTotal.orderNum}}</td>
+	         	<td>{{summaryModelForTotal.successOrderCount}}</td>
+	         	<td>{{summaryModelForTotal.successOrderNum}}</td>
+	         	<td>{{summaryModelForTotal.successOrderAmount}}</td>
+	         	<td>{{summaryModelForTotal.successOrderRatio}}</td>
+	        </tr>
+	        <tr ng-repeat="model in statisticsModels">
+	         	<td>{{$index+1+statisticsTableState.pagination.start}}</td>
+	         	<td>{{model.schoolName}}</td>
+	         	<td>{{model.orderCount}}</td>
+	         	<td>{{model.orderNum}}</td>
+	         	<td>{{model.successOrderCount}}</td>
+	         	<td>{{model.successOrderNum}}</td>
+	         	<td>{{model.successOrderAmount}}</td>
+	         	<td>{{model.successOrderRatio}}</td>
+	        </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="13" class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" >
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

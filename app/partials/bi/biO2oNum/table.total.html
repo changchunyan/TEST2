@@ -1,0 +1,27 @@
+<div class="table-responsive" style=" overflow-y:hidden">
+	<!-- 累计表格  -->
+    <table st-pipe="getTotal" st-table="o2oNums" class="table table-bordered table-striped">
+        <thead>
+        <tr>
+        	<td style="font-weight: bold;" data-content="累计的“线上O2O”渠道的用户" data-placement="top" webui-popover>累计用户数</td>
+        	<td style="font-weight: bold;" data-content="累计自发注册的用户" data-placement="top" webui-popover>累计注册用户数</td>
+        	<td style="font-weight: bold;" data-content="累计推荐注册的用户" data-placement="top" webui-popover>累计推荐用户数</td>
+        	<td style="font-weight: bold;" data-content="累计学生端用户(包含老学员)推荐的新增用户数" data-placement="top" webui-popover>累计学生推荐用户数</td>
+        	<td style="font-weight: bold;" data-content="累计教师端用户推荐的新增用户数" data-placement="top" webui-popover>累计教师推荐用户数</td>
+        	<td style="font-weight: bold;" data-content="累计注册且完成首次登录的用户数" data-placement="top" webui-popover>累计激活数</td>
+        	<td style="font-weight: bold;" data-content="累计注册且完成初次登录的用户数/新增用户数" data-placement="left" webui-popover>累计激活率</td>
+        </tr>
+        </thead>
+        <tbody>
+	        <tr>
+	         	<td>{{totalModel.o2oNum}}</td>
+	         	<td>{{totalModel.registerNum}}</td>
+	         	<td>{{totalModel.recommendNum}}</td>
+	         	<td>{{totalModel.studentRecommendNum}}</td>
+	         	<td>{{totalModel.teacherRecommendNum}}</td>
+	         	<td>{{totalModel.loginNum}}</td>
+	         	<td>{{totalModel.loginRatio}}</td>
+	        </tr>
+        </tbody>
+    </table>
+</div>

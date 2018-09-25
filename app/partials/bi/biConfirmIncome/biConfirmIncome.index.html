@@ -1,0 +1,22 @@
+<div class="view-frame" ng-controller="BiBaseController">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content" ng-controller="BiConfirmIncomeController">
+	    <div>
+		    <ul class="breadcrumb">
+		        <li><img ng-src="img/icon/bi/yingxiao.png" src="img/icon/bi/yingxiao.png"> 校区业绩<span class="divider"></span></li>
+		        <li class="active">一对一校区确认收入统计</li>
+		    </ul>
+		</div>
+        <tabs pane-changed="getTabIndex(selectedPane)" ng-if="!isSchoolUser">
+        	<pane title="校区明细">
+        		<div ng-include="'partials/bi/biConfirmIncome/biConfirmIncome.statistics.html'" ng-if="channelTab==='0'"></div>
+        	</pane>
+        	<pane title="区域汇总" ng-if="!isSchoolUser">
+        		<div ng-include="'partials/bi/biConfirmIncome/biConfirmIncome.summary.html'" ng-if="channelTab==='1'"></div>
+        	</pane>
+        </tabs>
+        <div ng-include="'partials/bi/biConfirmIncome/biConfirmIncome.statistics.html?v=1.0.2'" ng-if="isSchoolUser"></div>
+    </div>
+</div>

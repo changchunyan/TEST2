@@ -1,0 +1,39 @@
+#积分规则对应数据
+var data = [
+    {
+        group_id:1,
+        name:'注册'
+    },
+    {
+        group_id:2,
+        name:'完善个人信息'
+    },
+    {
+        group_id:3,
+        name:'签到'
+    },
+    {
+        group_id:4,
+        name:'分享资讯'
+    },
+    {
+        group_id:5,
+        name:'邀请好友'
+    },
+    {
+        group_id:6,
+        name:'购买课程'
+    },
+    {
+        group_id:7,
+        name:'消课一次'
+    },
+    {
+        group_id:8,
+        name:'教师评分'
+    },
+    {
+        group_id:9,
+        name:'评价教师'
+    }
+]

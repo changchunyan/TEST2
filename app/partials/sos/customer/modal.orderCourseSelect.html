@@ -1,0 +1,79 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+  	<div class="modal-dialog">
+    	<div class="modal-content">
+      		<div class="modal-header">
+        		<button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+        		<h4 class="modal-title" ng-bind="courseOrderTitle"></h4>
+      		</div>
+      		<div class="modal-body pb-20">
+      		    <div class="br-gray pl-0">
+                    <table class="table table-bordered table-striped table-condensed mt-table1" st-pipe="getOrderCourseList" st-table="orderCourse">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>课程名称</th>
+                            <th>方式</th>
+                            <th>科目</th>
+                            <th>课时性质</th>
+                            <th>签约时间</th>
+                            <th>购买课时</th>
+                            <th>已消课时</th>
+                            <th>剩余课时</th>
+                            <th>已排课时</th>
+                            <th>可排课时</th>
+                            <th>课程规格</th>
+                        </tr>
+                        </thead>
+                        <tbody id="orderInfo">
+                        <tr ng-if="detail.type == 1||detail.type == 2" ng-repeat="row in CustomerStudentCourseList" >
+                            <td>
+                                <div>
+                                    <input type="radio" name="cscourse" ng-click="selectIt($index)" ng-checked="row.isChecked"
+                                           ng-model="formData.cscourse" value="{{$index}}"/>
+                                </div>
+                                <!-- <div ng-if="row.disabled" title="请先排签约日期更早的订单中的课时"  data-toggle="tooltip">
+                                    <input type="radio" name="cscourse" ng-click="selectIt($index)" ng-checked="row.isChecked" ng-disabled="row.disabled"
+                                    ng-model="formData.cscourse" value="{{$index}}"/>
+                                </div> -->
+                            </td>
+                            <!-- o2o排课显示课程名称 -->
+                            <td ng-if="row.order_category == 1">{{row.course_type_name}}</td>
+                            <td ng-if="row.order_category == 2">{{row.course_name}}</td>
+                            <td>{{row.teachingStyle | teachingStyleShow : row.teachingStyle}}</td>
+                            <td ng-if="row.order_category == 1">{{row.subject_name}}</td>
+                            <td ng-if="row.order_category == 2">{{row.subject_name_o2o}}</td>
+                            <td>
+                                <span ng-if="row.course_property == 1">正课</span>
+                                <span ng-if="row.course_property == 2">赠课</span>
+                                <span ng-if="row.course_property == 3">返课</span>
+                                <span ng-if="row.course_property == 4">试听课</span>
+                                <span ng-if="row.course_property == null || row.course_property == 0">其他</span>
+                            </td>
+                            <td>{{row.contract_start_date | date:'yyyy-MM-dd'}}</td>
+                            <!-- 购买课时 -->
+                            <td>{{row.original_num}}</td>
+                            <!-- 已消课时 = 购买课时-剩余课时 -->
+                            <td>{{row.original_num - row.course_num |number:1}}</td>
+                            <!-- 剩余课时 -->
+                            <td>{{row.course_num}}</td>
+                            <!-- 已排课时 = 剩余课时-可排课时 -->
+                            <td>{{row.course_num - row.plan_available_num|number:1}}</td>
+                            <!-- 可排课时 -->
+                            <td>{{row.plan_available_num}}</td>
+                            <td ng-if="row.order_rule == 1">1小时</td>
+                            <td ng-if="row.order_rule == 2">40分钟</td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+      		</div>
+			<div class="modal-footer">
+			  	<button type="button" class="btn btn-success c5-lable" ng-click="selectOrderCourse()">确定</button>
+			  	<button type="button" class="btn btn-default" ng-click="cancle()">取消</button>
+			</div>
+    	</div>
+  	</div>
+</div>
+
+

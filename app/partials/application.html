@@ -1,0 +1,635 @@
+<div class="row" ng-controller="BdApplicationEditController as lsc">
+    <form name="applicationForm" role="form" class="form-horizontal showcase-form" novalidate="">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-10">
+        <table class="table table-bordered" ng-show="step==1">
+            <tr>
+                <td class="info">申请者</td>
+                <td colspan="3">
+                    <input type="text" class="form-control" ng-model="detail.name" ng-maxlength="10" ng-minlength="2" required/>
+                </td>
+            </tr>
+            <tr>
+                <td class="info">申请城市</td>
+                <td>
+                    <select ng-model="detail.province" class="form-control"
+                            ng-options="option.provinceCode as option.provinceName for option in provinceList"
+                            ng-change="provinceChanged()" required>
+                        <option value="">-- 请选择 --</option>
+                    </select>
+                </td>
+                <td>
+                    <select ng-model="detail.city" class="form-control"
+                            ng-options="option.cityCode as option.cityName for option in cityList"
+                            ng-change="cityChanged()" required>
+                        <option value="">-- 请选择 --</option>
+                    </select>
+                </td>
+                <td>
+                    <select ng-model="detail.area" class="form-control"
+                            ng-options="option.areaCode as option.areaName for option in areaList" required>
+                        <option value="">-- 请选择 --</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="info">家庭住址</td>
+                <td colspan="3">
+                    <input type="text" class="form-control" ng-model="detail.address" required/>
+                </td>
+            </tr>
+            <tr>
+                <td class="info">家庭电话</td>
+                <td><input type="text" class="form-control" ng-model="detail.tellphone" required/></td>
+                <td class="info">移动电话</td>
+                <td><input type="text" class="form-control" ng-model="detail.cellphone" required/></td>
+            </tr>
+            <tr>
+                <td class="info">传真</td>
+                <td><input type="text" class="form-control" ng-model="detail.fax" required/></td>
+                <td class="info">邮件</td>
+                <td><input type="email" class="form-control" ng-model="detail.email" required/></td>
+            </tr>
+            <tr>
+                <td class="info">微信号/微博</td>
+                <td colspan="3">
+                    <input type="text" class="form-control" ng-model="detail.weixin_no" required/>
+                </td>
+            </tr>
+        </table>
+
+        <table class="table table-bordered" ng-show="step==2">
+            <tr>
+                <td class="info" colspan="6" style="text-align:left">一、Personal Basic Information 个人基本情况</td>
+            </tr>
+            <tr>
+                <td class="info">年龄</td>
+                <td>
+                    <input type="number" class="form-control" ng-model="detail.age" required/>
+                </td>
+                <td class="info">性别</td>
+                <td>
+                    <select ng-model="detail.gender" class="form-control"
+                            ng-options="option.code as option.name for option in genderList" required>
+                        <option value="">-- 请选择 --</option>
+                    </select>
+                </td>
+                <td class="info">籍贯</td>
+                <td>
+                    <input type="text" class="form-control" ng-model="detail.birth_place" required/>
+                </td>
+            </tr>
+            <tr>
+                <td class="info">婚姻状况</td>
+                <td>
+                    <input type="text" class="form-control" ng-model="detail.marriage" required/>
+                </td>
+                <td class="info">个人年收入</td>
+                <td>
+                    <input type="number" class="form-control" ng-model="detail.annual_income" required/>
+                </td>
+                <td class="info">家庭年收入</td>
+                <td>
+                    <input type="number" class="form-control" ng-model="detail.family_annual_income" required/>
+                </td>
+            </tr>
+            <tr>
+                <td class="info">兴趣/爱好</td>
+                <td>
+                    <input type="text" class="form-control" ng-model="detail.hobby" required/>
+                </td>
+                <td class="info">特长</td>
+                <td>
+                    <input type="text" class="form-control" ng-model="detail.speciality" required/>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="info" colspan="6" style="text-align:left">配偶情况</td>
+            </tr>
+            <tr>
+                <td class="info">姓名</td>
+                <td>
+                    <input type="text" class="form-control" ng-model="detail.spouse_name"/>
+                </td>
+                <td class="info">年龄</td>
+                <td>
+                    <input type="number" class="form-control" ng-model="detail.spouse_age"/>
+                </td>
+                <td class="info">最高学历</td>
+                <td>
+                    <select ng-model="detail.spouse_education_background" class="form-control"
+                            ng-options="option.code as option.name for option in educationList">
+                        <option value="">-- 请选择 --</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="info">手机号码</td>
+                <td>
+                    <input type="text" class="form-control" ng-model="detail.spouse_cellphone"/>
+                </td>
+                <td class="info">职务</td>
+                <td>
+                    <input type="text" class="form-control" ng-model="detail.spouse_vocation"/>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="info" colspan="6" style="text-align:left">子女情况</td>
+            </tr>
+            <tr>
+                <td class="info">姓名</td>
+                <td>
+                    <input type="text" class="form-control" ng-model="detail.offspring_name"/>
+                </td>
+                <td class="info">性别</td>
+                <td>
+                    <select ng-model="detail.offspring_gender" class="form-control"
+                            ng-options="option.code as option.name for option in genderList">
+                        <option value="">-- 请选择 --</option>
+                    </select>
+                </td>
+                <td class="info">年龄</td>
+                <td>
+                    <input type="number" class="form-control" ng-model="detail.offspring_age"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="info" colspan="6" style="text-align:left">二、Personal Educational Information 个人学历情况（Highest Degree 最高学历）</td>
+            </tr>
+            <tr>
+                <td class="info">学习时间</td>
+                <td class="info">学校名称</td>
+                <td class="info">专业</td>
+                <td class="info">学历</td>
+                <td class="info" colspan="2">获得的荣誉、职称或证书</td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="date" onfocus="(this.type='date')" class="form-control" ng-model="detail.education_time"/>
+                </td>
+                <td>
+                    <input type="text" class="form-control" ng-model="detail.education_school"/>
+                </td>
+                <td>
+                    <input type="text" class="form-control" ng-model="detail.education_speciality"/>
+                </td>
+                <td>
+                    <input type="text" class="form-control" ng-model="detail.education_background"/>
+                </td>
+                <td colspan="2">
+                    <input type="text" class="form-control" ng-model="detail.education_certificate"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="info" colspan="6" style="text-align:left">三、Personal Business Experience 个人工作经历（Last 5 years 最近五年内）</td>
+            </tr>
+            <tr>
+                <td class="info">时间</td>
+                <td class="info">单位名称</td>
+                <td class="info">职务</td>
+                <td class="info" colspan="3">负责的工作内容</td>
+            </tr>
+            <tr>
+                <td><input type="date" onfocus="(this.type='date')" class="form-control" ng-model="detail.work1_time"/></td>
+                <td><input type="text" class="form-control" ng-model="detail.work1_company"/></td>
+                <td><input type="text" class="form-control" ng-model="detail.work1_duty"/></td>
+                <td colspan="3"><input type="text" class="form-control" ng-model="detail.work1_content"/></td>
+            </tr>
+            <tr>
+                <td><input type="date" onfocus="(this.type='date')" class="form-control" ng-model="detail.work2_time"/></td>
+                <td><input type="text" class="form-control" ng-model="detail.work2_company"/></td>
+                <td><input type="text" class="form-control" ng-model="detail.work2_duty"/></td>
+                <td colspan="3"><input type="text" class="form-control" ng-model="detail.work2_content"/></td>
+            </tr>
+            <tr>
+                <td><input type="date" onfocus="(this.type='date')" class="form-control" ng-model="detail.work3_time"/></td>
+                <td><input type="text" class="form-control" ng-model="detail.work3_company"/></td>
+                <td><input type="text" class="form-control" ng-model="detail.work3_duty"/></td>
+                <td colspan="3"><input type="text" class="form-control" ng-model="detail.work3_content"/></td>
+            </tr>
+            <tr>
+                <td><input type="date" onfocus="(this.type='date')" class="form-control" ng-model="detail.work4_time"/></td>
+                <td><input type="text" class="form-control" ng-model="detail.work4_company"/></td>
+                <td><input type="text" class="form-control" ng-model="detail.work4_duty"/></td>
+                <td colspan="3"><input type="text" class="form-control" ng-model="detail.work4_content"/></td>
+            </tr>
+            <tr>
+                <td><input type="date" onfocus="(this.type='date')" class="form-control" ng-model="detail.work5_time"/></td>
+                <td><input type="text" class="form-control" ng-model="detail.work5_company"/></td>
+                <td><input type="text" class="form-control" ng-model="detail.work5_duty"/></td>
+                <td colspan="3"><input type="text" class="form-control" ng-model="detail.work5_content"/></td>
+            </tr>
+        </table>
+
+        <table class="table table-bordered" ng-show="step==3">
+            <tr>
+                <td class="info" style="text-align:left">相关问题（以下信息可多项选择）</td>
+            </tr>
+
+            <tr>
+                <td class="info" style="text-align:left">1、您是怎样获悉我们公司授权合作的招商信息的？</td>
+            </tr>
+            <tr>
+                <td style="text-align:left">
+                    <input type="checkbox" ng-model="detail.q1_A"/><span> A.报刊广告</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="checkbox" ng-model="detail.q1_B"/><span> B.电视节目  </span>
+                    <span ng-if="detail.q1_B">节目名称: <input type="text" ng-model="detail.q1_program"/></span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left">
+                    <input type="checkbox" ng-model="detail.q1_C"/><span> C.网络信息</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="checkbox" ng-model="detail.q1_D"/><span> D.其他渠道   </span>
+                    <span ng-if="detail.q1_D">请注明: <input type="text" ng-model="detail.q1_channel"/></span>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="info" style="text-align:left">2、为何您要申请加入优胜教育大家庭？</td>
+            </tr>
+            <tr>
+                <td style="text-align:left">
+                    <input type="checkbox" ng-model="detail.q2_A"/><span> A.喜欢孩子</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="checkbox" ng-model="detail.q2_B"/><span> B.有相关行业经验</span> 
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left">
+                    <input type="checkbox" ng-model="detail.q2_C"/><span> C.高投资回报率的生意</span> 
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="checkbox" ng-model="detail.q2_D"/><span> D.稳定、良好的行业前景</span> 
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="checkbox" ng-model="detail.q2_E"/><span> E.作为自己多元化投资中的一项</span> 
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="checkbox" ng-model="detail.q2_F"/><span> F.作为改变我人生的一项事业</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="checkbox" ng-model="detail.q2_G"/><span> G.一种回馈社会的慈善事业</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="checkbox" ng-model="detail.q2_H"/><span> I.其他原因   </span>
+                    <span ng-if="detail.q2_H">请注明:<input type="text" ng-model="detail.q2_other"/></span>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="info" style="text-align:left">3、请排序以下行业你认为的社会认同度  <input type="text" ng-model="detail.q3"/></td>
+            </tr>
+            <tr>
+                <td style="text-align:left">
+                    <span>       A.教育       B.餐饮       C.服装服饰       D.家居  </span>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="info" style="text-align:left">4、如果建立合作关系，你的预期启动时间是？</td>
+            </tr>
+            <tr>
+                <td style="text-align:left">
+                    <input type="radio" name＝'q4' value="A" ng-model="detail.q4"/><span> A.三个月之内</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="radio" name＝'q4' value="B" ng-model="detail.q4"/><span> B.半年之内</span> 
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left">
+                    <input type="radio" name＝'q4' value="C" ng-model="detail.q4"/><span> C.九个月之内</span> 
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="radio" name＝'q4' value="D" ng-model="detail.q4"/><span> D.越快越好</span> 
+                </td>
+            </tr>
+
+            <tr>
+                <td class="info" style="text-align:left">5、您是否亲自经营和管理该培训机构？</td>
+            </tr>
+            <tr>
+                <td style="text-align:left">
+                    <input type="radio" name＝'q5' value="A" ng-model="detail.q5"/><span> A.是</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="radio" name＝'q5' value="B" ng-model="detail.q5"/><span> B.否</span> 
+                </td>
+            </tr>
+
+            <tr>
+                <td class="info" style="text-align:left">6、因为优胜教育加盟资金周转率较高，您回收的资金如何利用？</td>
+            </tr>
+            <tr>
+                <td style="text-align:left">
+                    <input type="checkbox" ng-model="detail.q6_A"/><span> A.继续投入此项目，扩大项目规模</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="checkbox" ng-model="detail.q6_B"/><span> B.改善生活品质</span> 
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left">
+                    <input type="checkbox" ng-model="detail.q6_C"/><span> C.投入其他项目</span> 
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="checkbox" ng-model="detail.q6_D"/><span> D.储蓄</span> 
+                </td>
+            </tr>
+
+            <tr>
+                <td class="info" style="text-align:left">7、谁会在将来运作中心？</td>
+            </tr>
+            <tr>
+                <td style="text-align:left">
+                    <input type="checkbox" ng-model="detail.q7_A"/><span> A.您本人</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="checkbox" ng-model="detail.q7_B"/><span> B.配偶</span> 
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left">
+                    <input type="checkbox" ng-model="detail.q7_C"/><span> C.同学/亲友</span> 
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="checkbox" ng-model="detail.q7_D"/><span> D.职业经理人</span> 
+                </td>
+            </tr>
+
+            <tr>
+                <td class="info" style="text-align:left">8、您认为一个中心的盈利能力取决于什么？</td>
+            </tr>
+            <tr>
+                <td style="text-align:left">
+                    <input type="checkbox" ng-model="detail.q8_A"/><span> A.品牌知名度</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="checkbox" ng-model="detail.q8_B"/><span> B.中心的管理</span> 
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left">
+                    <input type="checkbox" ng-model="detail.q8_C"/><span> C.市场的状况</span> 
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="checkbox" ng-model="detail.q8_D"/><span> D.自己的能力</span> 
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="checkbox" ng-model="detail.q8_E"/><span> E.中心的位置</span> 
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="checkbox" ng-model="detail.q8_F"/><span> F.销售的技巧</span> 
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="checkbox" ng-model="detail.q8_G"/><span> G.成本控制</span> 
+                </td>
+            </tr>
+
+            <tr>
+                <td class="info" style="text-align:left">9、对于优胜直盟校区的严格系统的管理制度是否认同</td>
+            </tr>
+            <tr>
+                <td style="text-align:left">
+                    <input type="radio" name＝'q9' value="A" ng-model="detail.q9"/><span> A.是</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="radio" name＝'q9' value="B" ng-model="detail.q9"/><span> B.否</span> 
+                </td>
+            </tr>
+
+            <tr>
+                <td class="info" style="text-align:left">10、您选择此项目，想要得到哪些回报？</td>
+            </tr>
+            <tr>
+                <td style="text-align:left">
+                    <input type="checkbox" ng-model="detail.q10_A"/><span> A.改变生活方式</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="checkbox" ng-model="detail.q10_B"/><span> B.长期事业发展</span> 
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left">
+                    <input type="checkbox" ng-model="detail.q10_C"/><span> C.满足心理需求</span> 
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="checkbox" ng-model="detail.q10_D"/><span> D.长线投资项目</span> 
+                </td>
+            </tr>
+
+            <tr>
+                <td class="info" style="text-align:left">11、您的年度盈利是多少？</td>
+            </tr>
+            <tr>
+                <td style="text-align:left">
+                    <input type="radio" name＝'q11' value="A" ng-model="detail.q11"/><span> A.&lt;=50万人民币</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="radio" name＝'q11' value="B" ng-model="detail.q11"/><span> B.人民币50万~100万</span> 
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left">
+                    <input type="radio" name＝'q11' value="C" ng-model="detail.q11"/><span> C.人民币100万~150万</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="radio" name＝'q11' value="D" ng-model="detail.q11"/><span> D.人民币150万~200万</span> 
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="radio" name＝'q11' value="E" ng-model="detail.q11"/><span> E.&gt;=200万人民币</span> 
+                </td>
+            </tr>
+
+            <tr>
+                <td class="info" style="text-align:left">12、您首选的中心所在城市名称</td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <span> A、第一选择<input type="text" ng-model="detail.q12_first"/></span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <span> B、第二选择<input type="text" ng-model="detail.q12_second"/></span>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="info" style="text-align:left">13、您的资金来源？</td>
+            </tr>
+            <tr>
+                <td style="text-align:left">
+                    <input type="radio" name＝'q13' value="A" ng-model="detail.q13"/><span> A.自有</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="radio" name＝'q13' value="B" ng-model="detail.q13"/><span> B.私人借款</span> 
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left">
+                    <input type="radio" name＝'q13' value="C" ng-model="detail.q13"/><span> C.银行贷款</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="radio" name＝'q13' value="D" ng-model="detail.q13"/><span> D.合伙</span> 
+                </td>
+            </tr>
+
+            <tr>
+                <td class="info" style="text-align:left">14、您目前能够/愿意投资在这个授权项目的整体资金投入金额为？</td>
+            </tr>
+            <tr>
+                <td style="text-align:left">
+                    <input type="radio" name＝'q14' value="A" ng-model="detail.q14"/><span> A.40万元以下</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="radio" name＝'q14' value="B" ng-model="detail.q14"/><span> B.40~60万元</span> 
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left">
+                    <input type="radio" name＝'q14' value="C" ng-model="detail.q14"/><span> C.60~100万元</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="radio" name＝'q14' value="D" ng-model="detail.q14"/><span> D.100~150万元</span> 
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <input type="radio" name＝'q14' value="E" ng-model="detail.q14"/><span> E.150万元以上</span> 
+                </td>
+            </tr>
+
+            <tr>
+                <td class="info" style="text-align:left">15、请排序揭秘日当天您最想了解的项目内容是？  <input type="text" ng-model="detail.q15"/></td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <span> A.校区运作模式</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <span>  B.项目盈利模式</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <span> C.岗位设置及人员培训</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <span> D.投资回报周期及利润率</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <span> E.运营支持体系</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <span> F.教研团队及核心教学</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;">
+                    <span> G.其他</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="info" style="text-align:left">本人郑重承诺上述个人、家庭、合伙人资料真实有效，如不属实，本人愿承担一切后果。</td>
+            </tr>
+        </table>
+
+        <table class="table">
+            <tr>
+                <td class="info" style="text-align: center;">
+                    <button ng-click="back()" class="btn btn-default" ng-if="step>1">上一步</button>
+                    <button ng-click="next()" class="btn btn-default" ng-if="step<3">下一步</button>
+                    <button ng-disabled="applicationForm.$invalid"  ng-click="save()" class="btn btn-success" ng-if="step==3">提交</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="col-sm-1"></div>
+
+
+
+    </form>
+
+
+
+</div>
+

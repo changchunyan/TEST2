@@ -1,0 +1,30 @@
+<div class="view-frame" ng-controller="BiBaseController">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content" ng-controller="BiTeacherReportController">
+        <div style="margin-bottom: 10px">
+  		    <ul class="breadcrumb">
+  		        <li><img ng-src="img/icon/bi/jiaowu.png" src="img/icon/bi/jiaowu.png"> 教务报表<span class="divider"></span></li>
+  		        <li class="active">教务日常</li>
+  		    </ul>
+		    </div>
+        <search on-department-clicked="showSelectDepartment()"
+                department="selectdDepartment"
+                search-model="searchModel"
+                is-school-user="isSchoolUser"
+                provinces="provinces"
+                on-province-changed="getCitysByProvinceCode(searchModel.schoolProvince)"
+                cities="cities"
+                on-reset="reset(isQ)"
+                on-search="argJudgement(generateTeacherConsumeReport)"/>
+        <tabs>
+        	<pane title="校区教师消课报表">
+        		<div ng-include="'partials/bi/biTeacherReport/biTeacherConsumeReport.html'"></div>
+        	</pane>
+            <pane title="校区学科组汇总报表">
+        		<div ng-include="'partials/bi/biTeacherReport/biTeacherConsumeSubjectSummaryReport.html'"></div>
+        	</pane>
+        </tabs>
+    </div>
+</div>

@@ -1,0 +1,190 @@
+.creathelp {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 102;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.5);
+  overflow: scroll;
+  transition: all 1s ;
+  transform: translateY(-1000PX);
+
+}
+.showbox{
+  transform: translateY(0PX);
+}
+.creathelp .creathelp-content {
+  width: 1000px;
+  margin: auto;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+.creathelp .creathelp-content .creathelp-content-top {
+  background-color: #739bc5;
+  height: 50px;
+  width: 100%;
+  text-indent: 20px;
+  line-height: 50px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  font-size: 18px;
+  color: #fff;
+}
+.creathelp .creathelp-content .creathelp-content-title {
+  width: 100%;
+  height: 100px;
+  background-color: #fff;
+  font-size: 16px;
+  line-height: 42px;
+  padding-left: 20px;
+}
+.creathelp .creathelp-content .creathelp-content-title input {
+  border-style: none;
+  outline-style: none;
+  border-bottom: 1px solid #dbdfee;
+  line-height: 0px;
+  width: 200px;
+}
+.creathelp .creathelp-content .creathelp-content-title select {
+  border-style: none;
+  outline-style: none;
+  width: 200px;
+  border-bottom: 1px solid #dbdfee;
+  line-height: 0px;
+}
+.creathelp .creathelp-content .creathelp-content-editor {
+  background-color: #fff;
+  min-width: 1000px;
+}
+.creathelp .creathelp-content .creathelp-content-foot {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  width: 100%;
+  height: 70px;
+  background-color: #fff;
+  overflow: hidden;
+  margin-top: -20px;
+}
+.creathelp .creathelp-content .creathelp-content-foot input {
+  width: 100px;
+  height: 45px;
+  float: right;
+  border: 0;
+  font-size: 20px;
+  margin-top: 12px;
+  margin-right: 10px;
+  outline: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.creathelp .creathelp-content .creathelp-content-foot .addhelp_cancle {
+  background: #eeeeee;
+  color: #55759f;
+}
+.creathelp .creathelp-content .creathelp-content-foot .addhelp_save {
+  width: 100px;
+  height: 45px;
+  background: #67ba2f;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  float: right;
+  color: #ffffff;
+}
+/*点击添加主题弹出的模态框样式*/
+.help_addHelpTheme{
+  width:100%;
+  height: 100%;
+  position: absolute;
+  z-index: 102;
+  top:0;
+  left: 0;
+  background: rgba(0,0,0,.4);
+  overflow: hidden;
+  transition: all 1s ;
+  transform: translateY(-1000PX);
+}
+
+
+.help_addHelpTheme .help_addHelpTheme_content{
+  width: 600px;
+  height: 350px;
+  margin: 175px auto 0;
+  border-radius: 10px;
+  background: #fff;
+}
+.help_addHelpTheme .help_addHelpTheme_content .addTheme_title{
+  height: 50px;
+  width: 100%;
+  background: #739bc5;
+  text-indent: 20px;
+  line-height: 50px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px ;
+  font-size: 18px;
+  color:#fff;
+}
+.help_addHelpTheme .help_addHelpTheme_content .addTheme_input{
+  width: 100%;
+  height: 233px;
+  border-bottom: 1px solid #e3eaf3;
+  line-height: 230px;
+  font-size: 18px;
+  color: #898989;
+  text-indent:20px ;
+}
+.help_addHelpTheme .help_addHelpTheme_content .addTheme_input>input{
+  border: 0;
+  outline: none;
+  width: 80%;
+  font-size: 16px;
+  border-bottom: 1px solid #e3eaf3;
+  color: #000;
+  margin-left: 5px;
+}
+.help_addHelpTheme .help_addHelpTheme_content button{
+  width: 100px;
+  height: 45px;
+  float: right;
+  border: 0;
+  font-size: 20px;
+  margin-top: 12px;
+  outline: none;
+  cursor: pointer;
+}
+.help_addHelpTheme .help_addHelpTheme_content .addTheme_cancle{
+  margin-right: 10px;
+  background: #fff;
+  color: #55759f;
+}
+.help_addHelpTheme .help_addHelpTheme_content .addTheme_save{
+  width: 100px;
+  height: 45px;
+  background: #67ba2f;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  float: right;
+  color: #ffffff;
+}
+/*!*富文本编辑器上传图片时loadding遮罩层的样式**/
+.loaddingBox{
+  width: 100%;
+  height: 100%;
+  background: rgba(46,46,52,.8);
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: scroll;
+  display: none;
+}
+.loaddingBox .loaddingContent{
+  height:30%;
+  width: 30%;
+  margin:0 auto;
+  margin-top: 30px;
+}
+.loaddingBox .loaddingContent p{
+  font-size: 18px;
+  color: #FFFFFF;
+}

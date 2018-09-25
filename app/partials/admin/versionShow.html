@@ -1,0 +1,70 @@
+<!-- 顶部logo -->
+<style>
+    .help_header,.help_search,.help_content{font-family: '微软雅黑';}
+    .help_content_right img{max-width: 100% !important;}
+    /*.help_content_left a{display: inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:200px;}*/
+
+    /*.help-thirdMenu a{margin-left: -40px;}*/
+    .help_content .help_content_left{
+        height: 700px;
+        overflow-y: auto;
+    }
+    .help_content .help_content_left>li>ul>li{
+        min-height: 45px;
+        padding: 0;
+        padding-top: 13px;
+        padding-left: 40px;
+        word-wrap: break-word;
+    }
+    .help_content .help_content_left>li{
+        padding-top: 0px;
+    }
+    .help_content .help_content_left>li>ul>li.active{
+        padding-left: 36px;
+        color: #ff5722;
+    }
+    .version_content{
+        float: left;
+        margin-left: 10px;
+        width: 815px;
+    }
+    .version_content h2{
+        padding:0;
+        margin:0;
+        height:47px;
+        line-height:47px;
+        border-bottom:1px solid #dcdcdc;
+        font-size: 18px;
+        font-family: '微软雅黑';
+        color: #898989;
+        margin-bottom:15px;
+    }
+</style>
+<div class="help_header">
+    <ul>
+        <li>
+            <img src="img/help/youwinlogo.png" />
+        </li>
+        <li class="help_header_lastLi">
+            <span>版本更新日志</span>
+        </li>
+    </ul>
+    <a href="#/">返回YES系统</a>
+</div>
+
+<div class="help_search versionbg">
+</div>
+
+<div class="help_content">
+    <ul class="help_content_left" >
+        <li>
+            <ul>
+                <li class="versionLi" ng-repeat="versionList in versionLists" ng-click="showVersion($index,versionList.title,versionList.contentPath)" ng-class="{active:$first}">{{versionList.title}}</li>
+            </ul>
+        </li>
+    </ul>
+    <div class="version_content">
+        <h2>{{showVersionTitle}}</h2>
+        <p class="help_content_right_content"></p>
+    </div>
+</div>

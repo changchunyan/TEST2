@@ -1,0 +1,82 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true" ng-controller="SNPCoursePlanController as controller">
+    <form class="modal-dialog form-horizontal" name="coursePlan">
+        <div class="modal-content mt-label-h2">
+            <div class="modal-header">
+              <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">记录详情</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row ml-0">
+                    <div class="form-group col-sm-12">
+                        <ul class="row mt-li-bg">
+                            <li class="col-sm-4">
+                              班级名称：{{snpClassAttendenceRecord.classname}}
+                            </li>
+                            <li class="col-sm-4">托管老师：<span>{{snpClassAttendenceRecord.teacher_name}}</span></li>
+                            <li class="col-sm-4">托管日期：<span>{{formatDate(snpClassAttendenceRecord.start_time)}}</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div  class="br-gray pl-0 time-show-2">
+                    <table class="table table-bordered table-striped mt-table1">
+                        <thead>
+                        <tr>
+                            <th>学生姓名</th>
+                            <th>电话</th>
+                            <th>
+                              缺勤
+                            </th>
+                            <th>到校</th>
+                            <th>开始作业</th>
+                            <th>完成作业</th>
+                            <th><div class="time-show br0 pl-0">加分项</div></th>
+                            <th><div class="time-show br0 pl-0">减分项</div></th>
+                            <th>离校</th>
+                            <th>缺席原因</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+	                        <tr ng-repeat="student in classStudents">
+	                            <td>{{student.studentName}}</td>
+	                            <td>{{student.phone}}</td>
+                              <td>{{student.isAttendence ? '否' : '是'}}</td>
+                              <td>
+                                    {{formatTime(student.arrivalTime)}}
+	                            </td>
+                              <td>
+                                {{formatTime(student.homeworkStartTime)}}
+	                            </td>
+                              <td>
+                                {{formatTime(student.homeworkEndTime)}}
+	                            </td>
+                              <td><a ng-click="showAddScoreDetails(student)">{{totalAddScore(student)}}</a></td>
+                              <td><a ng-click="showSubScoreDetails(student)">{{totalSubScore(student)}}</a></td>
+                              <td>
+                                {{formatTime(student.leaveTime)}}
+	                            </td>
+	                            <td>
+                                {{student.reason ? absenceReasons[student.reason].name : ''}}
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <td>总计{{classStudentsTotal}}人</td>
+	                            <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+	                            <td>{{countArrival()}} 人</td>
+                              <td>{{countHomeworkStarted()}} 人</td>
+                              <td>{{countHomeworkEnded()}} 人</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>{{countLeave()}} 人</td>
+                              <td>&nbsp;</td>
+	                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 20px">
+                <button type="button" class="btn btn-default" ng-click="$hide()">返回</button>
+            </div>
+        </div>
+    </form>
+</div>

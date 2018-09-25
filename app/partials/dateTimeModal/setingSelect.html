@@ -1,0 +1,52 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true" ng-controller="TimesController as tcl">
+    <form class="modal-dialog modal-dialog-small form-horizontal" id="dateTimeModal ">
+        <div class="modal-content mt-label-h2">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="resetFilterTime()"><span
+                        aria-hidden="true">&times;</span></button><!--$hide()-->
+                <h4 class="modal-title" ng-bind="setingSelectTitle"></h4>
+            </div>
+            <div class="modal-body pb-20 pl-30">
+                <div class="row group">
+                    <label class="fl lable-h2  col-sm-4 text-right bg-none">上课日期</label>
+                    <div class="col-sm-6">
+                        <input class="form-control" type="date" name="startDate" id="startDate" ng-model="select.startDate" ng-change="getEndTimeNew()" onfocus="(this.type='date')" value="{{ select.startDate | date:'yyyy-MM-dd' }}"  required>
+                    </div>
+                </div>
+                <div class="row group">
+                    <label class="fl lable-h2   col-sm-4 text-right bg-none">上课时间</label>
+                    <div class="col-sm-6" style="display:flex; padding-right: 0">
+                        <input class="form-control col-sm-5" style="flex:1" type="text"  name="leadsName1" id="time1"
+                               ng-model="select.time1" placeholder="时" required=""  ng-change="getEndTimeNew()"  ng-focus="getEndTimeNew()">
+                        <span class="col-sm-1 lh20 text-center text" style="width:10%;position: relative;margin-top: 10px;">:</span>
+                        <input class="form-control col-sm-6" style="flex:1"  name="leadsName1" id="time2" ng-model="select.time2" placeholder="分" required="" ng-change="getEndTimeNew()" ng-focus="getEndTimeNew()" ng-value="">
+                    </div>
+                </div>
+                <div class="row group">
+                    <label class="fl lable-h2   col-sm-4 text-right bg-none">上课时长</label>
+                    <div class="col-sm-6">
+                        <!--<input class="form-control">-->
+                        <select class="form-control" ng-model="select.timeSize"
+                                name="select.timeSize"  class="input-sm form-control"
+                                ng-options="option.id as option.name for option in TIME_SIZE" type="search" required="" ng-change="getEndTimeNew()">
+                            <option value="">请选择</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row group">
+                    <label class="fl lable-h2   col-sm-4 text-right bg-none">下课时间</label>
+                    <div class="col-sm-6">
+                        <input class="form-control" type="text"  readonly="" name=timeEnd
+                               ng-model="select.timeEnd" placeholder="自动生成" class="form-control ng-pristine " required="">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" ng-click="resetFilterTime()">取消</button>
+                <button type="button" class="btn btn-success c5-lable" ng-click="getTeachersListByFilter()" ng-if="!mtPK">确定</button>
+                <button type="button" class="btn btn-success c5-lable" ng-click="selectSubject('1')" ng-if="mtPK">确定</button>
+            </div>
+        </div>
+    </form>
+</div>
+

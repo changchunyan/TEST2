@@ -1,0 +1,70 @@
+<div class="modal-tab-panel padding-20-40">
+	<div>
+	    <div class="table-responsive c-select-text padding-top10" >
+	        <table st-pipe="getEmployeeChanges" st-table="employee.changes" class="table table-bordered table-striped">
+	            <thead>
+	                <tr>
+	                    <th>异动类别</th>
+	                    <th>异动前部门</th>
+	                    <th>异动前岗位</th>
+	                    <th>异动前底薪</th>
+	                    <th>异动前绩效</th>
+	                    <th>异动前提成</th>
+	                    <th>异动前课补级别</th>
+	                    <th>异动前浮动底薪</th>
+	                    <th>异动前义务课时</th>
+	                    <th>异动前其他薪资</th>
+	                    <th>异动后部门</th>
+	                    <th>异动后岗位</th>
+	                    <th>异动后底薪</th>
+	                    <th>异动后绩效</th>
+	                    <th>异动后提成</th>
+	                    <th>异动后课补级别</th>
+	                    <th>异动后浮动底薪</th>
+	                    <th>异动后义务课时</th>
+	                    <th>异动后其他薪资</th>
+	                    <th>执行日期</th>
+	                    <th>备注</th>
+	                </tr>
+	            </thead>
+	            <tbody>
+	                <tr ng-repeat="change in employee.changes track by $index">
+		                <td>{{dictData.changeType[change.changeType-1].name}}</td>
+		            	<td>{{change.departmentBefore.name}}</td>
+		            	<td>{{change.positionBefore.name}}</td>
+		            	<td>{{change.basicSalaryBefore}}</td>
+		            	<td>{{change.performanceBefore}}</td>
+		            	<td>{{change.commissionBefore}}</td>
+		            	<td>{{dictData.courseType[change.courseLevelBefore-1].name}}</td>
+		            	<td>{{change.basicSalaryFloatBefore}}</td>
+		            	<td>{{change.classHourDutyBefore}}</td>
+		            	<td>{{change.otherSalaryBefore}}</td>
+		            	<td>{{change.departmentAfter.name}}</td>
+		            	<td>{{change.positionAfter.name}}</td>
+		            	<td>{{change.basicSalaryAfter}}</td>
+		            	<td>{{change.performanceAfter}}</td>
+		            	<td>{{change.commissionAfter}}</td>
+		            	<td>{{dictData.courseType[change.courseLevelAfter-1].name}}</td>
+		            	<td>{{change.basicSalaryFloatAfter}}</td>
+		            	<td>{{change.classHourDutyAfter}}</td>
+		            	<td>{{change.otherSalaryAfter}}</td>
+		            	<td>{{change.executeDate | date : "yyyy-MM-dd"}}</td>
+		            	<td style="white-space: normal;text-align: left;">{{change.remark}}</td>
+	                </tr>
+	            </tbody>
+	            <tbody ng-show="isLoading">
+		            <tr>
+		                <td colspan="21" class="text-center"><div class="loading-indicator"></div>
+		                </td>
+		            </tr>
+	            </tbody>
+	            <tfoot>
+	                <tr>
+	                    <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="21">
+	                    </td>
+	                </tr>
+	            </tfoot>
+	        </table>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,141 @@
+<div class="view-frame">
+	<div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+	<div class="view-content">
+		<div>
+            <ul class="breadcrumb">
+                <li><a href="">人员信息管理</a> <span class="divider"></span></li>
+                <li class="active">异动管理</li>
+            </ul>
+        </div>
+		<form id="search-form " class="c-select-text">
+	        <table   rules="none">
+	            <tr>
+	                <td>
+	                    <label for="name" class="search-form-label">姓名</label>
+	                    <input ng-model="filter.name" type="text" name="name" id="name" class="search-form-input" />
+	                </td>
+	                <td>
+	                    <label for="changeType" class="search-form-label">异动类型</label>
+	                    <select ng-model="filter.changeType" name="changeType" id="changeType"
+                                class="search-form-input" ng-options="tl.id as tl.name for tl in dictData.changeType">
+                            <option value="">------请选择------</option>
+                        </select>
+                    </td>
+	                <td>
+	                    <label for="executeDateBegin" class="search-form-label">执行日期</label>
+	                    <input type="text" name="executeDateBegin" id="executeDateBegin" datePicker ng-model="filter.executeDateBegin"
+                       		class="search-form-label" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  onchange="" readonly/>
+	                	------
+                      	<input type="text" name="executeDateEnd" id="executeDateEnd" datePicker ng-model="filter.executeDateEnd"
+                       		class="search-form-label" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  onchange="" readonly/>
+	                </td>
+	            </tr>
+	            <tr>
+	            	<td>
+	                    <label for="departmentBefore" class="search-form-label">异动前部门</label>
+	                    <input ng-click="showSelectDepartment(1)" ng-model="filter.departmentBefore.name" type="text" name="departmentBefore" id="departmentBefore" class="search-form-input" />
+	                </td>
+	                <td>
+	                    <label for="positionBefore" class="search-form-label">异动前岗位</label>
+	                    <select ng-options="position.name for position in positionsBefore track by position.id"
+                            ng-model="filter.positionBefore" name="positionBefore" id="positionBefore" class="search-form-input">
+                    	</select>
+	                </td>
+	                <td>
+	                    <label for="hiringDateBegin" class="search-form-label">入职日期</label>
+	                    <input type="text" name="hiringDateBegin" id="hiringDateBegin" datePicker ng-model="filter.hiringDateBegin"
+                       		class="search-form-label" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  onchange="" readonly/>
+	                	------
+                      	<input type="text" name="hiringDateEnd" id="hiringDateEnd" datePicker ng-model="filter.hiringDateEnd"
+                       		class="search-form-label" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  onchange="" readonly/>
+	                </td>
+	            </tr>
+	            <tr>
+	            	<td>
+	                    <label for="departmentAfter" class="search-form-label">异动后部门</label>
+                   		<input ng-click="showSelectDepartment(2)" ng-model="filter.departmentAfter.name" type="text" name="departmentAfter" id="departmentAfter" class="search-form-input" />
+	                </td>
+	                <td>
+	                    <label for="positionAfter" class="search-form-label" >异动后岗位</label>
+	                    <select ng-options="position.name for position in positionsAfter track by position.id"
+                            ng-model="filter.positionAfter" name="positionAfter" id="positionAfter" class="search-form-input">
+                    	</select>
+	                </td>
+	            </tr>
+	        </table>
+	        <div class="c_center">
+	            <button class="btn btn-success" ng-click="getChangesByFilter()">查询</button>
+	            <button class="btn" ng-click="reset()">重置</button>
+	        </div>
+	    </form>
+    	<div class="table-responsive c-select-text padding-top10" >
+    	<div class="yws-container ">
+            <h4 class="yws-left">列表</h4>
+            <div class="yws-right">
+                <button class="btn btn-success" ng-click="exportToExcel()">导出异动记录</button>
+            </div>
+        </div>
+		<div class="table-responsive" style="overflow:scroll;overflow-y:hidden">
+			<table st-pipe="getChanges" st-table="changes" class="table table-bordered table-striped">
+				<thead>
+					<tr>
+						<th>员工姓名</th>
+						<th>入职日期</th>
+						<th>异动类型</th>
+						<th>校区性质</th>
+						<th>异动前部门</th>
+						<th>异动前岗位</th>
+						<th>异动前底薪</th>
+						<th>异动前绩效</th>
+						<th>异动前提成</th>
+						<th>异动前课补级别</th>
+						<th>异动后部门</th>
+						<th>异动后岗位</th>
+						<th>异动后底薪</th>
+						<th>异动后绩效</th>
+						<th>异动后提成</th>
+						<th>异动后课补级别</th>
+						<th>执行日期</th>
+						<th>备注</th>
+					</tr>
+				</thead>
+				<tbody>
+	                <tr ng-repeat="change in changes track by $index">
+	                	<td>{{change.employee.user.name}}</th>
+	                	<td>{{change.employee.hiringDate | date : "yyyy-MM-dd"}}</th>
+		                <td>{{dictData.changeType[change.changeType-1].name}}</td>
+						<td>{{dictData.schoolNature[change.employee.department.schoolNature-1].name}}</th>
+		            	<td>{{change.departmentBefore.name}}</td>
+		            	<td>{{change.positionBefore.name}}</td>
+		            	<td>{{change.basicSalaryBefore}}</td>
+		            	<td>{{change.performanceBefore}}</td>
+		            	<td>{{change.commissionBefore}}</td>
+		            	<td>{{dictData.courseType[change.courseLevelBefore-1].name}}</td>
+		            	<td>{{change.departmentAfter.name}}</td>
+		            	<td>{{change.positionAfter.name}}</td>
+		            	<td>{{change.basicSalaryAfter}}</td>
+		            	<td>{{change.performanceAfter}}</td>
+		            	<td>{{change.commissionAfter}}</td>
+		            	<td>{{dictData.courseType[change.courseLevelAfter-1].name}}</td>
+		            	<td>{{change.executeDate | date : "yyyy-MM-dd"}}</td>
+		            	<td style="white-space: normal;text-align: left;">{{change.remark}}</td>
+	                </tr>
+	            </tbody>
+				<tbody ng-show="isLoading">
+				<tr>
+					<td colspan="18" class="text-center"><div class="loading-indicator"></div>
+					</td>
+				</tr>
+				</tbody>
+				<tfoot>
+				<tr>
+					<td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="18" />
+				</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+	</div>
+</div>

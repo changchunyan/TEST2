@@ -1,0 +1,238 @@
+<div class="modal-tab-panel mrl-0">
+    <div class="row">
+    	<div class="col-sm-4 form-group" ng-class="{ 'has-error': form.internshipBasicSalary.$dirty && form.internshipBasicSalary.$error.required }">
+            <label for="internshipBasicSalary" class="col-sm-7 col-md-7 col-lg-6 control-label">实习期底薪</label>
+            <div class="col-sm-5 col-md-5 col-lg-6">
+                <input type="text" name="internshipBasicSalary" id="internshipBasicSalary" class="form-control" ng-model="employee.internshipBasicSalary" disabled/>
+            </div>
+        </div>
+        <div class="col-sm-4 form-group" ng-class="{ 'has-error': form.trialBasicSalary.$dirty && form.trialBasicSalary.$error.required }">
+            <label for="trialBasicSalary" class="col-sm-7 col-md-7 col-lg-6 control-label">试用期底薪</label>
+            <div class="col-sm-5 col-md-5 col-lg-6">
+                <input type="text" name="trialBasicSalary" id="trialBasicSalary" class="form-control" ng-model="employee.trialBasicSalary" disabled/>
+            </div>
+        </div>
+        <div class="col-sm-4 form-group" ng-class="{ 'has-error': form.basicSalary.$dirty && form.basicSalary.$error.required }">
+            <label for="basicSalary" class="col-sm-7 col-md-7 col-lg-6 control-label">转正后底薪</label>
+            <div class="col-sm-5 col-md-5 col-lg-6">
+                <input type="text" name="basicSalary" id="basicSalary" class="form-control" ng-model="employee.basicSalary" disabled/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+    	<div class="col-sm-4 form-group" ng-class="{ 'has-error': form.internshipPerformance.$dirty && form.internshipPerformance.$error.required }">
+          	<label for="internshipPerformance" class="col-sm-7 col-md-7 col-lg-6 control-label">实习期绩效</label>
+          	<div class="col-sm-5 col-md-5 col-lg-6">
+            	<input type="text" name="internshipPerformance" id="internshipPerformance" class="form-control" ng-model="employee.internshipPerformance" disabled/>
+          	</div>
+        </div>
+        <div class="col-sm-4 form-group" ng-class="{ 'has-error': form.trailPerformance.$dirty && form.trailPerformance.$error.required }">
+          	<label for="trailPerformance" class="col-sm-7 col-md-7 col-lg-6 control-label">试用期绩效</label>
+          	<div class="col-sm-5 col-md-5 col-lg-6">
+            	<input type="text" name="trailPerformance" id="trailPerformance" class="form-control" ng-model="employee.trailPerformance" disabled/>
+          	</div>
+        </div>
+      	<div class="col-sm-4 form-group">
+          	<label for="performance" class="col-sm-7 col-md-7 col-lg-6 control-label">转正后绩效</label>
+          	<div class="col-sm-5 col-md-5 col-lg-6">
+            	<input type="text" name="performance" id="performance" class="form-control" ng-model="employee.performance" disabled/>
+          	</div>
+      	</div>
+    </div>
+    <div class="row">
+    	<div class="col-sm-4 form-group" ng-class="{ 'has-error': form.internshipCommission.$dirty && form.internshipCommission.$error.required }">
+          	<label for="internshipCommission" class="col-sm-7 col-md-7 col-lg-6 control-label">实习期提成</label>
+          	<div class="col-sm-5 col-md-5 col-lg-6">
+            	<input type="text" name="internshipCommission" id="internshipCommission" class="form-control" ng-model="employee.internshipCommission" disabled/>
+          	</div>
+        </div>
+        <div class="col-sm-4 form-group" ng-class="{ 'has-error': form.trailCommission.$dirty && form.trailCommission.$error.required }">
+          	<label for="trailCommission" class="col-sm-7 col-md-7 col-lg-6 control-label">试用期提成</label>
+          	<div class="col-sm-5 col-md-5 col-lg-6">
+            	<input type="text" name="trailCommission" id="trailCommission" class="form-control" ng-model="employee.trailCommission" disabled/>
+          	</div>
+        </div>
+      	<div class="col-sm-4 form-group">
+          	<label for="commission" class="col-sm-7 col-md-7 col-lg-6 control-label">转正后提成</label>
+          	<div class="col-sm-5 col-md-5 col-lg-6">
+            	<input type="text" name="commission" id="commission" class="form-control" ng-model="employee.commission" disabled/>
+          	</div>
+      	</div>
+    </div>
+    
+    <div class="row">
+    	<div class="col-sm-4 form-group" ng-class="{ 'has-error': form.internshipBasicSalaryFloat.$dirty && form.internshipBasicSalaryFloat.$error.required }">
+          	<label for="internshipBasicSalaryFloat" class="col-sm-7 col-md-7 col-lg-6 control-label">实习期浮动底薪</label>
+          	<div class="col-sm-5 col-md-5 col-lg-6">
+            	<input type="text" name="internshipBasicSalaryFloat" id="internshipBasicSalaryFloat" class="form-control" ng-model="employee.internshipBasicSalaryFloat" disabled/>
+          	</div>
+        </div>
+        <div class="col-sm-4 form-group" ng-class="{ 'has-error': form.trailBasicSalaryFloat.$dirty && form.trailBasicSalaryFloat.$error.required }">
+          	<label for="trailBasicSalaryFloat" class="col-sm-7 col-md-7 col-lg-6 control-label">试用期浮动底薪</label>
+          	<div class="col-sm-5 col-md-5 col-lg-6">
+            	<input type="text" name="trailBasicSalaryFloat" id="trailBasicSalaryFloat" class="form-control" ng-model="employee.trailBasicSalaryFloat" disabled/>
+          	</div>
+        </div>
+      	<div class="col-sm-4 form-group" ng-class="{ 'has-error': form.basicSalaryFloat.$dirty && form.basicSalaryFloat.$error.required }">
+          	<label for="basicSalaryFloat" class="col-sm-7 col-md-7 col-lg-6 control-label">转正后浮动底薪</label>
+          	<div class="col-sm-5 col-md-5 col-lg-6">
+            	<input type="text" name="basicSalaryFloat" id="basicSalaryFloat" class="form-control" ng-model="employee.basicSalaryFloat" disabled/>
+          	</div>
+      	</div>
+    </div>
+    
+    <div class="row">
+    	<div class="col-sm-4 form-group" ng-class="{ 'has-error': form.internshipClassHourDuty.$dirty && form.internshipClassHourDuty.$error.required }">
+          	<label for="internshipClassHourDuty" class="col-sm-7 col-md-7 col-lg-6 control-label">实习期义务课时</label>
+          	<div class="col-sm-5 col-md-5 col-lg-6">
+            	<input type="text" name="internshipClassHourDuty" id="internshipClassHourDuty" class="form-control" ng-model="employee.internshipClassHourDuty" disabled/>
+          	</div>
+        </div>
+        <div class="col-sm-4 form-group" ng-class="{ 'has-error': form.trailClassHourDuty.$dirty && form.trailClassHourDuty.$error.required }">
+          	<label for="trailClassHourDuty" class="col-sm-7 col-md-7 col-lg-6 control-label">试用期义务课时</label>
+          	<div class="col-sm-5 col-md-5 col-lg-6">
+            	<input type="text" name="trailClassHourDuty" id="trailClassHourDuty" class="form-control" ng-model="employee.trailClassHourDuty" disabled/>
+          	</div>
+        </div>
+      	<div class="col-sm-4 form-group" ng-class="{ 'has-error': form.classHourDuty.$dirty && form.classHourDuty.$error.required }">
+          	<label for="classHourDuty" class="col-sm-7 col-md-7 col-lg-6 control-label">转正后义务课时</label>
+          	<div class="col-sm-5 col-md-5 col-lg-6">
+            	<input type="text" name="classHourDuty" id="classHourDuty" class="form-control" ng-model="employee.classHourDuty" disabled/>
+          	</div>
+      	</div>
+    </div>
+    
+    <div class="row">
+    	<div class="col-sm-4 form-group" ng-class="{ 'has-error': form.internshipOtherSalary.$dirty && form.internshipOtherSalary.$error.required }">
+          	<label for="internshipOtherSalary" class="col-sm-7 col-md-7 col-lg-6 control-label">实习期其他薪资</label>
+          	<div class="col-sm-5 col-md-5 col-lg-6">
+            	<input type="text" name="internshipOtherSalary" id="internshipOtherSalary" class="form-control" ng-model="employee.internshipOtherSalary" disabled/>
+          	</div>
+        </div>
+        <div class="col-sm-4 form-group" ng-class="{ 'has-error': form.trailOtherSalary.$dirty && form.trailOtherSalary.$error.required }">
+          	<label for="trailOtherSalary" class="col-sm-7 col-md-7 col-lg-6 control-label">试用期其他薪资</label>
+          	<div class="col-sm-5 col-md-5 col-lg-6">
+            	<input type="text" name="trailOtherSalary" id="trailOtherSalary" class="form-control" ng-model="employee.trailOtherSalary" disabled/>
+          	</div>
+        </div>
+      	<div class="col-sm-4 form-group" ng-class="{ 'has-error': form.otherSalary.$dirty && form.otherSalary.$error.required }">
+          	<label for="otherSalary" class="col-sm-7 col-md-7 col-lg-6 control-label">转正后其他薪资</label>
+          	<div class="col-sm-5 col-md-5 col-lg-6">
+            	<input type="text" name="otherSalary" id="otherSalary" class="form-control" ng-model="employee.otherSalary" disabled/>
+          	</div>
+      	</div>
+    </div>
+    
+    <div class="row">
+		<div class="row" ng-repeat="courseFee in employee.gradeCourseFeeList track by $index">
+			<div class="col-sm-6 form-group">
+				<label for="company" class="col-sm-3 control-label">年级段：</label>
+				<div class="col-sm-5 col-md-5 col-lg-6">
+					<select ng-model="courseFee.grade" name="grade" id="grade"
+	                        class="form-control" ng-options="tl.id as tl.name for tl in dictData.gradeDetail" disabled>
+	                    <option value="">------请选择------</option>
+	                </select>
+				</div>
+			</div>
+			<div class="col-sm-4 form-group">
+				<label for="position" class="col-sm-3 control-label">课时费：</label>
+				<div class="col-sm-6">
+					<input type="text" name="courseFee" id="courseFee" class="form-control" ng-model="courseFee.courseFee" disabled/>
+				</div>
+			</div>
+		</div>
+	</div>
+    
+    <h3>社保相关</h3><hr>
+    <div class="row">
+        <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.socialSecurityStatus.$dirty && form.socialSecurityStatus.$error.required }">
+            <label for="socialSecurityStatus" class="col-sm-7 col-md-7 col-lg-6 control-label">社保状态</label>
+            <div class="col-sm-5 col-md-5 col-lg-6">
+                <select ng-model="employee.socialSecurityStatus" name="socialSecurityStatus" id="socialSecurityStatus"
+                        class="form-control" ng-options="tl.id as tl.name for tl in dictData.payStatus" disabled>
+                    <option value="">------请选择------</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.socialSecurityBase.$dirty && form.socialSecurityBase.$error.required }">
+            <label for="socialSecurityBase" class="col-sm-7 col-md-7 col-lg-6 control-label">社保基数</label>
+            <div class="col-sm-5 col-md-5 col-lg-6">
+                <input type="text" name="socialSecurityBase" id="socialSecurityBase" class="form-control"
+                       ng-model="employee.socialSecurityBase" disabled />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.socialSecuritySelfAmount.$dirty && form.socialSecuritySelfAmount.$error.required }">
+            <label for="socialSecuritySelfAmount" class="col-sm-7 col-md-7 col-lg-6 control-label">个人承担金额</label>
+            <div class="col-sm-5 col-md-5 col-lg-6">
+                <input type="text" name="socialSecuritySelfAmount" id="socialSecuritySelfAmount"
+                       class="form-control" ng-model="employee.socialSecuritySelfAmount" disabled />
+            </div>
+        </div>
+        <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.socialSecurityEmployerAmount.$dirty && form.socialSecurityEmployerAmount.$error.required }">
+            <label for="socialSecurityEmployerAmount" class="col-sm-7 col-md-7 col-lg-6 control-label">公司承担金额</label>
+            <div class="col-sm-5 col-md-5 col-lg-6">
+                <input type="text" name="socialSecurityEmployerAmount" id="socialSecurityEmployerAmount"
+                       class="form-control" ng-model="employee.socialSecurityEmployerAmount" disabled />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.employer.$dirty && form.employer.$error.required }">
+            <label for="employer" class="col-sm-7 col-md-7 col-lg-6 control-label">缴纳账户</label>
+            <div class="col-sm-5 col-md-5 col-lg-6">
+                <!-- <select ng-model="employee.employer" name="employer" id="employer"
+                        class="form-control" ng-options="tl.id as tl.name for tl in dictData.employer" disabled>
+                </select> -->
+                <input type="text" name="employer" id="employer" class="form-control" ng-model="employee.department.contractCompany" disabled/>
+            </div>
+        </div>
+    </div>
+    <h3>公积金相关</h3><hr>
+    <div class="row">
+        <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.housingFundStatus.$dirty && form.housingFundStatus.$error.required }">
+            <label for="housingFundStatus" class="col-sm-7 col-md-7 col-lg-6 control-label">公积金状态</label>
+            <div class="col-sm-5 col-md-5 col-lg-6">
+                <select ng-model="employee.housingFundStatus" name="housingFundStatus" id="housingFundStatus"
+                        class="form-control" ng-options="tl.id as tl.name for tl in dictData.payStatus" disabled>
+                    <option value="">------请选择------</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.housingFundBase.$dirty && form.housingFundBase.$error.required }">
+            <label for="housingFundBase" class="col-sm-7 col-md-7 col-lg-6 control-label">公积金基数</label>
+            <div class="col-sm-5 col-md-5 col-lg-6">
+                <input type="text" name="housingFundBase" id="housingFundBase" class="form-control"
+                       ng-model="employee.housingFundBase" disabled />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.housingFundSelfAmount.$dirty && form.housingFundSelfAmount.$error.required }">
+            <label for="housingFundSelfAmount" class="col-sm-7 col-md-7 col-lg-6 control-label">个人承担金额</label>
+            <div class="col-sm-5 col-md-5 col-lg-6">
+                <input type="text" name="housingFundSelfAmount" id="housingFundSelfAmount"
+                       class="form-control" ng-model="employee.housingFundSelfAmount" disabled />
+            </div>
+        </div>
+        <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.housingFundEmployerAmount.$dirty && form.housingFundEmployerAmount.$error.required }">
+            <label for="housingFundEmployerAmount" class="col-sm-7 col-md-7 col-lg-6 control-label">公司承担金额</label>
+            <div class="col-sm-5 col-md-5 col-lg-6">
+                <input type="text" name="housingFundEmployerAmount" id="housingFundEmployerAmount"
+                       class="form-control" ng-model="employee.housingFundEmployerAmount" disabled />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.employer.$dirty && form.employer.$error.required }">
+            <label for="employer2" class="col-sm-7 col-md-7 col-lg-6 control-label">缴纳账户</label>
+            <div class="col-sm-5 col-md-5 col-lg-6">
+                <!-- <select ng-model="employee.employer" name="employer" id="employer2"
+                        class="form-control" ng-options="tl.id as tl.name for tl in dictData.employer" disabled>
+                </select> -->
+                <input type="text" name="employer" id="employer" class="form-control" ng-model="employee.department.contractCompany" disabled/>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,387 @@
+<style>
+    .bgtd-header, .bgtd-header td:nth-child(n) {
+        font-weight: bold;
+        width: 20%;
+        background: #f4b077 !important;
+    }
+
+    .bgtd-header:nth-child(2n), .bgtd-header:nth-child(2n) td {
+        background: #f4b099 !important;
+    }
+</style>
+
+<!-- 表格 -->
+<div class="default-box">
+    <div id="exportable" class="table-responsive" style="margin-top:20px;width:100%">
+        <!--<table class="table table-bordered table-striped" ng-if="searchModel.depType == 2">
+            <thead>
+            <tr>
+                <th>渠道</th>
+                <th ng-repeat="grade in gradesOrSegments()">{{grade}}</th>
+                <th class="cell-total">总计</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="channel in channels">
+                <td>{{channel.name}}</td>
+                <td ng-repeat="grade in gradesOrSegments()">
+                    {{cellData(channel.grades[grade])}}
+                </td>
+                <td class="cell-total">{{channelTotalCellData(channel.name)}}</td>
+            </tr>
+            <tr>
+                <td class="cell-total">总计</td>
+                <td ng-repeat="grade in gradesOrSegments()" class="cell-total">{{gradeTotalCellData(grade)}}</td>
+                <td class="cell-total">{{cellData(everythingTotal)}}</td>
+            </tr>
+            </tbody>
+        </table>-->
+        <!-- ng-if="searchModel.depType == 1"-->
+        <!-- st-pipe="getChannelGradeSummary"
+                st-table="gradeStatisticsSummary"-->
+        <table
+                class="table table-bordered table-striped mini-w100">
+            <thead>
+            <tr class="tr-title">
+                <td colspan="37" style="text-align: center">{{tabsName[searchModel.depType]}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;" rowspan="2">
+                    <span ng-if="isBranch()">校区性质</span>
+                    <span ng-if="!isBranch()">区域</span>
+                </td>
+                <td style="font-weight: bold;" rowspan="2">
+                    <span ng-if="isBranch()">城市</span>
+                    <span ng-if="!isBranch()">校区</span>
+                </td>
+                <!--<td style="font-weight: bold;" rowspan="2">
+                    <span ng-if="isBranch()">区域</span>
+                    <span ng-if="!isBranch()">校区性质</span>
+                </td>
+                <td style="font-weight: bold;" rowspan="2">
+                    <span ng-if="isBranch()">校区</span>
+                    <span ng-if="!isBranch()">城市</span>
+                </td>-->
+                <td class="bgtd-header" style="min-width: 500px;text-align: center" colspan="5"
+                    ng-repeat="item in newTitles[searchModel.depType]">{{item}}
+                </td>
+            </tr>
+            <tr>
+                <!--市场-->
+                <td colspan="5" class="bgtd-header min-w-500" style="padding:0;border-right: 0;min-width: 500px;"
+                    ng-repeat="item in newTitles[searchModel.depType]">
+                    <table class="table table-bordered table-striped ">
+                        <thead>
+                        <tr>
+                            <!--
+                                    data-content="指定周期内的到访人数，NOT人次" data-placement="top" webui-popover-->
+                            <td>到访量
+                            </td>
+                            <!--
+                                    data-content="指定周期内的体验人数，NOT人次" data-placement="top" webui-popover-->
+                            <td>体验量
+                            </td>
+                            <!--
+                                    data-content="指定周期内新签且无退单记录的订单数总和" data-placement="top" webui-popover-->
+                            <td>签单量
+                            </td>
+                            <!--
+                                    data-content="指定周期内新签且无退单记录的订单金额总和(订单金额是已优惠后的金额)" data-placement="top"
+                                    webui-popover-->
+                            <td>签单金额
+                            </td>
+                            <!--
+                                    data-content="指定周期内新签且无退单记录的订单实收金额总和(订单金额是已优惠后的金额)" data-placement="top"
+                                    webui-popover-->
+                            <td>实收金额
+                            </td>
+                        </tr>
+                        </thead>
+                    </table>
+                </td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="model in gradeStatisticsSummary">
+                <!--根据当前部门的isBranch()属性判断，要是1，就是分公司，0就不是分公司  是分公司，显示schoolNature，不是分公司显示parent_name  -->
+                <td>
+                    <span ng-if="isBranch()">{{model.schoolNature}}</span>
+                    <span ng-if="!isBranch()">{{model.parent_name}}</span>
+                </td>
+                <td>
+                    <!--根据当前部门的isBranch()属性判断，要是1，就是分公司，0就不是分公司  是分公司，显示cityName，不是分公司显示school_name  -->
+                    <span ng-if="isBranch()">{{model.cityName}}</span>
+                    <span ng-if="!isBranch()">{{model.school_name}}</span>
+                </td>
+
+                <td colspan="5" style="padding:0;border-right: 0;width: 20%;"
+                    ng-repeat="item in newTitles[searchModel.depType]">
+                    <table class="table table-bordered table-striped " style="height: 40px;">
+                        <tbody>
+                        <tr ng-if="item != '合计'">
+                            <td style="width: 20%;">{{model[item][1]||'0'}}</td>
+                            <td style="width: 20%;">{{model[item][2]||'0'}}</td>
+                            <td style="width: 20%;">{{model[item][3]||'0'}}</td>
+                            <td style="width: 20%;">{{model[item][4]||'0'}}</td>
+                            <td style="width: 20%;">{{model[item][5]||'0'}}</td>
+                        </tr>
+                        <tr ng-if="item == '合计'">
+                            <td style="width: 20%;">{{totalSmallByName(1,model)}}</td>
+                            <td style="width: 20%;">{{totalSmallByName(2,model)}}</td>
+                            <td style="width: 20%;">{{totalSmallByName(3,model)}}</td>
+                            <td style="width: 20%;">{{totalSmallByName(4,model)}}</td>
+                            <td style="width: 20%;">{{totalSmallByName(5,model)}}</td>
+                        </tr>
+                        </tbody>
+                       <!-- <tfoot>
+                        <tr ng-if="channelOrders && channelOrders.length">
+                            <td colspan="2" style="height: 40px;">总计</td>
+                            <td colspan="5" style="padding:0;border-right: 0;width: 20%;"
+                                ng-repeat="item in newTitles[searchModel.channelParentId]">
+                                <table class="table table-bordered table-striped " style="height: 40px;">
+                                    <tbody>
+                                    <tr ng-if="item != '合计'">
+                                        <td style="width: 20%;text-align: left">
+                                            {{totalAllByName(1,channelOrders,item)}}
+                                        </td>
+                                        <td style="width: 20%;text-align: left">
+                                            {{totalAllByName(2,channelOrders,item)}}
+                                        </td>
+                                        <td style="width: 20%;text-align: left">
+                                            {{totalAllByName(3,channelOrders,item)}}
+                                        </td>
+                                        <td style="width: 20%;text-align: left">
+                                            {{totalAllByName(4,channelOrders,item)}}
+                                        </td>
+                                        <td style="width: 20%;text-align: left">
+                                            {{totalAllByName(5,channelOrders,item)}}
+                                        </td>
+                                    </tr>
+                                    <tr ng-if="item == '合计'">
+                                        <td style="width: 20%;text-align: left">{{totalAllByName(1,channelOrders)}}</td>
+                                        <td style="width: 20%;text-align: left">{{totalAllByName(2,channelOrders)}}</td>
+                                        <td style="width: 20%;text-align: left">{{totalAllByName(3,channelOrders)}}</td>
+                                        <td style="width: 20%;text-align: left">{{totalAllByName(4,channelOrders)}}</td>
+                                        <td style="width: 20%;text-align: left">{{totalAllByName(5,channelOrders)}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        </tfoot>-->
+                    </table>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot ng-if="gradeStatisticsSummary && gradeStatisticsSummary.length">
+            <tr ng-if="!isShowTotalRow()">
+                <td colspan="2" style="height: 40px;">总计</td>
+                <td colspan="5" style="padding:0;border-right: 0;width: 20%;"
+                    ng-repeat="item in newTitles[searchModel.depType]">
+                    <table class="table table-bordered table-striped " style="height: 40px;">
+                        <tbody>
+                        <tr ng-if="item != '合计'">
+                            <td style="width: 20%;text-align: left">{{totalAllByName(1,gradeStatisticsSummary,item)}}
+                            </td>
+                            <td style="width: 20%;text-align: left">{{totalAllByName(2,gradeStatisticsSummary,item)}}
+                            </td>
+                            <td style="width: 20%;text-align: left">{{totalAllByName(3,gradeStatisticsSummary,item)}}
+                            </td>
+                            <td style="width: 20%;text-align: left">{{totalAllByName(4,gradeStatisticsSummary,item)}}
+                            </td>
+                            <td style="width: 20%;text-align: left">{{totalAllByName(5,gradeStatisticsSummary,item)}}
+                            </td>
+                        </tr>
+                        <tr ng-if="item == '合计'">
+                            <td style="width: 20%;text-align: left">{{totalAllByName(1,gradeStatisticsSummary)}}</td>
+                            <td style="width: 20%;text-align: left">{{totalAllByName(2,gradeStatisticsSummary)}}</td>
+                            <td style="width: 20%;text-align: left">{{totalAllByName(3,gradeStatisticsSummary)}}</td>
+                            <td style="width: 20%;text-align: left">{{totalAllByName(4,gradeStatisticsSummary)}}</td>
+                            <td style="width: 20%;text-align: left">{{totalAllByName(5,gradeStatisticsSummary)}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr ng-if="isShowTotalRow()">
+                <td style="height: 45px;text-align: left;padding-left: 100px;font-size: 16px;color:#ff3b30;" colspan="{{2+newTitles[searchModel.depType].length *5}}">
+                    还有{{isShowTotalRow()}}条数据，请导出报表查看
+                </td>
+            </tr>
+            <!--<tr ng-init="pageParamsInit()" ng-if="searchModel.depType == -1 || searchModel.depType == 5">
+                <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html"
+                    colspan="10">
+                </td>
+            </tr>-->
+            </tfoot>
+        </table>
+    </div>
+    <div ng-if="isBranch()" id="exportableDetail" class="table-responsive"
+         style="margin-top:20px;width:100%;display: none;">
+        <!-- ng-if="searchModel.depType == 1"-->
+        <!--st-pipe="getChannelGradeSummary"
+                st-table="gradeStatisticsSummary"-->
+        <table
+                class="table table-bordered table-striped mini-w100">
+            <thead>
+            <tr class="tr-title">
+                <td colspan="37" style="text-align: center">{{tabsName[searchModel.depType]}}</td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;" rowspan="2">校区性质</td>
+                <td style="font-weight: bold;" rowspan="2">城市</td>
+                <td style="font-weight: bold;" rowspan="2">区域</td>
+                <td style="font-weight: bold;" rowspan="2">校区</td>
+                <td class="bgtd-header" style="min-width: 500px;text-align: center" colspan="5"
+                    ng-repeat="item in newTitles[searchModel.depType]">{{item}}
+                </td>
+            </tr>
+            <tr>
+                <!--市场-->
+                <td colspan="5" class="bgtd-header min-w-500" style="padding:0;border-right: 0;min-width: 500px;"
+                    ng-repeat="item in newTitles[searchModel.depType]">
+                    <table class="table table-bordered table-striped ">
+                        <thead>
+                        <tr>
+                            <td
+                                    data-content="指定周期内的到访人数，NOT人次" data-placement="top" webui-popover>到访量
+                            </td>
+                            <td
+                                    data-content="指定周期内的体验人数，NOT人次" data-placement="top" webui-popover>体验量
+                            </td>
+                            <td
+                                    data-content="指定周期内新签且无退单记录的订单数总和" data-placement="top" webui-popover>签单量
+                            </td>
+                            <td
+                                    data-content="指定周期内新签且无退单记录的订单金额总和(订单金额是已优惠后的金额)" data-placement="top"
+                                    webui-popover>签单金额
+                            </td>
+                            <td
+                                    data-content="指定周期内新签且无退单记录的订单实收金额总和(订单金额是已优惠后的金额)" data-placement="top"
+                                    webui-popover>实收金额
+                            </td>
+                        </tr>
+                        </thead>
+                    </table>
+                </td>
+            </tr>
+            </thead>
+           <!-- <tbody>
+            <tr ng-repeat="model in gradeStatisticsSummaryDetail">
+                <td>
+                    &lt;!&ndash;{{model.parent_name}}&ndash;&gt;
+                    {{model.schoolNature}}
+                </td>
+                <td>
+                    {{model.branch_name}}
+                </td>
+                <td>
+                    {{model.parent_name}}
+                </td>
+                <td>
+                    {{model.school_name}}
+                </td>
+
+                <td colspan="5" style="padding:0;border-right: 0;width: 20%;"
+                    ng-repeat="item in newTitles[searchModel.depType]">
+                    <table class="table table-bordered table-striped " style="height: 40px;">
+                        <tbody>
+                        <tr ng-if="item != '合计'">
+                            <td style="width: 20%;">{{model[item][1]||'0'}}</td>
+                            <td style="width: 20%;">{{model[item][2]||'0'}}</td>
+                            <td style="width: 20%;">{{model[item][3]||'0'}}</td>
+                            <td style="width: 20%;">{{model[item][4]||'0'}}</td>
+                            <td style="width: 20%;">{{model[item][5]||'0'}}</td>
+                        </tr>
+                        <tr ng-if="item == '合计'">
+                            <td style="width: 20%;">{{totalSmallByName(1,model)}}</td>
+                            <td style="width: 20%;">{{totalSmallByName(2,model)}}</td>
+                            <td style="width: 20%;">{{totalSmallByName(3,model)}}</td>
+                            <td style="width: 20%;">{{totalSmallByName(4,model)}}</td>
+                            <td style="width: 20%;">{{totalSmallByName(5,model)}}</td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr ng-if="channelOrders && channelOrders.length">
+                            <td colspan="2" style="height: 40px;">总计</td>
+                            <td colspan="5" style="padding:0;border-right: 0;width: 20%;"
+                                ng-repeat="item in newTitles[searchModel.channelParentId]">
+                                <table class="table table-bordered table-striped " style="height: 40px;">
+                                    <tbody>
+                                    <tr ng-if="item != '合计'">
+                                        <td style="width: 20%;text-align: left">
+                                            {{totalAllByName(1,gradeStatisticsSummaryDetail,item)}}
+                                        </td>
+                                        <td style="width: 20%;text-align: left">
+                                            {{totalAllByName(2,gradeStatisticsSummaryDetail,item)}}
+                                        </td>
+                                        <td style="width: 20%;text-align: left">
+                                            {{totalAllByName(3,gradeStatisticsSummaryDetail,item)}}
+                                        </td>
+                                        <td style="width: 20%;text-align: left">
+                                            {{totalAllByName(4,gradeStatisticsSummaryDetail,item)}}
+                                        </td>
+                                        <td style="width: 20%;text-align: left">
+                                            {{totalAllByName(5,gradeStatisticsSummaryDetail,item)}}
+                                        </td>
+                                    </tr>
+                                    <tr ng-if="item == '合计'">
+                                        <td style="width: 20%;text-align: left">
+                                            {{totalAllByName(1,gradeStatisticsSummaryDetail)}}
+                                        </td>
+                                        <td style="width: 20%;text-align: left">
+                                            {{totalAllByName(2,gradeStatisticsSummaryDetail)}}
+                                        </td>
+                                        <td style="width: 20%;text-align: left">
+                                            {{totalAllByName(3,gradeStatisticsSummaryDetail)}}
+                                        </td>
+                                        <td style="width: 20%;text-align: left">
+                                            {{totalAllByName(4,gradeStatisticsSummaryDetail)}}
+                                        </td>
+                                        <td style="width: 20%;text-align: left">
+                                            {{totalAllByName(5,gradeStatisticsSummaryDetail)}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr ng-if="gradeStatisticsSummary && gradeStatisticsSummary.length">
+                <td colspan="4" style="height: 40px;">总计</td>
+                <td colspan="5" style="padding:0;border-right: 0;width: 20%;"
+                    ng-repeat="item in newTitles[searchModel.depType]">
+                    <table class="table table-bordered table-striped " style="height: 40px;">
+                        <tbody>
+                        <tr ng-if="item != '合计'">
+                            <td style="width: 20%;text-align: left">{{totalAllByName(1,gradeStatisticsSummary,item)}}
+                            </td>
+                            <td style="width: 20%;text-align: left">{{totalAllByName(2,gradeStatisticsSummary,item)}}
+                            </td>
+                            <td style="width: 20%;text-align: left">{{totalAllByName(3,gradeStatisticsSummary,item)}}
+                            </td>
+                            <td style="width: 20%;text-align: left">{{totalAllByName(4,gradeStatisticsSummary,item)}}
+                            </td>
+                            <td style="width: 20%;text-align: left">{{totalAllByName(5,gradeStatisticsSummary,item)}}
+                            </td>
+                        </tr>
+                        <tr ng-if="item == '合计'">
+                            <td style="width: 20%;text-align: left">{{totalAllByName(1,gradeStatisticsSummary)}}</td>
+                            <td style="width: 20%;text-align: left">{{totalAllByName(2,gradeStatisticsSummary)}}</td>
+                            <td style="width: 20%;text-align: left">{{totalAllByName(3,gradeStatisticsSummary)}}</td>
+                            <td style="width: 20%;text-align: left">{{totalAllByName(4,gradeStatisticsSummary)}}</td>
+                            <td style="width: 20%;text-align: left">{{totalAllByName(5,gradeStatisticsSummary)}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            </tfoot>-->
+        </table>
+    </div>
+</div>

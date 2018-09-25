@@ -1,0 +1,138 @@
+<div class="modal oms-record-modal" tabindex="-1" role="dialog" aria-hidden="true" >
+    <div class="modal-dialog">
+        <div class="modal-content update-class">
+            <form name="form">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="channleEdit()"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle"></h4>
+                </div>
+                <div class="modal-body pb-20">
+                    <h2 class="modal-h2 modal-update">修改上课日期</h2>
+                    <div  class="pt-10 of">
+                        <div class="col-sm-6 col-md-5 col-lg-4 form-group">
+                            <label class="control-label" for="startTime">上课日期{{timecousewill | date:'yyyy-MM-dd' }}</label>
+                        </div>
+                    </div>
+                    <div class="br-gray pl-0">
+                        <h2 class="br-gray-h2">修改列表</h2>
+                        <table class="table table-bordered table-striped table-condensed mt-table1"
+                              >
+                            <thead class="table table-bordered table-striped table-condensed">
+                            <tr>
+                                <th>科目</th>
+                                <th>上课老师</th>
+                                <th>上课时间</th>
+                                <th>上课时长</th>
+                                <th>下课时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="row in coursemultiplemakearry">
+                                <td>
+                                    <select class="input-sm form-control lh20" ng-model="row.subjectId"
+                                            style="width:120px;float:left" ng-change="clickgetteacherselect(row,$index)">
+                                        <option ng-repeat="list in multipleSubjectdisplayed" value="{{list.id}}"
+                                                ng-selected="row.subjectName == list.name" >{{list.name}}
+                                        </option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="input-sm form-control lh20" ng-model="row.teacherId"
+                                            style="width:120px;float:left" maxlength="10"  ng-if="row.linkteacherist" required>
+                                        <option ng-repeat="list in row.linkteacherist" value="{{list.userId}}"
+                                                ng-selected="row.teacherName == list.username">{{list.username}}
+                                        </option>
+                                    </select>
+                                    <input ng-model="row.teacherName" ng-click="clickgetteacherselect(row,$index)" ng-if="!row.linkteacherist">
+                                    <!--<input type="search" name="teacherName" id="teacherName" ng-model="teacherName"-->
+                                    <!--placeholder="姓名查询" st-search="teacherName" class="input-sm form-control"/>-->
+                                </td>
+                                <td>
+                                 <input ng-change="getMultipleCourseEndTime(row,$index,1)" type="text" datepicker="" onclick="WdatePicker({dateFmt:'H:mm'})" onchange=""
+                                        readonly="" name="leadsName"
+                                        ng-model="row.startTime" placeholder="上课时间" class="form-control ng-pristine "
+                                        required="" ng-value="row.startTime |  date:'HH:mm'">
+                                 </td>
+                                 <td>
+                                     <select ng-model="row.timelong"
+                                     name="row.timelong" class="input-sm form-control" type="search"  required=""  ng-change="getMultipleCourseEndTime(row,$index,2)">
+                                         <!--ng-options="option.id as option.name for option in TIME_SIZE1"-->
+                                         <option value="">请选择</option>
+                                         <option value="{{option.id}}" ng-selected="row.timelong == option.id" ng-repeat="option in TIME_SIZE1">{{option.name}}</option>
+                                    </select>
+                                </td>
+                                <td>
+                                <input ype="text" readonly="" name=timeEnd ng-model="row.endTime"
+                                    placeholder="自动生成" class="form-control ng-pristine "
+                                    required="" ng-value="row.endTime |  date:'HH:mm'">
+                                </td>
+                                <td>
+                                 <span style='cursor:pointer' class="glyphicon glyphicon-trash" ng-click="multipledeletePlans(row,$index)"></span>
+                                </td>
+                     </tr>
+                     </tbody>
+                     <tbody ng-show="isRemindLoading">
+                     <tr>
+                         <td colspan="5" class="text-center">
+                             <div class="loading-indicator">&nbsp;</div>
+                         </td>
+                     </tr>
+                     </tbody>
+                 </table>
+             </div>
+             <!--<h2 class="modal-h2 modal-time">修改时间</h2>-->
+             <!--<div class="of mt-10">-->
+                 <!--<div class="row m0">-->
+                     <!--<div class="col-sm-6 col-md-5 col-lg-4 form-group">-->
+                         <!--<label class="control-label" for="startTime">上课日期</label>-->
+                         <!--<div class="col-sm-8">-->
+                             <!--<input type="date" name="startDate" id="startDate" ng-model="select.startDate"-->
+                                    <!--class="form-control" ng-change="show.getEndTime()" onfocus="(this.type='date')"-->
+                                    <!--value="{{ select.startDate | date:'yyyy-MM-dd' }}" required/>-->
+                         <!--</div>-->
+                     <!--</div>-->
+                     <!--<div class="col-sm-6 col-md-5 col-lg-4 form-group">-->
+                         <!--<label class="control-label">上课时间</label>-->
+                         <!--<div class="col-sm-7">-->
+                             <!--<input ype="text" datepicker="" onclick="WdatePicker({dateFmt:'H:mm'})" onchange=""-->
+                                    <!--readonly="" name="leadsName"-->
+                                    <!--ng-model="select.time" placeholder="上课时间" class="form-control ng-pristine "-->
+                                    <!--required="" ng-change="show.getEndTime()" ng-focus="show.getEndTime()">-->
+                         <!--</div>-->
+                     <!--</div>-->
+                     <!--<div class="col-sm-6 col-md-5 col-lg-4 form-group">-->
+                         <!--<label class="control-label">上课时长</label>-->
+                         <!--<div class="col-sm-7">-->
+                             <!--<select ng-model="select.timeSize"-->
+                                     <!--name="select.timeSize" class="input-sm form-control"-->
+                                     <!--ng-options="option.id as option.name for option in TIME_SIZE" type="search"-->
+                                     <!--required="" ng-change="show.getEndTime()">-->
+                                 <!--<option value="">请选择</option>-->
+                             <!--</select>-->
+                         <!--</div>-->
+                     <!--</div>-->
+                     <!--<div class="col-sm-6 col-md-5 col-lg-4 form-group">-->
+                         <!--<label class="control-label">下课时间</label>-->
+                         <!--<div class="col-sm-7">-->
+                             <!--<input ype="text" readonly="" name=timeEnd-->
+                                    <!--ng-model="select.timeEnd" placeholder="自动生成" class="form-control ng-pristine "-->
+                                    <!--required="">-->
+                         <!--</div>-->
+                     <!--</div>-->
+                 <!--</div>-->
+             <!--</div>-->
+         </div>
+         <div class="modal-footer">
+             <div class="text-center">
+                 <button type="button" class="btn btn-default" ng-click="channleEdit()">取消</button>
+                 <button type="submit" class="btn btn-success" ng-click="multipleEditCoursePlanNow()"
+                         ng-disabled="form.$invalid || coursemultiplemakearry.length==0">确定
+                 </button>
+             </div>
+         </div>
+     </form>
+ </div>
+</div>
+</div>

@@ -1,0 +1,59 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true" ng-controller="PromotionMTContoller">
+    <form class="modal-dialog form-horizontal" name="coursePlan" style="width:700px;">
+        <div class="modal-content mt-label-h2">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">升班{{upgradeClassDetail.name}}</h4>
+            </div>
+            <div class="modal-body pb-20">
+                <div class="br-gray pl-0">
+                    <table class="table table-bordered table-striped table-condensed mt-table1"
+                           st-pipe="getCallNameStudents" st-table="byClassListTable">
+                        <thead>
+                        <tr>
+                            <th style="width:50px;"><label ng-class="{'active':ClassListSelect}" class="checkbox-bg"
+                                                           ng-click="selectClassList()"></label></th>
+                            <th>姓名</th>
+                            <th>电话</th>
+                            <th>升班班级</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="row in byClassList" ng-init="row._$index=$index" ng-class="{'ar':row.upgradeList.length}">
+                            <td><label ng-class="{'active':row.select}" class="checkbox-bg"
+                                       ng-click="selectClassList(row)"></label></td>
+                            <td>{{row.studentName}}</td>
+                            <td>{{row.phone}}</td>
+                            <td>
+                                <div>
+                                    <ul>
+                                        <li ng-repeat="el in row.upgradeList track by $index" style="line-height: 35px;"><span data="{{el.show}}" ng-mouseenter="el.show=!el.show" style="cursor: pointer;"  ng-mouseleave="el.show=!el.show">({{el.joinTime|date:'yyyy-MM-dd'}})&nbsp;{{el.className}}<a ng-show="el.show" style="position:relative;top: -3px;
+    left: 5px;font-size: 16px;
+    font-weight: bold;
+    line-height: 1;" ng-click="removeUpgradeClass(row,$index)">×</a></span></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-items-by-page="10"
+                                st-template="partials/util/pagination.custom.html" colspan="4">
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                <button type="button" class="btn btn-success c5-lable" ng-click="addToList(1)"
+                        ng-disabled="coursePlan.$invalid">
+                    确定
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

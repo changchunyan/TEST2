@@ -1,0 +1,73 @@
+<!-- 筛选条件 -->
+<search on-department-clicked="showSelectDepartment()"
+        department="selectdDepartment"
+        search-model="searchModel"
+        is-school-user="isSchoolUser"
+        provinces="provinces"
+        on-province-changed="getCitysByProvinceCode(searchModel.schoolProvince)"
+        cities="cities"
+        on-reset="reset(isQ)"
+        on-search="argJudgement(getSchoolPerfermenceSummary)"/>
+<!-- 表格 -->
+<div class="default-box">
+    <h4>
+                        校区业绩   - 汇总
+        <button class="btn btn-success bi-list-head" ng-click="exportSummaryToExcel()">导出列表</button>
+    </h4>
+    <br/>
+    <div class="table-responsive">
+        <table st-pipe="getSchoolPerfermenceSummary" st-table="tableModel" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th style="font-weight: bold;" rowspan="2">区域/校区</th>
+                <th class="bi-th1" style="font-weight: bold;" colspan="4">营销数据</th>
+                <th class="bi-th2" style="font-weight: bold;" colspan="4">学管数据</th>
+                <th class="bi-th3" style="font-weight: bold;" colspan="2">教务数据</th>
+                <th class="bi-th4" style="font-weight: bold;">转平台数据</th>
+                <th class="bi-th5" style="font-weight: bold;">总实收数据</th>
+            </tr>
+            <tr>
+                <td class="bi-th1" data-content="指定周期内指定校区新增类型为“新签”的订单数总和" 
+                	data-placement="top" webui-popover>签单数</td>
+                <td class="bi-th1" data-content="指定周期内指定校区新增类型为“新签”的订单金额总和" 
+                	data-placement="top" webui-popover>签单金额</td>
+                <td class="bi-th1" data-content="指定周期内指定校区新增类型为“新签”的已退费订单金额总和" 
+                	data-placement="top" webui-popover>退费金额</td>
+                <td class="bi-th1" data-content="指定周期内指定校区新增类型为“新签”的订单金额总和" 
+                	data-placement="top" webui-popover>实收金额</td>
+                <td class="bi-th2" data-content="指定周期内指定校区新增类型为“续费”和渠道为“学习顾问推荐”的订单数总和" 
+                	data-placement="top" webui-popover>签单数</td>
+                <td class="bi-th2" data-content="指定周期内指定校区新增订单类型为“续费”和渠道为“学习顾问推荐”的订单记录的总金额数" 
+                	data-placement="top" webui-popover>签单金额</td>
+                <td class="bi-th2" data-content="指定周期内指定校区新增订单类型为“续费”和渠道为“学习顾问推荐”的已退费订单记录的总金额数" 
+                	data-placement="top" webui-popover>退费金额</td>
+                <td class="bi-th2" data-content="指定周期内指定校区新增订单类型为“续费”和渠道为“学习顾问推荐”的订单记录的总金额数" 
+                	data-placement="top" webui-popover>实收金额</td>
+                <td class="bi-th3" data-content="指定周期内指定校区成功消课的排课记录对应的课时量" 
+                	data-placement="left" webui-popover>消课课时</td>
+                <td class="bi-th3" data-content="指定周期内指定校区成功消课的排课记录对应的课时小时数" 
+                	data-placement="left" webui-popover>时长</td>
+               	<td class="bi-th4">转平台金额</td>
+                <td class="bi-th5">总实收金额</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-if="summaryModel!=null">
+                <td>{{selectdDepartment.name}}</td>
+                <td>{{summaryModel.marketOrderCount}}</td>
+                <td>{{summaryModel.marketOrderAmount}}</td>
+                <td>{{summaryModel.marketRefundAmount}}</td>
+                <td>{{summaryModel.marketRealAmount}}</td>
+                <td>{{summaryModel.managementOrderCount}}</td>
+                <td>{{summaryModel.managementOrderAmount}}</td>
+                <td>{{summaryModel.managementRefundAmount}}</td>
+                <td>{{summaryModel.managementRealAmount}}</td>
+                <td>{{summaryModel.courseNum | number : 1}}</td>
+                <td>{{summaryModel.courseHours | number : 1}}小时</td>
+                <td>{{summaryModel.changePlatformAmount}}</td>
+                <td>{{summaryModel.totalRealAmount}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

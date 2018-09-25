@@ -1,0 +1,15 @@
+<!-- 筛选条件 -->
+<div ng-include="baseHtmlUrl" style="padding: 0px 15px"></div>
+
+<!-- 表格 -->
+<div class="default-box">
+    <h4>
+       	客户信息
+        <span ng-if="!isDay">（从 {{modelStartTime | date : 'yyyy-MM-dd'}} 至 {{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+        <span ng-if="isDay">（{{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+        <span ng-if="presentTime">最新统计时间：{{presentTime}}</span>
+        <button class="btn btn-success bi-list-head" ng-click="exportAll()">导出列表</button>
+    </h4>
+    <br/>
+	<div ng-include="tableHtmlUrl"></div>
+</div>

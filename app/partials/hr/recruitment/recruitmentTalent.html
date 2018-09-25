@@ -1,0 +1,113 @@
+<div class="view-frame">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="#/hr-admin/recruitmentManagement">需求管理</a> <span class="divider"></span></li>
+                <li class="active">需求人才管理</li>
+            </ul>
+        </div>
+        <div class="tabs-title">需求人才管理
+            <div class="yws-container key-value-box">
+                <div class="yws-left col-sm-3 border-box-default">
+                    <div class="col-sm-4 border-right1 table-key">部门</div>
+                    <div class="col-sm-8 table-value"> {{recruitment.department.name}}</div>
+                </div>
+                <div class="yws-left col-sm-3 border-box-default">
+                    <div class="col-sm-4 border-right1 table-key">岗位</div>
+                    <div class="col-sm-8 table-value"> {{recruitment.position.name}}</div>
+                </div>
+                <div class="yws-left col-sm-3 border-box-default">
+                    <div class="col-sm-4 border-right1 table-key">负责人</div>
+                    <div class="col-sm-8 table-value"> {{recruitment.responsible.user.name}}</div>
+                </div>
+                <div class="yws-left col-sm-3 border-box-default">
+                    <div class="col-sm-4 border-right1 table-key">执行人</div>
+                    <div class="col-sm-8 table-value"> <span ng-repeat="e in recruitment.executor">{{e.user.name}}&nbsp;&nbsp;</span></div>
+                </div>
+              <!--  <li class="active">{{recruitment.department.name}}部门 &#45;&#45; {{recruitment.position.name}}岗位
+                    &nbsp;&nbsp;&nbsp;&nbsp;负责人：{{recruitment.responsible.user.name}}
+                    &nbsp;&nbsp;&nbsp;&nbsp;执行人：<span ng-repeat="e in recruitment.executor">{{e.user.name}}&nbsp;&nbsp;</span>
+                </li>-->
+            </div>
+        </div>
+        <div class="border-bottom1 box-default yws-container">
+            <div class="col-sm-12 form-horizontal ">
+               <!-- <div class="col-sm-4 form-group">
+                    <label for="name" class="col-sm-4 control-label" >* 姓名</label>
+                    <div class="col-sm-8">
+                        <input ng-model="hrTalent.name" type="text" name="name" id="name" class="form-control " required/>
+                    </div>
+                </div>-->
+                <div class="col-sm-4 form-group">
+                    <label for="name" class="col-sm-4 control-label">姓名</label>
+                    <div class="col-sm-8">
+                        <input id="name"  type="text" ng-model="talent.name" class="form-control " />
+                    </div>
+                </div>
+                <div class="col-sm-4 form-group">
+                    <label for="tel" class="col-sm-4 control-label">手机号</label>
+                    <div class="col-sm-8">
+                        <input id="tel" type="text" ng-model="talent.tel" class="form-control " />
+                    </div>
+                </div>
+                <div class="col-sm-4 form-group">
+                    <label for="point" class="col-sm-4 control-label">招聘流程</label>
+                    <div class="col-sm-8">
+                        <select id="point"  name="point" ng-model="talent.recruitmentSchedule" class="form-control "
+                                ng-options="p.name for p in recruitmentPoints track by p.id">
+                            <option value="">---请选择---</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="c_center">
+            <button class="btn btn-primary" ng-click="getTalentByFilter()">查询</button>
+            <button class="btn" ng-click="reset()">重置</button>
+        </div>
+        <div class="tab-content">
+            <div class="table-responsive">
+                <div class="table-title border-bottom1">简历列表</div>
+                <table st-pipe="getTalentList" st-table="talents" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>姓名</th>
+                            <th>性别</th>
+                            <th>手机号</th>
+                            <th>邮箱</th>
+                            <th>流程状态</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="talent in talents">
+                            <td>
+                                <a href="#/hr-admin/recruitmentTalentDetail/{{talent.id}}/{{recruitment.id}}"  title="查看详细">
+                                    {{talent.name}}
+                                </a>
+                            </td>
+                            <td>{{talent.gender}}</td>
+                            <td>{{talent.tel}}</td>
+                            <td>{{talent.mail}}</td>
+                            <td>{{talent.recruitmentSchedule[0].scheduleName}}</td>
+                        </tr>
+                        </tbody>
+                        <tbody ng-show="isLoading">
+                        <tr>
+                            <td colspan="13" class="text-center"><div class="loading-indicator"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="5">
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+            </div>
+        </div>
+    </div>
+</div>

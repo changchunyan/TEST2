@@ -1,0 +1,53 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true" ng-controller="ClassManagementController as cmc">
+    <div class="modal-dialog form-horizontal hk-call-name-course">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" ng-bind="modalhCallNameCourseTitle"></h4>
+            </div>
+            <div class="modal-body mt-modal-order">
+                <div class="row">
+                    <div class="col-sm-6 col-md-5 col-lg-5 form-group" >
+                        <label for="name" class="control-label">上课日期 &nbsp;&nbsp;{{coursemultiplemakearry[0].startTime | date:'yyyy-MM-dd' }}</label>
+                    </div>
+                </div>
+                <div  class="mt-20">
+                    <div class="row m0">
+                        <div class="col-sm-12 form-group m0 br-gray pl-0 pr-0">
+                            <h2 class="pl-20">上课时间表</h2>
+                            <table class="table table-bordered table-striped mt-table1">
+                                <thead>
+                                <tr>
+                                    <th>科目</th>
+                                    <th>上课老师</th>
+                                    <th>上课时间</th>
+                                    <th>上课时长</th>
+                                    <th>下课时间</th>
+                                    <th>课时计费</th>
+                                </tr>
+                                </thead>
+                                <tbody >
+                                <tr ng-repeat="row in coursemultiplemakearry">
+                                    <td>{{row.subject}}</td>
+                                    <td>{{row.teacher}}</td>
+                                    <td>{{row.startTime | date:'HH:mm'}}</td>
+                                    <td>{{((row.endTime.getTime()-row.startTime.getTime())/3600/1000).toFixed(2)}}小时</td>
+                                    <td>{{row.endTime | date:'HH:mm'}}</td>
+                                    <td>{{row.teacher_charging==1?'已计费':'未计费'}}</td>
+                                    <!--<td>计费后台保留</td>-->
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" ng-click="$hide()">关闭</button>
+                <button type="button" class="btn btn-success hk-co-shenhe"  ng-click="$hide()">确认</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>

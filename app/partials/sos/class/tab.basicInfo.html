@@ -1,0 +1,306 @@
+<div class="yws-container mt-lable-fl mt-mlr-0 f16 look" ng-if="detailTab==='0' && studentClass.courseSubjectType != 3">
+    <div class="row" data="{{studentClass}}">
+        <div class="col-sm-4 form-group">
+            <label>班级名称：</label>
+            <span id="course" class="col-sm-6 c3">{{studentClass.name}}</span>
+        </div>
+        <div class="col-sm-4 form-group">
+            <label for="course">课程名称：</label>
+            <span id="course" class="c3">{{studentClass.courseName}}</span>
+        </div>
+        <div class="col-sm-3 form-group">
+            <label>科目：</label>
+            <select id="subjectId" name="subjectId" ng-model="studentClass.subjectId" ng-disabled="!studentClass.isEdit"
+                    ng-options="subject.id as subject.name for subject in omsSubject">
+                <option value=""></option>
+            </select>
+        </div>
+        <a class="c1-lable fr br-4 prl-22 ti-0" style="position: absolute; margin-left: -9px;"
+           ng-click="editDetail(studentClass,1)"
+           ng-if="showPermissions('ModifyClassInfo') && !studentClass.isEdit && !studentClass.isEditCoursePlanSetting">修改
+        </a>
+    </div>
+
+    <div class="row" data="{{studentClass}}">
+        <div class="col-sm-4 form-group">
+            <label for="planCount">计划招生人数：</label>
+            <input id="planCount" ng-pattern="/^[0-9]{0,10}$/" type="number" ng-model="studentClass.planCount" ng-disabled="!studentClass.isEdit" />
+        </div>
+        <div class="col-sm-4 form-group">
+            <label for="planCount">班级人数：</label>
+            <input id="planCount" ng-pattern="/^[0-9]{0,10}$/" type="number" ng-model="studentClass.appliedCount" ng-disabled="!studentClass.isEdit" />
+        </div>
+        <div class="col-sm-4 form-group">
+            <label for="planCourseCount">计划排课：</label>
+            <input id="planCourseCount" ng-pattern="/^[0-9]{0,10}$/" ng-model="studentClass.planCourseCount" ng-disabled="!studentClass.isEdit" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4 form-group">
+            <label for="startTime">计划开班日期：</label>
+            <input ng-model="studentClass.startTime" type="text" required onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,readOnly:true})"
+                   onchange="" name="statTime" id="statTime" ng-disabled="!studentClass.isEdit" />
+        </div>
+        <div class="col-sm-4 form-group m0">
+            <label for="endTime">计划结业日期：</label>
+            <input ng-model="studentClass.endTime" type="text" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,readOnly:true})"
+                   name="endTime" id="endTime" onchange="" ng-disabled="!studentClass.isEdit"/>
+        </div>
+    </div>
+    <div class=" mt-dashed of">
+        <h1>&nbsp;</h1>
+    </div>
+    <div class="row of">
+        <div ng-if="!IsYSP" class=" form-group" ng-class="{'col-sm-6':edite,'col-sm-4':!edite}">
+            <label for="userName">班主任：</label>
+            <input id="userName" ng-model="studentClass.userName" ng-disabled="!studentClass.isEdit" />
+            <a ng-click="showSelectHeadTeacherView()" class="br-2f" ng-if="studentClass.isEdit">选择</a>
+        </div>
+        <div class="form-group" ng-class="{'col-sm-6':edite,'col-sm-4':!edite}">
+            <label for="teacherName">上课老师：</label>
+            <input id="teacherName" ng-model="studentClass.teacherName" ng-disabled="!studentClass.isEdit" />
+            <a ng-click="showTeacherList()" class="br-2f" ng-if="studentClass.isEdit">选择</a>
+        </div>
+        <div class="col-sm-4 form-group m0 mt-select" ng-if="!edite" style="min-height: 36px;">
+            <a  class="mt-btn ml15 brc3 fr mr-28  c5 f14 width-auto mt-0"
+                ng-click="showTeacherList()" ng-if="!studentClass.isEdit && !IsYSP">选择老师
+            </a>
+            <a class="mt-btn ml15 brc3 fr c5 f14 width-auto mt-0"
+               ng-click="showSelectHeadTeacherView()" ng-if="!studentClass.isEdit && !IsYSP">分配班主任
+            </a>
+        </div>
+    </div>
+    <div class="mt-dashed of">
+        <h1>&nbsp;</h1>
+    </div>
+    <h2 class="cf8 f16">排课设置</h2>
+    <div class="br-gray pl-0 of">
+        <h2 class="pl-20">上课时间</h2>
+        <table class="table table-bordered table-striped mt-table1">
+            <thead>
+            <tr>
+                <th>星期</th>
+                <th>上课时间</th>
+                <th>上课时长</th>
+                <th>下课时间</th>
+                <th ng-if="(studentClass.isEdit && !IsYSP) || studentClass.isEditCoursePlanSetting">操作</th>
+            </tr>
+            </thead>
+            <tbody id="courseTimeAddList">
+            <tr ng-repeat="row in show.planLists | orderBy : 'day'">
+                <td>{{row.startDate}}</td>
+                <td>{{row.startTime}}</td>
+                <td>{{row.timelong}}</td>
+                <td>{{row.endTime}}</td>
+                <td ng-if="(studentClass.isEdit && !IsYSP) || studentClass.isEditCoursePlanSetting">
+                    <a ng-click="show.deletePlan(row)" title="删除">
+                        <span class="glyphicon glyphicon-delete"></span>
+                    </a> &nbsp;
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="4" class="mt-select">
+                    <a ng-if="showPermissions('CreateClassCoursePlan') && !studentClass.isEdit && studentClass.status != 1 && !studentClass.isEditCoursePlanSetting" class="mt-btn ml15 brc3 fr mr-28 mt-11 c5 f14"
+                       ng-click="addCoursePlanInfo(studentClass, 7)">排课
+                    </a>
+                    <a ng-if="showPermissions('EditCoursePlanSetting') && !studentClass.isEdit && !studentClass.isEditCoursePlanSetting" class="mt-btn ml15 brc3 fr mt-11 c5 f14"
+                       ng-click="editCoursePlanSetting(studentClass)" ng-class="{'mr-28':studentClass.status == 1}">修改设置
+                    </a>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+        <h3 class="h3-o2o f14 pl-20 of margin-top-10" ng-if="(studentClass.isEdit && !IsYSP) || studentClass.isEditCoursePlanSetting">
+            <a ng-click="showAddCoursePlanTime()" class="yws-left width10 add-a">添加</a>
+        </h3>
+    </div>
+</div>
+
+
+<div class="yws-container mt-lable-fl mt-mlr-0 f16 look" ng-if="studentClass.courseSubjectType == 3">
+
+    <div class="row" data="{{studentClass}}">
+        <div class="col-sm-4 form-group">
+            <label>班级名称：</label>
+            <span id="course" class="col-sm-6 c3">{{studentClass.name}}</span>
+        </div>
+        <div class="col-sm-4 form-group">
+            <label for="course">课程名称：</label>
+            <span id="course" class="c3">{{studentClass.courseName}}</span>
+        </div>
+        <div class="col-sm-3 form-group">
+            <label class="col-sm-6">班主任：</label>
+            <input class="col-sm-6" style="width:95px; padding-right: 0;" type="text" ng-model="studentClass.userName" readonly/>
+        </div>
+        <div class="col-sm-1" ng-if="studentClass.isEdit">
+            <a ng-click="showSelectHeadTeacherView()" class="br-2f">选择</a>
+        </div>
+    </div>
+
+    <div class="row" data="{{studentClass}}">
+        <div class="col-sm-4 form-group">
+            <label for="planCount">计划招生人数：</label>
+            <input id="planCount" ng-pattern="/^[0-9]{0,10}$/" type="number" ng-model="studentClass.planCount" ng-disabled="!studentClass.isEdit" />
+        </div>
+        <div class="col-sm-4 form-group">
+            <label for="planCount">班级人数：</label>
+            <input id="planCount" ng-pattern="/^[0-9]{0,10}$/" type="number" ng-model="studentClass.appliedCount" ng-disabled="!studentClass.isEdit" />
+        </div>
+        <div class="col-sm-4 form-group">
+            <label for="planCourseCount">计划排课：</label>
+            <input id="planCourseCount" ng-pattern="/^[0-9]{0,10}$/" ng-model="studentClass.planCourseCount" ng-disabled="!studentClass.isEdit" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4 form-group">
+            <label for="startTime">计划开班日期：</label>
+            <input ng-model="studentClass.startTime" type="text" required onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,readOnly:true})"
+                   onchange="" name="statTime" id="statTime" ng-disabled="!studentClass.isEdit" />
+        </div>
+        <div class="col-sm-4 form-group m0">
+            <label for="endTime">计划结业日期：</label>
+            <input ng-model="studentClass.endTime" type="text" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,readOnly:true})"
+                   name="endTime" id="endTime" onchange="" ng-disabled="!studentClass.isEdit"/>
+        </div>
+        <div class="col-sm-4">
+            <a class="c1-lable fr br-4 prl-22 ti-0" style="position: absolute; margin-left: -9px;"
+               ng-click="editDetail(studentClass)">修改
+            </a>
+        </div>
+    </div>
+
+    <div class=" mt-dashed of">
+        <h1>&nbsp;</h1>
+    </div>
+
+    <div class="br-gray pl-0 of">
+        <h2 class="pl-20">上课老师</h2>
+        <table class="table table-bordered table-striped mt-table1">
+            <thead>
+            <tr>
+                <th>科目</th>
+                <th>老师</th>
+                <th  ng-if="studentClass.isEdit">操作</th>
+            </tr>
+            </thead>
+            <tbody id="courseTimeAddList">
+            <tr>
+                <td style="padding: 0;" colspan="3">
+                    <div style="max-height:400px; overflow:auto;">
+                        <table class="table-striped table-bordered table">
+                            <tbody>
+                                <tr ng-repeat="row in studentClass.crmClassSubjectTeacher  track by $index">
+                                    <td style="width:{{studentClass.isEdit?'463px':'564px'}};border-right: 0;border-left: 0;">
+                                        {{row.subjectName}}
+                                    </td>
+                                    <td style="width:{{studentClass.isEdit?'400px':'auto'}};border-right: 0;border-left: 0;">
+                                        {{row.teacherName}}
+                                    </td>
+                                    <td ng-if="studentClass.isEdit" style="border-right: 0;border-left: 0;">
+                                        <a ng-click="deleteClassDetailTeacher($index)" title="删除"><span
+                                                class="glyphicon glyphicon-delete"></span></a> &nbsp;
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+
+            </tbody>
+            <tfoot>
+            <tr  ng-if="studentClass.isEdit">
+                <td>
+                    <select name="classMultipleInfo2.subjectId"  ng-change="getMultipleCourseTeachers(classMultipleInfo2.subjectId)" class="input-sm form-control" type="search" ng-model="classMultipleInfo2.subjectId">
+                        <option value="">-- 请选择 --</option>
+                        <option value="{{option.id}}" ng-repeat="option in omsSubject  track by $index">{{option.name}}</option>
+                    </select>
+                </td>
+
+                <td>
+                    <select  name="classMultipleInfo2.teacherId" id="classMultipleInfo2.teacherId" class="input-sm form-control" type="search" ng-model="classMultipleInfo2.teacherId"
+                    ">
+                    <!--ng-options="option.id as option.username for option in multipleCourseTeachersList-->
+                    <option value="">-- 请选择 --</option>
+                    <option value="{{option.userId}}" ng-repeat="option in multipleCourseTeachersList  track by $index">{{option.username}}</option>
+                    </select>
+                </td>
+                <td colspan="5" class=" h-50"  ng-if="studentClass.isEdit">
+                    <a ng-click="addClassDetailTeacher()" class="c1-f f16 underline">添加</a>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+        <!--<h3 class="h3-o2o f14 pl-20 of margin-top-10" ng-if="(studentClass.isEdit && !IsYSP) || studentClass.isEditCoursePlanSetting">-->
+        <!--<a ng-click="showAddCoursePlanTime()" class="yws-left width10 add-a">添加</a>-->
+        <!--</h3>-->
+    </div>
+
+    <div class=" mt-dashed of">
+        <h2 class="cf8 f16">排课设置</h2>
+    </div>
+
+
+    <div class="br-gray pl-0 of">
+        <h2 class="pl-20">上课计划</h2>
+        <table class="table table-bordered table-striped mt-table1">
+            <thead>
+            <tr>
+                <th>星期</th>
+                <th>科目</th>
+                <th>上课老师</th>
+                <th>上课时间</th>
+                <th  ng-if="studentClass.isEdit">操作</th>
+            </tr>
+            </thead>
+            <tbody id="courseTimeAddList">
+            <tr>
+                <td colspan="5" style="padding:0;">
+                    <div style="max-height:350px; overflow:auto;">
+                        <table class="table-striped table-bordered table">
+
+                            <tbody>
+                                <tr ng-repeat="row in paiKePlanLists track by $index| orderBy : 'day'">
+                                    <td style="width:{{studentClass.isEdit?'210px':'245px'}};border-right: 0;border-left: 0;">
+                                        {{row.startDate}}
+                                    </td>
+                                    <td style="width:{{studentClass.isEdit?'140px':'164px'}};border-right: 0;border-left: 0;">
+                                        <span ng-repeat="i in row.detail">{{i.subjectName}}<span ng-if="!$last">、</span></span>
+
+                                    </td>
+                                    <td style="width:{{studentClass.isEdit?'231px':'270px'}};border-right: 0;border-left: 0;">
+                                        <span ng-repeat="i in row.detail">{{i.teacherName}}<span ng-if="!$last">、</span></span>
+                                    </td>
+                                    <td style="width:{{studentClass.isEdit?'231px':'auto'}};border-right: 0;border-left: 0;">
+                                        <button class="btn btn-default btn-small" ng-click="viewCoursePlanTimeTimeModal(row)">查看</button>
+                                    </td>
+                                    <td  ng-if="studentClass.isEdit" style="border-right: 0;border-left: 0;">
+                                        <button class="btn btn-default btn-small" ng-click="editCoursePlanSetting(studentClass,row)">修改设置</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="4" class="mt-select">
+                    <a ng-if="showPermissions('CreateClassCoursePlan') && !studentClass.isEdit && studentClass.status != 1 && !studentClass.isEditCoursePlanSetting" class="mt-btn ml15 brc3 fr mr-28 mt-11 c5 f14"
+                       ng-click="multipleAddCoursePlanInfo(studentClass, 7)">排课
+                    </a>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+
+    </div>
+</div>
+
+
+
+<img src="img/icon/n.png" ng-if="studentClass.status == 1" style="position:absolute;top: 22px;right:90px;width:103px;height:63px;" >

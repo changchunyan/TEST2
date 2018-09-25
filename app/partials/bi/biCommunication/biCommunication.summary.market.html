@@ -1,0 +1,28 @@
+<div class="table-responsive">
+    <table st-pipe="getSummary" st-table="tableModel" class="table table-bordered table-striped" ng-if="summaryActiveTab == 2">
+	    <thead>
+	    <tr>
+	        <th style="font-weight: bold;" rowspan="1">区域/校区</th>
+        	<th data-content="指定校区的员工拨打电话数量（校区统计每个员工的数据项，区域统计每个校区数据项总量）" data-placement="top" webui-popover>外呼量</th>
+            <th data-content="指定周期内指定校区的员工拨打电话成功接听的数量（校区统计每个员工的数据项，区域统计每个校区数据项总量）" data-placement="top" webui-popover>接通量</th>
+            <th data-content="接通率=接通量/通话量" data-placement="top" webui-popover>接通率</th>
+            <th data-content="指定周期内，被标记异常的leads量（包含电话异常和leads异常）" data-placement="top" webui-popover>leads异常量</th>
+            <th data-content="指定周期内，被标记异常的leads量占拨打的电话量的比例" data-placement="top" webui-popover>leads异常率</th>
+            <th data-content="指定周期内指定校区员工成功接听电话的时长总计（校区统计每个员工的数据项，区域统计每个校区数据项总量）" data-placement="top" webui-popover>通话总时长</th>
+            <th data-content="指定周期内指定校区员工成功接听电话的时长总计/拨打电话成功接听的数量（校区统计每个员工的数据项，区域统计每个校区数据项总量）" data-placement="left" webui-popover>通话平均时长</th>
+	    </tr>
+	    </thead>
+	    <tbody>
+	    	<tr>
+	     		<td>{{selectdDepartment.name}}</td>
+	            <td>{{summaryModel.communicationCount}}</td>
+	            <td>{{summaryModel.communicationSuccessCount}}</td>
+	            <td>{{summaryModel.communicationSuccessRatio}}</td>
+	            <td>{{summaryModel.statusNum}}</td>
+                <td>{{summaryModel.leadsExceptionRatio}}</td>
+	            <td>{{summaryModel.communicationTimeCount}}</td>
+	            <td>{{summaryModel.communicationTimeAverage}}</td>
+	        </tr>
+	    </tbody>
+	</table>
+</div>

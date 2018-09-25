@@ -1,0 +1,158 @@
+<link rel="stylesheet" href="bower_components/mobile-angular-ui/dist/css/mobile-angular-ui-base.css">
+<style>
+    .btn{
+        border: 1px solid #ccc;
+    }
+    input.input-date{
+        height: 35px;
+        line-height:35px ;
+        display: inline-block;
+        width: 40%;
+        margin-left: 15px;
+    }
+    .input.ng-invalid{
+        color: #ff8486;
+    }
+</style>
+<div ng-controller="callPhoneCtrl">
+
+    <!--头部-->
+    <div class="navbar navbar-app navbar-absolute-top m-top">
+        <div class="glyphicon glyphicon-chevron-left top-left " ></div>
+        <a class="navbar-brand navbar-brand-center" ui-yield-to="title" href="#/fb-admin/leads_student_myself">
+            <img src="img/main/logo.png" class="m-top-logo">
+        </a>
+    </div>
+    <!--底部导航-->
+    <div class="navbar navbar-app navbar-absolute-bottom m-footer">
+        <div class="btn-group justified">
+            <a class="btn btn-navbar active" ng-disabled="callForm.$invalid" ng-click="saveCallPhoneDetilByMobile()">提交</a>
+        </div>
+    </div>
+    <!--主体部分-->
+    <div class="app-body " >
+        <div class="scrollable padding50-0">
+           <div class="scrollable-content">
+               <form name="callForm">
+
+                    <div class="exception-btn yws-container">
+                        <span class="exception-title yws-xs-2">{{detailForUpdate.name}}</span><sapn class="exception-tel yws-xs-2">{{currentPhone}}</sapn>
+                        <span class="yws-right" style="color: red;margin-right: 50px">通话中</span>
+                    </div>
+                    <div class="exception-btn">
+                        <div class="yws-xs-2 margin-top15">
+                            <span class="exception-title">电话异常</span>
+                        </div>
+                        <div class="yws-xs-8 text-left">
+                            <a class="btn margin-top15" ng-if="phone.phone_status !=5" ng-class="{true: 'active', false: ''}[phone.phone_status ==1 || !phone.phone_status]" ng-click="changePhoneStatus(phone.phone,1)">
+                                无异常
+                            </a>
+                            <a class="btn margin-top15" ng-if="phone.phone_status !=5" ng-class="{true: 'active', false: ''}[phone.phone_status ==2]"  ng-click="changePhoneStatus(phone.phone,2)">
+                                空号
+                            </a>
+                            <a class="btn margin-top15" ng-if="phone.phone_status !=5" ng-class="{true: 'active', false: ''}[phone.phone_status ==3]"  ng-click="changePhoneStatus(phone.phone,3)">
+                                错号
+                            </a>
+                            <a class="btn margin-top15" ng-if="phone.phone_status !=5" ng-class="{true: 'active', false: ''}[phone.phone_status ==4]"  ng-click="changePhoneStatus(phone.phone,4)">
+                                停机
+                            </a>
+                            <a class="btn margin-top15" ng-if="phone.phone_status ==5" ng-class="{true: 'active', false: ''}[phone.phone_status ==5]" >
+                                被投诉
+                            </a>
+                        </div>
+
+                    </div>
+                    <div class="exception-btn" ng-if="detailForUpdate.state == 2">
+                        <div class="yws-xs-2 margin-top15" style="vertical-align: top;">
+                            <span class="exception-title" >客户异常</span>
+                        </div>
+                        <div class="yws-xs-8 text-left">
+                            <a class="btn margin-top15" ng-class="{true: 'active', false: ''}[detailForUpdate.exception_status ==1 || !detailForUpdate.exception_status]" ng-click="changeExceptionStatus(detailForUpdate,1)">
+                                无异常
+                            </a>
+                            <a class="btn margin-top15" ng-class="{true: 'active', false: ''}[detailForUpdate.exception_status ==2]"  ng-click="changeExceptionStatus(detailForUpdate,2)">
+                                已经报名
+                            </a>
+                            <a class="btn margin-top15" ng-class="{true: 'active', false: ''}[detailForUpdate.exception_status ==3]"  ng-click="changeExceptionStatus(detailForUpdate,3)">
+                                要求别打
+                            </a>
+                            <a class="btn margin-top15" ng-class="{true: 'active', false: ''}[detailForUpdate.exception_status ==4]"  ng-click="changeExceptionStatus(detailForUpdate,4)">
+                                出国
+                            </a>
+                            <a class="btn margin-top15" ng-class="{true: 'active', false: ''}[detailForUpdate.exception_status ==5]"  ng-click="changeExceptionStatus(detailForUpdate,5)">
+                                不念了
+                            </a>
+                            <a class="btn margin-top15" ng-class="{true: 'active', false: ''}[detailForUpdate.exception_status ==6]"  ng-click="changeExceptionStatus(detailForUpdate,6)">
+                                不在本地
+                            </a>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="col-sm-4 form-group">
+                            <label for="school_name" class="col-sm-4 control-label">* 公立学校</label>
+                            <div class="col-sm-8">
+                               <!-- <input type="text" name="school_name" id="school_name_for_update" class="form-control" ng-model="detailForUpdate.school_name"
+                                       ng-maxlength="50" ng-pattern="/^0-9a-zA-Z\u4e00-\u9fa5|\u3002|\uff1f|\uff01|\uff0c|\u3001|\uff1b|\uff1a|\u201c|\u201d|\u2018|\u2019|\uff08|\uff09|\u300a ]{1,100}$/" />-->
+                                <input type="text" name="school_name" id="school_name_for_update" class="form-control" ng-model="detailForUpdate.school_name"
+                                       ng-maxlength="50"   />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group">
+                        <label for="grade_id" class="col-sm-4 control-label">* 所在年级</label>
+                        <div class="col-sm-8">
+                            <select ng-model="detailForUpdate.grade_id" name="grade_id" id="grade_id_for_update" class="form-control" ng-options="option.id as option.name for option in gradeIds" required>
+                                <option value="">-- 请选择 --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group" ng-if="detailForUpdate.state == 2">
+                        <label for="isPurpose" class="col-sm-4 control-label">* 意向程度</label>
+                        <div class="col-sm-8">
+                            <select ng-model="detailForUpdate.purposeLevel"
+                                    name="detailForUpdate.purposeLevel" id="detailForUpdate.purposeLevel" class="form-control"
+                                    ng-options="option.value as option.name for option in purposeLevel">
+                                <option value="">-- 请选择 --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="isPurpose" class="col-sm-2 control-label">本次沟通内容</label>
+                        <div class="col-sm-8">
+                            <textarea  name="leadsName" id="leadsName_for_update" ng-model="CrmInvitationCommunicationVoForCreate.communicateContent" class="form-control"
+                                       ng-maxlength="1000" ></textarea>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 form-group" ng-if="detailForUpdate.state != 1">
+                        <label for="receiveTime" class="col-sm-4 control-label">* 下次跟进时间</label>
+                        <div class="col-sm-8">
+                           <!-- <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss'})" onchange=""    name="receiveTime"  class="form-control"
+                                   ng-model="detailForUpdate.followUpAt"   readonly  />-->
+                            <input type="date" ng-model="detailForUpdate.followUpAt1"    class="input-date form-control"/>
+                            <input type="time" ng-model="detailForUpdate.followUpAt2"   class="input-date form-control"/>
+                        </div>
+                    </div>
+
+                    <hr />
+                    <div class="col-sm-6 form-group" ng-if="detailForUpdate.state != 1">
+                        <label for="receiveTime" class="col-sm-4 control-label">* 预到访时间</label>
+                        <div class="col-sm-8">
+                            <input  type="date" ng-model="CrmInvitationDetailVoForCreate.receiveTime1" class="input-date form-control" />
+                            <input  type="time" ng-model="CrmInvitationDetailVoForCreate.receiveTime2" class="input-date form-control"/>
+                        </div>
+                    </div>
+                    <div class="form-group" style="padding-bottom: 150px">
+                        <label for="isPurpose" class="col-sm-2 control-label">邀约内容</label>
+                        <div class="col-sm-8">
+                            <!--ng-pattern="/^[!0-9a-zA-Z\u4e00-\u9fa5\u201C\u201D\u2018\u2019，。……！!;；——-、《》/<>\(\)（）%#&？?,:：/.]*$/"-->
+                            <textarea  name="leadsName" ng-model="CrmInvitationDetailVoForCreate.invitationContent" class="form-control"
+                                       ng-maxlength="100"  ></textarea>
+                        </div>
+                    </div>
+               </form>
+        </div>
+    </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,82 @@
+<div class="modal orderModal"  tabindex="-1" role="dialog" aria-hidden="true" ng-controller="TeacherCoursesController as tcc">
+    <div class="modal-dialog">
+        <div class="modal-content" >
+            <form name="updateOrderForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="col-sm-12">
+                        <div>
+                            <div class="operations-panel">
+                                <button class="btn btn-primary" ng-click="tcc.showAddTeacherCourseView()"><span class="glyphicon glyphicon-plus"></span>&nbsp;创建课程</button>
+                            </div>
+                            <div class="operations-panel" >
+                                <button class="btn btn-primary" ng-click="tcc.showSelectedTeacherCourseView()"><span class="glyphicon glyphicon-plus"></span>&nbsp;选择课程</button>
+                            </div>
+                           <!-- <div class="operations-panel" >
+                                <button class="btn btn-success" ng-click="tcc.showTimeTeacherCourseView()"><span class="glyphicon glyphicon-retweet"></span>&nbsp;可上课时间</button>
+                            </div>-->
+                        </div>
+                        <tabs>
+                            <pane title="教师课程信息" >
+
+                                <div class="table-responsive" style="  ;overflow-y:hidden;    background-color: #f6f6f6;padding-left: 20px;">
+                                    <table st-pipe="tcc.callTeacherCoursesService" st-table="" class="table table-bordered table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>课程名称</th>
+                                            <th>科目</th>
+                                            <th>校区上课定价</th>
+                                            <th>教师上门定价</th>
+                                            <th>总课时</th>
+
+                                            <th>年级</th>
+                                            <th>课程类型</th>
+                                            <th>状态</th>
+                                            <th>添加时间</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody ng-if="!tcc.isLoadingTeacherCourseList">
+                                        <tr ng-repeat="row in teacherCoursesList">
+                                            <td>{{row.name}}</td>
+                                            <td>{{row.subject_id}}</td>
+                                            <td>无</td>
+                                            <td>无</td>
+                                            <td>{{row.standard_num}}</td>
+
+                                            <td>{{row.organization_id}}</td>
+                                            <td>{{row.course_type_id}}</td>
+                                            <td>无</td>
+                                            <td>{{row.create_at | date:'yyyy-MM-dd' }}</td>
+                                        </tr>
+                                        </tbody>
+                                        <tbody ng-if="tcc.isLoadingTeacherCourseList">
+                                        <tr>
+                                            <td colspan="24" class="text-center"><div class="loading-indicator"></div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="12"></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </pane>
+                        </tabs>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"  ng-click="$hide()">取消</button>
+                    <button type="button" class="btn btn-success" ng-style="isShowSubmit" ng-disabled="updateOrderForm.$invalid"  ng-click="modalSubmit()">保存</button><!--    -->
+                    <!--<button ng-if="showPermissions('OrderEditSave')" type="button" class="btn btn-success" ng-disabled="updateOrderForm.$invalid"  ng-click="updateOrder()">保存</button>&lt;!&ndash;    &ndash;&gt;-->
+                    <!--<img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />-->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

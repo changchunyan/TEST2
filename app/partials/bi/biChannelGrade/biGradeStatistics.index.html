@@ -1,0 +1,45 @@
+<div class="view-frame" ng-controller="BiBaseController">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content" ng-controller="BiChannelGradeController">
+        <div>
+            <ul class="breadcrumb">
+                <li><img ng-src="img/icon/bi/yingxiao.png" src="img/icon/bi/yingxiao.png"> 营销报表<span
+                        class="divider"></span></li>
+                <li class="active">年级统计</li>
+            </ul>
+        </div>
+        <!-- 筛选条件 -->
+        <search on-department-clicked="showSelectDepartment()"
+                department="selectdDepartment"
+                search-model="searchModel"
+                is-school-user="isSchoolUser"
+                provinces="provinces"
+                on-province-changed="getCitysByProvinceCode(searchModel.schoolProvince)"
+                cities="cities"
+                on-reset="reset(isQ)"
+                hide-province-and-city="true"
+                hide-school-type="true"
+                on-search="argJudgement(getChannelGradeSummary)"/>
+        <!-- 表格 -->
+        <div class=" default-box">
+            <h4>
+                <span ng-if="!isDay">从 {{searchModel.startTime | date : 'yyyy-MM-dd'}} 至 {{searchModel.endTime | date : 'yyyy-MM-dd'}}</span>
+                <span ng-if="isDay">（{{searchModel.endTime | date : 'yyyy-MM-dd'}}）</span>
+                <span ng-if="presentTime">最新统计时间：{{presentTime}}</span>
+            </h4>
+            <div class="export-btns">
+                <button class="btn btn-success" ng-click="exportableV1('年级统计汇总','exportable')">导出报表</button>
+                <button class="btn btn-success" ng-if="isBranch()" ng-click="getChannelGradeSummary('年级统计导出明细','exportableDetail')">导出明细</button>
+            </div>
+            <br/>
+            <tabs pane-changed="getTabIndex(selectedPane)">
+                <pane title="{{tab.name}}" ng-repeat="tab in tabs">
+                    <div data-index="{{$index}}"
+                         ng-include="'partials/bi/biChannelGrade/biGradeStatistics.summary.html?v=1.1.2'"></div>
+                </pane>
+            </tabs>
+        </div>
+    </div>
+</div>

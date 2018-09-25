@@ -1,0 +1,59 @@
+<script src="partials/tars/ueditor/ueditor.config.js">
+
+</script>
+
+<!-- 配置文件 -->
+<script type="text/javascript" src="partials/tars/ueditor/ueditor.config.js"></script>
+<!-- 编辑器源码文件 -->
+<script type="text/javascript" src="partials/tars/ueditor/ueditor.all.js"></script>
+<!-- 实例化编辑器 -->
+<!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+<!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+<script type="text/javascript" charset="utf-8" src="partials/tars/ueditor/lang/zh-cn/zh-cn.js"></script>
+<div class="modal crm-invitationDetail-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" style="width:570px;">
+        <div class="modal-content">
+            <form name="form">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="correctionTitle"></h4>
+                </div>
+                <div class="modal-body text-center pb-20" st-pipe="_modal.findCoursePlanByFilter" st-table="coursePlanList" style="height:500px;">
+                    <div class="row" style="text-align:left;font-size:16px;">
+                        <div class="col-sm-4" style="padding-left:20px;">
+                            编号：{{correction.id}}
+                        </div>
+                    </div>
+
+                    <div style="text-align:left;">
+                        <label style="font-size:16px; margin-right:20px;">*纠错类型</label>
+
+                        <select name="" id="" style="width:200px; height:30px;" ng-options="tl.dictCode as tl.dictName for tl in errorType" ng-model="_modal.errorInfo.erroryType">
+                            <!-- <option value="" >请选择</option> -->
+                        </select>
+                    </div>
+
+                    <div style="text-align:left;">
+                        <label style="font-size:16px; margin-right:20px;">*纠错描述</label>
+                        <div class="col-xs-12" style="width:525px;height: auto; overflow: hidden;">
+                            <div class="col-xs-12"></div>
+                            <script id="errorInfoEditor" name="errorInfoEditor" type="text/plain" style="width: 525px; height: 500px;"></script>
+                            <script type="text/javascript">
+                                UE.getEditor('errorInfoEditor', {
+                                    width: '525px'
+                                })
+                            </script>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="text-center">
+                        <!-- <button type="button" class="btn btn-default" ng-click="$hide()">关闭</button> -->
+                        <button type="button" class="btn btn-success" ng-click="_modal.submitErrorInfo()">确定</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

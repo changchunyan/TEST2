@@ -1,0 +1,179 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true" ng-controller="selectCourseController">
+    <div class="modal-dialog" style="width: 80%">
+        <div class="modal-content">
+            <form name="addOrderForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="selectCourseTitle"></h4>
+                </div>
+                <div class="modal-body of pb-20" id="getHeight" st-pipe="getCourseList" st-table="CourseList">
+                    <div style="position:absolute;top: 0;left: 0;width:120%;height:100%;z-index: 9;background: rgba(0,0,0,0)" ng-if="isSlide" ng-click="showTriggar(-1);"></div>
+                    <ul class="of width70 mt-modal-order input-left">
+                        <li class="p20">
+                            <label>课程名称</label>
+                            <input st-search="CourseListFilter.courseName" placeholder="输入名称查询"
+                                   ng-model="CourseListFilter.courseName" class="input-sm form-control"
+                                   type="search"/>
+                        </li>
+                        <li class="p20">
+                            <label>产品类型</label>
+                            <select st-search="CourseListFilter.productTypeId"
+                                    ng-model="CourseListFilter.productTypeId"
+                                    name="CourseListFilter.productTypeId" id="CourseListFilter.productTypeId"
+                                    class="input-sm form-control"
+                                    ng-options="option.id as option.name for option in productIdsModal"
+                                    type="search" ng-change="onProductIdModal()">
+                                <option value="">-- 请选择 --</option>
+                            </select>
+                        </li>
+                        <li class="p20">
+                            <label>课程类型</label>
+                            <select st-search="CourseListFilter.course_type_id"
+                                    ng-model="CourseListFilter.course_type_id"
+                                    name="CourseListFilter.course_type_id" id="CourseListFilter.course_type_id"
+                                    class="input-sm form-control"
+                                    ng-options="option.id as option.name for option in courseTypeIdsModal"
+                                    type="search" ng-change="onCourseTypeIdModal()">
+                                <option value="">-- 请选择 --</option>
+                            </select>
+                        </li>
+                        <li class="p20">
+                            <label>年级</label>
+                            <select st-search="CourseListFilter.grade_id" ng-model="CourseListFilter.grade_id"
+                                    name="CourseListFilter.grade_id" id="CourseListFilter.grade_id"
+                                    class="input-sm form-control"
+                                    ng-options="option.id as option.name for option in gradeIdsModal"
+                                    type="search">
+                                <option value="">-- 请选择 --</option>
+                            </select>
+                        </li>
+                        <li class="p20">
+                        	<label>方式</label>
+                        	<select st-search="CourseListFilter.teachingStyle"
+                           			ng-model="CourseListFilter.teachingStyle"
+                           			class="input-sm form-control"
+                           			ng-options="option.id as option.name for option in teachingStyles" type="search">
+                           	    <option value="">-- 请选择 --</option>
+                           	</select>
+                        </li>
+                    </ul>
+                    <div class="table-responsive yws-left border-ccc br-gray  pl-0" style="width:78%">
+                        <table class="table table-bordered table-striped table-condensed mt-table1">
+                            <thead>
+                            <tr>
+                                <th><label class="checkbox-bg" ng-class="{'active':countCourse}" ng-click="isCourseSelectedAll()">全选</label></th>
+                                <th>课程名称</th>
+                                <th>产品类型</th>
+                                <th>课程类型</th>
+                                <th>年级</th>
+                                <th>方式</th>
+                                <th>科目类型</th>
+                                <th>科目</th>
+                                <th>课程价格</th>
+                                <th>按期收费</th>
+                            </tr>
+                            </thead>
+                            <tbody ng-show="!isCourseListLoading">
+                            <tr ng-repeat="row in CourseList">
+                                <td>
+                                    <label ng-class="{'active':isCourseSelected(row)}" class="checkbox-bg" ng-click="selectOneCourse(row)" ></label><!-- for="Course{{$index}}"-->
+                                    <!--<input class="hide" type="checkbox" id="Course{{$index}}">--></td>
+                                <td>{{row.name}}</td>
+                                <td>{{row.productTypeName}}</td>
+                                <td>{{row.courseTypeName}}</td>
+                                <td>{{row.gradeName}}</td>
+                                <td>{{row.teachingStyle | teachingStyleShow : row.teachingStyle}}</td>
+                                <td><span ng-if="row.subjectType == 1">单科</span>
+                                	<span ng-if="row.subjectType == 2">全科</span>
+                                  <span ng-if="row.subjectType == 3">班类多科</span>
+                                </td>
+                                <td>{{row.subject_name}}</td>
+                                <td>
+	                            	{{row.standardPrice}}
+	                            	<span ng-if="row.isRegularCharge">元/期</span>
+	                            	<span ng-if="!row.isRegularCharge && row.courseUnit == 1">元/课时</span>
+	                            	<span ng-if="!row.isRegularCharge && row.courseUnit == 2">元/次</span>
+	                            </td>
+	                            <td>
+	                            	<span ng-if="row.isRegularCharge">
+	                            		{{row.regularTimes}}<span ng-if="row.courseUnit == 1">课时</span>
+	                            		<span ng-if="row.courseUnit == 2">次</span>/期
+	                            	</span>
+	                            </td>
+                            </tr>
+                            </tbody>
+                            <tbody ng-show="isCourseListLoading">
+                            <tr>
+                                <td colspan="14" class="text-center">
+                                    <div class="loading-indicator"></div>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="text-center" st-pagination="" st-items-by-page="10"
+                                    st-template="partials/util/pagination.custom.html" colspan="14"></td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="yws-right border-ccc br-gray pl-0" style="width:21%;height:498px;overflow-y: auto">
+                        <div class="padding10"><span class="width80 tc inline-block">已选择（<a class="c2f">{{selected.courses.length}}</a>）</span>
+                            <a ng-click="deleteSelectedAllCourses()"><span class="glyphicon glyphicon-delete"
+                                                                           title="删除全部"></span></a></div>
+                        <div ng-repeat="row in selected.courses" class="border-top1">
+                            <div>
+                                <span class="width80 tl inline-block">{{row.name}}</span>
+                                <a ng-click="deleteOneCourse(row)"><span class="glyphicon glyphicon-delete"
+                                                                         title="删除"></span></a>
+                            </div>
+                            <div class="mt-modal-order f14 mt-10">
+                                <input type="text" ng-model="row.showSubjectName" class="width70 f12 fl" disabled placeholder="可多选哦!">
+                                    <span class="btn c2f-bg fr" title="选科目" ng-if="row.is_fullsubject == 1" ng-click="showTriggar($index)">选科目</span>
+                                <div class="modal-content subject-body" ng-if="row.showSingle" style="right: 2.3%; margin-top: 24px;" mt-abs="" index="$index">
+                                    <span class="sj sj-base" style="margin-left: 216px"></span>
+                                    <form name="addOrderForm" role="form" class="form-horizontal showcase-form"
+                                          novalidate="">
+                                        <ul class="subject-item of">
+                                            <li ng-repeat="subject in subjectIdsModal"
+                                                ng-click="setCourseSubject(row,subject)"
+                                                ng-class="{true: 'c5-lable', false: ''}[isCheckedSubject(row,subject)]"
+                                                w72="" index="$index">
+                                                {{subject.name}}
+                                            </li>
+
+                                        </ul>
+                                        <ul class="text-center of mt-layer-footer">
+                                            <li class="fl width50"><a ng-click="showTriggar()">确定</a><span
+                                                    class="fr">&nbsp;</span></li>
+                                            <li class="fl width50"><a ng-click="showTriggar(-1)">取消</a></li>
+                                        </ul>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                    <button type="button" class="btn btn-success c5-lable" ng-click="doSelectCourse()">确定</button>
+                    <!-- -->
+                    <img ng-if="dataLoading"
+                         src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+<style>
+    .col-sm-6 {
+        padding-top: 10px;
+    }
+
+    .form-horizontal .control-label {
+        padding-top: 17px;
+    }
+</style>

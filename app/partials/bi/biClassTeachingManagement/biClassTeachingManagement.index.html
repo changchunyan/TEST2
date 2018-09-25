@@ -1,0 +1,14 @@
+<div class="view-frame" ng-controller="BiBaseController">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content" ng-controller="BiClassTeachingManagementController">
+      <div>
+		    <ul class="breadcrumb">
+		        <li><img ng-src="img/icon/bi/jiaowu.png" src="img/icon/bi/jiaowu.png"> 教务报表<span class="divider"></span></li>
+		        <li class="active">教务综合</li>
+		    </ul>
+		   </div>
+       <div ng-include="'partials/bi/biClassTeachingManagement/biClassTeachingManagement.statistics.html'"></div>
+    </div>
+</div>

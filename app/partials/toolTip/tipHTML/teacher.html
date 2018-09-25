@@ -1,0 +1,34 @@
+<span class="date-time" ng-click="setTimeClass(p_index,tm.pasttype,tm.start_time,tm.end_time)">
+	{{tm.start_time |date:"HH:mm"}}-{{tm.end_time |date:"HH:mm"}}
+	<!-- <p class="c3">{{tm.student_name}}</p> -->
+</span>
+<div class="mt-time-toolTip" ng-if="tm.isShow" ng-class="{'has-class':isHasClass(tm.pasttype)}">
+    <span class="tool-left" ng-if="!(s_id||st)||isHasClass(tm.pasttype)"></span>
+    <!--无排课记录-->
+    <ul class="of" ng-if="!isHasClass(tm.pasttype)&&!(s_id||st)">
+        <li ng-if="tm.pasttype==5 || tm.pasttype==6 || tm.pasttype==1 || tm.pasttype==2 || tm.pasttype==7 || tm.pasttype==8">
+            <a ng-click="tcl.showPlanDetail(tm)">查看</a>
+        </li>
+        <li ng-if="!isTeacherMaster() && !isTeacher() && tm.pasttype==5">
+            <a ng-click="yesconsume(tm)">消课</a>
+        </li>
+        <li ng-if="!isTeacherMaster() && !isTeacher() && tm.pasttype==5">
+            <a ng-click="showEditCoursePlan(tm)">编辑</a>
+        </li>
+        <li ng-if="!isTeacherMaster() && !isTeacher() && tm.pasttype==5">
+            <a ng-click="remove(tm)">删除</a>
+        </li>
+        <li ng-if="!isTeacherMaster() && !isTeacher() && tm.pasttype==6 && tm.is_satisfied!=0">
+            <a ng-click="addUnsatisfied(tm,0)">取消</a>
+        </li>
+        <li ng-if="!isTeacherMaster() && !isTeacherMaster2() && !isTeacherMaster3() && !isTeacher() && tm.pasttype==3">
+            <a ng-click="showSelectedTeacherPaikeView(personsData[0].teacherID, personsData[0].teachername, noots.date)">排课</a>
+        </li>
+        <li ng-if="!isTeacherMaster() && !isTeacher() && tm.pasttype==3">
+            <a ng-click="showSelectedTeacherPaikeView2(personsData[0].teacherID, personsData[0].teachername, noots.date)">排试听课</a>
+        </li>
+    </ul>
+    <!--有排课记录-->
+    <ul class="of" ng-if=" isHasClass(tm.pasttype)" ng-include="'partials/sos/coursePlan/modal.planTimeDetail.html?v='+vDateTime">
+    </ul>
+</div>

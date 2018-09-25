@@ -1,0 +1,123 @@
+<div class="view-frame" ng-controller="TeacherUnavailableController as tuc">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'">
+        </div>
+    </div>
+    <div class="view-content user-love">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="#">首页</a> <span class="divider"></span></li>
+                <li><a href="#/sos-admin">学员教务</a> <span class="divider"></span></li>
+                <li class="active">不可排课时间管理</li>
+            </ul>
+        </div>
+        <div class="mt-10 br-gray">
+            <div class="tabs-title border-1 c3">教师列表</div>
+            <div class="mt-student-m">
+                <ul class="f14 cf">
+                    <li>
+                        <a class="mt-timeTable" ng-click="setUnavailableTime()">不可排课时间设置</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="br-gray mt-list">
+            <h2 class="pl-20 c3">排课消课管理</h2>
+            <div class="overflow-x">
+                <table class="table table-bordered table-striped table-condensed mt-table1"
+                       st-pipe="getTeacherUnavailableListByFilter" st-table="teacherList">
+                    <thead>
+                    <tr class="br-gray-t">
+                        <th>教师姓名</th>
+                        <th>电话号码</th>
+                        <th>全/兼职</th>
+                        <th>科目</th>
+                        <th>年级段</th>
+                        <th colspan='2'>开始时间</th>
+                        <th>结束时间</th>
+                        <th>时长</th>
+                        <th>操作</th>
+                    </tr>
+                    <th><input st-search="teacher_name" ng-model="teacherFilter.teacher_name" placeholder="教师姓名"
+                               class="input-sm form-control" type="search"/></th>
+                    <th><input st-search="teacher_phone" ng-model="teacherFilter.teacher_phone" placeholder="电话号码"
+                               class="input-sm form-control" type="search"/></th>
+                    <th>
+                        <select st-search="part_full" ng-model="teacherFilter.part_full" name="part_full" id="part_full"
+                                class="input-sm form-control" ng-options="tl.id as tl.name for tl in dictData.partFull">
+                            <option value="">---请选择---</option>
+                        </select>
+                    </th>
+                    <th><!--科目-->
+                        <select st-search="subSt" ng-model="teacherFilter.subject_id"
+                                name="teacherFilter.subSt" id="teacherFilter.subjectId" class="input-sm form-control"
+                                ng-options="option.id as option.name for option in allSubject" type="search">
+                            <option value="">-- 请选择 --</option>
+                        </select>
+                    </th>
+                    <th>
+                        <select st-search="grade" ng-model="teacherFilter.grade" name="grade" id="grade"
+                                class="input-sm form-control" ng-options="tl.id as tl.name for tl in dictData.grade">
+                            <option value="">---请选择---</option>
+                        </select>
+                    <th><input st-search="start_time" placeholder="" class="input-sm form-control" type="search"
+                               datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="" readonly
+                               style="margin-right:9%;"/></th>
+                    <th><input st-search="end_time" placeholder="" class="input-sm form-control" type="search"
+                               datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="" readonly/></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="row in teacherList">
+                        <td>{{row.username}}</td>
+                        <td>{{row.mobile}}</td>
+                        <td ng-if="row.part_full==2">全职</td>
+                        <td ng-if="row.part_full==1">兼职</td>
+                        <td ng-if="row.part_full==null"></td>
+                        <td>{{row.subject_name}}</td>
+                        <td>{{row.teacher_grade}}</td>
+                        <td colspan='2'>{{row.start_time | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                        <td>{{row.end_time | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                        <td>{{row.hour}}</td>
+                        <td style="width:150px">
+                            <div>
+                                <a class="showUI" id="nw+{{$index}}" ng-click="nw[$index]=true">
+								<span class="glyphicon glyphicon-caozuo" title="操作">
+								</span>
+                                </a>
+                                <bubble ng-if="nw[$index]" for="nw+{{$index}}" align="bottom" close="nw[$index]=false"
+                                        close-action="outerchick " ng-mouseleave="nw[$index]=false;">
+                                    <ul>
+                                        <li>
+                                            <a ng-click="showEditView(row)">编辑</a>
+                                        </li>
+                                        <li>
+                                            <a ng-click="_delete(row.id)">删除</a>
+                                        </li>
+                                    </ul>
+                                </bubble>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tbody ng-show="isrendLoading">
+                    <tr>
+                        <td colspan="9" class="text-center">
+                            <div class="loading-indicator"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td class="text-center" st-pagination="" st-items-by-page="10"
+                            st-template="partials/util/pagination.custom.html" colspan="9">
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,495 @@
+<style>
+    .mini-w100 > thead > tr > td, .mini-w100 > tfoot > tr > td {
+        min-width: 120px;
+        text-align: center;
+    }
+
+    .bgtd-header, .bgtd-header td:nth-child(n) {
+        font-weight: bold;
+        width: 20%;
+        background: #f4b077 !important;
+    }
+
+    .bgtd-header:nth-child(2n), .bgtd-header:nth-child(2n) td {
+        background: #f4b099 !important;
+    }
+</style>
+<div class="table-responsive" id="exportable" style=" overflow-y:hidden">
+    <!--表格模板-->
+    <!-- st-pipe="getMarketSummary" st-table="channelOrders"-->
+    <table class="table table-bordered table-striped mini-w100"
+    >
+        <!--ng-if="searchModel.channelParentId == -1 || searchModel.channelParentId == 5"-->
+        <thead>
+        <tr class="tr-title">
+            <td colspan="{{2+newTitles[searchModel.channelParentId].length*5}}" style="text-align: center">
+                {{tabsName[searchModel.channelParentId]}}统计
+            </td>
+        </tr>
+        <tr>
+            <!--<td style="font-weight: bold;" rowspan="2">校区性质</td>
+            <td style="font-weight: bold;" rowspan="2">城市</td>-->
+
+            <td style="font-weight: bold;" rowspan="2">
+                <span ng-if="isBranch()">校区性质</span>
+                <span ng-if="!isBranch()">区域</span>
+            </td>
+            <td style="font-weight: bold;" rowspan="2">
+                <span ng-if="isBranch()">城市</span>
+                <span ng-if="!isBranch()">校区</span>
+            </td>
+            <td class="bgtd-header" style="min-width: 500px" colspan="5"
+                ng-repeat="item in newTitles[searchModel.channelParentId]">{{item}}
+            </td>
+        </tr>
+        <tr>
+            <!--市场-->
+            <td colspan="5" class="bgtd-header" style="padding:0;border-right: 0;"
+                ng-repeat="item in newTitles[searchModel.channelParentId]">
+                <table class="table table-bordered table-striped ">
+                    <thead>
+                    <tr><!--
+                                data-content="指定周期内的到访人数，NOT人次" data-placement="top" webui-popover-->
+                        <td>到访量
+                        </td>
+                        <!--
+                                data-content="指定周期内的体验人数，NOT人次" data-placement="top" webui-popover-->
+                        <td>体验量
+                        </td>
+                        <!--
+                                data-content="指定周期内新签且无退单记录的订单数总和" data-placement="top" webui-popover-->
+                        <td>签单量
+                        </td>
+                        <!--
+                                data-content="指定周期内新签且无退单记录的订单金额总和(订单金额是已优惠后的金额)" data-placement="top"
+                                webui-popover-->
+                        <td>签单金额
+                        </td>
+                        <!--
+                                data-content="指定周期内新签且无退单记录的订单实收金额总和(订单金额是已优惠后的金额)" data-placement="top"
+                                webui-popover-->
+                        <td>实收金额
+                        </td>
+                    </tr>
+                    </thead>
+                </table>
+            </td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="model in channelOrders">
+            <!--根据当前部门的isBranch()属性判断，要是1，就是分公司，0就不是分公司  是分公司，显示schoolNature，不是分公司显示parent_name  -->
+            <td>
+                <span ng-if="isBranch()">{{model.schoolNature}}</span>
+                <span ng-if="!isBranch()">{{model.parent_name}}</span>
+            </td>
+            <td>
+                <!--根据当前部门的isBranch()属性判断，要是1，就是分公司，0就不是分公司  是分公司，显示cityName，不是分公司显示school_name  -->
+                <span ng-if="isBranch()">{{model.cityName}}</span>
+                <span ng-if="!isBranch()">{{model.school_name}}</span>
+            </td>
+
+            <td colspan="5" style="padding:0;border-right: 0;width: 20%;"
+                ng-repeat="item in newTitles[searchModel.channelParentId]">
+                <table class="table table-bordered table-striped " style="height: 40px;">
+                    <tbody>
+                    <tr ng-if="item != '合计'">
+                        <td style="width: 20%;">{{model[item][1]||'0'}}</td>
+                        <td style="width: 20%;">{{model[item][2]||'0'}}</td>
+                        <td style="width: 20%;">{{model[item][3]||'0'}}</td>
+                        <td style="width: 20%;">{{model[item][4]||'0'}}</td>
+                        <td style="width: 20%;">{{model[item][5]||'0'}}</td>
+                    </tr>
+                    <tr ng-if="item == '合计'">
+                        <td style="width: 20%;">{{totalSmallByName(1,model)}}</td>
+                        <td style="width: 20%;">{{totalSmallByName(2,model)}}</td>
+                        <td style="width: 20%;">{{totalSmallByName(3,model)}}</td>
+                        <td style="width: 20%;">{{totalSmallByName(4,model)}}</td>
+                        <td style="width: 20%;">{{totalSmallByName(5,model)}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+        <tfoot ng-if="channelOrders && channelOrders.length">
+        <tr ng-if="!isShowTotalRow()">
+            <td colspan="2" style="height: 40px;">总计</td>
+            <td colspan="5" style="padding:0;border-right: 0;width: 20%;"
+                ng-repeat="item in newTitles[searchModel.channelParentId]">
+                <table class="table table-bordered table-striped " style="height: 40px;">
+                    <tbody>
+                    <tr ng-if="item != '合计'">
+                        <td style="width: 20%;text-align: left">{{totalAllByName(1,channelOrders,item)}}</td>
+                        <td style="width: 20%;text-align: left">{{totalAllByName(2,channelOrders,item)}}</td>
+                        <td style="width: 20%;text-align: left">{{totalAllByName(3,channelOrders,item)}}</td>
+                        <td style="width: 20%;text-align: left">{{totalAllByName(4,channelOrders,item)}}</td>
+                        <td style="width: 20%;text-align: left">{{totalAllByName(5,channelOrders,item)}}</td>
+                    </tr>
+                    <tr ng-if="item == '合计'">
+                        <td style="width: 20%;text-align: left">{{totalAllByName(1,channelOrders)}}</td>
+                        <td style="width: 20%;text-align: left">{{totalAllByName(2,channelOrders)}}</td>
+                        <td style="width: 20%;text-align: left">{{totalAllByName(3,channelOrders)}}</td>
+                        <td style="width: 20%;text-align: left">{{totalAllByName(4,channelOrders)}}</td>
+                        <td style="width: 20%;text-align: left">{{totalAllByName(5,channelOrders)}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr ng-if="isShowTotalRow()">
+            <td style="height: 45px;text-align: left;padding-left: 100px;font-size: 16px;color:#ff3b30;"
+                colspan="{{2+newTitles[searchModel.channelParentId].length *5}}">
+                还有{{isShowTotalRow()}}条数据，请导出报表查看
+            </td>
+        </tr>
+        <!--<tr ng-init="pageParamsInit()" ng-if="searchModel.channelParentId == -1 || searchModel.channelParentId == 5">
+            <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html"
+                colspan="10">
+            </td>
+        </tr>-->
+        </tfoot>
+    </table>
+
+    <!-- 汇总表  -->
+    <!-- st-pipe="getMarketSummary" st-table="channelOrders"-->
+    <!--<table class="table table-bordered table-striped"
+           ng-if=" searchModel.channelParentId == 49">&lt;!&ndash; ng-if="searchModel.channelParentId == 4 || searchModel.channelParentId == 49"&ndash;&gt;
+
+        <thead>
+        <tr>
+            <td style="font-weight: bold;">序号</td>
+            <td style="font-weight: bold;">渠道</td>
+            <td style="font-weight: bold;" data-content="指定周期内的到访人数，NOT人次" data-placement="top" webui-popover>到访量</td>
+            <td style="font-weight: bold;" data-content="指定周期内的体验人数，NOT人次" data-placement="top" webui-popover>体验量</td>
+            <td style="font-weight: bold;" data-content="指定周期内新签且无退单记录的订单数总和" data-placement="top" webui-popover>签单量
+            </td>
+            <td style="font-weight: bold;" data-content="指定周期内新签且无退单记录的订单金额总和(订单金额是已优惠后的金额)" data-placement="top"
+                webui-popover>签单金额
+            </td>
+            <td style="font-weight: bold;" data-content="指定周期内新签且无退单记录的订单实收金额总和(订单金额是已优惠后的金额)" data-placement="top"
+                webui-popover>实收金额
+            </td>
+            <td style="font-weight: bold;" data-content="签单金额/签单数" data-placement="top" webui-popover>平均单底</td>
+            <td style="font-weight: bold;" data-content="到访且体验数/到访数" data-placement="top" webui-popover>到访体验率</td>
+            <td style="font-weight: bold;" data-content="体验且签单数/体验数" data-placement="top" webui-popover>体验签单率</td>
+            <td style="font-weight: bold;" data-content="到访且签单数/到访数" data-placement="left" webui-popover>到访签单率</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-if="!$last" ng-repeat="model in summaryModels">
+            <td>{{$index+1}}</td>
+            <td>{{model.channelName}}</td>
+            <td>{{model.arrivalNum}}</td>
+            <td>{{model.experienceNum}}</td>
+            <td>{{model.orderNum}}</td>
+            <td>{{model.orderAmount|number:2}}</td>
+            <td>{{model.payAmount|number:2}}</td>
+            <td>{{model.orderAmount/model.orderNum | number:2}}</td>
+            <td>{{(model.experienceNum/model.arrivalNum)*100 | number:2}}%</td>
+            <td>{{(model.orderNum/model.experienceNum)*100 | number:2}}%</td>
+            <td>{{(model.orderNum/model.arrivalNum)*100 | number:2}}%</td>
+        </tr>
+        </tbody>
+        <tbody ng-show="isLoading">
+        <tr>
+            <td colspan="8" class="text-center">
+                <div class="loading-indicator"></div>
+            </td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="2" style="height: 40px" align="center">总计</td>
+            <td>{{summaryModels[summaryModels.length-1].arrivalSum}}</td>
+            <td>{{summaryModels[summaryModels.length-1].experienceSum}}</td>
+            <td>{{summaryModels[summaryModels.length-1].orderSum}}</td>
+            <td>{{summaryModels[summaryModels.length-1].orderAmountSum|number:2}}</td>
+            <td>{{summaryModels[summaryModels.length-1].payAmountSum|number:2}}</td>
+            <td>{{summaryModels[summaryModels.length-1].averageSingleBottom|number:2}}</td>
+            <td>{{summaryModels[summaryModels.length-1].experienceRateSum*100|number:2}}%</td>
+            <td>{{summaryModels[summaryModels.length-1].orderExperienceRateSum*100| number:2}}%</td>
+            <td>{{summaryModels[summaryModels.length-1].orderRateSum*100| number:2}}%</td>
+        </tr>
+        </tfoot>
+    </table>-->
+
+
+    <!-- 明细表  st-pipe="getStatistics" st-table="channelOrders"  -->
+    <table class="table table-bordered table-striped"
+           ng-if="currentTable === '2' && channelTab === '1'">
+        <thead>
+        <tr>
+            <th rowspan="2" class="bi-th0">序号</th>
+            <th ng-if="!isSchoolUser" rowspan="2" class="bi-th0">校区</th>
+            <th colspan="5" class="bi-th1">总计</th>
+            <th colspan="5" class="bi-th2">直访</th>
+            <th colspan="5" class="bi-th3">拉上</th>
+            <th colspan="5" class="bi-th4">渠道</th>
+            <th colspan="5" class="bi-th5">活动</th>
+            <th colspan="5" class="bi-th6">渠道活动</th>
+            <th colspan="5" class="bi-th1">收集leads</th>
+            <th colspan="5" class="bi-th2">微信社群</th>
+            <th colspan="5" class="bi-th3">数据采购</th>
+            <th colspan="5" class="bi-th4">会销</th>
+        </tr>
+        <tr>
+            <!-- 总计   -->
+            <td class="bi-th1">到访数</td>
+            <td class="bi-th1">体验数</td>
+            <td class="bi-th1">签单数</td>
+            <td class="bi-th1">签单金额</td>
+            <td class="bi-th1">实收金额</td>
+            <!-- 直访   -->
+            <td class="bi-th2">到访数</td>
+            <td class="bi-th2">体验数</td>
+            <td class="bi-th2">签单数</td>
+            <td class="bi-th2">签单金额</td>
+            <td class="bi-th2">实收金额</td>
+            <!-- 拉上  -->
+            <td class="bi-th3">到访数</td>
+            <td class="bi-th3">体验数</td>
+            <td class="bi-th3">签单数</td>
+            <td class="bi-th3">签单金额</td>
+            <td class="bi-th3">实收金额</td>
+            <!-- 渠道  -->
+            <td class="bi-th4">到访数</td>
+            <td class="bi-th4">体验数</td>
+            <td class="bi-th4">签单数</td>
+            <td class="bi-th4">签单金额</td>
+            <td class="bi-th4">实收金额</td>
+            <!-- 活动  -->
+            <td class="bi-th5">到访数</td>
+            <td class="bi-th5">体验数</td>
+            <td class="bi-th5">签单数</td>
+            <td class="bi-th5">签单金额</td>
+            <td class="bi-th5">实收金额</td>
+            <!-- 渠道活动  -->
+            <td class="bi-th6">到访数</td>
+            <td class="bi-th6">体验数</td>
+            <td class="bi-th6">签单数</td>
+            <td class="bi-th6">签单金额</td>
+            <td class="bi-th6">实收金额</td>
+            <!-- 收集leads  -->
+            <td class="bi-th1">到访数</td>
+            <td class="bi-th1">体验数</td>
+            <td class="bi-th1">签单数</td>
+            <td class="bi-th1">签单金额</td>
+            <td class="bi-th1">实收金额</td>
+            <!-- 微信社群  -->
+            <td class="bi-th2">到访数</td>
+            <td class="bi-th2">体验数</td>
+            <td class="bi-th2">签单数</td>
+            <td class="bi-th2">签单金额</td>
+            <td class="bi-th2">实收金额</td>
+            <!-- 数据采购  -->
+            <td class="bi-th3">到访数</td>
+            <td class="bi-th3">体验数</td>
+            <td class="bi-th3">签单数</td>
+            <td class="bi-th3">签单金额</td>
+            <td class="bi-th3">实收金额</td>
+            <!-- 会销  -->
+            <td class="bi-th4">到访数</td>
+            <td class="bi-th4">体验数</td>
+            <td class="bi-th4">签单数</td>
+            <td class="bi-th4">签单金额</td>
+            <td class="bi-th4">实收金额</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="channelOrder in channelOrders">
+            <td>{{$index+1+statisticsTableState.pagination.start}}</td>
+            <td ng-if="!isSchoolUser">{{channelOrder.schoolName}}</td>
+            <!-- 总计  -->
+            <td>{{channelOrder.totalVisitCount}}</td>
+            <td>{{channelOrder.totalExperienceCount}}</td>
+            <td>{{channelOrder.totalOrderCount}}</td>
+            <td>{{channelOrder.totalOrderAmount}}</td>
+            <td>{{channelOrder.totalRealPaymentAmount}}</td>
+            <!-- 直访  -->
+            <td>{{channelOrder.zfVisitCount}}</td>
+            <td>{{channelOrder.zfExperienceCount}}</td>
+            <td>{{channelOrder.zfOrderCount}}</td>
+            <td>{{channelOrder.zfOrderAmount}}</td>
+            <td>{{channelOrder.zfRealPaymentAmount}}</td>
+            <!-- 拉上  -->
+            <td>{{channelOrder.lsVisitCount}}</td>
+            <td>{{channelOrder.lsExperienceCount}}</td>
+            <td>{{channelOrder.lsOrderCount}}</td>
+            <td>{{channelOrder.lsOrderAmount}}</td>
+            <td>{{channelOrder.lsRealPaymentAmount}}</td>
+            <!-- 渠道  -->
+            <td>{{channelOrder.qdVisitCount}}</td>
+            <td>{{channelOrder.qdExperienceCount}}</td>
+            <td>{{channelOrder.qdOrderCount}}</td>
+            <td>{{channelOrder.qdOrderAmount}}</td>
+            <td>{{channelOrder.qdRealPaymentAmount}}</td>
+            <!-- 活动  -->
+            <td>{{channelOrder.hdVisitCount}}</td>
+            <td>{{channelOrder.hdExperienceCount}}</td>
+            <td>{{channelOrder.hdOrderCount}}</td>
+            <td>{{channelOrder.hdOrderAmount}}</td>
+            <td>{{channelOrder.hdRealPaymentAmount}}</td>
+            <!-- 渠道活动  -->
+            <td>{{channelOrder.qdhdVisitCount}}</td>
+            <td>{{channelOrder.qdhdExperienceCount}}</td>
+            <td>{{channelOrder.qdhdOrderCount}}</td>
+            <td>{{channelOrder.qdhdOrderAmount}}</td>
+            <td>{{channelOrder.qdhdRealPaymentAmount}}</td>
+            <!-- 收集leads  -->
+            <td>{{channelOrder.leadsVisitCount}}</td>
+            <td>{{channelOrder.leadsExperienceCount}}</td>
+            <td>{{channelOrder.leadsOrderCount}}</td>
+            <td>{{channelOrder.leadsOrderAmount}}</td>
+            <td>{{channelOrder.leadsRealPaymentAmount}}</td>
+            <!-- 微信社群  -->
+            <td>{{channelOrder.wxsqVisitCount}}</td>
+            <td>{{channelOrder.wxsqExperienceCount}}</td>
+            <td>{{channelOrder.wxsqOrderCount}}</td>
+            <td>{{channelOrder.wxsqOrderAmount}}</td>
+            <td>{{channelOrder.wxsqRealPaymentAmount}}</td>
+            <!-- 数据采购  -->
+            <td>{{channelOrder.sjcgVisitCount}}</td>
+            <td>{{channelOrder.sjcgExperienceCount}}</td>
+            <td>{{channelOrder.sjcgOrderCount}}</td>
+            <td>{{channelOrder.sjcgOrderAmount}}</td>
+            <td>{{channelOrder.sjcgRealPaymentAmount}}</td>
+            <!-- 会销  -->
+            <td>{{channelOrder.hxVisitCount}}</td>
+            <td>{{channelOrder.hxExperienceCount}}</td>
+            <td>{{channelOrder.hxOrderCount}}</td>
+            <td>{{channelOrder.hxOrderAmount}}</td>
+            <td>{{channelOrder.hxRealPaymentAmount}}</td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="13" class="text-center" st-pagination="" st-items-by-page="10"
+                st-template="partials/util/pagination.custom.html">
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+<!--导出明细专用-->
+<div class="table-responsive" ng-if="isBranch()" id="exportableDetail"
+     style=" overflow-y:hidden;display: none;"><!-- && channelOrdersDetail.length-->
+
+    <!--表格模板-->
+    <!-- st-pipe="getMarketSummary" st-table="channelOrders"-->
+    <table class="table table-bordered table-striped mini-w100"
+           >
+        <!--ng-if="searchModel.channelParentId == -1 || searchModel.channelParentId == 5"-->
+        <thead>
+        <tr class="tr-title">
+            <td colspan="{{4+newTitles[searchModel.channelParentId].length*5}}" style="text-align: center">
+                {{tabsName[searchMiodel.channelParentId]}}统计
+            </td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;" owspan="2">校区性质</td>
+            <td style="font-weight: bold;" rowspan="2">城市</td>
+            <td style="font-weight: bold;" rowspan="2">区域</td>
+            <td style="font-weight: bold;" rowspan="2">校区</td>
+            <td class="bgtd-header" style="min-width: 500px" colspan="5"
+                ng-repeat="item in newTitles[searchModel.channelParentId]">{{item}}
+            </td>
+        </tr>
+        <tr>
+            <!--市场-->
+            <td colspan="5" class="bgtd-header" style="padding:0;border-right: 0;"
+                ng-repeat="item in newTitles[searchModel.channelParentId]">
+                <table class="table table-bordered table-striped ">
+                    <thead>
+                    <tr>
+                        <td
+                                data-content="指定周期内的到访人数，NOT人次" data-placement="top" webui-popover>到访量
+                        </td>
+                        <td
+                                data-content="指定周期内的体验人数，NOT人次" data-placement="top" webui-popover>体验量
+                        </td>
+                        <td
+                                data-content="指定周期内新签且无退单记录的订单数总和" data-placement="top" webui-popover>签单量
+                        </td>
+                        <td
+                                data-content="指定周期内新签且无退单记录的订单金额总和(订单金额是已优惠后的金额)" data-placement="top"
+                                webui-popover>签单金额
+                        </td>
+                        <td
+                                data-content="指定周期内新签且无退单记录的订单实收金额总和(订单金额是已优惠后的金额)" data-placement="top"
+                                webui-popover>实收金额
+                        </td>
+                    </tr>
+                    </thead>
+                </table>
+            </td>
+        </tr>
+        </thead>
+        <!-- <tbody>
+         <tr ng-repeat="model in channelOrdersDetail">
+             <td>
+                 {{model.schoolNature}}
+             </td>
+             <td>
+                 &lt;!&ndash;{{model.cityName}}&ndash;&gt;
+                 {{model.branch_name}}
+             </td>
+             <td>
+                 {{model.parent_name}}
+             </td>
+             <td>
+                 {{model.school_name}}
+             </td>
+
+
+             <td colspan="5" style="padding:0;border-right: 0;width: 20%;"
+                 ng-repeat="item in newTitles[searchModel.channelParentId]">
+                 <table class="table table-bordered table-striped " style="height: 40px;">
+                     <tbody>
+                     <tr ng-if="item != '合计'">
+                         <td style="width: 20%;">{{model[item][1]||'0'}}</td>
+                         <td style="width: 20%;">{{model[item][2]||'0'}}</td>
+                         <td style="width: 20%;">{{model[item][3]||'0'}}</td>
+                         <td style="width: 20%;">{{model[item][4]||'0'}}</td>
+                         <td style="width: 20%;">{{model[item][5]||'0'}}</td>
+                     </tr>
+                     <tr ng-if="item == '合计'">
+                         <td style="width: 20%;">{{totalSmallByName(1,model)}}</td>
+                         <td style="width: 20%;">{{totalSmallByName(2,model)}}</td>
+                         <td style="width: 20%;">{{totalSmallByName(3,model)}}</td>
+                         <td style="width: 20%;">{{totalSmallByName(4,model)}}</td>
+                         <td style="width: 20%;">{{totalSmallByName(5,model)}}</td>
+                     </tr>
+                     </tbody>
+                 </table>
+             </td>
+         </tr>
+         </tbody>
+         <tfoot>
+         <tr ng-if="channelOrdersDetail && channelOrdersDetail.length">
+             <td colspan="4" style="height: 40px;">总计</td>
+             <td colspan="5" style="padding:0;border-right: 0;width: 20%;"
+                 ng-repeat="item in newTitles[searchModel.channelParentId]">
+                 <table class="table table-bordered table-striped " style="height: 40px;">
+                     <tbody>
+                     <tr ng-if="item != '合计'">
+                         <td style="width: 20%;text-align: left">{{totalAllByName(1,channelOrdersDetail,item)}}</td>
+                         <td style="width: 20%;text-align: left">{{totalAllByName(2,channelOrdersDetail,item)}}</td>
+                         <td style="width: 20%;text-align: left">{{totalAllByName(3,channelOrdersDetail,item)}}</td>
+                         <td style="width: 20%;text-align: left">{{totalAllByName(4,channelOrdersDetail,item)}}</td>
+                         <td style="width: 20%;text-align: left">{{totalAllByName(5,channelOrdersDetail,item)}}</td>
+                     </tr>
+                     <tr ng-if="item == '合计'">
+                         <td style="width: 20%;text-align: left">{{totalAllByName(1,channelOrdersDetail)}}</td>
+                         <td style="width: 20%;text-align: left">{{totalAllByName(2,channelOrdersDetail)}}</td>
+                         <td style="width: 20%;text-align: left">{{totalAllByName(3,channelOrdersDetail)}}</td>
+                         <td style="width: 20%;text-align: left">{{totalAllByName(4,channelOrdersDetail)}}</td>
+                         <td style="width: 20%;text-align: left">{{totalAllByName(5,channelOrdersDetail)}}</td>
+                     </tr>
+                     </tbody>
+                 </table>
+             </td>
+         </tr>
+         </tfoot>-->
+    </table>
+</div>

@@ -1,0 +1,151 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" style="min-width: 910px;width:60%;">
+        <div class="modal-content">
+            <form name="addOrderForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modaltitle"></h4>
+                </div>
+                <div class="modal-body of pb-20" id="getHeight" st-pipe="getMyCrmCustomerStudentListForAddGroup"
+                     st-table="myCrmCustomerStudentListForAddGroupFilter">
+                    <div style="position:absolute;top: 0;left: 0;width:120%;height:100%;z-index: 9;background: rgba(0,0,0,0)"
+                         ng-if="isSlide" ng-click="showTriggar(-1);"></div>
+                    <ul class="of mt-modal-order input-left">
+                        <li>
+                            <label>一对多名称</label>
+                            <input ng-model="myCrmCustomerStudentListForAddGroupFilter.group_no" placeholder="一对多名称"
+                            	class="form-control" ng-maxlength="20" required/>
+                        </li>
+                        <li>
+                            <label>课程规则</label>
+                            <select ng-model="myCrmCustomerStudentListForAddGroupFilter.order_rule" name="orderRule" id="orderRule" class="form-control"
+                                    ng-options="option.id as option.name for option in orderRuleSelect" required>
+                                <option value="">-- 请选择 --</option>
+                            </select>
+                        </li>
+                        <li>
+                        	<label>类型</label>
+                            <select ng-model="myCrmCustomerStudentListForAddGroupFilter.group_type" name="groupType" id="groupType" class="form-control"
+                                    ng-options="option.id as option.name for option in groupTypeList" ng-change="groupTypeChange()" required>
+                                <option value="">-- 请选择 --</option>
+                            </select>
+                        </li>
+                        <li>
+                        	<label>人数</label>
+                            <input ng-model="myCrmCustomerStudentListForAddGroupFilter.student_count" placeholder="人数"
+                            	class="form-control" type="text" ng-pattern="/^[1-9][0-5]*$/" ng-maxlength="2" ng-minlength="1"
+                            	ng-disabled="myCrmCustomerStudentListForAddGroupFilter.group_type===2||myCrmCustomerStudentListForAddGroupFilter.group_type===3"
+                            	required/>
+                        </li>
+                    </ul>
+                    <div class="mt-modal-order" style="padding-bottom: 0 !important;">
+                        <div class="mt-dashed"></div>
+                    </div>
+                    <ul class="of mt-modal-order input-left">
+                        <li>
+                            <label>姓名</label>
+                            <input st-search="myCrmCustomerStudentListForAddGroupFilter.name" placeholder="学生姓名"
+                                   ng-model="myCrmCustomerStudentListForAddGroupFilter.name"
+                                   class="input-sm form-control" type="search"/>
+                        </li>
+                        <li>
+                            <label>电话</label>
+                            <input st-search="myCrmCustomerStudentListForAddGroupFilter.phone" placeholder="电话"
+                                   ng-model="myCrmCustomerStudentListForAddGroupFilter.phone"
+                                   class="input-sm form-control"/>
+                        </li>
+                        <li>
+                            <label data="{{gradeIds}}">年级</label>
+                            <select st-search="myCrmCustomerStudentListForAddGroupFilter.grade_id"
+                                    ng-model="myCrmCustomerStudentListForAddGroupFilter.grade_id"
+                                    name="myCrmCustomerStudentListForAddGroupFilter.grade_id" class="input-sm form-control"
+                                    ng-options="option.id as option.name for option in gradeIds">
+                                <option value="">-- 请选择--</option>
+                            </select>
+                        </li>
+                        <li style="line-height: 33px;">
+                        	<a class="mt-cx" ng-click="getMyCrmCustomerStudentListForAddGroup(studentListForAddGroupTableState)">查询</a>
+                        	<a class="mt-qx" ng-click="resetParam()">重置</a>
+                        </li>
+                    </ul>
+                    <div class="table-responsive width70 yws-left border-ccc br-gray  pl-0" style="width:80%;">
+                        <table class="table table-bordered table-striped table-condensed mt-table1">
+                            <thead>
+                            <tr>
+                                <th>选择</th>
+                                <th>学员姓名</th>
+                                <th>学员电话</th>
+                                <th>学员年级</th>
+                                <th>课时订单剩余</th>
+                                <th>课时订单已消</th>
+                                <th>电子账户余额</th>
+                                <th>已消金额</th>
+                            </tr>
+                            </thead>
+                            <tbody ng-show="!isMyCrmCustomerStudentListForAddGroupLoading">
+                            <tr ng-repeat="row in MyCrmCustomerStudentListForAddGroup">
+                                <td>
+                                    <label ng-class="{'active':row.select}" class="checkbox-bg" ng-click="selectOneMt(row)"></label>
+                                </td>
+                                <td>{{row.name}}</td>
+                                <td>{{row.phone}}</td>
+                                <td>{{row.grade_name}}</td>
+                                <td>{{row.courseNum}}</td>
+                                <td>{{row.originalCourseNum-row.courseNum|number:2}}</td>
+                                <td>{{row.account_balance}}</td>
+                                <td>{{row.alreadyAmount}}</td>
+                            </tr>
+                            </tbody>
+                            <tbody ng-show="isMyCrmCustomerStudentListForAddGroupLoading">
+                            <tr>
+                                <td colspan="14" class="text-center">
+                                    <div class="loading-indicator"></div>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="text-center" st-pagination="" st-items-by-page="10"
+                                    st-template="partials/util/pagination.custom.html" colspan="14"></td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="yws-right border-ccc br-gray pl-0" style="width:18%;height:410px;overflow-y: auto">
+                        <div class="padding10 hk-order-reminding-bg">
+                        	<span class="width80 tc inline-block">
+                        		已选择
+                        		（<a class="c2f">{{MyCrmCustomerStudentListOk.length||0}}/{{myCrmCustomerStudentListForAddGroupFilter.student_count}}</a>）
+                        	</span>
+                            <a ng-click="deleteAllMt()">
+                            	<span class="glyphicon glyphicon-delete" title="删除全部"></span>
+                            </a>
+                        </div>
+                        <div ng-repeat="row in MyCrmCustomerStudentListOk" class="mt-bt" style="height:41px;line-height: 41px;">
+                            <div>
+                                <span class="width80 tl inline-block">{{row.name}}</span>
+                                <a ng-click="deleteOneMt(row)"><span class="glyphicon glyphicon-delete" title="删除"></span></a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                    <button type="button" class="btn btn-success c5-lable" ng-click="btnTrue()" ng-disabled="addOrderForm.$invalid">确定</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+<style>
+    .col-sm-6 {
+        padding-top: 10px;
+    }
+
+    .form-horizontal .control-label {
+        padding-top: 17px;
+    }
+</style>

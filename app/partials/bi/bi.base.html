@@ -1,0 +1,71 @@
+<div class="default-box form-horizontal yws-container row">
+    <div class="col-sm-4">
+    	<label for="schoolType" class="col-sm-4 control-label">区域/校区：</label>
+    	<div class="col-sm-8 form-group">
+	        <input id="department" class="form-control" type="text" ng-click="showSelectDepartment()" 
+	        	ng-model="selectdDepartment.name" />
+	    </div>
+    </div>
+    <div class="col-sm-4">
+        <label for="schoolType" class="col-sm-4 control-label">校区类型：</label>
+        <div class="col-sm-8 form-group">
+            <select ng-model="searchModel.schoolType" name="schoolType" id="schoolType" class="form-control" 
+            	ng-disabled="isSchoolUser">
+                <option value="">------全部------</option>
+                <option value="1">直营校区</option>
+                <option value="2">合作校区</option>
+                <option value="3">直盟校区</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <label for="schoolProvince" class="col-sm-4 control-label">省：</label>
+        <div class="col-sm-8 form-group">
+            <select ng-model="searchModel.schoolProvince" name="schoolProvince" id="schoolProvince" class="form-control"
+                    ng-options="province.provinceCode as province.provinceName for province in provinces"
+                    ng-change="getCitysByProvinceCode(searchModel.schoolProvince)"
+                    ng-disabled="isSchoolUser">
+                <option value="">------全部------</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <label for="schoolCity" class="col-sm-4 control-label">城市：</label>
+        <div class="col-sm-8 form-group">
+            <select ng-model="searchModel.schoolCity" name="schoolCity" id="schoolCity" class="form-control"
+                    ng-options="city.cityCode as city.cityName for city in cities"
+                    ng-disabled="isSchoolUser">
+                <option value="">------全部------</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <label for="statTime" class="col-sm-4 control-label">时间：</label>
+        <div class="col-sm-8 form-group">
+            <input ng-model="searchModel.statTime" type="text" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,readOnly:true})"
+            	 name="statTime" id="statTime" class="form-control"/>
+            <input ng-hide="true" ng-model="searchModel.startTime" type="text" name="startTime" id="startTime" class="form-control"/>
+            <input ng-hide="true" ng-model="searchModel.endTime" type="text" name="endTime" id="endTime" class="form-control"/>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <label for="period" class="col-sm-4 control-label">查看周期：</label>
+
+        <div class="col-sm-8 form-group">
+            <select ng-model="viewPeriod" name="period" id="period" class="form-control"
+                    ng-change="setTimeScope(viewPeriod)">
+                <option value="0" ng-selected="isSelected('D')"  ng-hide="isQ">单日</option>
+                <option value="1" ng-selected="isSelected('W')">单周</option>
+                <option value="2" ng-selected="isSelected('M')">单月</option>
+                <option value="3" ng-selected="isSelected('Q')"  ng-hide="!isQ" >单季</option>
+                <option value="4" ng-selected="isSelected('Y')"  ng-hide="!isY" >单年</option>
+            </select> 
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="c_center  yws-container">
+            <button id="keydown-query" class="btn btn-success" ng-click="argJudgement(getDataByFilter)">查询</button>
+            <button class="btn" ng-click="reset(isQ)">重置</button>
+        </div>
+    </div>
+</div>

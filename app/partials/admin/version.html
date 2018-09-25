@@ -1,0 +1,165 @@
+<style>
+    #new{
+        color:#ffffff !important;
+    }
+    .modal-body{
+        padding: 0px;
+    }
+    input{
+        text-align: center;
+    }
+    .add-model-input{
+        border:none;
+        border-bottom: 1px solid #dcdcdc;
+        width: 200px;
+        text-align: left;
+        font-size: 18px;
+    }
+    label span{
+        float: left;
+    }
+    label textarea{
+        resize: none;
+        border: 1px solid #dbdfee !important;
+        border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+    }
+</style>
+<div class="view-frame" ng-controller="VersionManagementController">
+    <div class="view-left">
+        <nav-side menu-data="menu.subMenu"></nav-side>
+    </div>
+    <div class="view-content">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="">系统管理</a><span class="divider"></span></li>
+                <li class="active">帮助管理</li>
+            </ul>
+        </div>
+
+        <div class="yws-container" >
+            <div class="mt-10 br-gray">
+                <div class="bt tabs-title border-1 c3">版本日志管理<i class="i-br">？</i> </div>
+                <a id="new" ng-click="addPublic()" class="mt-purple add-a br-4 mt-11">添加公告</a>
+            </div>
+        </div>
+
+        <div class="br-gray mt-list">
+            <h2 class="pl-20 c3">版本日志列表</h2>
+            <div class="overflow-x">
+                <table class="table table-bordered table-striped table-condensed mt-table1 mt-list  " st-pipe="getVersionList" st-table="versionTableState">
+                    <thead>
+                        <tr class="br-gray-t" style="display: flex;width:100%">
+                            <th style="flex: 3">公告标题</th>
+                            <th style="flex: 3;overflow: hidden">编号</th>
+                            <th style="flex: 3;overflow: hidden">创建时间</th>
+                            <th style="flex: 2">操作</th>
+                        </tr>
+                        <tr style="display: flex;width:100%">
+                            <th style="flex: 3">
+                                <input placeholder="标题查询" maxlength="30" class="input-sm form-control" type="search" ng-model="filter.title" st-search="filter.title"/>
+                            </th>
+                            <th style="flex: 2">
+                                <input placeholder="编号查询" maxlength="15" class="input-sm form-control" type="search" ng-model="filter.version" st-search="filter.version"/>
+                            </th>
+                            <th style="flex: 6">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="row in versionList" style="display: flex;width:100%;">
+                            <td style="flex: 3;overflow: auto">{{row.title}}</td>
+                            <td style="flex: 3;overflow: auto ">{{row.version}}</td>
+                            <td  style="flex: 3;overflow: auto ">{{row.createdAt | date:'yyyy-MM-dd'}}</td>
+                            <td style="flex: 2">
+                                <a class="showUI" id="nw2+{{$index}}" ng-click="nw2[$index]=true">
+                                    <span class="glyphicon glyphicon-caozuo" title="操作"></span>
+                                </a>
+                                <bubble ng-if="nw2[$index]" for="nw2+{{$index}}" align="bottom" close="nw2[$index]=false" close-action="outerchick " ng-mouseleave="nw2[$index]=false;">
+                                    <ul>
+                                        <li>
+                                            <a ng-click="showVersion(row)">查看</a>
+                                        </li>
+                                        <li>
+                                            <a ng-click="changeVersion(row)">编辑</a>
+                                        </li>
+                                        <li>
+                                            <a ng-click="removeVersion(row)">删除</a>
+                                        </li>
+                                    </ul>
+                                </bubble>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="4"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+
+
+<div class="creathelp"  id="editorhelp">
+    <div class="creathelp-content">
+        <div class="creathelp-content-top">
+            <span>编辑版本更新日志</span>
+        </div>
+        <div class="creathelp-content-title" style="height: auto">
+            <label style="width: 50%">
+                公告标题：
+                <input maxlength="30" type="text" ng-model="changeVersionData.title" style="width:75%;">
+            </label>
+            <label style="width: 49%">
+                编号：
+                <input maxlength="16" type="text" ng-model="changeVersionData.version" style="width:75%;">
+            </label>
+            <label style="width: 90%;margin-left: 20px">
+                <span style="float: left;">简介：</span>
+                <textarea cols="100" rows="4" placeholder="限制160个字符(必填项不可为空)" maxlength="160" type="text" ng-model="changeVersionData.introduction" style="width:75%;"></textarea>
+            </label>
+        </div>
+        <div class="creathelp-content-editor" >
+            <!-- 加载编辑器的容器 -->
+            <div id="summernote-edit" ></div>
+            <!--<summernote on-image-upload="imageUpload(files[0])" editable="editable" editor="editor" ng-model="articleListData.articleContent" height="300" required></summernote>-->
+        </div>
+        <div class="creathelp-content-foot">
+            <input id="cancleeditor" ng-click="cancleeditor()" class="addhelp_cancle" type="button" value="取消">
+            <input id="saveeditor" class="addhelp_save" type="submit" value="保存" ng-click="saveChange()">
+        </div>
+    </div>
+</div>
+
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // 实例化富文本编辑器  实例化的代码必须放在编辑器所在页面内
+        $('#summernote-edit').summernote({
+            height:500,
+            minHeight: 300,
+            maxHeight: null,
+            focus: true,
+            lang:'zh-CN',
+            toolbar: [
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['font', ['strikethrough', 'superscript', 'subscript']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']],
+                ['picture', ['picture']],
+                ['link', ['link']],
+                ['table', ['table']],
+                ['link', ['link']],
+                ['hr', ['hr']],
+            ]
+        });
+    })
+</script>

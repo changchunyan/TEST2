@@ -1,0 +1,91 @@
+<div class="modal oms-record-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" style="min-width: 700px">
+        <div class="modal-content">
+        <form name="form">
+        <div class="modal-header">
+          <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" ng-bind="title"></h4>
+        </div>
+        <div class="modal-body yws-container pb-20">
+            <!-- 筛选条件 -->
+            <div class="default-box form-horizontal br-gray of mt-select mt-modal-order">
+                <div ng-if = "type != 2">
+                    学生姓名：<input ng-model="myCrmCustomerStudentFilter.name" type="text" name="myCrmCustomerStudentFilter.name" id="studentName" style="width:120px;" class="mr-28"/>
+                    电话号码：<input ng-model="myCrmCustomerStudentFilter.phone" type="text" name="myCrmCustomerStudentFilter.phone" id="mobile" style="width:120px;" class="mr-28"/>
+                    <a class="mt-btn cf bg-color-blue br br-0" ng-click="getLeadsStudentInfoByFilter()">查询</a>
+                    <a class="mt-btn ml15 brc3" ng-click="resetFilter()">重置</a>
+                </div>
+                <div ng-if="type == 2">
+                    成员：<input ng-model="myCrmCustomerStudentFilter.crmStudentName" type="text" name="myCrmCustomerStudentFilter.crmStudentName" id="crmStudentName" style="width:120px;" class="mr-28"/>
+                    学生年级：
+                    <select ng-model="myCrmCustomerStudentFilter.grade_id" name="grade_id" id="grade_id" ng-options="option.id as option.name for option in omsGrade"  class="mr-28" style="line-height: normal;">
+                        <option value="">-- 请选择查询班级--</option>
+                    </select>
+                    <a class="mt-btn cf bg-color-blue br br-0" ng-click="getLeadsStudentInfoByFilter()">查询</a>
+                    <a class="mt-btn ml15 brc3" ng-click="resetFilter()">重置</a>
+                </div>
+                <!--<div class="row">
+                    <div class="c_center  yws-container  mt-select">
+                        <a class="mt-btn cf bg-color-blue br br-0" ng-click="getLeadsStudentInfoByFilter()">查询</a>
+                        <a class="mt-btn ml15 brc3" ng-click="resetFilter()">重置</a>
+                    </div>
+                </div>-->
+            </div>
+            <!-- 表格 -->
+            <div class="br-gray pl-0"><!--class="default-box"-->
+                <div id="exportable" class="table-responsive" style="">
+                    <table  st-pipe="getLeadsStudentInfo"  st-table="tableState1"  class="table table-bordered table-striped mt-table1">
+                        <thead>
+                        <tr>
+                            <th>选择</th><!-- class="bi-th0"-->
+                            <th ng-if="type == 2">一对多名称</th>
+                            <th ng-if="type == 2">成员</th>
+                            <th ng-if="type == 2">年级</th>
+                            <th ng-if="type != 2">姓名</th>
+                            <th ng-if="type != 2">性别</th>
+                            <th ng-if="type != 2">电话</th>
+                            <th ng-if="type != 2">公立学校</th>
+                            <th>所属人</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr  ng-repeat="row in resultList">
+                            <td>
+                                <input type="radio" name="studentRadio" ng-model="studentRadio" ng-checked="isChecked(row)" value="{{row.crm_student_id}}" ng-click="checkedCustomer(row)"/>
+                            </td>
+                            <td>{{row.name}}</td>
+                            <td><span ng-if="row.gender == false">女</span>
+                                <span ng-if="row.gender == true">男</span>
+                            </td>
+                            <td><span>{{row.phone}}</span>
+                                <span ng-if="row.mother_phone"><br>{{row.mother_phone}}</span>
+                                <span ng-if="row.father_phone"><br>{{row.father_phone}}</span>
+                            </td>
+                            <td>{{row.school_name}}</td>
+                            <td>{{row.belong_user_name}}</td>
+                        </tr>
+
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="6" class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!--<tabs>
+
+                </tabs>-->
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <div class="text-center">
+                <button class="btn btn-success" ng-click="$hide()">确定</button>
+            </div>
+        </div>
+        </form>
+        </div>
+
+    </div>
+</div>

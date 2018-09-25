@@ -1,0 +1,107 @@
+<link href="css/smarty.css" rel="stylesheet">
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true" style="overflow-y:auto">
+    <div class="modal-dialog" style="width:80%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" ng-bind="modalTitleDetail"></h4>
+            </div>
+            <div class="table-responsive">
+                <form name="addOrderRenewalForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                    <div class="modal-body mt-modal-order">
+                        <div>
+                            <div class="row ">
+                                <div class="col-sm-4 form-group "
+                                     ng-class="{ 'has-error': addOrderForm.leadName.$dirty && addOrderForm.leadName.$error.required}">
+                                    <label for="leadName" class="control-label">* 学生姓名</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" ng-model="order.name" readonly class="input-sm form-control"/>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 form-group">
+                                    <label for="leadPhone" class="control-label">* 电话</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="input-sm form-control" ng-model=" order.phone" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4  form-group">
+                                    <label for="orderType" class=" control-label">* 业绩类型</label>
+                                    <div class="col-sm-6">
+                                        <select ng-model="order.orderType" class="form-control" disabled>
+                                            <option value="">-- 请选择 --</option>
+                                            <option value="1" ng-selected="order.orderType == 1" >新签</option>
+                                            <option value="2" ng-selected="order.orderType == 2">续费</option>
+                                            <option value="5" ng-selected="order.orderType == 5">推荐</option>
+                                            <option value="8" ng-selected="order.orderType == 8">赠课</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                       
+                        </div>
+                        <div class="br-gray pl-0"><!-- 交费列表 -->
+                            <table class="table table-bordered table-striped mt-table1">
+                                <thead>
+                                <tr>
+                                    <th>交费日期</th>
+                                    <th>交费金额</th>
+                                    <th>经办人</th>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="row in order.crmorderPayments">
+                                    <td>{{row.payDate | date:'yyyy-MM-dd'}}</td>
+                                    <td>{{row.payAmount}}</td>
+                                    <td>{{row.name}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="mt-dashed mt-10"></div>
+                        <h5 class="pl-20">业绩所属人</h5>
+                        <div class="br-gray pl-0">
+                            <table class="table table-bordered table-striped mt-table1" st-table="order.orderAchievementRatios">
+                                <thead>
+                                <tr>
+                                    <th>姓名</th>
+                                    <th>岗位</th>
+                                    <th>校区</th>
+                                    <th>业绩计算比例</th>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="row in order.achievementRatios">
+                                    <th>{{row.userName}}</th>
+                                    <th>{{row.position.name}}{{row.positionName}}</th>
+                                    <th>{{row.departName}}</th>
+                                    <th>
+                                        <select class="input-sm form-control" ng-model="row.achievementRatio" ng-change="changeRatio(row)" >
+                                            <!--<option value=1 ng-selected="row.achievementRatio == 1">100%</option>-->
+                                            <!--<option value=0.5 ng-selected="row.achievementRatio == 0.5">50%</option>-->
+                                            <option value=1 ng-selected="row.achievementRatio == 1">100%</option>
+                                            <option value=0.9 ng-selected="row.achievementRatio == 0.9">90%</option>
+                                            <option value=0.8 ng-selected="row.achievementRatio == 0.8">80%</option>
+                                            <option value=0.7 ng-selected="row.achievementRatio == 0.7">70%</option>
+                                            <option value=0.6 ng-selected="row.achievementRatio == 0.6">60%</option>
+                                            <option value=0.5 ng-selected="row.achievementRatio == 0.5">50%</option>
+                                            <option value=0.4 ng-selected="row.achievementRatio == 0.4">40%</option>
+                                            <option value=0.3 ng-selected="row.achievementRatio == 0.3">30%</option>
+                                            <option value=0.2 ng-selected="row.achievementRatio == 0.2">20%</option>
+                                            <option value=0.1 ng-selected="row.achievementRatio == 0.1">10%</option>
+                                        </select>
+                                    </th>
+                                </tr>
+                            </table>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                    	<button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                    	<button type="button" class="btn btn-success hk-co-tuidan" ng-disabled="!order.refundAmount " ng-click="refund()">退单</button>
+                    	<input type="text" ng-model="order.refundAmount" ng-pattern="/^[1-9]\d*\b|0$/" ng-maxlength="10" ng-pattern="" class="input-sm tuikuanjine"/>
+                    	<label class="tuikuan-jine-num"> 退单金额</label>
+                    	<img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                </div>
+                </form>
+            </div>
+		</div>
+        </div>
+    </div>
+</div>

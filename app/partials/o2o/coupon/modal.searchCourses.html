@@ -1,0 +1,60 @@
+<div class="modal orderModal"  tabindex="-1" role="dialog" aria-hidden="true" ng-controller="SearchCoursesController as scc">
+    <div class="modal-dialog">
+        <div class="modal-content" >
+            <form name="SearchCoursesForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="title"></h4>
+                </div>
+                <div class="modal-body" ng-if="!scc.isLoadingSearchCourses">
+                    <ul>
+                        <div class="row " >
+                            <div class="col-sm-3 ">
+                                <div class="col-sm-1 ">
+                                    <input type="checkbox" ng-checked="scc.show.ifSelectedAll(row)" ng-click="scc.show.selectAll($event)"  />
+                                </div>
+                                <div class="col-sm-9" >
+                                    全选
+                                </div>
+                            </div>
+                        </div>
+                        <li ng-repeat="tree in scc.show.tree">
+                            <div class="row" >
+                                <div class="col-sm-3 ">
+                                    <div class="col-sm-1 ">
+                                        <input type="checkbox" name="selected" ng-checked="scc.show.isSelected(tree.check)" ng-click="scc.show.updateSelection($event, tree)"/>
+                                    </div>
+                                    <div class="col-sm-8 ">
+                                        <strong>{{tree.name}}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row col-sm-10">
+                                <div ng-repeat="e in tree.items" class="col-sm-3 " >
+                                    <div class="col-sm-1">
+                                        <input type="checkbox" name="selected" ng-checked="scc.show.isSelected(e.check)" ng-click="scc.show.updateSelection($event, e)"/>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        {{e.name}}
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="modal-body" ng-if="scc.isLoadingSearchCourses">
+                        <div colspan="24" class="text-center">
+                            <div class="loading-indicator"></div>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                    <button ng-if="scc.view.isSubmit" type="submit" class="btn btn-success js-edit-bottom c5-lable" ng-click="scc.submitController()" ng-disabled="CourseOnlineform.$invalid">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

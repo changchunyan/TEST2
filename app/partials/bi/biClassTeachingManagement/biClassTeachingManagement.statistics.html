@@ -1,0 +1,67 @@
+<!-- 筛选条件 -->
+<search on-department-clicked="showSelectDepartment()"
+        department="selectdDepartment"
+        search-model="searchModel"
+        is-school-user="isSchoolUser"
+        provinces="provinces"
+        on-province-changed="getCitysByProvinceCode(searchModel.schoolProvince)"
+        cities="cities"
+        on-reset="reset(isQ)"
+        hide-province-and-city="true"
+        hide-school-type="true"
+        on-search="argJudgement(getChildren)"/>
+<!-- 表格 -->
+<div class="default-box">
+    <h4>教务综合</h4>
+    <br/>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th style="font-weight: bold;" rowspan="2">区域/校区</th>
+                <th class="bi-th1" style="font-weight: bold;" rowspan="2"><span data-content="订单类型为“新签”的订单数据" data-placement="right"  webui-popover>学科</span></th>
+                <th class="bi-th2" style="font-weight: bold;" rowspan="2"><span data-content="订单类型为“续费”和“推荐”的订单数据" data-placement="right"  webui-popover></span>教师数</th>
+                <th class="bi-th3" style="font-weight: bold;" rowspan="2">开班数</th>
+                <th class="bi-th4" style="font-weight: bold;" rowspan="2">学生数</th>
+                <th ng-repeat="classType in classTypes" colspan="2">
+                  {{classType}}
+                </th>
+            </tr>
+            <tr>
+              <th ng-repeat="classTypeValue in flattenClassTypeValues track by $index">
+                {{classTypeValue}}
+              </th>
+            </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="statisticsModel in statisticsModels">
+                  <td rowspan="{{statisticsModel.rows}}" ng-if="statisticsModel.isStart">{{statisticsModel.departmentName}}</td>
+                  <td>{{statisticsModel.subject}}</td>
+                  <td>{{statisticsModel.numberOfTeachers}}</td>
+                  <td>{{statisticsModel.numberOfClasses}}</td>
+                  <td>{{statisticsModel.numberOfStudents}}</td>
+                  <td ng-repeat-start="classType in classTypes">
+                    {{statisticsModel.classTypeStats[classType].numberOfClasses || 0}}
+                  </td>
+                  <td ng-repeat-end>
+                    {{statisticsModel.classTypeStats[classType].numberOfStudent || 0}}
+                  </td>
+              </tr>
+              <tr>
+                <td colspan="2">总计</td>
+                <td>{{total.numberOfTeachers}}</td>
+                <td>{{total.numberOfClasses}}</td>
+                <td>{{total.numberOfStudents}}</td>
+                <td ng-repeat-start="classType in classTypes">
+                  {{total.classTypeStats[classType].numberOfClasses || 0}}
+                </td>
+                <td ng-repeat-end>
+                  {{total.classTypeStats[classType].numberOfStudent || 0}}
+                </td>
+              </tr>
+            </tbody>
+
+        </table>
+
+    </div>
+</div>

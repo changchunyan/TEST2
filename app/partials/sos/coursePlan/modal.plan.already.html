@@ -1,0 +1,107 @@
+<div class="modal oms-record-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" style="width: 80%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="callServerrecordFilterChange()"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" ng-bind="modalTitle"></h4>
+            </div>
+            <div class="modal-body yws-container pb-20">
+                <div class="br-gray pl-0 modal-input">
+                    <table class="table table-bordered table-striped table-condensed mt-table1" st-pipe="callServerrecord"
+                           st-table="displayedrecord">
+                        <thead>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>学生姓名</th>
+                            <th>一对多名称</th>
+                            <th>消课状态</th>
+                            <th>课程类型</th>
+                            <th>科目</th>
+                            <th colspan='2'>上课时间</th>
+                            <th>上课课时</th>
+                            <th>任课老师</th>
+                            <th>全职/兼职</th>
+                            <th>教师电话</th>
+                        </tr>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th><input st-search="student_name" placeholder="学生姓名" class="input-sm form-control"
+                                       type="search"/></th>
+                            <th><input st-search="crm_order_student_course_id" placeholder="一对多名称"
+                                       class="input-sm form-control" type="search"/></th>
+                            <th>
+                                &nbsp;
+                            </th>
+                            <th><input st-search="coursename" placeholder="查询" class="input-sm form-control" type="search"/>
+                            </th>
+                            <th><input st-search="subject_name" placeholder="科目查询" class="input-sm form-control"
+                                       type="search"/></th>
+                            <th>
+                                <input st-search="start_time" placeholder="" class="input-sm form-control" type="date"
+                                       style="margin-right:9%;"/>
+                            </th>
+                            <th>
+                                <input st-search="end_time" placeholder="" class="input-sm form-control" type="date"/>
+                            </th>
+                            <th><input st-search="course_num" placeholder="课时" class="input-sm form-control" type="search"/>
+                            </th>
+                            <th><input st-search="teacher_name" placeholder="任课老师" class="input-sm form-control"
+                                       type="search"/></th>
+                            <th><select st-search="part_full" placeholder="全职/兼职" class="input-sm form-control">
+                                <option value=""></option>
+                                <option value="2">全职</option>
+                                <option value="1">兼职</option>
+                            </select></th>
+                            <th><input st-search="mobile" placeholder="任课老师电话" class="input-sm form-control" type="search"/>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody ng-show="!isrendLoading">
+                        <tr ng-repeat="row in displayedrecord">
+                            <td><input type="radio" name="selectStudent" ng-click="yesconsume(row,1)"></td>
+                            <td>{{ row.student_name }}</td>
+                            <td>{{row.crm_order_student_course_id}}</td>
+                            <td>未消课</td>
+                            <td ng-if="row.type==3">试听课程</td>
+                            <td ng-if="row.type!=3">{{row.coursename}}</td>
+                            <td>{{row.subject_name}}</td>
+                            <td colspan='2'>{{row.start_time | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                            <td>{{row.course_num|number:1}}</td>
+                            <td>{{row.teacher_name}}</td>
+                            <td ng-if="row.part_full==2">全职</td>
+                            <td ng-if="row.part_full==1">兼职</td>
+                            <td ng-if="row.part_full==null"></td>
+                            <td>{{row.mobile}}</td>
+                        </tr>
+                        </tbody>
+                        <tbody ng-show="isrendLoading">
+                        <tr>
+                            <td colspan="7" class="text-center">
+                                <div class="loading-indicator"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-items-by-page="10"
+                                st-template="partials/util/pagination.custom.html" colspan="10">
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <div class="text-center">
+                    <button class="btn btn-default" ng-click="callServerrecordFilterChange()">关闭</button><!-- style="float: right;margin-right: 20px"-->
+                    <button class="btn btn-success c5-lable"
+                            ng-click="showPaikeView(1,1)">无排课记录直接记录上课
+                    </button><!-- style="float: right;margin-right: 20px;border: 1px solid #517ee3;color: #517ee3"-->
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

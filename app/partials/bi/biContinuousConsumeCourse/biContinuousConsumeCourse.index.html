@@ -1,0 +1,23 @@
+<div class="view-frame" ng-controller="BiBaseController">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+
+    <div class="view-content" ng-controller="BiContinuousConsumeCourseController">
+	    <div>
+		    <ul class="breadcrumb">
+            <li><img ng-src="img/icon/bi/jiaowu.png" src="img/icon/bi/jiaowu.png"> 学管报表<span class="divider"></span></li>
+		        <li class="active">续推消课</li>
+		    </ul>
+		</div>
+        <tabs pane-changed="getTabIndex(selectedPane)" ng-if="!isSchoolUser">
+        	<pane title="数据明细表">
+        		<div ng-include="'partials/bi/biContinuousConsumeCourse/biContinuousConsumeCourse.statistics.html'" ng-if="channelTab==='0'"></div>
+        	</pane>
+        	<pane title="数据汇总表">
+        		<div ng-include="'partials/bi/biContinuousConsumeCourse/biContinuousConsumeCourse.summary.html'" ng-if="channelTab==='1'"></div>
+        	</pane>
+        </tabs>
+        <div ng-include="'partials/bi/biContinuousConsumeCourse/biContinuousConsumeCourse.statistics.html'" ng-if="isSchoolUser"></div>
+    </div>
+</div>

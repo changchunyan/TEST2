@@ -1,0 +1,90 @@
+<div class="table-responsive" style=" overflow-y:hidden">
+	<!-- 汇总表格  -->
+    <table st-pipe="getSummary" st-table="schoolLeadsSummary" class="table table-bordered table-striped"
+    	ng-if="currentTable==='2'">
+        <thead>
+        	<tr>
+	        	<th class="bi-th0" rowspan="2">区域/校区</th>
+	        	<th class="bi-th2" rowspan="2">新增意向客户</th>
+	        	<th class="bi-th2" colspan="4">客户总数</th>
+	        	<th class="bi-th3" rowspan="2">未联系客户</th>
+	        	<th class="bi-th4" colspan="5">已联系客户数量</th>
+	        </tr>
+	        <tr>
+	        	<td class="bi-th2">小学</td>
+	        	<td class="bi-th2">初中 </td>
+	        	<td class="bi-th2">高中</td>
+	        	<td class="bi-th2">总计 </td>
+	        	<td class="bi-th4">已联系客户 </td>
+	        	<td class="bi-th4">已邀约客户</td>
+	        	<td class="bi-th4">已到访客户</td>
+	        	<td class="bi-th4">已体验客户</td>
+	        	<td class="bi-th4">总计</td>
+	        </tr>
+        </thead>
+        <tbody>
+        	<tr>
+        		<td>{{selectdDepartment.name}}</td>
+        		<td>{{summaryResult.newLeadsCount}}</td>
+        		<td>{{summaryResult.primaryLeadsCount}}</td>
+        		<td>{{summaryResult.middleLeadsCount}}</td>
+        		<td>{{summaryResult.highLeadsCount}}</td>
+        		<td>{{summaryResult.gradeSummaryCount}}</td>
+        		<td>{{summaryResult.noCallLeadsCount}}</td>
+        		<td>{{summaryResult.callLeadsCount}}</td>
+        		<td>{{summaryResult.invitationLeadsCount}}</td>
+        		<td>{{summaryResult.visitLeadsCount}}</td>
+        		<td>{{summaryResult.experienceLeadsCount}}</td>
+        		<td>{{summaryResult.callLeadsSummaryCount}}</td>
+        	</tr>
+        </tbody>
+        <tfoot>
+        </tfoot>
+    </table>
+    <!-- 明细列表 -->
+    <table st-pipe="getStatistics" st-table="schoolLeadsStatistics" class="table table-bordered table-striped"
+    	ng-if="currentTable==='1'">
+        <thead>
+	        <tr>
+	        	<th class="bi-th0" rowspan="2">校区</th>
+	        	<th class="bi-th1" rowspan="2">新增意向客户</th>
+	        	<th class="bi-th2" colspan="4">客户总数</th>
+	        	<th class="bi-th3" rowspan="2">未联系客户</th>
+	        	<th class="bi-th4" colspan="5">已联系客户数量</th>
+	        </tr>
+	        <tr>
+	        	<td class="bi-th2">小学</td>
+	        	<td class="bi-th2">初中 </td>
+	        	<td class="bi-th2">高中</td>
+	        	<td class="bi-th2">总计 </td>
+	        	<td class="bi-th4">已联系客户 </td>
+	        	<td class="bi-th4">已邀约客户</td>
+	        	<td class="bi-th4">已到访客户</td>
+	        	<td class="bi-th4">已体验客户</td>
+	        	<td class="bi-th4">总计</td>
+	        </tr>
+        </thead>
+        <tbody>
+        	<tr ng-repeat="row in statisticsList">
+        		<td>{{row.schoolName}}</td>
+        		<td>{{row.newLeadsCount}}</td>
+        		<td>{{row.primaryLeadsCount}}</td>
+        		<td>{{row.middleLeadsCount}}</td>
+        		<td>{{row.highLeadsCount}}</td>
+        		<td>{{row.gradeSummaryCount}}</td>
+        		<td>{{row.noCallLeadsCount}}</td>
+        		<td>{{row.callLeadsCount}}</td>
+        		<td>{{row.invitationLeadsCount}}</td>
+        		<td>{{row.visitLeadsCount}}</td>
+        		<td>{{row.experienceLeadsCount}}</td>
+        		<td>{{row.callLeadsSummaryCount}}</td>
+        	</tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="13" class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" >
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

@@ -1,0 +1,220 @@
+
+<div class="view-frame" ng-controller="O2oOrderManagementController">
+    <div class="view-left">
+        <nav-side menu-data="menu.subMenu"></nav-side>
+    </div>
+    <div  class="view-content" >
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="#/">首页</a> <span class="divider"></span></li>
+                <li><a href="#/o2o-admin">O2O管理</a> <span class="divider"></span></li>
+                <li><a ng-click="o2o-admin/order">订单管理</a> <span class="divider"></span></li>
+                <li class="active">订单列表</li>
+            </ul>
+        </div>
+        <div>
+           <!-- <button class="btn btn-success pull-right" ng-click="addOrderModalShow()">课程订单添加</button>
+            <button class="btn btn-success pull-right" ng-click="addMembershipCardOrderModalShow()">会员卡订单添加</button>-->
+           <!-- <div class="operations-panel" ng-if="showPermissions('ProductTypeAdd')">
+                <button class="btn btn-primary" ng-click="addOrderModalShow()"><span class="glyphicon glyphicon-plus"></span>&nbsp;课程订单添加</button>
+            </div>-->
+
+          <!--  <div class="operations-panel" ng-if="showPermissions('CourseTypeAdd')">
+                <button class="btn btn-primary" ng-click="addMembershipCardOrderModalShow()"><span class="glyphicon glyphicon-plus"></span>&nbsp;会员卡订单添加</button>
+            </div>-->
+        </div>
+        <div >
+            <div class="tabs-title">订单管理</div>
+            <tabs>
+                <pane title="课程订单列表" >
+                <div class="table-responsive" >
+                    <div class="table-title">课程订单列表</div>
+                    <table class="table table-bordered table-striped"  st-pipe="getOrderListController" st-table="oneOrders" >
+                        <thead>
+                        <tr>
+                            <th >序号</th>
+                            <th>操作</th>
+                            <th>订购时间</th>
+                            <th>成交时间</th>
+                            <th>订单状态</th>
+                            <th st-sort="orderNo">订单编号</th>
+                            <th>学号</th>
+                            <th>姓名</th>
+                            <th>电话</th>
+                            <th>地址</th>
+                            <th>性别</th>
+                            <th>课程类型</th>
+                            <th>课程名称</th>
+                            <th>教师</th>
+                            <th>教师id</th>
+                            <th>上课方式</th>
+                            <th>授课地点</th>
+                            <th>课程总价</th>
+                            <th>优惠</th>
+                            <th>总课时</th>
+                            <th>已上课时</th>
+                            <th>剩余课时</th>
+                            <th>退班应退费</th>
+                            <th>补课/赠课</th>
+                        </tr>
+                        <tr>
+                            <th colspan="4"><input  ng-model="orderListFilter.orderNo" st-search="orderListFilter.orderNo" placeholder="订单编号" class="input-sm form-control" type="search"/></th>
+                            <th colspan="4"><input  ng-model="orderListFilter.name" st-search="orderListFilter.name" placeholder="学生姓名" class="input-sm form-control" type="search"/></th>
+                            <th colspan="4"><input  ng-model="orderListFilter.phone" st-search="orderListFilter.phone" placeholder="电话" class="input-sm form-control" type="search"/></th>
+                            <th colspan="4"><input  ng-model="orderListFilter.courseName" st-search="orderListFilter.courseName" placeholder="课程名称" class="input-sm form-control" type="search"/></th>
+                            <th colspan="4"><input  ng-model="orderListFilter.teacherName" st-search="orderListFilter.teacherName" placeholder="教师姓名" class="input-sm form-control" type="search"/></th>
+                        </tr>
+                        </thead>
+                        <tbody >
+                        <tr ng-repeat="row in oneOrders">
+                            <td>{{$index+1}}</td>
+                            <td>
+                                <a ng-click="listeningCoursesShow(row)" ng-if="true"><span class="glyphicon glyphicon-ok" title="试听"></span></a>
+                                <a ng-click="planCoursesShow(row)" ng-if="view.ifPlanCourse(row)"><span class="glyphicon glyphicon-plan" title="排课"></span></a>
+
+                                <a ng-click="detailOrderModal(row)"><span class="glyphicon glyphicon-search" title="查看"></span></a>
+                                <a ng-click="editOrderModalShow(row)"><span class="glyphicon glyphicon-pencil" title="修改"></span></a>
+                               <!-- <a ng-click="deleteOrderModalShow(row)"><span class="glyphicon glyphicon-pencil" title="删除">删除</span></a>-->
+
+                            </td>
+                            <td>{{row.createdAt | date:'yyyy-MM-dd'}}</td>
+                            <td>{{row.tradeAt | date:'yyyy-MM-dd'}}</td>
+                            <!--<td>{{row.orderStatus}}</td>-->
+                                <td ng-if="row.orderStatus == orderStatusSELECT[0].id">{{orderStatusSELECT[0].name}}</td>
+                                <td ng-if="row.orderStatus == orderStatusSELECT[1].id">{{orderStatusSELECT[1].name}}</td>
+                                <td ng-if="row.orderStatus == orderStatusSELECT[2].id">{{orderStatusSELECT[2].name}}</td>
+                                <td ng-if="row.orderStatus == orderStatusSELECT[3].id">{{orderStatusSELECT[3].name}}</td>
+                                <td ng-if="row.orderStatus == orderStatusSELECT[4].id">{{orderStatusSELECT[4].name}}</td>
+                            <td ng-if="row.orderStatus == orderStatusSELECT[5].id">{{orderStatusSELECT[5].name}}</td>
+                            <td ng-if="row.orderStatus == orderStatusSELECT[6].id">{{orderStatusSELECT[6].name}}</td>
+                            <td>{{row.orderNo}}</td>
+                            <td>{{row.userId}}</td>
+                            <td>{{row.name}}</td>
+                            <td>{{row.phone}}</td>
+                            <td>{{row.address}}</td>
+                            <!--<td>{{row.gender}}</td>-->
+                            <td>{{row.gender | sex}}</td>
+                                <!--<td ng-if="row.gender == null">未知</td>
+                                <td ng-if="row.gender == genderSELECT[0].id">{{genderSELECT[0].name}}</td>
+                                <td ng-if="row.gender == genderSELECT[1].id">{{genderSELECT[1].name}}</td>-->
+                            <td>{{row.courseTypeName}}</td>
+                            <td>{{row.courseName}}</td>
+                            <td>{{row.teacherName}}</td>
+                            <td>{{row.teacherId}}</td>
+                            <!--<td>{{row.classType}}</td>-->
+                                <td ng-if="row.classType == null">未知</td>
+                                <td ng-if="row.classType == classTypeSELECT[0].id">{{classTypeSELECT[0].name}}</td>
+                                <td ng-if="row.classType == classTypeSELECT[1].id">{{classTypeSELECT[1].name}}</td>
+                                <td ng-if="row.classType == classTypeSELECT[2].id">{{classTypeSELECT[2].name}}</td>
+                                <td ng-if="row.classType == classTypeSELECT[3].id">{{classTypeSELECT[3].name}}</td>
+                            <td>{{row.classAddress}}</td>
+                            <td>{{row.realTotalAmount}}</td>
+                            <td>{{row.privilegeAmount}}</td>
+                            <td>{{row.originalNum}}</td>
+                            <td>{{row.originalNum+row.donateCourseNum-row.courseNum}}</td>
+                            <td>{{row.courseNum}}</td>
+                            <td>{{row.refundAmount}}</td>
+                            <td>{{row.donateCourseNum}}</td>
+                        </tr>
+                        </tbody>
+                       <!-- <tbody ng-show="isLoading">
+                        <tr>
+                            <td colspan="24" class="text-center"><div class="loading-indicator"></div>
+                            </td>
+                        </tr>
+                        </tbody>-->
+                        <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="24"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </pane>
+                <!--<pane title="会员卡订单列表" >
+                <div class="table-responsive" style="overflow:scroll;overflow-y:hidden">
+                    <table class="table table-bordered table-striped"  st-pipe="getCouponsListController" st-table="oneCoupons" >
+                        <thead>
+                        <tr>
+                            <th>操作</th>
+                            <th>订单号</th>
+                            <th>订购时间</th>angularSelectedJiLian.html
+                            <th>成交时间</th>
+                            <th>订单状态</th>
+                            <th>注册手机号</th>
+                            <th>会员卡类型</th>
+                            <th>实付款</th>
+                        </tr>
+                        <tr>
+                            <th style="line-height: 30px;"><span>查询条件</span></th>
+                            <th colspan="3">
+                                <input st-search="couponListFilter.orderNo" placeholder="订单号" ng-model="order.orderNo" class="input-sm form-control" type="search"/>
+                            </th>
+                            &lt;!&ndash;<th>&ndash;&gt;
+                                &lt;!&ndash;<input st-search="order.createdAt" placeholder="订购时间" ng-model="order.createdAt" class="input-sm form-control" type="search"/>&ndash;&gt;
+                            &lt;!&ndash;</th>&ndash;&gt;
+                            &lt;!&ndash;<th>&ndash;&gt;
+                                &lt;!&ndash;<input st-search="order.tradeAt" placeholder="成交时间" ng-model="order.tradeAt" class="input-sm form-control" type="search"/>&ndash;&gt;
+                            &lt;!&ndash;</th>&ndash;&gt;
+                            <th>
+                                <select st-search="order.orderStatus" ng-model="couponListFilter.orderStatus"
+                                        name="order.orderStatus" id="order.orderStatus" class="input-sm form-control"
+                                        ng-options="option.id as option.name for option in orderStatusSelect" type="search">
+                                    <option value="">&#45;&#45; 请选择 &#45;&#45;</option>
+                                </select>
+                            </th>
+                            <th>
+                                <input st-search="order.phone" placeholder="注册手机号" ng-model="couponListFilter.phone" class="input-sm form-control" type="search"/>
+                            </th>
+                            <th>
+                                <select st-search="order.cardType" ng-model="couponListFilter.cardType"
+                                        name="order.cardType" id="order.cardType" class="input-sm form-control"
+                                        ng-options="option.id as option.name for option in orderCardTypeSelect" ng-change="mediaChannel1ChangeForFilter()" type="search">
+                                    <option value="">&#45;&#45; 请选择 &#45;&#45;</option>
+                                </select>
+                            </th>
+                            <th>
+                                <input st-search="order.realPayAmount" placeholder="实付款" ng-model="couponListFilter.realPayAmount" class="input-sm form-control" type="search"/>
+                            </th>
+                        </tr>
+
+                        </thead>
+                        <tbody ng-show="!isLoading">
+                        <tr ng-repeat="row in oneCoupons">
+                            <td>
+                                <a ng-click="editMembershipCardOrderModalShow(row)"><span class="glyphicon glyphicon-pencil" title="修改">修改</span></a>
+                                <a ng-click="deleteMembershipCardOrderModalShow(row)"><span class="glyphicon glyphicon-delete" title="删除">删除</span></a>
+                            </td>
+                            <td>{{row.orderNo}}</td>
+                            <td>{{row.createdAt | date:'yyyy-MM-dd'}}</td>
+                            <td>{{row.tradeAt | date:'yyyy-MM-dd'}}</td>
+                            <td ng-show="row.orderStatus == 1">待支付</td><td ng-show="row.orderStatus == 2">已付款 </td><td ng-show="row.orderStatus == 3">已取消</td>
+                            <td>{{row.phone}}</td>
+                            <td>{{row.cardType}}</td>
+                            <td>{{row.realPayAmount}}</td>
+                           &lt;!&ndash; <td>{{row.donateCourseNum}}</td>&ndash;&gt;
+                        </tr>
+                        </tbody>
+                        <tbody ng-show="isLoading">
+                        <tr>
+                            <td colspan="11" class="text-center"><div class="loading-indicator"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="12">
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </pane>-->
+
+
+            </tabs>
+        </div>
+
+    </div>
+</div>
+

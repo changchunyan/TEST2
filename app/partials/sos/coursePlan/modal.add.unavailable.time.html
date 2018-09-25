@@ -1,0 +1,72 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" aria-label="Close"
+					ng-click="$hide()">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title" ng-bind="autmodalTitle"></h4>
+			</div>
+			<div class="modal-body">
+				<div class="row" style="text-align: center;">
+					<div class="col-sm-10 form-group" style="font-size: 10px;">
+						<span><input name="dayofWeek" type="checkbox" value="1"
+							ng-model="selected.dayShowOfWeek1">星期一&nbsp;</span> <span><input
+							name="dayofWeek" type="checkbox" value="2"
+							ng-model="selected.dayShowOfWeek2">星期二&nbsp;</span> <span><input
+							name="dayofWeek" type="checkbox" value="3"
+							ng-model="selected.dayShowOfWeek3">星期三&nbsp;</span> <span><input
+							name="dayofWeek" type="checkbox" value="4"
+							ng-model="selected.dayShowOfWeek4">星期四&nbsp;</span> <span><input
+							name="dayofWeek" type="checkbox" value="5"
+							ng-model="selected.dayShowOfWeek5">星期五&nbsp;</span> <span><input
+							name="dayofWeek" type="checkbox" value="6"
+							ng-model="selected.dayShowOfWeek6">星期六&nbsp;</span> <span><input
+							name="dayofWeek" type="checkbox" value="7"
+							ng-model="selected.dayShowOfWeek7">星期日&nbsp;</span>
+					</div>
+				</div>
+				<hr />
+				<div class="row" style="text-align: center">
+					<div class="col-sm-6 form-group">
+						<span class="col-sm-4 control-label">
+							<input name="allDay" type="checkbox" ng-click="checkAllDay()" ng-model="selectTime.allDay">
+							&nbsp;&nbsp;全天&nbsp;
+						</span>
+					</div>
+				</div>
+				<div class="row" style="text-align: center">
+					<div class="col-sm-6 form-group">
+						<label class="col-sm-4 control-label">不可排开始时间</label>
+						<div class="col-sm-8">
+							<input type="text" datepicker=""
+								onclick="WdatePicker({dateFmt:'H:mm'})" onchange="" readonly=""
+								name="startTime" ng-model="selectTime.startTime"
+								placeholder="不可排开始时间" class="form-control ng-pristine "
+								required>
+						</div>
+					</div>
+				</div>
+				<div class="row" style="text-align: center">
+					<div class="col-sm-6 form-group">
+						<label class="col-sm-4 control-label">不可排结束时间</label>
+						<div class="col-sm-8">
+							<input type="text" datepicker=""
+								onclick="WdatePicker({dateFmt:'H:mm'})" onchange="" readonly=""
+								name="endTime" ng-model="selectTime.endTime"
+								placeholder="不可排结束时间" class="form-control ng-pristine "
+								required>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" ng-click="addUnavailablePlan()">确定</button>
+				<button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+

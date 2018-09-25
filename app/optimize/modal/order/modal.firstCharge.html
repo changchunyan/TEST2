@@ -1,0 +1,172 @@
+<link href="css/smarty.css" rel="stylesheet">
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true" style="overflow-y:auto">
+    <div class="modal-dialog" style="width:80%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" ng-bind="modalTitleCharge"></h4>
+            </div>
+            <div class="table-responsive" ng-controller="OrderOperatingController">
+                <form name="addOrderRenewalForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                    <div class="modal-body mt-modal-order">
+                        <div>
+                            <!-- <input type="hidden" id="createLead" ng-model="order.createLead" value="1"/> -->
+                            <div class="row ">
+                                <div class="col-sm-4 form-group "
+                                     ng-class="{ 'has-error': addOrderForm.leadName.$dirty && addOrderForm.leadName.$error.required}">
+                                    <label for="leadName" class="control-label">* 学生姓名</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" placeholder="1到20个字符" ng-maxlength="20" ng-minlength="1"
+                                               name="leadName" id="leadName" ng-model="order.name" required
+                                               class="input-sm form-control"  ng-change="gusseyourresult()"/>
+                                        <ul class="order_mess_show" ng-show="hasresult">
+                                            <li ng-repeat="row in gusseresult" ng-click="addThisinput(row,1)"><span>{{row.name}}</span><span style="float: right">{{row.phone}}</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 form-group">
+                                    <label for="leadPhone" class="control-label">* 电话</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" ng-blur="checkPhone()" name="leadPhone" id="leadPhone"
+                                               class="input-sm form-control" ng-model=" order.leadPhone" required=""
+                                               ng-pattern="/^[0-9]*$/" ng-maxlength="11" ng-readonly="order.crmStudentId > 0" ng-change="repeatFroCreate(order.leadPhone)">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 form-group">
+                                    <label for="leadGradeId" class="control-label">* 年级</label>
+                                    <div class="col-sm-6">
+                                        <select ng-model="order.leadGradeId" name="leadGradeId" id="leadGradeId"
+                                                class="form-control"
+                                                ng-options="option.id as option.name for option in leadGradeIds" ng-disabled="order.crmStudentId > 0 && order.leadGradeId > 0" required>
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4 form-group">
+                                    <label for="leadMediaChannelId1" class="control-label">* 一级渠道</label>
+                                    <div class="col-sm-6">
+                                        <select ng-model="order.leadMediaChannelId1" name="leadMediaChannelId1" id="leadMediaChannelId1" class="form-control"
+                                                ng-options="option.id as option.name for option in mediaChannel1List" ng-change="mediaChannel1Change()" required ng-disabled="order.crmStudentId > 0">
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 form-group" ng-if="mediaChannel2List.length > 0">
+                                    <label for="leadMediaChannelId2" class="control-label">* 二级渠道</label>
+                                    <div class="col-sm-6">
+                                        <select ng-model="order.leadMediaChannelId2" name="leadMediaChannelId2" id="leadMediaChannelId2" class="form-control"
+                                                ng-options="option.id as option.name for option in mediaChannel2List" ng-change="mediaChannel2Change()" required ng-disabled="order.crmStudentId > 0">
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 form-group" ng-if="mediaChannel3List.length > 0" >
+                                    <label for="leadMediaChannelId3" class="control-label">* 渠道详情</label>
+                                    <div class="col-sm-6">
+                                        <select ng-model="order.leadMediaChannelId3" name="leadMediaChannelId3" id="leadMediaChannelId3" class="form-control"
+                                                ng-options="option.id as option.name for option in mediaChannel3List"  ng-disabled="order.crmStudentId > 0" required>
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                              <div class="row ">
+                                <div class="col-sm-4  form-group">
+                                        <label for="orderType" class=" control-label">* 业绩类型</label>
+                                        <div class="col-sm-6">
+                                            <select ng-model="order.orderType" name="orderType" id="orderType" class="form-control"
+                                                    required>
+                                                <option value="">-- 请选择 --</option>
+                                                <!--<option value="1">新签</option>
+                                                <option value="2">续费</option>
+                                                <option value="5">推荐</option>
+                                                <option value="8">赠课</option>-->
+                                                <option value="1" ng-selected="order.orderType == 1">新签
+                                                </option>
+                                                <option value="2" ng-selected="order.orderType == 2" ng-if="order.stuState==1">续费
+                                                </option>
+                                                <option value="5" ng-selected="order.orderType == 5" ng-if="order.stuState==2">推荐
+                                                </option>
+                                            </select>
+                                        </div>
+                                </div>
+                                <div class="col-sm-4 form-group">
+	                                  <label for="payDueAmount" class="control-label">* 交费日期</label>
+	                                  <div class="col-sm-6">
+	                                  <input ng-disabled="!isModyfied" type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"
+	                                            onchange="" readonly ng-value="order.payDate | date:'yyyy-MM-dd' "
+	                                            name="order.payDate" id="order.payDate" ng-model="order.payDate"
+	                                            required class="form-control"/>
+	                                  </div>  
+                                           
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-4  form-group">
+                                     <label for="realPayAmount" class=" control-label">* 本次支付金额</label>
+                                     <div class="col-sm-6 col-md-5 col-lg-6">
+                                         <input type="text" name="realPayAmount" id="realPayAmount"
+                                                ng-pattern="/^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/"
+                                                ng-model="order.realPayAmount" ng-maxlength="10" required
+                                                ng-change="isVailabled()"
+                                                ng-class="{'font-color-red':order.realPayAmount==0}"
+                                                class="input-sm form-control" />
+                                     </div>
+                                 </div>
+                            </div>
+                        </div>
+                        <div class="mt-dashed mt-0"></div>
+                        <h5 class="pl-20">业绩所属人</h5>
+                        <div class="br-gray pl-0">
+                            <table class="table table-bordered table-striped mt-table1" st-table="order.orderAchievementRatios">
+                                <thead>
+                                <tr>
+                                    <th>姓名</th>
+                                    <th>岗位</th>
+                                    <th>校区</th>
+                                    <th>业绩计算比例</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="row in order.achievementRatios">
+                                    <th>{{row.userName}}</th>
+                                    <th>{{row.position.name}}{{row.positionName}}</th>
+                                    <th>{{row.departName}}</th>
+                                    <th>
+                                        <select class="input-sm form-control" ng-model="row.achievementRatio" ng-change="changeRatio(row)" >
+                                            <option value=1 ng-selected="row.achievementRatio == 1">100%</option>
+                                            <option value=0.9 ng-selected="row.achievementRatio == 0.9">90%</option>
+                                            <option value=0.8 ng-selected="row.achievementRatio == 0.8">80%</option>
+                                            <option value=0.7 ng-selected="row.achievementRatio == 0.7">70%</option>
+                                            <option value=0.6 ng-selected="row.achievementRatio == 0.6">60%</option>
+                                            <option value=0.5 ng-selected="row.achievementRatio == 0.5">50%</option>
+                                            <option value=0.4 ng-selected="row.achievementRatio == 0.4">40%</option>
+                                            <option value=0.3 ng-selected="row.achievementRatio == 0.3">30%</option>
+                                            <option value=0.2 ng-selected="row.achievementRatio == 0.2">20%</option>
+                                            <option value=0.1 ng-selected="row.achievementRatio == 0.1">10%</option>
+                                        </select>
+                                    </th>
+                                    <th>
+                                        <a ng-click="removeRatio(row,1)"> <span class="glyphicon glyphicon-delete" title="删除"></span></a>
+                                    </th>
+                                </tr>
+                            </table>
+
+                        </div>
+                        <div>
+                            <h3 class="h3-o2o f14 pl-20 of" style="margin-top: 10px">
+                                <a ng-click="showAddAchievementRatio(1)" class="yws-left width10 add-a">添加</a>
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                        <button type="button" class="btn btn-success c5-lable" ng-disabled="addOrderRenewalForm.$invalid || order.ratioInvalid || order.paymentsWrite" ng-click="saveOrderFirstCharge()" >保存
+                        </button>
+                    </div>
+                </form>
+            </div>
+		</div>
+        </div>
+    </div>
+</div>

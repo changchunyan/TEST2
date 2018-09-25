@@ -1,0 +1,245 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="" ng-class="{'modal-dialog mt-modal-600':!isMobile}">
+        <div class="modal-content">
+            <form name="addTransferForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header" ng-if="!isMobile">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="title"></h4>
+                </div>
+                <div class="modal-body pb-20">
+                    <div class="br-gray pl-0">
+                        <table class="table table-bordered table-striped table-condensed mt-table1">
+                            <thead>
+                            <tr>
+                                <th>人名</th>
+                                <th>电话号码</th>
+                                <th
+                                    ng-if="!isCallCenterMaster()&&!phone.isNotOperate  && canCallPhone">操作
+                                </th><!-- ng-controller="callPhoneCtrl" @李世明 解决移动端打电话问题-->
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{phone.name}}
+                                </td>
+                                <td>{{phone.phone}}
+                                    <span ng-if="phone.phone">
+                                        <a id="nw+{{$index}}" ng-click="nw[$index]=true">
+                                            <span ng-if="phone.phone_status ==1 || !phone.phone_status"
+                                                  class="glyphicon glyphicon-yichang wyc" title="无异常"></span>
+                                            <span ng-if="phone.phone_status ==2" class="glyphicon glyphicon-yichang2"
+                                                  title="空号"></span>
+                                            <span ng-if="phone.phone_status ==3" class="glyphicon glyphicon-yichang2"
+                                                  title="错号"></span>
+                                            <span ng-if="phone.phone_status ==4" class="glyphicon glyphicon-yichang2"
+                                                  title="停机"></span>
+                                            <span ng-if="phone.phone_status ==5" class="glyphicon glyphicon-yichang2"
+                                                  title="被投诉"></span>
+                                        </a>
+                                        <bubble ng-if="nw[$index]" for="nw+{{$index}}" align="bottom"
+                                                close="nw[$index]=false" close-action="outerchick "
+                                                ng-mouseleave="nw[$index]=false;"><!--ng-mouseleave="nw[$index]=false;"-->
+                                            <ul>
+                                                <li ng-if="phone.phone_status !=5"
+                                                    ng-class="{true: 'active', false: ''}[phone.phone_status ==1 || !phone.phone_status]"
+                                                    ng-click="changePhoneStatus(phone.phone,1)">
+                                                    <a>无异常</a>
+                                                </li>
+                                                <li ng-if="phone.phone_status !=5"
+                                                    ng-class="{true: 'active', false: ''}[phone.phone_status ==2]"
+                                                    ng-click="changePhoneStatus(phone.phone,2)">
+                                                    <a>空号</a>
+                                                </li>
+                                                <li ng-if="phone.phone_status !=5"
+                                                    ng-class="{true: 'active', false: ''}[phone.phone_status ==3]"
+                                                    ng-click="changePhoneStatus(phone.phone,3)">
+                                                    <a>错号</a>
+                                                </li>
+                                                <li ng-if="phone.phone_status !=5"
+                                                    ng-class="{true: 'active', false: ''}[phone.phone_status ==4]"
+                                                    ng-click="changePhoneStatus(phone.phone,4)">
+                                                    <a>停机</a>
+                                                </li>
+                                                <li ng-if="phone.phone_status ==5"
+                                                    ng-class="{true: 'active', false: ''}[phone.phone_status ==5]">
+                                                    <a>被投诉</a>
+                                                </li>
+
+                                            </ul>
+                                        </bubble>
+
+                                    </span>
+
+                                </td>
+                                <td
+                                    ng-if="!isCallCenterMaster()&&!phone.isNotOperate  && canCallPhone"><!-- ng-controller="callPhoneCtrl" 2016-11-29 17.37 @李世明 解决移动端打电话问题-->
+                                   <!--  <a ng-if="phone.phone && phone.phone_status !=5"
+                                       ng-click="callPhone(phone.phone,phone.phone_status)">
+
+
+                                        <span ng-if="!ifLastCommunicatedByPhone(phone.phone_lastDate)"
+                                              class="glyphicon glyphicon-tel" title="未拨打"></span>
+                                        <span ng-if="ifLastCommunicatedByPhone(phone.phone_lastDate)"
+                                              class="glyphicon glyphicon-tel2" title="已拨打"></span>
+                                    </a> -->
+                                    <a ng-if="phone.phone && phone.phone_status !=5"
+                                       >
+                                        <!-- <span class="glyphicon glyphicon-tel" title="拨号"></span>-->
+
+                                        <span ng-if="!ifLastCommunicatedByPhone(phone.phone_lastDate)"
+                                              class="glyphicon glyphicon-tel" title="外呼暂时不可用"></span>
+                                        <span ng-if="ifLastCommunicatedByPhone(phone.phone_lastDate)"
+                                              class="glyphicon glyphicon-tel2" title="外呼暂时不可用"></span>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>母亲电话</td>
+                                <td>
+                                    {{phone.mother_phone}}
+                                    <span ng-if="phone.mother_phone">
+                                        <a id="nwf+{{$index}}" ng-click="nwf[$index]=true">
+                                            <span ng-if="phone.mother_phone_status ==1 || !phone.mother_phone_status"
+                                                  class="glyphicon glyphicon-yichang wyc" title="无异常"></span>
+                                            <span ng-if="phone.mother_phone_status ==2"
+                                                  class="glyphicon glyphicon-yichang2 yws-xs-3" title="空号"></span>
+                                            <span ng-if="phone.mother_phone_status ==3"
+                                                  class="glyphicon glyphicon-yichang2 yws-xs-3" title="错号"></span>
+                                            <span ng-if="phone.mother_phone_status ==4"
+                                                  class="glyphicon glyphicon-yichang2 yws-xs-3" title="停机"></span>
+                                            <span ng-if="phone.mother_phone_status ==5"
+                                                  class="glyphicon glyphicon-yichang2 yws-xs-3" title="被投诉"></span>
+                                        </a>
+                                        <bubble ng-if="nwf[$index]" for="nwf+{{$index}}" align="bottom"
+                                                close="nwf[$index]=false" close-action="outerchick "
+                                                ng-mouseleave="nwf[$index]=false;"><!--ng-mouseleave="nwf[$index]=false;"-->
+                                            <ul>
+                                                <li ng-if="phone.mother_phone_status !=5"
+                                                    ng-class="{true: 'active', false: ''}[phone.mother_phone_status ==1 || !phone.mother_phone_status]"
+                                                    ng-click="changePhoneStatus(phone.mother_phone,1)">
+                                                    <a>无异常</a>
+                                                </li>
+                                                <li ng-if="phone.mother_phone_status !=5"
+                                                    ng-class="{true: 'active', false: ''}[phone.mother_phone_status ==2]"
+                                                    ng-click="changePhoneStatus(phone.mother_phone,2)">
+                                                    <a>空号</a>
+                                                </li>
+                                                <li ng-if="phone.mother_phone_status !=5"
+                                                    ng-class="{true: 'active', false: ''}[phone.mother_phone_status ==3]"
+                                                    ng-click="changePhoneStatus(phone.mother_phone,3)">
+                                                    <a>错号</a>
+                                                </li>
+                                                <li ng-if="phone.mother_phone_status !=5"
+                                                    ng-class="{true: 'active', false: ''}[phone.mother_phone_status ==4]"
+                                                    ng-click="changePhoneStatus(phone.mother_phone,4)">
+                                                    <a>停机</a>
+                                                </li>
+                                                <li ng-if="phone.mother_phone_status ==5"
+                                                    ng-class="{true: 'active', false: ''}[phone.mother_phone_status ==5]">
+                                                    <a>被投诉</a>
+                                                </li>
+
+                                            </ul>
+                                        </bubble>
+                                    </span>
+
+
+                                </td>
+                                <td ng-if="!phone.isNotOperate && canCallPhone">
+                                    <a ng-if="phone.mother_phone && phone.mother_phone_status !=5"
+                                       ng-click="callPhone(phone.mother_phone,phone.mother_phone_status)">
+                                        <!--<span class="glyphicon glyphicon-tel" title="拨号"></span>-->
+                                        <span ng-if="!ifLastCommunicatedByPhone(phone.mother_phone_lastDate)"
+                                              class="glyphicon glyphicon-tel" title="未拨打"></span>
+                                        <span ng-if="ifLastCommunicatedByPhone(phone.mother_phone_lastDate)"
+                                              class="glyphicon glyphicon-tel2" title="已拨打"></span>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>父亲电话</td>
+                                <td>
+                                    {{phone.father_phone}}
+                                    <span ng-if="phone.father_phone">
+                                        <a id="nwj+{{$index}}" ng-click="nwj[$index]=true">
+                                            <span ng-if="phone.father_phone_status ==1 || !phone.father_phone_status"
+                                                  class="glyphicon glyphicon-yichang wyc" title="无异常"></span>
+                                            <span ng-if="phone.father_phone_status ==2"
+                                                  class="glyphicon glyphicon-yichang2 yws-xs-3" title="空号"></span>
+                                            <span ng-if="phone.father_phone_status ==3"
+                                                  class="glyphicon glyphicon-yichang2 yws-xs-3" title="错号"></span>
+                                            <span ng-if="phone.father_phone_status ==4"
+                                                  class="glyphicon glyphicon-yichang2 yws-xs-3" title="停机"></span>
+                                            <span ng-if="phone.father_phone_status ==5"
+                                                  class="glyphicon glyphicon-yichang2 yws-xs-3" title="被投诉"></span>
+                                        </a>
+                                        <bubble ng-if="nwj[$index]" for="nwj+{{$index}}" align="bottom"
+                                                close="nwj[$index]=false" close-action="outerchick "
+                                                ng-mouseleave="nwj[$index]=false;"><!--ng-mouseleave="nwj[$index]=false;"-->
+                                            <ul>
+                                                <li ng-if="phone.father_phone_status !=5"
+                                                    ng-class="{true: 'active', false: ''}[phone.father_phone_status ==1 || !phone.father_phone_status]"
+                                                    ng-click="changePhoneStatus(phone.father_phone,1)">
+                                                    <a>无异常</a>
+                                                </li>
+                                                <li ng-if="phone.father_phone_status !=5"
+                                                    ng-class="{true: 'active', false: ''}[phone.father_phone_status ==2]"
+                                                    ng-click="changePhoneStatus(phone.father_phone,2)">
+                                                    <a>空号</a>
+                                                </li>
+                                                <li ng-if="phone.father_phone_status !=5"
+                                                    ng-class="{true: 'active', false: ''}[phone.father_phone_status ==3]"
+                                                    ng-click="changePhoneStatus(phone.father_phone,3)">
+                                                    <a>错号</a>
+                                                </li>
+                                                <li ng-if="phone.father_phone_status !=5"
+                                                    ng-class="{true: 'active', false: ''}[phone.father_phone_status ==4]"
+                                                    ng-click="changePhoneStatus(phone.father_phone,4)">
+                                                    <a>停机</a>
+                                                </li>
+                                                <li ng-if="phone.father_phone_status ==5"
+                                                    ng-class="{true: 'active', false: ''}[phone.father_phone_status ==5]">
+                                                    <a>被投诉</a>
+                                                </li>
+
+                                            </ul>
+                                        </bubble>
+                                    </span>
+
+                                </td>
+                                <td ng-if="!phone.isNotOperate && canCallPhone">
+                                   <!--  <a ng-if="phone.father_phone && phone.father_phone_status !=5"
+                                       ng-click="callPhone(phone.father_phone,phone.father_phone_status)">
+
+                                        <span ng-if="!ifLastCommunicatedByPhone(phone.father_phone_lastDate)"
+                                              class="glyphicon glyphicon-tel" title="未拨打"></span>
+                                        <span ng-if="ifLastCommunicatedByPhone(phone.father_phone_lastDate)"
+                                              class="glyphicon glyphicon-tel2" title="已拨打"></span>
+                                    </a> -->
+                                    <a ng-if="phone.father_phone && phone.father_phone_status !=5">
+                                        <!--  <span class="glyphicon glyphicon-tel" title="拨号"></span>-->
+                                        <span ng-if="!ifLastCommunicatedByPhone(phone.father_phone_lastDate)"
+                                              class="glyphicon glyphicon-tel" title="外呼暂时不可用"></span>
+                                        <span ng-if="ifLastCommunicatedByPhone(phone.father_phone_lastDate)"
+                                              class="glyphicon glyphicon-tel2" title="外呼暂时不可用"></span>
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-style="{'pt10':isMobile}" ng-click="$hide()">取消</button>
+                    <button type="button" class="btn btn-success c5-lable" ng-class="{'mt-0':isMobile}" ng-click="$hide()">确认</button>
+                </div>
+                <!--<div class="width100" ng-if="isMobile">
+                    <div class="btn width100 " style="background: #fe9b00;" ng-click="$hide()">关闭</div>
+                </div>-->
+            </form>
+        </div>
+
+    </div>
+</div>

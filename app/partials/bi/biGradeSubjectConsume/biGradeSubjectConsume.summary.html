@@ -1,0 +1,47 @@
+<!-- 筛选条件 -->
+<search on-department-clicked="showSelectDepartment()"
+        department="selectdDepartment"
+        search-model="searchModel"
+        is-school-user="isSchoolUser"
+        provinces="provinces"
+        on-province-changed="getCitysByProvinceCode(searchModel.schoolProvince)"
+        cities="cities"
+        on-reset="reset(isQ)"
+        hide-province-and-city="true"
+        hide-school-type="true"
+        on-search="argJudgement(getSummary)"/>
+
+<div class="default-box">
+    <h4>年级学科消课
+      <div class="btn-group" role="group" style="float:right;margin-right:20px;margin-top: -5px">
+        <button type="button" class="{{buttonStyle('学生数')}}" style="margin: 1px 0; border-right:none" ng-click="setDataType('学生数')">学生数</button>
+        <button type="button" class="{{buttonStyle('小时数')}}" style="margin: 1px 0; border-right:none" ng-click="setDataType('小时数')">小时数</button>
+      </div>
+    </h4>
+    <br/>
+    <div id="exportable" class="table-responsive" style="margin-top:20px;width:100%">
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>学科</th>
+                <th ng-repeat="grade in grades">{{grade}}</th>
+                <th class="cell-total">总计</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="subject in subjects">
+                <td>{{subject.name}}</td>
+                <td ng-repeat="grade in grades">
+                  {{cellData(subject.grades[grade])}}
+                </td>
+                <td class="cell-total">{{subjectTotalCellData(subject.name)}}</td>
+            </tr>
+            <tr>
+             <td class="cell-total">总计</td>
+             <td ng-repeat="grade in grades" class="cell-total">{{gradeTotalCellData(grade)}}</td>
+             <td class="cell-total">{{cellData(everythingTotal)}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

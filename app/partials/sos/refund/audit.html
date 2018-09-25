@@ -1,0 +1,317 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true" ng-controller="OrderRefundController">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="refundOrderForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle"></h4>
+                </div>
+                <div class="modal-body pb-20">
+                    <div class="col-sm-12">
+                        <div class="row ">
+                            <div class="col-sm-4 ">
+                                <label for="orderNo" class="col-sm-6 control-label"> 合同编号</label>
+                                <div class="col-sm-6">
+                                    <input type="text" ng-if="order.orderNo==order.originalOrderNo" readonly
+                                           name="orderNo" id="orderNo" class="input-sm form-control"/>
+                                    <input type="text" ng-if="order.orderNo!=order.originalOrderNo" readonly
+                                           name="orderNo" id="orderNo" ng-model="order.orderNo"
+                                           class="input-sm form-control"/>
+                                    <input type="hidden" name="crmStudentId" id="crmStudentId"
+                                           ng-model="order.crmStudentId" class="input-sm form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 ">
+                                <label for="name" class="col-sm-6 control-label">* 学员姓名</label>
+                                <div class="col-sm-6">
+                                    <input type="text" readonly name="name" id="name" ng-model="order.name"
+                                           placeholder="1到20个字符" ng-maxlength="20" ng-minlength="1" required readonly
+                                           class="input-sm form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 ">
+                                <label for="orderType" class="col-sm-6 control-label">* 订单类型</label>
+                                <div class="col-sm-6">
+                                    <select ng-model="order.orderType" name="orderType" id="orderType"
+                                            class="form-control" readonly
+                                            ng-options="option.id as option.name for option in orderTypeSelect">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 ">
+                                <label for="contractStartDate" class="col-sm-6 control-label">* 签约时间</label>
+                                <div class="col-sm-6">
+                                    <input type="text" datepicker onchange="" readonly
+                                           ng-value="order.contractStartDate | date:'yyyy-MM-dd' "
+                                           name="contractStartDate" id="contractStartDate"
+                                           ng-model="order.contractStartDate" required class=" form-control"/>
+                                </div>
+                            </div>
+                            <!--<div class="col-sm-4 ">-->
+                                <!--<label for="contractEndDate" class="col-sm-6 control-label">* 到期时间</label>-->
+                                <!--<div class="col-sm-6">-->
+                                    <!--<input type="text" datepicker onchange="" readonly-->
+                                           <!--ng-value="order.contractEndDate | date:'yyyy-MM-dd' " name="contractEndDate"-->
+                                           <!--id="contractEndDate" ng-model="order.contractEndDate" required-->
+                                           <!--class="form-control"/>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <div class="col-sm-4 ">
+                                <label for="orderType"  class="col-sm-6 control-label">主从关系</label>
+                                <div class="col-sm-6" >
+                                    <select name="masterSlaveRelation" id="masterSlaveRelation" readonly="true" disabled="true"
+                                            class="form-control"  style="background:none">
+                                        <option value="" ng-if="!order.masterSlaveRelation">未标记</option>
+                                        <option value="" ng-if="order.masterSlaveRelation==1">主合同</option>
+                                        <option value="" ng-if="order.masterSlaveRelation==2">附加协议</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row"></div>
+                    <hr>
+                   <!--  <div class="br-gray pl-0">课程列表
+                        <table class="table table-bordered table-striped" st-table="order.orderCourses">
+                            <thead>
+                            <tr>
+                                <th>课程ID</th>
+                                <th>课程类型</th>
+                                <th>年级</th>
+                                <th>科目</th>
+                                <th>标准单价</th>
+                                <th>实际单价</th>
+                                <th>课时量</th>
+                                <th>总价</th>
+                            </tr>
+                            </thead>
+                            <tr ng-repeat="row in order.orderCourses">
+                                <td>{{row.courseId}}</td>
+                                <td>{{row.courseTypeName}}</td>
+                                <td>{{row.gradeName}}</td>
+                                <td>{{row.subjectName}}</td>
+                                <td>{{row.standardPrice}}</td>
+                                <td>{{row.actualPrice}}</td>
+                                <td>{{row.originalNum}}</td>
+                                <td>{{row.actualPrice*row.originalNum| number:2}}</td>
+                            </tr>
+                            <tr>
+                                <td>总计</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>{{order.totalOriginalNum}}</td>
+                                <td>{{order.totalPrice| number:2}}</td>
+                            </tr>
+                        </table>
+                    </div> 
+                    <hr> -->
+                    <div class="row">
+                    	
+                        <div class="col-sm-4 ">
+                            <label for="totalPrice" class="col-sm-6 control-label">* 增加账户金额</label>
+                            <div class="col-sm-6">
+                                <input type="text" name="totalPrice" id="totalPrice"
+                                       ng-value="orderOther.totalPrice | number:2" ng-maxlength="10"
+                                       ng-pattern="/^[1-9]\d*\b|0$/" readonly class="form-control" />
+                            </div>
+                        </div>
+                    	
+                        <div class="col-sm-4 ">
+                            <label for="privilegeAmount" class="col-sm-6 control-label">* 优惠金额</label>
+                            <div class="col-sm-6">
+                                <input type="number" name="privilegeAmount" id="privilegeAmount"
+                                       ng-model="order.privilegeAmount"
+                                       ng-maxlength="10" readonly class="form-control"/>
+                            </div><!-- ng-pattern="/^[1-9]\d*\b|0$/"-->
+                        </div>
+                        <div class="col-sm-4 ">
+                            <label for="realTotalAmount" class="col-sm-6 control-label">* 实际总价</label>
+                            <div class="col-sm-6">
+                                <input type="text" name="realTotalAmount" id="realTotalAmount"
+                                       ng-value="order.realPayAmount | number:2" ng-maxlength="10"
+                                       ng-pattern="/^[1-9]\d*\b|0$/" readonly class="form-control"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 ">
+                            <label for="realPayAmount" class="col-sm-6 control-label">* 已付价格</label>
+                            <div class="col-sm-6">
+                                <input type="text" name="realPayAmount" id="realPayAmount"
+                                       ng-model="order.realPayAmount" ng-pattern="/^[1-9]\d*\b|0$/"
+                                       ng-maxlength="10" readonly class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 ">
+                            <label for="supplementaryFee" class="col-sm-6 control-label">* 实付价格</label>
+                            <div class="col-sm-6">
+                                <input type="text" name="supplementaryFee" id="supplementaryFee"
+                                       ng-model="order.supplementaryFee" ng-maxlength="10" readonly
+                                       class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 ">
+                            <label for="payDueAmount" class="col-sm-6 control-label">* 尾款金额</label>
+                            <div class="col-sm-6">
+                                <input type="text" name="payDueAmount" id="payDueAmount"
+                                       ng-model="order.payDueAmount" ng-maxlength="10" class="form-control"/>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-4 ">
+                            <label for="consumeNum" class="col-sm-6 control-label">已消耗课时</label>
+                            <div ng-if="order.orderRefundCategory==1||order.orderRefundCategory==2" class="col-sm-6">
+                                <input type="text" name="consumeNum" id="consumeNum" ng-model="order.consumeNum"
+                                       ng-maxlength="10" class="form-control"/>
+                            </div>
+                            <div ng-if="order.orderRefundCategory==3" class="col-sm-6">
+                                <input type="text" name="rechargeConsumeNum" id="rechargeConsumeNum" ng-model="order.rechargeConsumeNum"
+                                       ng-maxlength="10" class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 ">
+                            <label for="consumeAmount" class="col-sm-6 control-label">消耗课程金额</label>
+                            <div class="col-sm-6">
+                                <input type="text" name="consumeAmount" id="consumeAmount"
+                                       ng-model="order.consumeAmount" ng-maxlength="10" class="form-control"/>
+                            </div>
+                            <!-- <div ng-if="order.orderRefundCategory==3" class="col-sm-6">
+                                <input type="text" name="consumeAmount" id="consumeAmount"
+                                       ng-value="orderOther.totalPrice-order.additionalAmount" ng-maxlength="10" class="form-control"/>
+                            </div> -->
+                        </div>
+
+                        <div class="col-sm-4 ">
+                            <label for="orderType" class="col-sm-6 control-label">退款方式</label>
+                            <div class="col-sm-6">
+                                <select ng-model="order.refundType" name="refundType" id="refundType"
+                                        class="form-control"
+                                        ng-options="option.id as option.name for option in orderRefundTypeSelect">
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!--<div class="col-sm-4 ">
+                            <label for="materialFee" class="col-sm-6 control-label">资料费</label>
+                            <div class="col-sm-6">
+                                <input type="text" name="materialFee" id="materialFee" ng-model="order.materialFee"
+                                       readonly class="form-control"/>
+                            </div>
+                        </div>-->
+                    </div>
+                    <!-- 扣减金额 、 扣减课时 -->
+                    <div class="row">
+                    	  <div class="col-sm-4 " ng-if="order.orderRefundCategory != 3">
+                    	  	<label for="orderType" class="col-sm-6 control-label">扣减课时</label>
+                    	  	<div class="col-sm-6">
+                    	  		<input type="text" ng-model="order.reduceCourseNum" readonly class="form-control"/>
+                    	  	</div>
+                    	  </div>
+                    	  
+                    	  <div class="col-sm-4 "  ng-if="order.orderRefundCategory == 3">
+                    	  	<label for="orderType" class="col-sm-6 control-label">扣减账户金额</label>
+                    	  	<div class="col-sm-6">
+                    	  		<input type="text"  ng-model="order.reduceAccountAmount" readonly class="form-control"/>
+                    	  	</div>
+                    	  </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-6 ">
+
+                            <label for="payDueAmount" class="col-sm-4 control-label">退费金额</label>
+                            <div class="col-sm-6">
+                                <input type="text" ng-pattern="/^[1-9]\d*\b|0$/" name="refundAmount"
+                                       id="refundAmount" integer ng-model="order.refundAmount" ng-maxlength="10"
+                                       class="form-control"/>
+                                <!--ng-value="order.totalPrice - order.privilegeAmount - order.realPayAmount -order.supplementaryFee | number:2"--><label for="payDueAmount" class="control-label" style="    position: absolute;
+    top: 0;
+    right: 13px;">( 退费金额可以修改 )</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 "  data-toggle="tooltip" data-placement="top" data-original-title="按所选退费日期统计业绩">
+                            <label for="order.refundDate" class="col-sm-3 control-label">* 退费日期</label>
+                            <div class="col-sm-6" >
+                                <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"
+                                       onchange="" readonly ng-value="order.refundDate | date:'yyyy-MM-dd' "
+                                       name="order.refundDate" id="order.refundDate" ng-model="order.refundDate"
+                                       required class=" form-control"/>
+                                <label for="payDueAmount" class="control-label" style="position: absolute;top: 0;right: -100px;">( 退费日期可以修改 )</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="br-gray pl-0" ng-show="isOmsCourse">
+                        <table  class="table table-bordered table-striped" st-pipe="getOmsCoursePlanPage" st-table="coursePlans">
+                            <thead >
+                            <tr>
+                                <th>课程名称</th>
+                                <th>科目</th>
+                                <th>上课时间</th>
+                                <th>下课时间</th>
+                                <th>上课课时</th>
+                                <th>任课老师</th>
+                            </tr>
+                            <tr>
+                                <th><input  class="width100" st-search="coursename" placeholder="查询"/></th>
+                                <th><input  class="width100" st-search="subject_name" placeholder="科目查询"/></th>
+                                <th><input st-search="start_time" placeholder="" type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange=""  class="input-sm form-control width100" type="search"/></th>
+                                <th><input st-search="end_time" placeholder="" type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange=""  class="input-sm form-control width100" type="search"/></th>
+                                <th><input  class="width100" st-search="course_num" placeholder="课时"/></th>
+                                <th><input  class="width100" st-search="teacher_name" placeholder="任课老师"/></th>
+                            </tr>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="row in coursePlans">
+                                <td>{{row.coursename}}</td>
+                                <td>{{row.subject_name}}</td>
+                                <td>{{row.start_time | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                                <td>{{row.end_time | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                                <td>{{row.course_num}}</td>
+                                <td>{{row.teacher_name}}</td>
+                            </tr>
+                            </tbody>
+                            <tbody ng-show="isrendLoading">
+                            <tr>
+                                <td colspan="7" class="text-center"><div class="loading-indicator"></div></td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="text-center" st-pagination="" st-items-by-page="10"  st-template="partials/util/pagination.custom.html" colspan="10">
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" ng-click="showOmsCourse()">消课记录</button>
+                    <button type="button" class="btn btn-success" ng-disabled="refundOrderForm.$invalid"
+                            ng-click="auditRefund()">确认退款
+                    </button>
+                    <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+</div>
+<style>
+    .col-sm-4 {
+        margin-top: 20px;
+    }
+</style>
+<script>
+
+    $(function () { $("[data-toggle='tooltip']").tooltip(); });
+</script>

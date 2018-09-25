@@ -1,0 +1,42 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true"  >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="addTransferForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle"></h4>
+                </div>
+                <div class="modal-body pb-20">
+                    <div class="br-gray pl-0">
+                        <table class="table table-bordered mt-table1">
+                            <tr>
+                                <td class="info">学员姓名</td>
+                                <td class="info">学员年级</td>
+                                <td class="info">学员电话</td>
+                                <td class="info">课时订单剩余</td>
+                                <td class="info">课时订单已消</td>
+                                <td class="info">电子账户余额</td>
+                                <td class="info">已消费金额</td>
+                                <td class="info" ng-if="!IsSchoolAuit()">操作</td>
+                            </tr>
+                            <tr ng-repeat="row in groupDetailStudentList">
+                                <td>{{row.studentName}}</td>
+                                <td>{{row.gradeName}}</td>
+                                <td>{{row.studentPhone}}</td>
+                                <td>{{row.courseNum | number:2}}</td>
+                                <td>{{row.allPastCoursePlanCount | number:2}}</td>
+                                <td>{{row.account_balance | number:2}}</td>
+                                <td>{{row.alreadyAmount | number:2}}</td>
+                                <td ng-if="!IsSchoolAuit()">
+                                    <!-- <a ng-click="showCrmCustomerStudent(row)" ng-if="showPermissions('CustomerView')"><span class="glyphicon glyphicon-search" title="查看学员详情"></span></a>&nbsp; -->
+                                    <a ng-click="removeOneStudentOfGroup(row)" ng-if="showPermissions('GroupStudentDelete')"><span class="glyphicon glyphicon-delete" title="删除一对多学员"></span></a>&nbsp;
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer"></div>
+            </form>
+        </div>
+    </div>
+</div>

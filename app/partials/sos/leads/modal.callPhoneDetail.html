@@ -1,0 +1,606 @@
+<style type="text/css">
+    .modal-part {
+        border-bottom: 1px dashed #CCCCCC;
+        margin: 20px;
+        margin-bottom: 16px;
+        overflow: hidden;
+        padding-bottom: 16px;
+    }
+
+    .exception-btn {
+        height: 40px;
+        line-height: 40px;
+
+    }
+
+    .exception-btn a.active {
+        border: 1px solid #3e70c5;
+        color: #3e70c5;
+    }
+
+    .exception-btn .btn {
+        margin: 5px;
+    }
+
+    .exception-title {
+        /*width: 50px;*/
+        text-align: right;
+        margin-right: 5px;
+        display: inline-block;
+        color: #898989;
+    }
+
+    .exception-tel {
+        padding-left: 8px;
+    }
+
+    .mt-0 {
+        margin-top: 0;
+    }
+
+    .ml-n-5 {
+        margin-left: -5px;
+    }
+</style>
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" style="min-width: 870px;">
+        <div class="modal-content">
+            <form name="addOrderForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" ng-show="!isAddState" aria-label="Close" ng-click="hideModel()">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">
+                        {{title}}
+                        <img src="img/icon/util/wen.png" id="calling" class="icon-wen ng-scope"
+                             style="width: 18px;height:18px;margin-left: 20px;" data-target="webuiPopover8">
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-part" style="    margin-top: -15px;">
+                        <div class="exception-btn"><span class="exception-title">电话号码</span>
+                            <sapn class="exception-tel">{{currentPhone}}</sapn>
+                        </div>
+                        <div class="exception-btn" ng-if="!exc"><span class="exception-title">电话异常</span>
+                            <a class="mt-btn-base mt-btn-c6" ng-if="phone.phone_status !=5"
+                               ng-class="{true: 'active', false: ''}[phone.phone_status ==1 || !phone.phone_status]"
+                               ng-click="changePhoneStatus(phone.phone,1)">
+                                无异常
+                            </a>
+                            <a class="mt-btn-base mt-btn-c2" ng-if="phone.phone_status !=5"
+                               ng-class="{true: 'active', false: ''}[phone.phone_status ==2]"
+                               ng-click="changePhoneStatus(phone.phone,2)">
+                                空号
+                            </a>
+                            <a class="mt-btn-base mt-btn-ce" ng-if="phone.phone_status !=5"
+                               ng-class="{true: 'active', false: ''}[phone.phone_status ==3]"
+                               ng-click="changePhoneStatus(phone.phone,3)">
+                                错号
+                            </a>
+                            <a class="mt-btn-base mt-btn-ce" ng-if="phone.phone_status !=5"
+                               ng-class="{true: 'active', false: ''}[phone.phone_status ==4]"
+                               ng-click="changePhoneStatus(phone.phone,4)">
+                                停机
+                            </a>
+                            <a class="mt-btn-base mt-btn-ce" ng-if="phone.phone_status ==5"
+                               ng-class="{true: 'active', false: ''}[phone.phone_status ==5]">
+                                被投诉
+                            </a>
+                        </div>
+                        <div class="exception-btn" ng-if="!exc"><span class="exception-title">客户异常</span>
+                            <!-- ng-if="detailForUpdate.state == 2"-->
+                            <a class="mt-btn-base mt-btn-c6"
+                               ng-class="{true: 'active', false: ''}[detailForUpdate.exception_status ==1 || !detailForUpdate.exception_status]"
+                               ng-click="changeExceptionStatus(detailForUpdate,1)">
+                                无异常
+                            </a>
+                            <a class="mt-btn-base mt-btn-c9"
+                               ng-class="{true: 'active', false: ''}[detailForUpdate.exception_status ==2]"
+                               ng-click="changeExceptionStatus(detailForUpdate,2)">
+                                已经报名
+                            </a>
+                            <a class="mt-btn-base mt-btn-c9"
+                               ng-class="{true: 'active', false: ''}[detailForUpdate.exception_status ==3]"
+                               ng-click="changeExceptionStatus(detailForUpdate,3)">
+                                要求别打
+                            </a>
+                            <a class="mt-btn-base mt-btn-c9"
+                               ng-class="{true: 'active', false: ''}[detailForUpdate.exception_status ==4]"
+                               ng-click="changeExceptionStatus(detailForUpdate,4)">
+                                出国
+                            </a>
+                            <a class="mt-btn-base mt-btn-c9"
+                               ng-class="{true: 'active', false: ''}[detailForUpdate.exception_status ==5]"
+                               ng-click="changeExceptionStatus(detailForUpdate,5)">
+                                不念了
+                            </a>
+                            <a class="mt-btn-base mt-btn-c9"
+                               ng-class="{true: 'active', false: ''}[detailForUpdate.exception_status ==6]"
+                               ng-click="changeExceptionStatus(detailForUpdate,6)">
+                                不在本地
+                            </a>
+                        </div>
+                    </div>
+                    <div class="modal-part">
+                        <div class="row pl-30">
+                            <div class="col-sm-4 form-group">
+                                <label for="leadsName" class="col-sm-4 control-label">* 客户姓名</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="leadsName" id="leadsName_for_update2"
+                                           ng-model="detailForUpdate.name" placeholder="1到20个字符" class="form-control"
+                                           ng-maxlength="20" ng-minlength="2" required/>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label for="gender_for_update" class="col-sm-4 control-label">* 客户性别</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="detailForUpdate.gender" name="gender" id="gender_for_update"
+                                            class="form-control"
+                                            ng-options="option.value as option.name for option in genders">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label for="school_name" class="col-sm-4 control-label">* 公立学校</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="school_name" id="school_name_for_update"
+                                           class="form-control" ng-model="detailForUpdate.school_name"
+                                           ng-maxlength="50"/>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label for="grade_id" class="col-sm-4 control-label">* 所在年级</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="detailForUpdate.grade_id" name="grade_id" id="grade_id_for_update"
+                                            class="form-control"
+                                            ng-options="option.id as option.name for option in gradeIds" required>
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label for="subject_id" class="col-sm-4 control-label">* 咨询科目</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="detailForUpdate.subject_id" name="subject_id"
+                                            id="subject_id_for_update" class="form-control"
+                                            ng-options="option.id as option.name for option in subjectIds">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label for="media_channel_id_1" class="col-sm-4 control-label">* 渠道来源</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="detailForUpdate.media_channel_id_1" name="media_channel_id_1"
+                                            id="media_channel_id_1_for_update" class="form-control"
+                                            ng-options="option.id as option.name for option in mediaChannel1List"
+                                            ng-disabled="!isAddState" required
+                                            ng-change="mediaChannel1ChangeForUpdate()">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group" ng-if="mediaChannel2List && mediaChannel2List.length>0">
+                                <label for="media_channel_id_2" class="col-sm-4 control-label">* 渠道详情</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="detailForUpdate.media_channel_id_2" name="media_channel_id_2"
+                                            id="media_channel_id_2_for_update" class="form-control"
+                                            ng-options="option.id as option.name for option in mediaChannel2List"
+                                            ng-disabled="!isAddState" required>
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--<div class="col-sm-5 form-group" ng-if="detailForUpdate.state == 2">
+                                &lt;!&ndash;<label for="isPurpose" class="col-sm-4 control-label">* 意向程度</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="detailForUpdate.purposeLevel"
+                                            name="detailForUpdate.purposeLevel" id="detailForUpdate.purposeLevel" class="form-control"
+                                            ng-options="option.value as option.name for option in purposeLevel">
+                                        <option value="">&#45;&#45; 请选择 &#45;&#45;</option>
+                                    </select>
+                                </div>&ndash;&gt;
+                                <label for="isPurpose" class="col-sm-3 control-label ml-7">* 意向程度</label>
+                                <div class="col-sm-8 ml-n-5">
+                                    <div class="text-left exception-btn mt-0">
+                                        <a class="btn ml-5" ng-click="selectPurposeLevel(list.value)" ng-class="{'active':detailForUpdate.purposeLevel==list.value}" ng-repeat="list in purposeLevel">{{list.name}}</a>
+                                    </div>
+                                </div>
+                            </div>-->
+
+                        </div>
+                        <div class="exception-btn"><span class="exception-title">意向程度</span>
+                            <!-- ng-if="detailForUpdate.state == 2"-->
+                            <!--<a class="btn " ng-click="selectPurposeLevel(list.value)" ng-class="{'active':detailForUpdate.purposeLevel==list.value}" ng-repeat="list in purposeLevel">{{list.name}}</a>-->
+                            <a class="mt-btn-base mt-btn-c6 " ng-click="selectPurposeLevel('4')"
+                               ng-class="{'active':detailForUpdate.purposeLevel=='4'||!detailForUpdate.purposeLevel}">未标记</a>
+                            <a class="mt-btn-base mt-btn-c2 " ng-click="selectPurposeLevel('3')"
+                               ng-class="{'active':detailForUpdate.purposeLevel=='3'}">暂无</a>
+                            <a class="mt-btn-base mt-btn-ce " ng-click="selectPurposeLevel('2')"
+                               ng-class="{'active':detailForUpdate.purposeLevel=='2'}">一般</a>
+                            <a class="mt-btn-base mt-btn-ce " ng-click="selectPurposeLevel('1')"
+                               ng-class="{'active':detailForUpdate.purposeLevel=='1'}">高</a>
+                        </div>
+                        <div class="exception-btn"><span class="exception-title">客户类型</span>
+
+
+                            <a class="mt-btn-base mt-btn-c2"
+                               ng-class="{true: 'active', false: ''}[detailForUpdate.leadsProperty != 2]"
+                               ng-click="changeLeadsProterty(detailForUpdate,1)">
+                                陌拜
+                            </a>
+                            <a class="mt-btn-base mt-btn-ce"
+                               ng-class="{true: 'active', false: ''}[detailForUpdate.leadsProperty == 2]"
+                               ng-click="changeLeadsProterty(detailForUpdate,2)">
+                                重点跟踪
+                            </a>
+                        </div>
+                    </div>
+                    <div class="modal-part">
+
+                        <div class="row">
+                            <label for="isPurpose" class="col-sm-12 control-label tl lh-0 pl-15">本次沟通内容</label>
+                            <div class="col-sm-12">
+                                <textarea name="leadsName" ng-maxlength="1000" id="leadsName_for_update"
+                                          ng-model="CrmInvitationCommunicationVoForCreate.communicateContent"></textarea>
+                            </div>
+                        </div>
+                        <div ng-if="!isAddState" class="mt-modal-recording">
+                            <div class="tabs-title">记录管理</div>
+                            <tabs>
+                                <!-- <pane title="提醒记录">
+                                     <div class="table-responsive" >
+                                         <div class="table-title">提醒记录列表</div>
+                                        &lt;!&ndash; <button class="btn btn-success table-top-button" ng-click="addInvitationRemind()">新增提醒</button>&ndash;&gt;
+                                         <table class="table table-bordered table-striped table-condensed" st-pipe="getRemindList" st-table="CrmLeadsStudentRemindList">
+                                             <thead>
+                                             <tr>
+
+                                                 <th>提醒时间</th>
+                                                 <th>提醒内容</th>
+                                                 <th ng-if="false">创建人</th>
+                                                 <th ng-if="false">创建时间</th>
+                                                 &lt;!&ndash;<th>提醒操作</th>&ndash;&gt;
+                                             </tr>
+                                             </thead>
+                                             <tbody ng-show="!isRemindLoading">
+                                             <tr ng-repeat="row in CrmLeadsStudentRemindList">
+
+                                                 <td>{{ row.remindTime | date:'yyyy-MM-dd HH:mm' }}</td>
+                                                 <td>{{row.remindContent}}</td>
+                                                 <td ng-if="false">{{row.createBy}}</td>
+                                                 <td ng-if="false">{{ row.createAt | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+                                                &lt;!&ndash; <td>
+                                                     <a ng-click="editInvitationRemind(row)"><span class="glyphicon glyphicon-pencil" title="编辑提醒"></span></a>&nbsp;
+                                                     <a ng-click="deleteInvitationRemind(row)"><span class="glyphicon glyphicon-delete" title="删除提醒"></span></a>&nbsp;
+                                                 </td>&ndash;&gt;
+                                             </tr>
+                                             </tbody>
+                                             <tbody ng-show="isRemindLoading">
+                                             <tr>
+                                                 <td colspan="4" class="text-center"><div class="loading-indicator"></div></td>
+                                             </tr>
+                                             </tbody>
+                                             <tfoot>
+                                             <tr>
+                                                 <td class="text-center" st-pagination="" st-items-by-page="4" colspan="7" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html">
+                                                 </td>
+                                             </tr>
+                                             </tfoot>
+                                         </table>
+                                     </div>
+                                 </pane>-->
+
+                                <pane title="沟通记录">
+
+                                    <div class="table-responsive">
+                                        <div class="table-title">沟通记录列表</div>
+                                        <table class="table table-bordered table-striped table-condensed mt-table1"
+                                               st-pipe="getCommunicationList"
+                                               st-table="CrmLeadsStudentCommunicationList">
+                                            <thead>
+                                            <tr>
+                                                <th>沟通时间</th>
+                                                <th>沟通内容</th>
+                                                <th>沟通人</th>
+                                                <th>方式</th>
+                                                <th>状态</th>
+                                                <th>录音</th>
+                                                <th ng-if="false">创建人</th>
+                                                <th ng-if="false">创建时间</th>
+                                                <!--   <th>沟通操作</th>-->
+                                            </tr>
+                                            </thead>
+                                            <tbody ng-show="!isCommunicationLoading">
+                                            <tr ng-repeat="row in CrmLeadsStudentCommunicationList">
+
+                                                <td>{{ row.communicateTime | date:'yyyy-MM-dd' }}</td>
+                                                <td>{{row.communicateContent}}</td>
+
+                                                <td>{{row.username}}</td>
+                                                <td>{{row.calltype}}</td>
+                                                <td ng-if="row.callresult== 0">接通</td>
+                                                <td ng-if="row.callresult== 3">正忙</td>
+                                                <td ng-if="row.callresult!= 3&&row.callresult!= 0&&row.callresult!=-1">
+                                                    失败
+                                                </td>
+                                                <td ng-if="row.callresult==-1"></td>
+                                                <td>
+                                                    <!-- <video controls>
+                                                            <source ng-src="http://7xp05b.com2.z0.glb.qiniucdn.com/15311665826/1453820405234.mp3">
+                                                        </video>-->
+                                                    <button ng-if="row.recording_path" class="btn btn-primary"
+                                                            ng-click="playAudio(row.recording_path)">播放
+                                                    </button>
+                                                    <!--<object height="50" width="190" data="{{row.recording_path}}"></object>-->
+                                                    <!--  <audio controls="controls" src="{{row.recording_path}}">
+                                                        </audio></td>-->
+                                                </td>
+                                                <!-- <embed controls="controls" src="{{row.recording_path}}">
+                                                </embed> --></td>
+
+                                                <!-- <td><audio controls="controls">
+                                                    <source src="{{row.recording_path}}" type="audio/mpeg">
+                                                    </audio></td> -->
+                                                <td ng-if="false">{{row.createBy}}</td>
+                                                <td ng-if="false">{{ row.createAt | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+                                                <!-- <td>
+                                                     <a ng-click="editInvitationCommunication(row)"><span class="glyphicon glyphicon-pencil" title="编辑沟通"></span></a>&nbsp;
+                                                     <a ng-click="deleteInvitationCommunication(row)"><span class="glyphicon glyphicon-delete" title="删除沟通"></span></a>&nbsp;
+                                                 </td>-->
+                                            </tr>
+                                            </tbody>
+                                            <tbody ng-show="isCommunicationLoading">
+                                            <tr>
+                                                <td colspan="6" class="text-center">
+                                                    <div class="loading-indicator"></div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                            <tfoot>
+                                            <tr>
+                                                <td class="text-center" st-pagination="" st-items-by-page="5"
+                                                    colspan="6" st-template="partials/util/pagination.custom.html"
+                                                    st-template="partials/util/pagination.custom.html">
+                                                </td>
+                                            </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </pane>
+
+
+                                <pane title="邀约记录">
+                                    <div class="table-responsive">
+                                        <div class="table-title">邀约记录列表</div>
+                                        <!--<button class="btn btn-success table-top-button" ng-click="addInvitationDetail()">新增邀约</button>-->
+                                        <table class="table table-bordered table-striped table-condensed mt-table1"
+                                               st-pipe="getInvitationList" st-table="CrmLeadsStudentInvitationList">
+                                            <thead>
+                                            <tr>
+
+                                                <th>邀约时间</th>
+                                                <th>预到访时间</th>
+                                                <th>邀约内容</th>
+                                                <th>邀约人</th>
+                                                <th ng-if="false">创建人</th>
+                                                <th ng-if="false">创建时间</th>
+                                                <!--<th>邀约操作</th>-->
+                                            </tr>
+                                            </thead>
+                                            <tbody ng-show="!isInvitationLoading">
+                                            <tr ng-repeat="row in CrmLeadsStudentInvitationList">
+
+                                                <td>{{ row.invitateTime | date:'yyyy-MM-dd HH:mm' }}</td>
+                                                <td>{{ row.receiveTime | date:'yyyy-MM-dd HH:mm' }}</td>
+                                                <td>{{row.invitationContent}}</td>
+                                                <td>{{row.username}}</td>
+                                                <td ng-if="false">{{row.createBy}}</td>
+                                                <td ng-if="false">{{ row.createAt | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+                                                <!--<td>
+                                                    <a ng-click="editInvitationDetail(row)"><span class="glyphicon glyphicon-pencil" title="编辑邀约"></span></a>&nbsp;
+                                                    <a ng-click="deleteInvitationDetail(row)"><span class="glyphicon glyphicon-delete" title="删除邀约"></span></a>&nbsp;
+                                                </td>-->
+                                            </tr>
+                                            </tbody>
+                                            <tbody ng-show="isInvitationLoading">
+                                            <tr>
+                                                <td colspan="6" class="text-center">
+                                                    <div class="loading-indicator"></div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                            <tfoot>
+                                            <tr>
+                                                <td class="text-center" st-pagination="" st-items-by-page="5"
+                                                    colspan="6" st-template="partials/util/pagination.custom.html"
+                                                    st-template="partials/util/pagination.custom.html">
+                                                </td>
+                                            </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </pane>
+                                <pane title="消课记录">
+                                    <div class="table-responsive">
+                                        <div class="table-title">排课消课管理</div>
+                                        <table class="table table-bordered table-striped table-condensed mt-table1"
+                                               st-pipe="getPlanCourseList" st-table="displayed">
+                                            <thead>
+                                            <tr>
+                                                <th>学生姓名</th>
+                                                <th>一对多名称</th>
+                                                <th>消课状态</th>
+                                                <th>课程名称</th>
+                                                <th>科目</th>
+                                                <th>上课时间</th>
+                                                <th>下课时间</th>
+                                                <th>上课课时</th>
+                                                <th>任课老师</th>
+                                                <th>不满意原因</th>
+                                            </tr>
+                                            <tr>
+                                                <th><input st-search="student_name" placeholder="学生姓名"
+                                                           class="input-sm form-control" type="search"/></th>
+                                                <th><input st-search="crm_order_student_course_id" placeholder="一对多名称"
+                                                           class="input-sm form-control" type="search"/></th>
+                                                <th><select st-search="is_past" placeholder="消课状态"
+                                                            class="input-sm form-control">
+                                                    <option value=""></option>
+                                                    <option value="0">未消课</option>
+                                                    <option value="1">已消课</option>
+                                                </select>
+                                                </th>
+                                                <th><input st-search="coursename" placeholder="查询"
+                                                           class="input-sm form-control" type="search"/></th>
+                                                <th><input st-search="subject_name" placeholder="科目查询"
+                                                           class="input-sm form-control" type="search"/></th>
+                                                <th><input st-search="start_time" placeholder=""
+                                                           class="input-sm form-control" type="search" datepicker
+                                                           onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange=""
+                                                           readonly style="margin-right:9%;"/></th>
+                                                <th><input st-search="end_time" placeholder=""
+                                                           class="input-sm form-control" type="search" datepicker
+                                                           onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange=""
+                                                           readonly/></th>
+                                                <th><input st-search="course_num" placeholder="课时"
+                                                           class="input-sm form-control" type="search"/></th>
+                                                <th><input st-search="teacher_name" placeholder="任课老师"
+                                                           class="input-sm form-control" type="search"/></th>
+                                                <th><select st-search="remark" placeholder="不满意原因"
+                                                            class="input-sm form-control">
+                                                    <option value=""></option>
+                                                    <option value="不满意">不满意</option>
+                                                    <option value="消课错误">消课错误</option>
+                                                    <option value="其他原因">其他原因</option>
+                                                </select>
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody ng-show="!isLoading">
+                                            <tr ng-repeat="row in displayed">
+                                                <td>{{ row.student_name }}</td>
+                                                <td>{{row.crm_order_student_course_id}}</td>
+                                                <td ng-if="row.is_past==0">未消课</td>
+                                                <td ng-if="row.is_past==1">已消课</td>
+                                                <td ng-if="row.type==3">试听课程</td>
+                                                <td ng-if="row.type!=3">{{row.coursename}}</td>
+                                                <td>{{row.subject_name}}</td>
+                                                <td colspan='2'>{{row.start_time | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                                                <td ng-if="row.order_rule!=2">{{row.course_num}}</td>
+                                                <td ng-if="row.order_rule==2">{{row.course_num_2}}</td>
+                                                <td>{{row.teacher_name}}</td>
+                                                <td>{{row.remark}}</td>
+
+                                            </tr>
+                                            </tbody>
+                                            <tbody ng-show="isLoading">
+                                            <tr>
+                                                <td colspan="11" class="text-center">
+                                                    <div class="loading-indicator"></div>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                            <tfoot>
+                                            <tr>
+                                                <td class="text-center" st-pagination="" st-items-by-page="10"
+                                                    st-template="partials/util/pagination.custom.html" colspan="11">
+                                                </td>
+                                            </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </pane>
+                            </tabs>
+                        </div>
+                    </div>
+                    <div class="modal-part">
+                        <div>
+                            <div class="yes-radio" ng-click="choiceIfShowInvite()">
+                                <input type="radio">
+                            </div>
+                            添加邀约
+                        </div>
+                        <div ng-if="isShowInvite">
+                            <div class="col-sm-6 form-group">
+                                <label for="invitateTime" class="fl control-label pl-20">* 邀约时间</label>
+                                <div class="col-sm-8">
+                                    <input type="date" onfocus="(this.type='date')" name="invitateTime"
+                                           id="invitateTime" class="form-control"
+                                           ng-model="CrmInvitationDetailVoForCreate.invitateTime"
+                                           value="{{ CrmInvitationDetailVoForCreate.invitateTime | date:'yyyy-MM-dd' }}"
+                                           readonly="readonly" required/>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                <label for="receiveTime" class="fl control-label ce-i">* 预到访时间</label>
+                                <div class="col-sm-8 mt-date">
+                                    <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd H:mm'})"
+                                           onchange="" name="receiveTime" class="form-control"
+                                           ng-model="CrmInvitationDetailVoForCreate.receiveTime"
+                                           value="{{ CrmInvitationDetailVoForCreate.receiveTime }}" readonly required/>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 form-group">
+                                <label for="invitationContent" class="lh-0 col-sm-12 control-label tl pl-20 ce-i">*
+                                    邀约内容</label>
+                                <div class="col-sm-12">
+                                    <textarea name="invitationContent" id="invitationContent" placeholder="邀约内容..."
+                                              class="form-control" ng-maxlength="100"
+                                              ng-model="CrmInvitationDetailVoForCreate.invitationContent" required/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-part">
+                        <div class="col-sm-6 form-group" ng-if="detailForUpdate.state != 1">
+                            <label for="receiveTime" class="fl pl-20 control-label">* 下次跟进时间</label>
+                            <div class="col-sm-8 mt-date">
+                                <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"
+                                       onchange="" name="receiveTime" class="form-control"
+                                       ng-model="detailForUpdate.followUpAt" readonly/>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 form-group" ng-if="detailForUpdate.state == 1">
+                            <label for="receiveTime" class="fl pl-20 control-label">* 下次回访时间</label>
+                            <div class="col-sm-8 mt-date">
+                                <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"
+                                       onchange="" name="receiveTime" class="form-control"
+                                       ng-model="detailForUpdate.nextVisitAt" readonly/>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer margin-top20">
+                    <button type="button" class="btn btn-default" ng-show="!isAddState" ng-click="$hide()">取消</button>
+                    <!--<button type="button" class="btn btn-success" ng-if="addOrderForm.$valid"  ng-click="saveOrder()">保存2</button>-->
+                    <button type="button" class="btn btn-success c5-lable" ng-disabled="addOrderForm.$invalid"
+                            ng-click="saveCallPhoneDetil()">保存
+                    </button><!-- -->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $(".yes-radio").on("click", function () {
+            if ($(this).hasClass("radio-checked")) {
+                $(this).removeClass("radio-checked");
+
+            } else {
+                $(this).addClass("radio-checked");
+            }
+        })
+        setTimeout(function () {
+                    var node1 = $("#calling");
+                    var content1 = '拨打操作后，您所绑定的座机会先响起；在您接起6-10秒后，会拨打客户的电话，请等待客户接听';
+                    node1.webuiPopover({content: content1, trigger: 'hover', placement: 'bottom'});
+                }
+                , 1000)
+
+    });
+</script>
+

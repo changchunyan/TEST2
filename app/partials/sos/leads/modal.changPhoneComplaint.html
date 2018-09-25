@@ -1,0 +1,35 @@
+<style>
+    .phone{
+        width: 80%;
+        /* margin: 50px; */
+        display: inline-block;
+        margin: 20px 50px 10%;
+    }
+</style>
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" style="width: 500px">
+        <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="title"></h4>
+                </div>
+                <form name="phoneComplaintForm"  novalidate="">
+                    <div class="modal-body" >
+                        <div>
+                            请输入投诉骚扰的电话号码，该电话号码在系统中的异常状态将置为“被投诉”，该状态不可更改。且系统限制不可再拨打。
+                        </div>
+                        <input type="number" ng-minlength="7" ng-maxlength="20" class="phone" ng-model="head.changePhoneNumber" required>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="text-center">
+                            <button class="btn " ng-click=" $hide()" >取消</button>
+                            <button class="btn btn-success c5-lable" ng-click="changePhoneStatus()" ng-disabled="phoneComplaintForm.$invalid" >保存</button>
+                        </div>
+                    </div>
+                </form>
+
+        </div>
+    </div>
+</div>
+

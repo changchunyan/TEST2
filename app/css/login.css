@@ -1,0 +1,398 @@
+/********************************************************************************/
+/******************************************新版本UI****************************/
+/*************************************************************************************/
+/*清除浏览器默认样式*/
+body,div,p,ul,li{
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+    font-family: "微软雅黑";
+}
+body{
+    overflow: hidden;
+}
+
+/*登录页面css*/
+form input.ng-invalid{
+    border: none;
+}
+.bg{
+    width: 100%;
+    position: relative;
+    z-index: 0;
+
+}
+.bg img{
+    width: 100%;
+}
+
+/*登录框开始*/
+.login{
+    width: 478px;
+    height: 448px;
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    margin-left: -239px;
+    top: 50%;
+    margin-top: -260px;
+}
+
+/*logo开始*/
+.logo{
+    width: 216px;
+    margin: 0 auto;
+}
+
+/*登录框内容区域开始*/
+.login_info{
+    width: 478px;
+    height: 360px;
+    margin: 50px auto;
+    border-radius: 20px;
+    background: #fff;
+
+}
+.login_info p{
+    width: 280px;
+    height: 20px;
+    margin: 0px auto;
+    padding-top: 32px;
+
+}
+
+/*采集信息区域开始*/
+.collectInformation{
+    width: 342px;
+    margin: 0px auto;
+    margin-top: 30px;
+    position: relative;
+}
+
+.collectInformation input{
+    width: 100%;
+    height: 46px;
+    margin-top: 10px;
+    border-radius: 23px;
+    background: #ececec;
+    position: relative;
+  
+    text-indent: 50px;
+    outline: none;
+    color:#cacaca;
+    font-family: "黑体";
+    font-size: 14px;
+}
+.collectInformation input.validateInput{
+    width: 142px;
+    float: left;
+    text-indent: 24px;
+
+}
+/*.validateBtn{
+    display: inline-block;
+    width: 102px;
+    height: 46px;
+    margin-top: 10px;
+    background: #cacaca;
+    border-radius: 23px;
+    float: left;
+    margin-left: 10px;
+    line-height: 46px;
+    text-align: center;
+    color: #fff;
+    cursor: pointer;
+}*/
+.enter{
+    display: inline-block;
+    width: 78px;
+    height: 46px;
+    margin-top: 10px;
+    float: left;
+    /*margin-left: 10px;*/
+    background: #fc990a;
+    color: #fff;
+    line-height: 46px;
+    text-align: center;
+    border-radius: 23px;
+    cursor: pointer;
+    border:none;
+    font-size: 16px;
+}
+/*ico开始*/
+.userico{
+    position: absolute;
+    top: 24px;
+    left: 22px;
+    z-index: 2;
+}
+.passwordico{
+    position: absolute;
+    top: 81px;
+    z-index: 2;
+    left: 22px
+}
+
+
+/*获取焦点后显示的线条*/
+/*用户名线条*/
+.userLine_01{
+    position: absolute;
+    top: 10px;
+    z-index: 2;
+    display: none;
+}
+.userLine_02{
+    position: absolute;
+    z-index: 2;
+    top: 53px;
+    left: 42px;
+    display: none;
+}
+/*用户名线条*/
+
+/*密码线条*/
+.userLine_03{
+    position: absolute;
+    top: 66px;
+    left: 300px;
+    z-index: 2;
+    display: none;
+}
+.userLine_04{
+    position: absolute;
+    z-index: 2;
+    top: 66px;
+    left: 23px;
+    display: none;
+}
+
+/*密码线条*/
+
+/*验证码线条*/
+.validator_01{
+    position: absolute;
+    z-index: 2;
+    top: 121px;
+    left: 0px;
+    display: none;
+}
+.validator_02{
+    position: absolute;
+    z-index: 2;
+    top: 167px;
+    left: 42px;
+    display: none;
+}
+/*验证码线条*/
+/*底部颜色区域开始*/
+.loginBottom{
+    width: 478px;
+    height: 80px;
+    position: absolute;
+    bottom: -4px;
+    background: #fe9b00;
+    border-top: 2px solid #ef7c00;
+    border-bottom-left-radius:23px;
+    border-bottom-right-radius:23px;
+}
+.loginWelcome{
+    width: 300px;
+    margin: 0 auto;
+    margin-top: 30px;
+    color:#fff;
+    font-size: 14px;
+    font-family: "微软雅黑";
+
+
+}
+
+/*footer开始*/
+.footer{
+    width: 100%;
+    height: 50px;
+    background: #1b191a;
+    position: absolute;
+    z-index: 3;
+    bottom: 0px;
+    color:#929292;
+    text-align: center;
+    line-height: 50px;
+    font-size: 12px;
+}
+.enter_into{
+    background-color: #ef7c00;
+}
+/*
+ * TODO:登录重构
+ * 李世明
+ */
+/*适用于webkit内核表单属性获取焦点时去掉边框*/
+input,button,select,textarea{outline:none}
+body{
+    background: url("../img/login/body-bg.png?v=1.0.0") no-repeat;
+    background-size: 100% 100%;
+}
+/*将登陆框相对body定位居中*/
+.login-body{
+    width:880px;
+    height:402px;
+    position: absolute;
+    top:50%;
+    left: 50%;
+    margin-left: -440px;
+    margin-top: -231px;
+    -webkit-border-radius:5px;
+    -moz-border-radius:5px;
+    border-radius:5px;
+    /*加外阴影*/
+    -webkit-box-shadow: 0 0 30px rgba(0,0,0,.2);
+    -moz-box-shadow: 0 0 30px rgba(0,0,0,.2);
+    box-shadow:  0 0 30px rgba(0,0,0,.2);
+}
+/*登陆框左侧文字介绍部分*/
+.login-body .left {
+    color: #fff;
+    padding: 38px 50px 0 54px;
+    background: url("../img/login/left-bg.png?v=1.2.3") no-repeat center;
+    background-size: cover;;
+    height: 402px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.login-body div{
+    float: left;
+    width:440px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+.login-body .left h1{
+    font-size: 22px;
+    line-height: 56px;
+    border-bottom: 1px #fff solid;
+}
+.login-body .left li{
+    font-size: 16px;
+    line-height: 40px;
+    text-indent:15px;
+    background: url("../img/login/login-li-bg.png") no-repeat left center;
+}
+/*登陆框右侧录入信息部分*/
+.login-body .right{
+    height: 402px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background: url("../img/login/right-bg.png") no-repeat center 38px #fff;
+    padding: 120px 38px 0 38px;
+}
+.login-body .right ul{
+    height: 54px;
+    padding-top: 16px;
+    border-bottom: 1px solid #dcdcdc;
+}
+/*账户名*/
+.login-body .right .login-name{
+    padding-top: 6px;
+    height:44px;
+}
+.login-body .right input{
+    width: 322px;
+    border: none;
+    height:38px;
+    line-height: 38px;
+    margin-top: -1px;
+    background: #fff;
+    float: right;
+}
+.login-body .right input:-webkit-autofill{
+    -webkit-box-shadow: 0 0 0 1000px white inset;
+    border: none !important;
+}
+/*验证码*/
+.login-body .right .login-code{
+    border: none;
+}
+.login-body .right .login-code a{
+    display: inline-block;
+    float: right;
+    width:133px;
+    height: 38px;
+    background: #dcdcdc;
+    border-radius: 5px;
+}
+.login-body .right .login-code img{
+    width:100%;
+    height: 38px;
+    border-radius: 5px;
+}
+.login-body .right .login-code input{
+    width:216px;
+    float: left;
+    border-bottom: 1px solid #dcdcdc;
+    margin-top: 0;
+    color: #4e83e7;
+    padding-left: 10px;
+}
+/*输入框获取焦点处理*/
+.login-body .right .active{
+    border-bottom: 1px solid #4e83e7;
+    color: #4e83e7;
+}
+/*.login-body .right .login-code input.now{
+    color: #4e83e7;
+}*/
+/*登陆框右侧icon部分*/
+.login-body .right ul .label-name{
+    background: url("../img/login/login-name.png") no-repeat center;
+}
+.login-body .right .active .label-name{
+    background: url("../img/login/login-name-a.png") no-repeat center;
+}
+.login-body .right ul .label-pass{
+    background: url("../img/login/login-pass.png") no-repeat center;
+}
+.login-body .right .active .label-pass{
+    background: url("../img/login/login-pass-a.png") no-repeat center;
+}
+.login-body .right ul .lable-com{
+    display: inline-block;
+    width: 42px;
+    height: 38px;
+    float: left;
+}
+/*登录submit*/
+.login-body .right .login-submit{
+    height:50px;
+    padding-top: 0;
+    border: none;
+}
+.login-body .right .login-submit button{
+    width:100%;
+    height:50px;
+    line-height: 50px;
+    background: #67ba2f;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.login-body .right .login-submit button:hover{
+    background: #529526;
+}
+.login-body .right .login-submit button:active{
+    background: #488221;
+}
+.login-body .right .active button{
+    background: #488221;
+}
+/*错误提示*/
+.login-body .right .login-error{
+    border:none;
+    text-align: center;
+}
+.error-bg{
+    background: url("../img/login/error-bg.png") no-repeat left center;
+    padding-left: 20px;
+    display: inline-block;
+    height: 25px;
+    line-height: 25px;
+}

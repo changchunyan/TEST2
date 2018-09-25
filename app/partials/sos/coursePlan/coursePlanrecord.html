@@ -1,0 +1,363 @@
+<div class="view-frame" ng-controller="CoursePlanController as cpc">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div ng-show="!isAdding" class="view-content user-love">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="#">首页</a> <span class="divider"></span></li>
+                <li><a href="#/sos-admin">学员教务</a> <span class="divider"></span></li>
+                <li class="active">一对多消课管理</li>
+            </ul>
+        </div>
+        <div st-pipe="GroupcallServerrecord" st-table="Groupdisplayedrecord" class="lh21">
+            <!--TODO:查询条件-->
+            <div class="mt-student-m br-gray h-auto no-media ml-0">
+                <ul class="f14 cf bb-1">
+                    <li class="ml-0">
+                        <a class="mt-timeTable" ng-click="oneTomorepaike()">一对多排课</a>
+                    </li>
+                    <!--<li ng-if="!isTeacherOrTeacherMaster && isShowPaikeViewAll()" class="ml-0">-->
+                    <!--<a class="mt-timeTable" ng-click="showPaikeView(3,0)">排课</a>-->
+                    <!--&lt;!&ndash;   <a class="mt-timeTable" ng-click="showListonPaikeView(3,0)">排课</a> &ndash;&gt;-->
+                    <!--</li>-->
+                    <!--<li ng-if="!isTeacherOrTeacherMaster && !isShowPaikeViewAll()">-->
+                    <!--<a class="mt-timeTable" ng-click="showPaikeView(3)">排课</a>-->
+                    <!--&lt;!&ndash; <a class="mt-timeTable" ng-click="showListonPaikeView(3,0)">排课</a> &ndash;&gt;-->
+                    <!--</li>-->
+                    <li ng-if="!isTeacher()">
+                        <a class="mt-export " ng-click="exportGroupCoursePlanToExcel(1)">导出已消课列表</a>
+                    </li>
+                    <li hidden ng-if="!isTeacherOrTeacherMaster">
+                        <a class="mt-recording" ng-click="recordClass(1)">记录上课</a>
+                    </li>
+                </ul>
+                <ul class="one mt-10 h-auto pr-0 input-180">
+                    <li class="no-mar ml-0"><label>学生姓名</label>
+                        <input placeholder="请输入" id="noMar" ng-model="mtSeach.student_name" type="search">
+                    </li>
+                    <li><label>老师姓名</label>
+                        <input placeholder="请输入" ng-model="mtSeach.teacher_name" type="search"></li>
+                    <li><label class="belongTo">学习顾问</label>
+                        <input placeholder="请输入" ng-model="mtSeach.xueguanname" type="search"></li>
+                    <li class="class-over"><label for="yxk" class="guolv ml-0 mr-14"
+                                                  ng-click="changeSelct('isSelectedGraduation')"
+                                                  ng-class="{'now':mtSeach.isSelectedGraduation}">已消课</label>
+                        <input
+                                id="yxk" class="hide" type="text"
+                                ng-model="mtSeach.myCrmCustomerStudentFilter.isSelectedGraduation"
+                                st-search="myCrmCustomerStudentFilter.isSelectedGraduation"></li>
+                    <li class="class-over"><label for="wxk" class="guolv ml-0 mr-14"
+                                                  ng-click="changeSelct('removeAbnormal')"
+                                                  ng-class="{'now':mtSeach.removeAbnormal}">未消课</label>
+                        <input
+                                id="wxk" class="hide" type="text" ng-model="mtSeach.removeAbnormal"
+                                st-search="mtSeach.removeAbnormal">
+
+                </ul>
+                <ul class="one h-auto pr-0">
+                    <div class="mt-select" style="min-height: 35px">
+                        <div class="rbg mt-0" style="border: none;">
+                            <ul class="h-auto" style="padding-right: 0">
+                                <div class="of">
+                                    <li class="mt-three option no-mar" vr-select
+                                        changeFun="callServerrecordFilterChange" data-mt="{{nextCourseDatas}}"
+                                        style="margin-right: 20px"><label class="fl bg-none"
+                                                                          style="width:auto;">上课时间</label>
+                                        <input class="three-1">
+                                        <div class="three-1">自定义</div>
+                                        <input class="three-2" readonly type="search" placeholder="" datepicker
+                                               onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})"
+                                               ng-model="mtSeach.start_time">
+                                        <div class="three-2"></div>
+                                        <span class="dao">到</span>
+                                        <input class="three-2" readonly type="search" name="" placeholder="" datepicker
+                                               onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})"
+                                               ng-model="mtSeach.end_time">
+                                        <div class="three-2"></div>
+                                    </li>
+                                    <ul class="inline-block time-show lh-auto span-54">
+                                        <span ng-class="{'active':mtSeach.forenoon}" ng-click="changeSelct('forenoon')"
+                                              class="active">上午</span>
+                                        <span ng-class="{'active':mtSeach.afternoon}"
+                                              ng-click="changeSelct('afternoon')" class="active">下午</span>
+                                        <span ng-class="{'active':mtSeach.night}" ng-click="changeSelct('night')"
+                                              class="active">晚上</span>
+                                        <a id="keydown-query" class="mt-btn cf bg-color-blue br ti-0 li-btn-1 pr-0 mt-0"
+                                           href="javascript:void (0);" ng-click="callServerrecordFilterChange()">查询</a>
+                                        <a class="mt-btn ml15 brc3 li-btn-1 pr-0 mt-0 ti-0" id="resetInputAll"
+                                           ng-click="resetSelect()">重置</a>
+                                        <a class="more mr-14" style="color:#428bca;" ng-click="changeSelectMore(1,1)">{{selectMoreText}}</a>
+                                    </ul>
+                                    <!--更多选项-->
+                                    <li class="w1" ng-if="!selectMore">
+                                        <a ng-click="changeSelectMore(1)" href="javascript:void(0);" class="mt-more">&nbsp;</a>
+                                    </li>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                </ul>
+                <div class="rbg mt-select" ng-show="selectMore" style="border-top: 1px dotted #ccc;">
+                    <ul class="h-auto">
+                        <li class="ml-0 frist"><label>一对多名称</label><input placeholder="一对多名称" ng-model="mtSeach.crm_order_student_course_id" type="search"></li>
+                        <li style="line-height: 28px"><label>课时性质</label><select st-search="course_property" ng-model="mtSeach.course_property">
+                            <option value="">请选择</option>
+                            <option value="1">正课</option>
+                            <option value="2">赠课</option>
+                            <option value="3">返课</option>
+                            <option value="4">试听课</option>
+                        </select></li>
+                        <li><label>课程类型</label><input ng-model="mtSeach.coursename"></li>
+                        <li><label>年级</label><input ng-model="mtSeach.grade_name"></li>
+                        <li><label>科目</label><input ng-model="mtSeach.subject_name"></li>
+                        <li class="ml-0 mr-100"><label>老师电话</label><input placeholder="任课老师" ng-model="mtSeach.mobile"
+                                                                          type="search"></li>
+                        <li style="line-height: 28px"><label>取消原因</label><select st-search="remark"
+                                                                                 ng-model="mtSeach.remark">
+                            <option value="">请选择</option>
+                            <option value="不满意">不满意</option>
+                            <option value="消课错误">消课错误</option>
+                        </select></li>
+                        <li><label>消课人</label><input ng-model="mtSeach.passOperatorName"></li>
+                        <li style="display: block">
+                            <div class="mt-select" style="min-height: 35px">
+                                <div class="rbg mt-0" style="border: none;">
+                                    <ul class="h-auto" style="padding-right: 0">
+                                        <div class="of">
+                                            <li class="mt-three option no-mar" vr-select
+                                                changeFun="callServerrecordFilterChange" data-mt="{{nextCourseDatas}}"
+                                                style="margin-right: 20px"><label class="fl bg-none"
+                                                                                  style="width:auto;">消课时间</label>
+                                                <input class="three-1">
+                                                <div class="three-1">不限</div>
+                                                <input class="three-2" readonly type="search" placeholder="" datepicker
+                                                       onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})"
+                                                       ng-model="mtSeach.pastStartDate">
+                                                <div class="three-2"></div>
+                                                <span class="dao">到</span>
+                                                <input class="three-2" readonly type="search" name="" placeholder=""
+                                                       datepicker
+                                                       onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})"
+                                                       ng-model="mtSeach.pastEndDate">
+                                                <div class="three-2"></div>
+                                            </li>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+
+
+                        <!--隐藏更多-->
+                        <li class="w1 down">
+                            <a ng-click="changeSelectMore(0)" class="mt-more">&nbsp;</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="br-gray mt-list">
+                <h2 class="pl-20 c3">
+                    排课消课列表
+                    <label>（一对多上课资料需在一对多管理中以组为单位发送）</label>
+                </h2>
+
+                <div class="overflow-x isShowCol">
+                    <table class="table table-bordered table-striped table-condensed mt-table1">
+                        <thead>
+                            <tr class="br-gray-t">
+                                <th>一对多名称</th>
+                                <th>学生姓名</th>
+                                <th>学习顾问</th>
+                                <th>一对多人数</th>
+                                <th>消课状态</th>
+                                <th>课程详情</th>
+                                <th>科目</th>
+                                <th colspan='2'>上课时间</th>
+                                <th>课时数</th>
+                                <th>任课老师</th>
+                                <th>上课途径</th>
+                                <th>课程标题</th>
+                                <th>课前预习</th>
+                                <th>备课笔记</th>
+                                <th>课后作业</th>
+                                <th>消课人</th>
+                                <th>消课时间</th>
+                                <th>取消原因</th>
+                                <th ng-if="!isTeacherOrTeacherMaster">消课</th>
+                            </tr>
+                        </thead>
+                        <tbody ng-show="!isrendLoading">
+                            <tr ng-if="!$last" ng-repeat="row in Groupdisplayedrecord">
+                                <td>{{ row.groupName }}</td>
+                                <td><a title="{{row.namesext}}" data-placement="bottom" data-toggle="tooltip" tooltip>{{row.names}}</a></td>
+                                <td>{{row.xueguanname}}</td>
+                                <td>{{row.student_count}}</td>
+                                <td>{{row.isPast|mtPart:row.isPast:'0'}}</td>
+                                <td><a ng-click="showCoursePlanModal(row)" class="open">查看</a></td>
+                                <td>{{row.subject_name}}</td>
+                                <td colspan='2'>{{row.startTime | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                                <td>{{row.courseNum}}</td>
+                                <td>{{row.teacherName||' '}}</td>
+                                <td>{{row.typeO2o | inClassFilter}}</td>
+                                <td>{{row.courseTitle}}</td>
+                                <td ng-if="row.groupId">
+                                    <span ng-if="isTeacherOrTeacherMaster && row.lackPreviewHomework">未上传</span>
+                                    <!-- 过了上课时间还没有资料的 -->
+                                    <span ng-if="isTeacherOrTeacherMaster && row.isBefore48Hours"></span>
+                                    <!-- 课前48小时没有任何操作 -->
+                                    <span ng-if="isTeacherOrTeacherMaster && row.previewHomework && row.previewHomework.packState == 3">未发送</span>
+                                    <!-- 资料未发送 -->
+                                    <a ng-if="isTeacherOrTeacherMaster && row.editablePreviewHomework" ng-click="editPreviewHomework(row, 1)">编辑</a>
+                                    <!-- 课前48小时内是可以编辑的 -->
+                                    <a ng-if="isTeacherOrTeacherMaster && row.previewHomework && row.previewHomework.packState == 1" ng-click="editPreviewHomework(row, 1)">编辑</a>
+                                    <a ng-if="isTeacherOrTeacherMaster && row.previewHomework && row.previewHomework.packState == 2" ng-click="editPreviewHomework(row, 2)">查看</a>
+                                    <a ng-if="!isTeacherOrTeacherMaster && !row.lackPreviewHomework && row.previewHomework && row.previewHomework.packState == 2"
+                                       ng-click="editPreviewHomework(row, 2)">查看</a>
+                                </td>
+                                <td ng-if="!row.groupId"></td>
+                                <td ng-if="row.groupId">
+                                    <span ng-if="isTeacherOrTeacherMaster && row.lackTeacherHandouts"></span>
+                                    <a ng-if="isTeacherOrTeacherMaster && row.editableTeacherHandouts && !row.teacherHandouts" ng-click="editTeacherHandouts(row, 1)">编辑</a>
+                                    <a ng-if="isTeacherOrTeacherMaster && row.teacherHandouts && row.teacherHandouts.packState == 1" ng-click="editTeacherHandouts(row, 1)">编辑</a>
+                                    <a ng-if="isTeacherOrTeacherMaster && row.teacherHandouts && row.teacherHandouts.packState == 2" ng-click="editTeacherHandouts(row, 2)">查看</a>
+                                    <a ng-if="!isTeacherOrTeacherMaster && !row.lackTeacherHandouts && row.teacherHandouts && row.teacherHandouts.packState == 2"
+                                       ng-click="editTeacherHandouts(row, 2)">查看</a>
+                                </td>
+                                <td ng-if="!row.groupId"></td>
+                                <td ng-if="row.groupId">
+                                    <span ng-if="isTeacherOrTeacherMaster && row.lackReviewHomework"></span>
+                                    <a ng-if="isTeacherOrTeacherMaster && row.editableReviewHomework" ng-click="editReviewHomework(row, 1)">编辑</a>
+                                    <a ng-if="isTeacherOrTeacherMaster && row.reviewHomework && row.reviewHomework.packState == 1" ng-click="editReviewHomework(row, 1)">编辑</a>
+                                    <a ng-if="isTeacherOrTeacherMaster && row.reviewHomework && row.reviewHomework.packState == 2" ng-click="editReviewHomework(row, 2)">查看</a>
+                                    <a ng-if="!isTeacherOrTeacherMaster && !row.lackReviewHomework && row.reviewHomework && row.reviewHomework.packState == 2"
+                                       ng-click="editReviewHomework(row, 2)">查看</a>
+                                </td>
+                                <td ng-if="!row.groupId"></td>
+
+                                <td>{{row.passOperatorName}}</td>
+                                <td>{{row.passDate | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                                <td><a ng-class="{'black':row.remark!='其他原因'}" title="{{row.remarkext}}" data-placement="bottom"
+                                        data-toggle="tooltip" tooltip>{{row.remark}}</a></td>
+                                <td ng-if="!isTeacherOrTeacherMaster">
+                                    <div>
+                                        <!--<a ng-if="row.is_satisfied!=0&&row.is_past==1&&row.type!=3" ng-click="addUnsatisfied(row,0,1)" class="mt-cancle">取消</a>-->
+                                        <div ng-if="row.isPast==0||(row.is_satisfied!=0&&row.isPast==1&&row.type!=3)">
+                                            <a class="showUI" id="nw+{{$index}}" ng-click="nw[$index]=true"><span
+                                                class="glyphicon glyphicon-caozuo" title="操作"></span></a>
+                                        <bubble ng-if="nw[$index]" for="nw+{{$index}}" align="bottom"
+                                                close="nw[$index]=false" close-action="outerchick "
+                                                ng-mouseleave="nw[$index]=false;">
+                                            <!--ng-mouseleave="nw[$index]=false;"-->
+                                            <ul ng-if="!row.isPast">
+                                                <li>
+                                                    <a ng-click="yesconsume2(row,6)">消课</a>
+                                                </li>
+                                                <!-- 20180802
+
+「约么赵老湿：@开心一刻-撸码一生 皇上~~有个紧急得坑~~」
+- - - - - - - - - - - - - - -
+「约么赵老湿：一对多消课记录，能不能把未消课得记录编辑功能先给我隐藏掉」
+- - - - - - - - - - - - - - -
+「约么赵老湿：@开心一刻-撸码一生 皇上啊！！！！！！！！！！！要命啊！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！」
+- - - - - - - - - - - - - - -
+
+
+                                                <li>
+                                                     <a ng-click="showEditCoursePlan(row,6)">编辑</a>
+                                                 </li>
+
+                                                 -->
+                                                <li>
+                                                    <a ng-click="remove(row,6)">删除</a>
+                                                </li>
+                                            </ul>
+                                            <ul ng-if="row.is_satisfied!=0&&row.isPast==1&&row.courseType!=3">
+                                                <li>
+                                                    <a ng-click="getClassPorintList(row)">打印课票</a>
+                                                </li>
+                                                <!--<li>-->
+                                                <!--<a ng-click="addUnsatisfied(row,0,6)">取消消课</a>-->
+                                                <!--</li>-->
+                                                <li ng-if="isCancel(row)">
+                                                    <a ng-click="addUnsatisfiedwrong(row,0,6)">撤销消课</a>
+                                                </li>
+                                                <li>
+                                                    <a ng-click="addUnsatisfied(row,0,6)">不满意</a>
+                                                </li>
+                                            </ul>
+                                        </bubble>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tbody ng-show="isrendLoading">
+                        <tr>
+                            <td colspan="15" class="text-center">
+                                <div class="loading-indicator"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-items-by-page="10"
+                                st-template="partials/util/pagination.custom.html" colspan="19">
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="mt-student-m br-gray h-auto no-media ml-0">
+            <ul class="one mt-10 h-auto pr-0 input-180">
+                <li class="no-mar ml-0"><label>列表条目总数</label>
+                    <input placeholder="{{lastObj.total != null ? lastObj.total : 0}}" ng-model="mtSeach.totalNum"
+                           type="text">
+
+                </li>
+                <li><label>总排课课时数</label>
+                    <input placeholder="{{lastObj.sum_plancourse_num != null ? (lastObj.sum_plancourse_num | number:1) : 0 }}"
+                           ng-model="mtSeach.sumPlanCourseNum"
+                           type="text">
+                </li>
+                <li><label class="belongTo">总消课课时数</label>
+                    <input placeholder="{{lastObj.past_course_num != null ? (lastObj.past_course_num | number:1) : 0 }}"
+                           ng-model="mtSeach.pastCourseNum"
+                           type="text">
+                </li>
+
+            </ul>
+        </div>
+
+        <!--<button ng-if="!isTeacher() && !isTeacherMaster()" class="btn " ng-click="showPaikeView(3)">试听排课</button>
+                     <button ng-if="!isTeacher() && !isTeacherMaster()" class="btn " ng-click="showPaikeView(1)">学员排课</button>
+                     <button ng-if="!isTeacher() && !isTeacherMaster()" class="btn " ng-click="showPaikeView(2)">一对多排课</button>
+                     <a class="btn " href="#/sos-admin/teacher_times" >查看老师时间表</a>
+                     <a class="btn " ng-if="!isTeacher() && !isTeacherMaster()" href="#/sos-admin/customer_times" >查看学生时间表</a>
+                     <a class="btn " ng-if="!isTeacher() && !isTeacherMaster()" href="#/sos-admin/customer_times/backToPlan" >查看学生时间表</a>-->
+        <!--<a class="btn" ng-click="CoursePlanquick(1)" ng-class="{true:'btn-success',false:''}[quick[1]]">今日未上课</a>
+            <a class="btn" ng-click="CoursePlanquick(2)" ng-class="{true:'btn-success',false:''}[quick[2]]">今日已上课</a>
+            <a class="btn" ng-click="CoursePlanquick(3)" ng-class="{true:'btn-success',false:''}[quick[3]]">本周未上课</a>
+            <a class="btn" ng-click="CoursePlanquick(4)" ng-class="{true:'btn-success',false:''}[quick[4]]">本周已上课</a>-->
+
+
+    </div>
+    <div class="mt-layer" ng-if="mtLayer">
+        <div class="mt-alert">
+            <h1 class="f18 cf">通知<a class="fr" ng-click="recordClass(0)">&nbsp;</a></h1>
+            <h2 class="mt-h2">您要记录上课的课时是否在系统中已经进行排课？</h2>
+            <ul>
+                <a href="" class="c5" ng-click="recordClass(0)">取消</a>
+                <a href="" class="brbf c43" ng-click="planAlready()">不确定</a>
+                <a href="" class=" b9-lable" ng-click="showPaikeView(1,1)" ng-if="isShowPaikeViewAll()">没有排课</a>
+                <a href="" class=" b9-lable" ng-click="showPaikeView(3,1)" ng-if="!isShowPaikeViewAll()">没有排课</a>
+                <!--<a href="" class=" b9-lable" ng-click="showPaikeView(1,1,1)" ng-if="isShowPaikeViewAll()">没有排课</a>
+                <a href="" class=" b9-lable" ng-click="showPaikeView(3,1,1)" ng-if="!isShowPaikeViewAll()">没有排课</a>-->
+                <a href="" class=" c5-lable" ng-click="planAlready()">已经排课</a>
+            </ul>
+        </div>
+    </div>
+</div>
+<script src="js/jqDom.js"></script>

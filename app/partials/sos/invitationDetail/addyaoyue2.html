@@ -1,0 +1,115 @@
+<div class="mt-input-group pra br-0">
+    <form name="form">
+        <div class="modal-body mt-yue">
+            <div class="row">
+                <div ng-if="saveType == 2" class="col-sm-12 saveType2  br-gray-t pb-20">
+                    <div class="row ">
+                        <div class="col-sm-6 ">
+                            <label for="leadName" class="fl control-label">* 学生姓名</label>
+                            <div class="col-sm-6 ml-10"
+                                 ng-class="{ 'has-error': form.leadName.$dirty && form.leadName.$error.required}">
+                                <input type="text" placeholder="1到20个字符" ng-maxlength="20" ng-minlength="1"
+                                       name="leadName" id="leadName" ng-model="CrmInvitationDetailVoForCreate.name"
+                                       required class="input-sm form-control"/>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="leadPhone" class="fl control-label">* 电话</label>
+                            <div class="col-sm-6 ml-10"
+                                 ng-class="{ 'has-error': form.leadPhone.$dirty && form.leadPhone.$error.required }">
+                                <input type="text" ng-blur="checkPhone()" name="leadPhone" id="leadPhone"
+                                       class="input-sm form-control"
+                                       ng-model=" CrmInvitationDetailVoForCreate.leadPhone" required=""
+                                       ng-pattern="/^[0-9]*$/" ng-maxlength="11">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label for="leadGradeId" class="fl control-label mr-28">* 年级</label>
+                            <div class="col-sm-6 ml-10"
+                                 ng-class="{ 'has-error': form.leadGradeId.$dirty && form.leadGradeId.$error.required }">
+                                <select ng-model="CrmInvitationDetailVoForCreate.leadGradeId" name="leadGradeId"
+                                        id="leadGradeId" class="form-control"
+                                        ng-options="option.id as option.name for option in leadGradeIds" required>
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="leadMediaChannelId1" class="fl control-label">* 渠道</label>
+                            <div class="col-sm-6 ml-10"
+                                 ng-class="{ 'has-error': form.leadMediaChannelId1.$dirty && form.leadMediaChannelId1.$error.required }">
+                                <select ng-model="CrmInvitationDetailVoForCreate.leadMediaChannelId1"
+                                        name="leadMediaChannelId1" id="leadMediaChannelId1" class="form-control"
+                                        ng-options="option.id as option.name for option in mediaChannel1List"
+                                        ng-change="mediaChannel1Change2()" required>
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="mediaChannel2List2.length > 0" class="row">
+                        <div class="col-sm-6">
+                            <label for="leadMediaChannelId2" class="col-sm-4 control-label" style="padding-right: 0">* 渠道详情</label>
+                            <div class="col-sm-6 ml-5">
+                                <select ng-model="CrmInvitationDetailVoForCreate.leadMediaChannelId2"
+                                        name="leadMediaChannelId2" id="leadMediaChannelId2" class="form-control"
+                                        ng-options="option.id as option.name for option in mediaChannel2List2"
+                                        required>
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <!-- ng-if="saveType == 2"-->
+            <!--<div ng-if="saveType == 2" class="row br-gray-t"></div>&lt;!&ndash; ng-if="saveType == 2"&ndash;&gt;-->
+            <div class="form-group of row"
+                 ng-class="{ 'has-error': form.receiveTime.$dirty && form.receiveTime.$error.required }">
+                <label for="receiveTime" class="fl">* 到访时间</label>
+                <div class="col-sm-6">
+                    <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd H:mm'})" onchange=""
+                           name="receiveTime" id="receiveTime" class="form-control col-sm-10"
+                           ng-model="CrmInvitationDetailVoForCreate.receiveTime"
+                           value="{{ CrmInvitationDetailVoForCreate.receiveTime }}" readonly required/>
+                    <!-- <input type="text" name="receiveTime" id="receiveTime" datePicker ng-model="CrmInvitationDetailVoForCreate.receiveTime"
+                         class="form-control" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})"  onchange="" />  -->
+                    <span ng-show="form.invitateTime.$dirty && form.invitateTime.$error.required"
+                          class="help-block">输入到访时间</span>
+                </div>
+            </div>
+            <div class="form-group of row"
+                 ng-class="{ 'has-error': form.invitationContent.$dirty && form.invitationContent.$error.required }">
+                <label for="invitationContent" class="col-sm-6" style="float:left;text-align:left!important;">* 邀约内容</label>
+                <textarea name="invitationContent" id="invitationContent" placeholder="邀约内容..."
+                          class="form-control col-sm-12" ng-maxlength="100"
+                          ng-model="CrmInvitationDetailVoForCreate.invitationContent" required/>
+                <span ng-show="form.invitationContent.$dirty && form.invitationContent.$error.required"
+                      class="help-block">请输入邀约内容</span>
+            </div>
+        </div>
+        <!--<div class="modal-footer">-->
+            <!--<div ng-if="!saveType" class="text-center">-->
+                <!--<button type="button" class="btn btn-default" ng-click="$hide()">取消</button>-->
+                <!--<button type="submit" class="btn btn-success c5-lable"-->
+                        <!--ng-if="CrmInvitationDetailVoForCreate.isinside==1" ng-click="saveInvitationDetail()"-->
+                        <!--ng-disabled="form.$invalid">保存-->
+                <!--</button>-->
+                <!--<button type="submit" class="btn btn-success c5-lable"-->
+                        <!--ng-if="CrmInvitationDetailVoForCreate.isinside==0" ng-click="save()"-->
+                        <!--ng-disabled="form.$invalid">保存-->
+                <!--</button>-->
+                <!--<img ng-if="dataLoading"-->
+                     <!--src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>-->
+            <!--</div>-->
+        <!--</div>-->
+    </form>
+</div>
+
+

@@ -1,0 +1,156 @@
+<div class="view-frame" ng-controller="OrderDataManagementController">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content mt-new-ui user-love">
+        <div class="yws-nav">
+            <ul class="breadcrumb">
+                <li><a href="#/">首页</a> <span class="divider"></span></li>
+                <li><a href="#/sos-admin">学员教务</a> <span class="divider"></span></li>
+                <li><a ng-click="sos-admin/orderData">订单数据管理</a> <span class="divider"></span></li>
+                <li class="active">修改剩余课时</li>
+            </ul>
+        </div>
+        <div class="mt-10">
+            <div class="tabs-title border-1 c3">订单数据管理</div>
+        </div>
+        <div class="br-gray mt-list">
+            <h2 class="pl-20 c3">订单列表</h2>
+            <div class="overflow-x">
+                <table class="table table-bordered table-striped table-condensed mt-table1" st-pipe="callServerOneTab"
+                       st-table="oneOrders">
+                    <thead>
+                    <tr class="br-gray-t">
+                        <th>所属校区</th>
+                        <th st-sort="orderNo">合同编号</th>
+                        <th>学员姓名</th>
+                        <th>联系方式</th>
+                        <th>订单类型</th>
+                        <th>订单状态</th>
+                        <th>签约时间</th>
+                        <th>优惠后金额</th>
+                        <th>优惠金额</th>
+                        <th>实付金额</th>
+                        <th>尾款金额</th>
+                        <th>业绩所属人</th>
+                        <th>渠道来源</th>
+                        <th>渠道详情</th>
+                        <th>操作</th>
+                    <tr>
+                        <th><input st-search="belongSchoolName" placeholder="所属校区" class="input-sm form-control"/></th>
+                        <th><input st-search="orderNo" placeholder="合同编号" class="input-sm form-control"/></th>
+                        <th><input st-search="name" placeholder="学员姓名" class="input-sm form-control"/></th>
+                        <th><input st-search="phone" placeholder="联系方式" class="input-sm form-control"/></th>
+                        <th><select st-search="orderType" ng-model="orderType" class="input-sm form-control"
+                                    type="search">
+                            <option value="">-- 请选择 --</option>
+                            <option value="1">新签</option>
+                            <option value="2">续费</option>
+                            <option value="5">推荐</option>
+                            <option value="4">转课</option>
+                            <option value="7">线上O2O</option>
+                            <option value="8">赠课</option>
+                        </select>
+                        </th>
+                        <th><select st-search="orderStatus" ng-model="orderStatus" class="input-sm form-control"
+                                    type="search">
+                            <option value="">-- 请选择 --</option>
+                            <option value="1">录入订单</option>
+                            <option value="2">支付定金</option>
+                            <option value="3">审核通过</option>
+                            <!--<option value="4">审核未通过</option>-->
+                            <option value="5">已退单</option>
+                            <option value="6">已转课</option>
+                            <option value="7">已生成合同</option>
+                            <option value="8">已结课</option>
+                            <option value="9">已退费</option>
+                            <option value="10">退费中</option>
+                            <option value="11">转课中</option>
+                        </select>
+                        </th>
+                        <th><input st-search="contractStartDate" type="text" datepicker
+                                   onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="" readonly
+                                   class="input-sm form-control"/></th>
+                        <th><input st-search="realTotalAmount" placeholder="合同金额" class="input-sm form-control"/></th>
+                        <th><input st-search="privilegeAmount" placeholder="优惠金额" class="input-sm form-control"/></th>
+                        <th><input st-search="realPayAmount" placeholder="实付金额" class="input-sm form-control"/></th>
+                        <th><input st-search="payDueAmount" placeholder="尾款金额" class="input-sm form-control"/></th>
+                        <th><input st-search="achievementPerson" placeholder="业绩所属人" class="input-sm form-control"/></th>
+                        <th>
+                            <select st-search="mediaChannelId1" ng-model="order.mediaChannelId1" name="mediaChannelId1"
+                                    class="input-sm form-control"
+                                    ng-options="option.id as option.name for option in mediaChannel1List"
+                                    ng-change="orderMediaChannel1Change()">
+                                <option value="">请选择</option>
+                            </select>
+                        </th>
+                        <th>
+                            <select st-search="mediaChannelId2" ng-model="order.mediaChannelId2" name="mediaChannelId2"
+                                    class="input-sm form-control"
+                                    ng-options="option.id as option.name for option in mediaChannel2List">
+                                <option value="">请选择</option>
+                            </select>
+                        </th>
+                        <th>&nbsp;</th>
+                    </tr>
+                    </tr>
+                    </thead>
+                    <tbody ng-show="!isLoading">
+                    <tr ng-repeat="row in oneOrders">
+                        <td>{{row.belongSchoolName}}</td>
+                        <td ng-if="row.orderNo==row.originalOrderNo"></td>
+                        <td ng-if="row.orderNo!=row.originalOrderNo">{{row.orderNo}}</td>
+                        <td>{{row.name}}</td>
+                        <td>{{row.phone}}</td>
+                        <td ng-show="row.orderType == 1">新签</td>
+                        <td ng-show="row.orderType == 2">续费</td>
+                        <td ng-show="row.orderType == 3">返课</td>
+                        <td ng-show="row.orderType == 4">转课</td>
+                        <td ng-show="row.orderType == 5">推荐</td>
+                        <td ng-show="row.orderType == 7">线上O2O</td>
+                        <td ng-show="row.orderType == 8">赠课</td>
+                        <td ng-show="row.orderStatus == 1">录入订单</td>
+                        <td ng-show="row.orderStatus == 2">支付定金</td>
+                        <td ng-show="row.orderStatus == 3">审核通过</td>
+                        <td ng-show="row.orderStatus == 4">审核未通过</td>
+                        <td ng-show="row.orderStatus == 5">已退单</td>
+                        <td ng-show="row.orderStatus == 6">已转课</td>
+                        <td ng-show="row.orderStatus == 7">已生成合同</td>
+                        <td ng-show="row.orderStatus == 8">已结课</td>
+                        <td ng-show="row.orderStatus == 9">已退费</td>
+                        <td ng-show="row.orderStatus == 10">退费中</td>
+                        <td ng-show="row.orderStatus == 11">转课中</td>
+                        <td ng-show="row.orderStatus == 12">已关闭</td>
+                        <td>{{row.contractStartDate | date:'yyyy-MM-dd' }}</td>
+                        <td>{{row.realTotalAmount}}</td>
+                        <td>{{row.privilegeAmount}}</td>
+                        <td>{{row.realPayAmount}}</td>
+                        <td>{{row.payDueAmount}}</td>
+                        <td>{{row.achievementPerson}}</td>
+                        <td>{{row.mediaChannelId1Name}}</td>
+                        <td>{{row.mediaChannelId2Name}}</td>
+                        <td><!--ng-if="showPermissions('OrderDataEdit')" -->
+                            <a ng-click="editDataOrder(row)"><span class="glyphicon glyphicon-pencil" title="修改"></span></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tbody ng-show="isLoading">
+                    <tr>
+                        <td colspan="14" class="text-center">
+                            <div class="loading-indicator"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td class="text-center" st-pagination="" st-items-by-page="10"
+                            st-template="partials/util/pagination.custom.html"
+                            st-template="partials/util/pagination.custom.html" colspan="14">
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

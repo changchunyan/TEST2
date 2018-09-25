@@ -1,0 +1,29 @@
+<div class="modal crm-invitationRemind-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <form name="form">
+        <div class="modal-header">
+          <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" ng-bind="modalTitle"></h4>
+        </div>
+        <div class="modal-body">
+        <div class="form-group" ng-class="{ 'has-error': form.remindTime.$dirty && form.remindTime.$error.required }">
+        		<label  for="remindTime" >* 提醒时间</label>
+                <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd H:mm'})" onchange="" readonly  name="remindTime" id="remindTime" class="form-control" ng-model="CrmInvitationRemindVoForCreate.remindTime"  value="{{ CrmInvitationRemindVoForCreate.remindTime | date:'yyyy-MM-dd' }}"  required/>
+                <span ng-show="form.remindTime.$dirty && form.remindTime.$error.required" class="help-block">请输入提醒时间</span>
+            </div>  
+          <div class="form-group" ng-class="{ 'has-error': form.remindContent.$dirty && form.remindContent.$error.required }">
+                 <label for="remindContent" >* 提醒内容</label>
+                <textarea name="remindContent" id="remindContent" placeholder="提醒内容..." class="form-control" ng-maxlength="100" ng-model="CrmInvitationRemindVoForCreate.remindContent" required/>
+                <span ng-show="form.remindContent.$dirty && form.remindContent.$error.required" class="help-block">请输入提醒内容</span>
+            </div>
+        </div>
+            <div class="text-center">
+                <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+	          	<button type="submit" class="btn btn-success" ng-click="saveInvitationRemind()" ng-disabled="form.$invalid">保存</button>
+	          	<img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+	        </div>
+        </form>
+        </div>
+    </div>
+</div>

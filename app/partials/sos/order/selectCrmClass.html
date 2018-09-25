@@ -1,0 +1,49 @@
+<div ng-controller="orderSelectClassController as oscc1" style="position:fixed;background: rgba(0,0,0,.3);top: 0;width:100%;height: 100%;left: 0;z-index: 9;" ng-click="hideSelectClass()"></div>
+<div id="getListModal" class="br-gray modal-input pl-0" ng-controller="orderSelectClassController as oscc">
+    <span id="jiatou" class="sj-base sj-left" style=""></span>
+    <table class="table table-bordered table-striped table-condensed mt-table1" st-pipe="getCrmClassList" st-table="crmClassList">
+        <thead>
+        <tr>
+            <th ng-if="!locked">选择</th>
+            <th>班级名称</th>
+            <th>科目</th>
+            <th>招生人数</th>
+            <th>开班日期</th>
+            <th>上课教师</th>
+        </tr>
+        </thead>
+        <tbody ng-show="!isLoading">
+        <tr ng-repeat="row in MyCrmCustomerStudentClassList" ng-init="updateSelectCourse(row,$index)" ng-hide="!row.isDown && locked" style="border: none !important;;">
+            <td class="vr" ng-if="!locked"><label for="nakedContract{{$index}}" class="radio-vr" ng-class="{'active':row.isDown}" ng-init="updateSelectCourse(row,$index)" ng-click="radioFun($index,'MyCrmCustomerStudentClassList','isDown')">&nbsp;</label><input id="nakedContract{{$index}}" class="hide" type="radio" name="crmClassRadio" value="{{$index}}"></td>
+            <td>{{row.name}}</td>
+            <td>{{row.subjectName}}</td>
+            <td style="white-space: nowrap;">
+                 <span class="yws-tiao" style="border: none;border-radius: 0">
+                     <div class="text" style="width:100%;text-align: left;position:inherit;">{{row.appliedCount}} / {{row.planCount}}</div>
+                     <div style="width:100%;height:6px;background-color: #ccc;overflow:hidden;border-radius: 3px;">
+                         <i class="bg" ng-if="row.planCount==0" style="height: 6px;position: relative;top: -6px;"></i>
+                         <i class="bg" ng-if="row.planCount!=0" style="height: 6px;position: relative;top: -6px;" ng-style="{  'width': ((row.appliedCount)/(row.planCount))*100 + '%'}" ng-class="{'c1-i':((row.appliedCount)/(row.planCount))<0.5,'c2-i': 0.5<=((row.appliedCount)/(row.planCount))&&((row.appliedCount)/(row.planCount))<0.8,'c3-i':0.8<=((row.appliedCount)/(row.planCount))}"></i>
+                     </div>
+                 </span>
+            </td>
+            <td>{{row.startTime | date : "yyyy-MM-dd"}}</td>
+            <td>{{row.teacherName}}</td>
+        </tr>
+        </tbody>
+        <tbody ng-show="isLoading">
+        <tr>
+            <td colspan="6" class="text-center"><div class="loading-indicator"></div></td>
+        </tr>
+        </tbody>
+        <tfoot style="border-top: 1px solid #ccc" ng-if="pages.length>1">
+        <tr>
+            <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="12">
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="hideSelectClass()">取消</button>
+        <button type="button" class="btn btn-success c5-lable" ng-if="!locked" ng-click="doSelectClass()">确定</button>
+    </div>
+</div>

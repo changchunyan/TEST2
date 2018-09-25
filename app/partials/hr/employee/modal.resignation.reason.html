@@ -1,0 +1,40 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="form">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="reasonModalTitle"></h4>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="form-group" ng-class="{ 'has-error': form.resignationDate.$dirty && form.resignationDate.$error.required }">
+                        <label for="resignationDate">离职日期</label>
+                        <input type="text" class="form-control"  name="resignationDate" id="resignationDate" datePicker ng-model="resignation.resignationDate"
+                                onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  onchange="" readonly required/>
+                        <span ng-show="form.resignationDate.$dirty && form.resignationDate.$error.required" class="help-block" required>请输入离职日期</span>
+
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': form.resignationReasonType.$dirty && form.resignationReasonType.$error.required }">
+                        <label for="resignationReason">离职原因</label>
+                        <select ng-model="resignation.resignationReasonType" name="resignationReasonType" id="resignationReasonType"
+                                class="form-control" ng-options="tl.id as tl.name for tl in dictData.resignationReasonType" required>
+                            <option value="">------请选择------</option>
+                        </select>
+                        <span ng-show="form.resignationReasonType.$dirty && form.resignationReasonType.$error.required" class="help-block" >请选择离职原因</span>
+                      </div>
+                    <div class="form-group">
+                        <label for="resignationReason">原因描述</label>
+                        <input type="text" name="resignationReason" id="resignationReason" class="form-control" ng-model="resignation.resignationReason" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                    <button type="button" class="btn btn-success" ng-click="saveReason()" ng-disabled="form.$invalid">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,137 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="talent-add modal-dialog">
+		<form name="addPlatForm" role="form" class="form-horizontal showcase-form" novalidate="">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">申请转平台</h4>
+				</div>
+				<div class="modal-body row m0">
+					<div class="row m0 mt-form-control mt-10">
+						<div class="col-sm-6 form-group m0">
+							<label for="leadName" class="lable-h2 fl bg-none">* 学生姓名</label>
+							<input type="text" ng-maxlength="20" ng-minlength="1" name="leadName" id="leadName" ng-model="order.name" required class="input-sm form-control"
+							/>
+						</div>
+					</div>
+					<div class="col-sm-12 form-group">
+						<div class="table-responsive">
+							<table class="table table-bordered table-striped table-condensed mt-table1" st-pipe="getPlatformOrders" st-table="">
+								<thead>
+									<tr>
+										<th></th>
+										<th>合同编号</th>
+										<th>订单类型</th>
+										<th>方式</th>
+										<th>签约日期</th>
+										<th>签约金额</th>
+										<th>实收金额</th>
+										<th>剩余实收金额</th>
+										<!--<th>剩余课时</th>-->
+										<!--<th>剩余金额</th>-->
+									</tr>
+								</thead>
+								<tbody ng-show="!isNormalOrderLoading">
+									<tr ng-repeat="row in passOrders">
+										<td>
+											<input type="checkbox" name="orderList" ng-model="order.orderList[$index]" ng-change="getAllAmount()">
+										</td>
+										<!--<td>{{row.orderNo}}</td>-->
+										<td ng-if="row.orderNo==row.originalOrderNo"></td>
+										<td ng-if="row.orderNo!=row.originalOrderNo">{{row.orderNo}}</td>
+										<td>{{row.orderType|orderType:row.orderType}}</td>
+										<td ng-if="row.orderCategory == 1">买课程</td>
+										<td ng-if="row.orderCategory == 3">充值</td>
+										<td>{{row.contractStartDate | date:'yyyy-MM-dd'}}</td>
+										<td>{{row.realPayAmount+row.privilegeAmount | number:2}}</td>
+										<td>{{row.realPayAmount | number:2}}</td>
+										<td>{{row.leaveActualCourseAmount}}</td>
+										<!--<td ng-if = "row.orderCategory == 3"></td>-->
+										<!--<td ng-if = "row.orderCategory != 3">{{row.totalCourseNum | number:2}}</td>-->
+										<!--<td ng-if = "row.orderCategory == 3">{{row.additionalAmount | number:2}}</td>-->
+										<!--<td ng-if = "row.orderCategory != 3">{{row.leaveCourseAmount | number:2}}</td>-->
+									</tr>
+								</tbody>
+								<tbody ng-show="isNormalOrderLoading">
+									<tr>
+										<td colspan="16" class="text-center">
+											<div class="loading-indicator"></div>
+										</td>
+									</tr>
+								</tbody>
+								<tfoot>
+									<tr>
+										<td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="16">
+										</td>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					</div>
+					<div class="row m0 mt-form-control mt-10">
+						<div class="col-sm-6 form-group m0">
+							<label class="lable-h2 fl bg-none">总实收金额</label>
+							<input type="text" class="form-control ng-pristine  col-sm-6 ng-untouched ng-valid needsclick" name="teacherName" readonly=""
+							 id="totalAmount" ng-value="order.totalAmount | number:2" ng-model="order.totalAmount">
+						</div>
+						<div class="col-sm-6 form-group m0">
+							<label class="lable-h2 fl bg-none">总剩余实收金额</label>
+							<!--后台需要这个hidden里面绑定的值-->
+							<input type="hidden" class="form-control ng-pristine  col-sm-6 ng-untouched ng-valid needsclick" name="teacherName" readonly=""
+							 id="totalAdditionalAmount" ng-value="order.totalAdditionalAmount | number:2" ng-model="order.totalAdditionalAmount">
+							<input type="text" class="form-control ng-pristine  col-sm-6 ng-untouched ng-valid needsclick" name="teacherName" readonly=""
+							 id="totalleaveActualCourseAmount" ng-value="order.totalleaveActualCourseAmount | number:2" ng-model="order.totalleaveActualCourseAmount">
+						</div>
+					</div>
+					<div class="row m0 mt-form-control mt-10">
+						<div class="col-sm-6 form-group m0">
+							<label class="lable-h2 fl">转出校区</label>
+							<input id="oldPlatformId" type="hidden" ng-model="platform.oldPlatformId">
+							<input type="text" class="form-control ng-pristine  col-sm-6 ng-untouched ng-valid needsclick" name="oldPlatformName" readonly=""
+							 id="oldPlatformName" ng-model="platform.oldPlatformName">
+						</div>
+						<div class="col-sm-6 form-group m0">
+							<label class="lable-h2 fl">转入校区</label>
+							<input id="departmentId" type="hidden" ng-model="platform.departmentId">
+							<input id="departName" type="text" class="form-control ng-pristine  col-sm-6 ng-untouched ng-valid needsclick" ng-click="showDristictDepartment()"
+							 ng-disabled="operateRatio == 'update'" ng-model="platform.departName" required />
+						</div>
+					</div>
+					<div class="row m0 mt-form-control mt-10">
+						<div class="col-sm-6 form-group m0">
+							<label class="lable-h2 fl bg-none">转出平台业绩</label>
+							<input ng-change="zhuanyeji()" placeholder="金额不能超过总剩余实收金额" type="text" name="changePlatformAmount" id="changePlatformAmount"
+							 ng-pattern="/^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/" ng-model="platform.changePlatformAmount" ng-maxlength="10" required=""
+							 class="form-control ng-pristine  col-sm-6 ng-untouched ng-valid needsclick">
+						</div>
+						<div class="col-sm-6 form-group m0">
+							<label class="lable-h2 fl bg-none">转平台日期</label>
+							<input type="text" autocomplete="off" required="" datepicker="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange=""
+							 value="" name="contractStartDate" id="contractStartDate" ng-model="platform.changePlatformDate" class="form-control ng-pristine  col-sm-6 ng-untouched ng-valid needsclick">
+						</div>
+					</div>
+					<div class="row m0 mt-form-control mt-10">
+						<div class="col-sm-12 form-group m0">
+							<label class="lable-h2 fl bg-none">
+								<span class="glyphicon glyphicon-warning-sign"></span>&nbsp;&nbsp;通过双方校区审核后，该学员将会分配至转入校区运营主管
+							</label><br><br>
+							<!--<label class="lable-h2 fl bg-none">-->
+							<!--<span class="glyphicon glyphicon-warning-sign"></span>&nbsp;&nbsp;转出平台业绩校验逻辑：金额不能超过总剩余实收金额；-->
+							<!--</label><br><br>-->
+							<!--<label class="lable-h2 fl bg-none">-->
+							<!--<span class="glyphicon glyphicon-warning-sign"></span>&nbsp;&nbsp;剩余实收金额：实收金额-消耗课时*课时折后单价/消耗课时*折后师资档位-->
+							<!--</label>-->
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="text-center">
+						<button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+						<button type="button" class="btn btn-success c5-lable" ng-click="savePlatformChange()" ng-disabled="addPlatForm.$invalid || !order.orderNos || order.orderNos.trim().length <= 0">提交</button>
+						<!-- ngIf: dataLoading -->
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

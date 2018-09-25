@@ -1,0 +1,48 @@
+<div class="default-box">
+    <h4 class="bi-search-result-title">教师消课月报 <button class="btn btn-success bi-list-head" ng-click="exportTeacherMonthlyConsumeReport()">导出列表</button></h4>
+    <br/>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped" id="teacherConsumeReportTable">
+            <thead>
+                <tr>
+                     <th style="font-weight: bold;" rowspan="1">序号</th>
+                     <th style="font-weight: bold;" rowspan="1">姓名</th>
+                     <th style="font-weight: bold;" rowspan="1">科目</th>
+                     <th style="font-weight: bold;" rowspan="1">月优质课时<br/>大于等于<br/>4小时学生数</th>
+                     <th style="font-weight: bold;" rowspan="1">月上正常课学生数</th>
+                     <th style="font-weight: bold;" rowspan="1">月周中正常课时</th>
+                     <th style="font-weight: bold;" rowspan="1">月周中体验课时</th>
+                     <th style="font-weight: bold;" rowspan="1">月周末正常课时</th>
+                     <th style="font-weight: bold;" rowspan="1">月周末体验课时</th>
+                     <th style="font-weight: bold;" rowspan="1">月周中课时总数</th>
+                     <th style="font-weight: bold;" rowspan="1">月课时总数</th>
+                     <th style="font-weight: bold;" rowspan="1">数据结论</th>
+                     <th style="font-weight: bold;" rowspan="1">月新签体验单数</th>
+                     <th style="font-weight: bold;" rowspan="1">月新签体验成功单数</th>
+                     <th style="font-weight: bold;" rowspan="1">教师星级</th>
+                     <th style="font-weight: bold;" rowspan="1">是否转正</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="report in teacherConsumeReportData ">
+                <td>{{report.groupId}}</td>
+                <td style="background-color:{{nameBackgroundColor(report)}}">{{report.teacherName}}</td>
+                <td style="background-color:{{nameBackgroundColor(report)}}">{{report.role == '负责人' || report.role == '' ? report.subject : report.role}}</td>
+                <td>{{report.greaterThan4StudentNumber}}</td>
+                <td>{{report.studentNumber}}</td>
+                <td>{{report.weekdayCourseHour}}</td>
+                <td>{{report.weekdayTrialCourseHour}}</td>
+                <td>{{report.weekendCourseHour}}</td>
+                <td>{{report.weekendTrialCourseHour}}</td>
+                <td>{{report.weekdayTotalCourseHour}}</td>
+                <td>{{report.totalCourseHour}}</td>
+                <td style="background-color: {{judgementBackgroundColor(report)}};"><span style="color: {{judgementColor(report)}};">{{judgement(report)}}</span></td>
+                <td>{{report.trialOrderNumber}}</td>
+                <td>{{report.successTrialOrderNumber}}</td>
+                <td>{{report.teacherLevel}}</td>
+                <td>{{report.employmentType}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

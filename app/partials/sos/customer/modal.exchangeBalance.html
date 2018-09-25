@@ -1,0 +1,55 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="exchangeBalanceForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="exchangeBalanceTitle"></h4>
+                </div>
+                <div class="modal-body">
+                	<label style="font-weight: bold;">选择兑换的课程</label>
+                    <table class="table table-bordered table-striped" st-table="orderCourses">
+                        <thead>
+                            <tr>
+                            	<th><input type="checkbox" ng-checked="isExchangedAll()" ng-click="exchangeAllRows()"/></th>
+                                <th>课程名称</th>
+                                <th>科目</th>
+                                <th>性质</th>
+                                <th>剩余课时</th>
+                                <th>课时价值</th>
+                                <th>兑换课时</th>
+                                <th>转后剩余</th>
+                            </tr>
+                        </thead>
+                        <tr ng-repeat="row in exchangeBalanceCourses">
+                        	<td ng-if="row.courseProperty===1 && row.orderStatus==='3'"><input type="checkbox" ng-checked="isRowExchanged(row)" ng-click="exchangeRow(row)"/></td>
+                        	<td ng-if="row.courseProperty!=1 || row.orderStatus!='3'" data-content="课时性质为赠课、返课的不可兑换" data-placement="bottom" webui-popover >
+	                        	<input type="checkbox" ng-checked="isRowExchanged(row)" ng-click="exchangeRow(row)" disabled="disabled"/>
+                        	</td>
+                            <td>{{row.courseTypeName}}</td>
+                            <td>{{row.subjectName}}</td>
+                            <td ng-if="row.courseProperty == 1">正课</td>
+                            <td ng-if="row.courseProperty == 2">赠课</td>
+                            <td ng-if="row.courseProperty == 3">返课</td>
+                            <td ng-if="row.courseProperty == 4">试听课</td>
+                            <td ng-if="row.courseProperty == null || row.courseProperty == 0 ">其他</td>
+                            <td>{{row.courseNum}}</td>
+                            <td>{{row.courseValue}}</td>
+                            <td><input ng-if="row.isExchanged" type="number" min="0" max="{{row.courseNum}}" step="0.5" ng-model="row.exchangeCourseNum" ng-change="calculateTotalExchange(row)"/></td>
+                            <td>{{row.courseNum-row.exchangeCourseNum}}</td>
+                        </tr>
+                    </table>   
+                </div>
+                <br>
+                <div style="float: right;color: blue;">
+                	兑换课时总数量：{{exchangeCourseNum}}&nbsp;&nbsp;&nbsp;&nbsp;兑换课时总价值：{{exchangeCourseValue}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                <br>
+                <div class="modal-footer">
+                	<button type="button" class="btn btn-success" ng-click="exchangeBalance()" ng-disabled="exchangeCourseNum===0||exchangeCourseValue===0||exchangeBalanceForm.$invalid">确定</button>
+                	<button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

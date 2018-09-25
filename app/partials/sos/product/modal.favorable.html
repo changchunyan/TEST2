@@ -1,0 +1,72 @@
+<div class="modal oms-Favorable-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+          <form name="Favorableform" role="form" class="form-horizontal showcase-form" novalidate="">
+            <div class="modal-header">
+              <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" ng-bind="modalTitleForFavorable"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-sm-12">
+                    <div class="row ">
+                        <div class="col-sm-6" ng-class="{ 'has-error': Favorableform.Favorable.minPrice.$dirty && Favorableform.Favorable.minPrice.$error.required }">
+                            <label for="Favorable.minPrice">最小金额(包含)</label>
+                            <input type="number" name="Favorable.minPrice" id="Favorable.minPrice" class="form-control" ng-model="Favorable.minPrice" ng-pattern="/^[1-9]\d*|0$/" ng-maxlength="10" required />
+                        </div>
+                        <div class="col-sm-6" ng-class="{ 'has-error': Favorableform.Favorable.maxPrice.$dirty && Favorableform.Favorable.maxPrice.$error.required }">
+                            <label for="Favorable.maxPrice">最大金额(不包含)</label>
+                            <input type="number" name="Favorable.maxPrice" id="Favorable.maxPrice" class="form-control" ng-model="Favorable.maxPrice" ng-pattern="/^[1-9]\d*|0$/" ng-maxlength="10" required />
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-sm-6" ng-class="{ 'has-error': Favorableform.Favorable.discount.$dirty && Favorableform.Favorable.discount.$error.required }">
+                            <label for="Favorable.discount">单价折扣</label>
+                            <input type="number" name="Favorable.discount" id="Favorable.discount" class="form-control" ng-model="Favorable.discount" ng-pattern="/^[1-9]\d*|0$/" ng-maxlength="4" required />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                      <button type="submit" class="btn btn-success c5-lable" ng-click="saveFavorable()" ng-disabled="Favorableform.$invalid">保存</button>
+                      <img ng-if="dataLoadingForFavorable" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                    </div>
+                </div>
+            </div>
+          </form>
+
+          <table class="table table-bordered table-striped table-condensed" st-pipe="getFavorableList" st-table="FavorableList">
+                <thead>
+                <tr>
+                    <th>操作</th>
+                    <th>优惠名称</th>
+                    <th>最小金额(包含)</th>
+                    <th>最大金额(不包含)</th>
+                    <th>单价折扣</th>
+                </tr>
+                </thead>
+                <tbody ng-show="!isFavorableListLoading">
+                <tr ng-repeat="row in FavorableList">
+                    <td>
+                        <a ng-click="editFavorable(row)" ng-if="showPermissions('CourseTypeEdit')"><span class="glyphicon glyphicon-pencil" title="编辑课程类型"></span></a>&nbsp;
+                        <a ng-click="removeFavorable(row)" ng-if="showPermissions('CourseTypeDelete')"><span class="glyphicon glyphicon-delete" title="删除优惠"></span></a>&nbsp;
+                    </td>
+                    <td>优惠{{$index + 1}}</td>
+                    <td>{{row.minPrice}}</td>
+                    <td>{{row.maxPrice}}</td>
+                    <td>{{row.discount}}折</td>
+                </tr>
+                </tbody>
+                <tbody ng-show="isFavorableListLoading">
+                <tr>
+                    <td colspan="5" class="text-center"><div class="loading-indicator"></div>
+                    </td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="5"></td>
+                </tr>
+                </tfoot>
+            </table>
+    </div>
+  </div>
+</div>

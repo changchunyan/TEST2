@@ -1,0 +1,66 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="refundApplyForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="refundApplyModalTitle"></h4>
+                </div>
+                <div class="modal-body">
+                    <div>
+		                <div class="table-responsive c-select-text">
+		                    <div class="c-tab-title">列表</div>
+		                    <table st-pipe="callServerNormalOrderTab" st-table="refundAbleOrders" class="table table-bordered table-striped c-tab-content">
+		                        <thead>
+		                        <tr>
+		                            <th>选择</th>
+		                            <th>合同编号</th>
+		                            <th>学员姓名</th>
+		                            <th>签约时间</th>
+		                            <th>总价</th>
+		                            <th>已上课时</th>
+		                            <th>剩余课时</th>
+		                            <th>充值金额</th>
+                                    <th>剩余金额</th>
+		                        </tr>
+		                        </thead>
+		                        <tbody>
+		                        <tr ng-repeat="row in refundAbleOrders track by $index">
+		                            <td>
+		                            	<input type="checkbox" ng-model="row.selected"></input>
+		                            </td>
+		                            <td ng-if="row.orderNo==row.originalOrderNo"></td>
+                            		<td ng-if="row.orderNo!=row.originalOrderNo">{{row.orderNo}}</td>
+		                            <td>{{selectedStudentName}}</td>
+		                            <td>{{row.contractStartDate | date : "yyyy-MM-dd"}}</td>
+		                            <td>{{row.realTotalAmount+row.privilegeAmount}}</td>
+		                            <td>{{row.originalNumSum - row.courseNumSum | number:1}}</td>
+		                            <td>{{row.courseNumSum | number:1}}</td>
+		                            <td ng-if="row.orderCategory == 1"></td>
+                                    <td ng-if="row.orderCategory == 2">{{row.realTotalAmount}}</td>
+                                    <td ng-if="row.orderCategory == 3">{{row.totalPrice}}</td>
+                                    <!-- 剩余金额 -->
+                                    <td ng-if="row.orderCategory == 1"></td>
+                                    <td ng-if="row.orderCategory == 2">{{row.realTotalAmount}}</td>
+                                    <td ng-if="row.orderCategory == 3">{{row.additionalAmount}}</td>
+		                        </tr>
+		                        </tbody>
+		                        <tbody ng-show="isLoading">
+		                        <tr>
+		                            <td colspan="7" class="text-center"><div class="loading-indicator"></div>
+		                            </td>
+		                        </tr>
+		                        </tbody>
+		                    </table>
+		                </div>
+                    </div>
+                </div>
+            
+	            <div class="modal-footer">
+	            	<button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+	            	<button type="button" class="btn btn-success" ng-click="doRefund()"  ng-disabled="form.$invalid">申请退费</button>
+	            </div>
+	         </form>   
+        </div>
+    </div>
+</div>

@@ -1,0 +1,132 @@
+<div class="view-frame">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="">人员信息管理</a> <span class="divider"></span></li>
+                <li class="active">离职管理</li>
+            </ul>
+        </div>
+        <tabs>
+            <pane title="离职管理">
+                <div class="row">
+
+                    <form id="search-form " class="c-select-text">
+                        <table rules="none">
+                            <tr>
+                                <td>
+                                    <label for="name" class="search-form-label">姓名</label>
+                                    <input ng-model="ade.user.name" type="text" name="name" id="name" class="search-form-input" />
+                                </td>
+                                <td>
+                                    <label for="account" class="search-form-label">系统登录账号</label>
+                                    <input ng-model="ade.user.account" type="text" name="account" id="account" class="search-form-input" />
+
+                                </td>
+                                <td>
+                                    <label for="mobile" class="search-form-label">手机号</label>
+                                    <input ng-model="ade.mobile" type="text" name="mobile" id="mobile" class="search-form-input" />
+                                </td>
+                                <td>
+                                    <label for="resignationReasonType" class="search-form-label">离职原因</label>
+                                    <select class="search-form-input" ng-model="ade.resignationReasonType" name="resignationReasonType" id="resignationReasonType"
+                                             ng-options="tl.id as tl.name for tl in dictData.resignationReasonType" >
+                                        <option value="">------请选择------</option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <tr>
+
+                                <td class=" width-85">
+                                    <label for="hiringDateBegin" class="search-form-label">入职日期</label>
+                                    <input type="text" name="hiringDateBegin" id="hiringDateBegin" datePicker ng-model="ade.hiringDateBegin"
+                                           class="search-form-label mt-input-1" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  onchange="" readonly/>
+                                    -
+                                    <input type="text" name="hiringDateEnd" id="hiringDateEnd" datePicker ng-model="ade.hiringDateEnd"
+                                           class="search-form-label mt-input-1" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  onchange="" readonly/>
+
+
+                                </td>
+                                <td class=" width-85">
+                                    <label for="hiringDateBegin" class="search-form-label">离职日期</label>
+                                    <input type="text" name="resignationDateBegin" id="resignationDateBegin" datePicker ng-model="ade.resignationDateBegin"
+                                           class="search-form-label mt-input-1" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  onchange="" readonly/>
+                                    -
+                                    <input type="text" name="resignationDateEnd" id="resignationDateEnd" datePicker ng-model="ade.resignationDateEnd"
+                                           class="search-form-label mt-input-1" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  onchange="" readonly/>
+
+                                </td>
+
+                            </tr>
+
+                        </table>
+                        <div class="c_center">
+                            <button class="btn-base btn btn-success btn-select" ng-click="getAllEmployeesByFilters()">查询</button>
+                            <button class="btn-base btn btn-reast" ng-click="reset(3)">重置</button>
+                        </div>
+                    </form>
+
+
+                    <div class="table-responsive c-select-text pl-0 br-gray pt-0" >
+                        <h2 class="yws-left width100 mt-student-m"><span class="yws-left">离职员工列表</span>
+                            <ul class="f14 cf yws-left width80 ml15">
+                                <li><a class="mt-export" ng-click="exportResignationToExcel()">导出离职列表</a></li>
+                            </ul>
+                        </h2>
+                        <table st-pipe="getAllDimissionEmployees" st-table="allDimissionEmployees" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+
+                                <th>员工姓名</th>
+                                <th>系统登录账号</th>
+                                <th>手机号</th>
+                                <th>所属机构</th>
+                                <th>所属岗位</th>
+                                <th>入职日期</th>
+                                <th>离职日期</th>
+                                <th>工龄</th>
+                                <th>离职原因</th>
+                                <th>原因描述</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="employee in allDimissionEmployees track by $index">
+
+                                <td>{{employee.user.name}}</td>
+                                <td>{{employee.user.account}}</td>
+                                <td>{{employee.mobile}}</td>
+                                <td>{{employee.department.name}}</td>
+                                <td>{{employee.position.name}}</td>
+                                <td>{{employee.hiringDate  | date:'yyyy-MM-dd' }}</td>
+                                <td>{{employee.resignationDate  | date:'yyyy-MM-dd' }}</td>
+                                <td>{{getWorkingDate(employee.hiringDate)}}</td>
+                                <td>{{dictData.resignationReasonType[employee.resignationReasonType-1].name}}</td>
+                                <td>{{employee.resignationReason}}</td>
+                                <td>
+                                    <a ng-click="showDimissionDetailView(employee)" title="查看详细"><span class="glyphicon glyphicon-plus"></span></a> &nbsp;
+                                    <a ng-click="reRecruited(employee)" title="重新待入职"><span class="glyphicon glyphicon-log-in"></span></a>&nbsp;&nbsp;
+                                </td>
+                            </tbody>
+                            <tbody ng-show="isLoading">
+                            <tr>
+                                <td colspan="13" class="text-center"><div class="loading-indicator"></div>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="text-center" st-pagination="" st-items-by-page="10"  st-template="partials/util/pagination.custom.html" colspan="9" />
+                            </tr>
+                            </tfoot>
+                        </table>
+                        </div>
+                    </div>
+                </div>
+            </pane>
+        </tabs>
+    </div>
+</div>

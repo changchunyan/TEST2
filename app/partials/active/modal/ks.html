@@ -1,0 +1,89 @@
+<div class="form-option" style="padding: 20px;">
+    <div class="mt-input-group"><label>总消课数量</label><input ng-pattern="/^[0-9]+(\.[0-9]{1})?$/"
+                                                           ng-model="setParam.totalConsumers" name="totalConsumers"
+                                                           class="tc"><a ng-click="autoDistribution()">自动分配</a><span
+            style="color: #2fb0ee;" class="fr ml-20">总可排课时:{{kpHours}}</span><span style="color: #2fb0ee;" class="fr">总剩余课时:{{totalHours}}</span>
+    </div>
+    <div>
+                <span class="glyphicon glyphicon-yichang ml15 caveat"
+                      style="background-position: center 4px"></span>
+        <span style="color:#f8d398;">若可排课时不足请清除未消课的排课记录，即可用于活动消课</span>
+    </div>
+    <div st-pipe="getOrderCourseList" st-table="orderCourse" class="br-gray pl-0">
+        <table class="table mt-table1" id="active_mt">
+            <thead>
+            <tr>
+                <th style="width:30px;">
+                    <label class="checkbox-bg pt-0" ng-class="{'active':activeAll}" ng-click="setActiveAll()"></label>
+                </th>
+                <th>课程名称</th>
+                <th>科目</th>
+                <th>课时性质</th>
+                <th>签约时间</th>
+                <th>购买课时</th>
+                <th>已消课时</th>
+                <th>剩余课时</th>
+                <th>已排课时</th>
+                <th>可排课时</th>
+                <th>消课数量</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="row in CustomerStudentCourseList">
+                <td>
+                    <label class="checkbox-bg" ng-class="{'active':row.active}" ng-click="setActive(row)"></label>
+                </td>
+                <!-- o2o排课显示课程名称 -->
+                <td ng-if="row.order_category == 1">{{row.course_type_name}}</td>
+                <td ng-if="row.order_category == 2">{{row.course_name}}</td>
+                <td ng-if="row.order_category == 1">{{row.subject_name}}</td>
+                <td ng-if="row.order_category == 2">{{row.subject_name_o2o}}</td>
+                <td>
+                    <span ng-if="row.course_property == 1">正课</span>
+                    <span ng-if="row.course_property == 2">赠课</span>
+                    <span ng-if="row.course_property == 3">返课</span>
+                    <span ng-if="row.course_property == 4">试听课</span>
+                    <span ng-if="row.course_property == null || row.course_property == 0">其他</span>
+                </td>
+                <td>{{row.contract_start_date | date:'yyyy-MM-dd'}}</td>
+                <!-- 购买课时 -->
+                <td>{{row.original_num}}</td>
+                <!-- 已消课时 = 购买课时-剩余课时 -->
+                <td>{{row.original_num - row.course_num |number:1}}</td>
+                <!-- 剩余课时 -->
+                <td>{{row.course_num}}</td>
+                <!-- 已排课时 = 剩余课时-可排课时 -->
+                <td>{{row.course_num - row.plan_available_num|number:1}}</td>
+                <!-- 可排课时 -->
+                <td>{{row.plan_available_num}}</td>
+                <td>
+                    <div class="mt-input-group">
+                        <input ng-model="row.consumersNum" placeholder="请输入0.5课时的整数倍"
+                               ng-blur="validatePrice($index,'plan_available_num')" ng-readonly="!row.active"
+                               ng-required="row.active" ng-pattern="/^[0-9]+(\.[0-9]{1})?$/">
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="11" class="tr" style="height: 40px;padding-right: 30px">总计：{{setParam.totalConsumers|number:1}}
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="mt-20">
+        <div class="mt-input-group col-33 mt-date" style="position:relative;">
+            <label style="margin-top: 0">消课日期</label>
+            <input class="Wdate" type="date" ng-model="setParam.consumersTime" required name="consumersTime"
+                   onchange="">
+            <!-- onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'1990-01-01',maxDate:'2030-12-31'})"  readonly-->
+        </div>
+        <div class="mt-input-group col-50">
+            <label style="width:30%;margin-top: 0">消课原因</label>
+            <input style="width:60%;" ng-model="setParam.consumerRseason" ng-maxlength="20">
+        </div>
+    </div>
+
+</div>

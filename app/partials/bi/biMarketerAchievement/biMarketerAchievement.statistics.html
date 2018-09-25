@@ -1,0 +1,60 @@
+<!-- 筛选条件 -->
+<div ng-include="baseHtmlUrl" style="padding: 0px 15px"></div>
+
+<!-- 表格 -->
+<div class="default-box">
+    <h4>市场业绩
+        <span ng-if="!isDay">（从 {{modelStartTime | date : 'yyyy-MM-dd'}} 至 {{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+        <span ng-if="isDay">（{{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+        <span ng-if="presentTime">最新统计时间：{{presentTime}}</span>
+    </h4>
+    <br/>
+    <div class="table-responsive">
+        <table st-pipe="getStatistics" st-table="tableModel" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th style="font-weight: bold;">员工</th>
+                <th style="font-weight: bold;">岗位</th>
+                <th style="font-weight: bold;" ng-if="isSchoolUser">校区</th>
+                <th style="font-weight: bold;" ng-if="isSchoolUser">校区类型</th>
+                <th style="font-weight: bold;" data-content="指定周期内，录入 Leads 的数量"
+                	data-placement="top" webui-popover>Leads 数</th>
+                <th style="font-weight: bold;" data-content="指定周期内，邀约的人数（同一时期，同一个人多次被邀约算一人）"
+                	data-placement="top" webui-popover>邀约数</th>
+                <th style="font-weight: bold;" data-content="指定周期内，确认到访的人数（同一时期，同一个人多次被邀约算一人）"
+                	data-placement="top" webui-popover>到访数</th>
+                <th style="font-weight: bold;" data-content="指定周期内，参与试听的人数（同一时期，同一个人多次被邀约算一人）"
+                	data-placement="top" webui-popover>体验数</th>
+                <th style="font-weight: bold;" data-content="指定周期内新签且无退单记录的订单数总和"
+                	data-placement="top" webui-popover>签单数</th>
+                <th style="font-weight: bold;" data-content="指定周期内新签且无退单记录的订单金额总和(订单金额是已优惠后的金额)"
+                	data-placement="top" webui-popover>签单金额</th>
+                <th style="font-weight: bold;" data-content="指定周期内新签且无退单记录的实际订单金额总和(订单金额是已优惠后的金额)"
+                	data-placement="left" webui-popover>实收金额</th>
+            </tr>
+            </thead>
+            <tbody>
+	            <tr ng-repeat="statisticsModel in statisticsModels">
+	                <td>{{statisticsModel.userName}}</td>
+	                <td>{{statisticsModel.positionName}}</td>
+	                <td ng-if="isSchoolUser">{{statisticsModel.schoolName}}</td>
+	                <td ng-if="isSchoolUser">{{statisticsModel.schoolType}}</td>
+                  <td>{{statisticsModel.leadsCount}}</td>
+	                <td>{{statisticsModel.invitationCount}}</td>
+	                <td>{{statisticsModel.visitCount}}</td>
+	                <td>{{statisticsModel.experienceCount}}</td>
+	                <td>{{statisticsModel.orderCount}}</td>
+	                <td>{{statisticsModel.orderAmount}}</td>
+	                <td>{{statisticsModel.orderRealAmount}}</td>
+	            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="30" class="text-center" st-pagination="" st-items-by-page="10"
+                    st-template="partials/util/pagination.custom.html">
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

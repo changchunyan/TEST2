@@ -1,0 +1,83 @@
+<div class="view-frame">
+    <div class="view-left">
+      <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="yws-container view-content">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="">组织架构管理</a> <span class="divider"></span></li>
+                <li class="active">组织架构管理</li>
+            </ul>
+        </div>
+        <tabs>
+            <pane title="组织架构管理">
+                <div class="row">
+                    <div class="c-select-text padding-0-20 form-horizontal min-height900">
+                        <div class="col-sm-3">
+                        <div><h4>{{currentUser.organization.name}}</h4></div>
+
+                        <div class="">
+                            <div class="box-with-right-border" style="height:800px;overflow-y:scroll">
+                                <treecontrol class="tree-classic"
+                                             tree-model="departments"
+                                             options="treeOptions"
+                                             on-selection="selectNode(node)"
+                                             selected-node="node1">
+                                    {{node.name}}
+                                </treecontrol>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="col-sm-9"  >
+                        <div class="row operations-panel mt-btn-r" style="margin-right:10px;" ng-if="canManageDepartment()">
+                          <button class="btn btn-danger" ng-click="remove()" ng-if="selectedNode">删除所选部门</button>
+                          <button class="btn btn-success" ng-click="addChild()" ng-if="selectedNode">添加下级部门</button>
+                          <button class="btn btn-success" ng-click="edit()" ng-if="selectedNode">修改部门</button>
+                        <!--
+                          <button class="btn btn-success" ng-click="changeParent()" ng-if="selectedNode">修改所属部门</button>
+                        -->
+                          <button class="btn btn-success" ng-class="{'br5':!selectedNode&&!selectedNode&&!selectedNode}" ng-click="addRoot()" style="width:120px;">添加一级部门</button>
+                        </div>
+                          <div ng-if="showType()" style="margin-top:20px;">
+                              <label>校区名称：{{selectedNode.name}}</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                              <label>校区地址：{{schoolAddress}}</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                              <label>所属大区：{{belongDistrict}}</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                              <label>所属区域：{{selectedNode.region.name}}</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                              <label>校区类型：{{dictData.schoolNature[selectedNode.schoolNature-1].name}}</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                          </div>
+                          <div ng-if="!showType()"  style="margin-top:20px;">
+                              <label>部门名称：{{selectedNode.name}}</label>
+                          </div>
+
+                        <hr ng-if="canManageDepartment()">
+                        <div class="row operations-panel"  style="margin-right:10px;">
+                          <button class="btn btn-success" ng-click="addPosition()" ng-if="selectedNode">岗位维护</button>
+                        </div>
+                        <h4 ng-if="selectedNode">岗位列表</h4>
+                        <table st-table="rowCollection" class="table table-striped" ng-if="selectedNode">
+                            <thead>
+                            <tr>
+                                <th>岗位编号</th>
+                                <th>岗位名称</th>
+                            <th>岗位描述</th>
+                                <!--<th>操作</th>-->
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="position in positions">
+                                <td>{{position.id}}</td>
+                                <td>{{position.name}}</td>
+                                <td>{{position.description}}</td>
+                        <!--
+                                <td><a ng-click="editPosition(position)"><span class="glyphicon glyphicon-pencil"></span></a> &nbsp; <a ng-click="removePosition(position)"><span class="glyphicon glyphicon-delete"></span></a></td>
+                        -->
+                            </tr>
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                </div>
+            </pane>
+        </tabs>
+    </div>
+</div>

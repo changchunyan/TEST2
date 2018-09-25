@@ -1,0 +1,107 @@
+<div class="mt-input-group pra br-0">
+    <div class="mt-modal-group"
+    >
+        <div class="col-33">
+            <label>卡号:</label>
+            <input ng-pattern="/^[0-9]*$/" ng-model="detailForUpdate.number">
+        </div>
+        <div class="col-33">
+            <label>姓名:</label>
+            <input ng-model="detailForUpdate.name" placeholder="1到20个字符" ng-maxlength="20" ng-minlength="1"
+                   required>
+        </div>
+        <div class="col-33">
+            <label>电话:</label>
+            <input ng-model="detailForUpdate.phone" required ng-pattern="/^[0-9]*$/" ng-maxlength="11" ng-minlength="7">
+        </div>
+        <div class="col-33">
+            <label>性别:</label>
+            <select ng-model="detailForUpdate.gender" ng-options="option.value as option.name for option in genders"><option value="">请选择</option></select>
+        </div>
+        <div class="col-33 mt-date">
+            <label>出生年月:</label>
+            <input ng-model="detailForUpdate.birthDate" readonly onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'1990-01-01',maxDate:'2030-12-31'})" name="birthDate">
+        </div>
+        <div class="col-33 cl">
+            <label>公立学校:</label>
+            <input ng-model="detailForUpdate.school_name">
+        </div>
+        <div class="col-33">
+            <label  class="tool-bg" title="" data-toggle="tooltip" data-placement="top" data-original-title="默认每年9月1日，学员的年级会自动升级" style="background-position-x: right">年级&nbsp;:</label>
+            <select ng-model="detailForUpdate.grade_id" ng-options="option.id as option.name for option in gradeIds" required></select>
+        </div>
+    </div>
+    <div class="mt-modal-group">
+        <div class="col-33">
+            <label>所属校区:</label>
+            <span>{{detailForUpdate.belong_school_name}}</span>
+        </div>
+        <div class="col-33">
+            <label>报名时间:</label>
+            <span ng-model="detailForUpdate.create_at"></span>
+        </div>
+        <div class="col-33">
+            <label>在读状态:</label>
+            <select ng-model="detailForUpdate.status" ng-options="option.value as option.name for option in StudentStatusForUpdate"
+            required>
+                <option value="">请选择</option>
+            </select>
+        </div>
+        <div class="col-33">
+            <label>所属人:</label>
+            <span>{{detailForUpdate.belong_user_name}}</span>
+        </div>
+        <div class="col-33 fr tr" ng-if="!isTeacherOrTeacherMaster">
+            <a class="btn-com btn-cb2" ng-if="showPermissions('CustomerAllot')" ng-click="distributeCustomerStudent(detailForUpdate)">分配</a>
+            <a class="btn-com btn-cb9" ng-if="showPermissions('makeInvication')" ng-click="addInvitationDetailByList(detailForUpdate)">邀约</a>
+            <a class="btn-com btn-cb6"  ng-if="showPermissions('CustomerCoursePlan')"
+               ng-click="addCoursePlanInfo(detailForUpdate,1)">排课</a>
+            <!--<a class="btn-com btn-cb6"  ng-if="showPermissions('CtrlLeftClassHourShow') && !isShowLeftClasshour" ng-click="confirmShowLeftClassHour(detail)">显示剩余课时/金额</a>-->
+        </div>
+    </div>
+    <div class="mt-modal-group">
+        <div class="col-33">
+            <label>可排课订单:</label>
+            <span>{{detailForUpdate.orderNum}}</span>
+        </div>
+        <div class="col-33">
+            <label>剩余学费:</label>
+            <span>{{detailForUpdate.courseAmount|number:2}}</span>
+        </div>
+        <div class="col-33">
+            <label>可排学费:</label>
+            <span>{{detailForUpdate.availableAmount|number:2}}</span>
+        </div>
+        <div class="col-33">
+            <label>上次消课:</label>
+            <span>{{detailForUpdate.lastCourseTime|date:'yyyy-MM-dd'}}</span>
+        </div>
+        <div class="col-33">
+            <label>下次排课:</label>
+            <span>{{detailForUpdate.nextCourseTime|date:'yyyy-MM-dd'}}</span>
+        </div>
+        <div class="col-50 fr tr" ng-if="!isTeacherOrTeacherMaster">
+            <a class="btn-com btn-cb6"  ng-if="showPermissions('OrderRenewal')||(showPermissions('OrderAdd') && isKeChengGuWenOrMaster())" ng-click="renewalOrder(detail)">录订单</a>
+            <!--<a class="btn-com btn-cb6"  ng-if="showPermissions('OrderRenewal')" ng-click="renewalOrderTopup(detailForUpdate)">充值</a>
+            <a class="btn-com btn-cb2" style="padding: 4px 9px" ng-if="showPermissions('OrderRenewal')||(showPermissions('OrderAdd') && isKeChengGuWenOrMaster())" ng-click="renewalOrder(detailForUpdate)">买课程</a>-->
+            <a class="btn-com btn-cb2" ng-if="showPermissions('OrderRestitution')" ng-click="addRestitutionOrder();">返课</a>
+            <a class="btn-com btn-cb2" ng-if="showPermissions('OrderTransfer')"  ng-click="addTransferOrder()">转课</a>
+            <a class="btn-com btn-cb9"  ng-if="showPermissions('RefundOperate') "
+               ng-click="showReturnView(detailForUpdate)">退费</a>
+            <a class="btn-com btn-cb2"  ng-if="showPermissions('TransferClass')"
+               ng-click="showTransferClassView(detailForUpdate)">转班</a>
+        </div>
+
+    </div>
+    <!--客户记录-->
+    <div class="cl of pt-10" style="line-height: 30px;">
+        <label class="fl tr" style="width: 11.5%;
+    text-align: right;line-height: 30px;">客户记录:</label>
+        <p class="fl tl f14" style="width: 85%;    word-wrap: break-word;"><textarea style="width:100%;" ng-model="detailForUpdate.customer_requirement" placeholder="用户需求..."></textarea></p>
+    </div>
+    <script>
+        setTimeout(function(){
+            $("[data-toggle='tooltip']").tooltip();
+        },1000);
+    </script>
+</div>

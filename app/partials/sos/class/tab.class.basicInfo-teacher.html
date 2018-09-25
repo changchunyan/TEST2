@@ -1,0 +1,91 @@
+<div class="yws-container mt-lable-fl mt-mlr-0 f16 look" ng-if="detailTab==='0'">
+    <div class="row">
+        <div class="col-sm-4 form-group">
+            <label for="name">班级名称：</label>
+            <input id="name" ng-model="studentClass.name" disabled/>
+        </div>
+        <div class="col-sm-4 form-group">
+            <label for="course">课程名称：</label>
+            <span id="course" class="col-sm-6 c3">{{studentClass.courseName}}</span>
+        </div>
+        <div class="col-sm-4 form-group">
+            <label>科目：</label>
+            <select id="subjectId" name="subjectId" ng-model="studentClass.subjectId" disabled
+                    ng-options="subject.id as subject.name for subject in omsSubject">
+                <option value=""></option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4 form-group">
+            <label for="planCount">班级人数：</label>
+            <input id="planCount" ng-model="studentClass.appliedCount" disabled />
+        </div>
+        <div class="col-sm-4 form-group">
+            <label for="userName">班主任：</label>
+            <input id="userName" ng-model="studentClass.userName" disabled />
+        </div>
+        <div class="col-sm-4 form-group">
+            <label for="startTime">计划开班日期：</label>
+            <input ng-model="studentClass.startTime" type="text" required onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,readOnly:true})"
+                   onchange="" name="statTime" id="statTime" disabled/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4 form-group m0">
+            <label for="endTime">计划结业日期：</label>
+            <input ng-model="studentClass.endTime" type="text" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,readOnly:true})"
+                   name="endTime" id="endTime" onchange="" disabled/>
+        </div>
+        <div class="col-sm-4 form-group">
+            <label for="startTime">上课时间：</label>
+            <div ng-repeat="element in studentClass.classTimeList">
+                <ul>
+                    <li class="lh20">{{element.startDate}}<span class="pl-10">{{element.startTime}}-{{element.endTime}}</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-4 form-group m0">
+            <label for="endTime">所属校区：</label>
+            <input ng-model="studentClass.schoolName" type="text"  name="schoolName" id="schoolName" onchange="" disabled/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4 form-group">
+            <label for="planCourseCount">计划课时：</label>
+            <input id="planCourseCount"  ng-model="studentClass.planCourseCount" ng-disabled="!studentClass.isEdit" />
+        </div>
+        <div class="col-sm-4 form-group">
+            <label for="leftCourseCount">剩余课时：</label>
+            <span id="leftCourseCount" class="col-sm-6 c3">{{studentClass.planCourseCount-studentClass.allCoursePlanCount}} </span>
+        </div>
+    </div>
+
+    <div class="mt-dashed of">
+        <h1>&nbsp;</h1>
+    </div>
+    <h2 class="cf8 f16">排课设置</h2>
+    <div class="br-gray pl-0 of">
+        <h2 class="pl-20">上课时间</h2>
+        <table class="table table-bordered table-striped mt-table1">
+            <thead>
+            <tr>
+                <th>星期</th>
+                <th>上课时间</th>
+                <th>上课时长</th>
+                <th>下课时间</th>
+            </tr>
+            </thead>
+            <tbody id="courseTimeAddList">
+            <tr ng-repeat="row in show.planLists | orderBy : 'day'">
+                <td>{{row.startDate}}</td>
+                <td>{{row.startTime}}</td>
+                <td>{{row.timelong}}</td>
+                <td>{{row.endTime}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<img src="img/icon/n.png" ng-if="studentClass.status == 1" style="position:absolute;top: 22px;right:90px;width:103px;height:63px;" >
+

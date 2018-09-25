@@ -1,0 +1,47 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true"  >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="form" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="editReviewHomeworkTitle"></h4>
+                </div>
+                <div class="modal-body">
+                   	<div>
+                   		<label style="width:100px;">课程标题</label>
+                   		<input ng-if="isEdit" type="text" style="width:400px;" id="title" ng-model="reviewHomeworkInfo.title" 
+                   			placeholder="本堂课的标题，1-10个字符" maxlength="10" />
+                   		<input ng-if="isView" type="text" style="width:400px;" id="title" ng-model="reviewHomeworkInfo.title" 
+                   			placeholder="本堂课的标题，1-10个字符" maxlength="10" disabled/>
+                   	</div>
+                   	<br/>
+                   	<div style="height: 100px"">
+                   		<div ng-if="isEdit" style="width:100px;float:left;">添加课后作业</div>
+                   		<div ng-if="isView" style="width:100px;float:left;">课后作业</div>
+                   		<div ng-if="isEdit && !reviewHomeworkInfo.url" style="float:left;">
+                   			<span style="float:left;" class="glyphicon glyphicon-import" title="上传文件"></span>
+                   			<input style="float:left;" id="reviewHomeworkFile" type="file" file-model="reviewHomeworkFile"/>
+                   			<span style="margin-left:10px;" class="glyphicon glyphicon-import" title="应用已上传作业"></span><a ng-click="usePackExist(4)">应用已上传课后作业</a>
+                   			<br/>
+                   			<br/>
+                   			<label class="control-label" ng-if="reviewHomeworkInfo.url">{{reviewHomeworkInfo.filename}}</label>
+                        	<label class="control-label" ng-if="reviewHomeworkFile.name!=undefined">{{reviewHomeworkFile.name}}</label>
+                   			<br/>
+                   			上传标准：可上传文件扩展名为.doc、.docx和.pdf的文件
+                   		</div>
+                   		<div ng-if="reviewHomeworkInfo.url" style="float:left;">
+                   		    <a href={{reviewHomeworkInfo.viewPath}} target="_blank">{{reviewHomeworkInfo.filename}}</a>
+                   			<a ng-if="isEdit" style="margin-left:30px" ng-click="removePack(4)">删除</a>
+                   		</div>
+                   	</div>
+                </div>
+                <div class="modal-footer" ng-if="isEdit">
+                    <button type="button" class="btn btn-success c5-lable" ng-click="saveReviewHomework(0)" ng-disabled="form.$invalid">发送</button>
+                    <button type="button" class="btn btn-success c5-lable" ng-click="saveReviewHomework(1)" ng-disabled="form.$invalid">保存</button>
+                </div>
+                <div class="modal-footer" ng-if="isView">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

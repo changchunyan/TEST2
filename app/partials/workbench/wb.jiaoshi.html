@@ -1,0 +1,142 @@
+<div class="workbench-container" ng-controller="workbench.jiaoshiCtrl as jsc">
+    <!--包括今日课堂和快速链接-->
+    <div class="yws-container">
+        <div class="yws-left" style="width:70%;">
+            <!-- 今日课堂 -->
+            <h4><span class="h2-span">今日课堂&nbsp;&nbsp;&nbsp;&nbsp;{{dateStr}}&nbsp;&nbsp;{{dayOfWeek}}</span></h4>
+            <div class="table-responsive table-scroll" >
+	            <table class="table table-bordered table-striped mt-table1"  st-pipe="getTodayCourse"  st-table="todayCourse">
+	                <thead>
+		                <tr>
+		                    <th>上课对象</th>
+		                    <th>上课时间</th>
+		                    <th>操作</th>
+		                </tr>
+	                </thead>
+	                <tbody >
+		                <tr ng-repeat="row in todayCourse">
+		                	<td>{{row.objName}}</td>
+		                    <td>{{row.courseTime}}</td>
+		                    <td>
+		                    	<a ng-if="row.type == 1 || row.type == 8" href="#/sos-admin/customer_student/{{row.objId}}" style="color:blue">查看</a>
+		                    	<a ng-if="row.type == 3" href="#/fb-admin/CoursePlan_Listen/{{row.omsCoursePlanId}}" style="color:blue">查看</a><!-- 试听课跳转【前台业务】-【试听管理】 -->
+		                    	<a ng-if="row.type == 2 || row.type == 9" href="#/sos-admin/customer_group/{{row.objId}}" style="color:blue">查看</a>
+		                    </td>
+		                </tr>
+	                </tbody>
+	                <tfoot>
+		                <tr>
+		                    <td class="text-center" st-pagination="" st-items-by-page="5" st-template="partials/util/pagination.custom.html" colspan="3"></td>
+		                </tr>
+	                </tfoot>
+	            </table>
+			</div>
+        </div>
+        <!--快速链接-->
+        <div class="yws-right workbench-links">
+            <div class="links-top">
+                	快速链接
+            </div>
+            <div class="links-content ">
+                <li><a href="#/sos-admin/teacher_times">我的时间表<img  src="img/workbench/jiantou-right.png" ></a></li>
+                <li><a href="#/sos-admin/customer_student">学员管理<img  src="img/workbench/jiantou-right.png" ></a></li>
+                <li><a href="#/bi-admin/classHour">课时统计<img  src="img/workbench/jiantou-right.png" ></a></li>
+            </div>
+            <div class="links-bottom"></div>
+        </div>
+    </div>
+
+    <div class="yws-container">
+        <div class="warn-content">
+            <tabs>
+                <pane title="课前预习" >
+                    <div class="table-responsive table-scroll" >
+                        <table class="table table-bordered table-striped mt-table1"  st-pipe="getTodayCoursePackBefore"  st-table="todayCoursePackBefore">
+                            <thead>
+	                            <tr>
+	                                <th>上课对象</th>
+	                                <th>上课时间</th>
+	                                <th>截止时间</th>
+	                                <th>预习资料</th>
+	                            </tr>
+                            </thead>
+                            <tbody >
+	                            <tr ng-repeat="row in todayCoursePackBefore">
+	                                <td>
+	                                	<a ng-if="row.type == 1 || row.type == 8" href="#/sos-admin/customer_student/{{row.objId}}" style="color:blue">{{row.objName}}</a>
+	                                	<a ng-if="row.type == 3" href="#/fb-admin/CoursePlan_Listen/{{row.omsCoursePlanId}}" style="color:blue">{{row.objName}}</a><!-- 试听课跳转【前台业务】-【试听管理】 -->
+	                                	<a ng-if="row.type == 2 || row.type == 9" href="#/sos-admin/customer_group/{{row.objId}}" style="color:blue">{{row.objName}}</a>
+	                                	<span ng-if="row.type == 7">{{row.objName}}</span>
+	                                </td>
+		                    		<td>{{row.courseDate}}&nbsp;&nbsp;{{row.courseTime}}</td>
+		                    		<td>{{row.startTime | date:'yyyy-MM-dd HH:mm'}}</td>
+		                    		<td>
+                                		<a ng-if="(row.type == 1 || row.type == 8) && row.editablePreviewHomework" href="#/sos-admin/customer_student/{{row.objId}}" style="color:blue">编辑</a>
+                                		<a ng-if="(row.type == 1 || row.type == 8) && row.previewHomework && row.previewHomework.packState == 1" href="#/sos-admin/customer_student/{{row.objId}}" style="color:blue">编辑</a>
+                                		<a ng-if="(row.type == 2 || row.type == 9) && row.editablePreviewHomework" href="#/sos-admin/customer_group/{{row.objId}}" style="color:blue">编辑</a>
+                                		<a ng-if="(row.type == 2 || row.type == 9) && row.previewHomework && row.previewHomework.packState == 1" href="#/sos-admin/customer_group/{{row.objId}}" style="color:blue">编辑</a>
+                                		<a ng-if="row.type == 3 && row.editablePreviewHomework" href="#/fb-admin/CoursePlan_Listen/{{row.omsCoursePlanId}}" style="color:blue">编辑</a>
+                                		<a ng-if="row.type == 3 && row.previewHomework && row.previewHomework.packState == 1" href="#/fb-admin/CoursePlan_Listen/{{row.omsCoursePlanId}}" style="color:blue">编辑</a>
+									</td>
+	                            </tr>
+                            </tbody>
+                            <tfoot>
+	                            <tr>
+	                                <td class="text-center" st-pagination="" st-items-by-page="5" st-template="partials/util/pagination.custom.html" colspan="4"></td>
+	                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </pane>
+                <pane title="课后资料" >
+                    <div class="table-responsive table-scroll" >
+                        <table class="table table-bordered table-striped mt-table1"  st-pipe="getTodayCoursePackAfter"  st-table="todayCoursePackAfter">
+                            <thead>
+	                            <tr>
+	                                <th>上课对象</th>
+	                                <th>上课时间</th>
+	                                <th>截止时间</th>
+	                                <th>备课笔记</th>
+	                                <th>课后作业</th>
+	                            </tr>
+                            </thead>
+                            <tbody >
+								<tr ng-repeat="row in todayCoursePackAfter">
+	                                <td>
+	                                	<a ng-if="(row.type == 1 || row.type == 8)" href="#/sos-admin/customer_student/{{row.objId}}" style="color:blue">{{row.objName}}</a>
+	                                	<a ng-if="(row.type == 2 || row.type == 9)" href="#/sos-admin/customer_group/{{row.objId}}" style="color:blue">{{row.objName}}</a>
+	                                	<a ng-if="row.type == 3" href="#/fb-admin/CoursePlan_Listen/{{row.omsCoursePlanId}}" style="color:blue">{{row.objName}}</a><!-- 试听课跳转【前台业务】-【试听管理】 -->
+	                                	<span ng-if="row.type == 7">{{row.objName}}</span>
+	                                </td>
+		                    		<td>{{row.courseDate}}&nbsp;&nbsp;{{row.courseTime}}</td>
+		                    		<td>{{row.endDeadline}}</td>
+		                    		<td>
+			                    		<a ng-if="(row.type == 1 || row.type == 8) && row.editableTeacherHandouts && !row.teacherHandouts" href="#/sos-admin/customer_student/{{row.objId}}" style="color:blue">编辑</a>
+										<a ng-if="(row.type == 1 || row.type == 8) && row.teacherHandouts && row.teacherHandouts.packState == 1" href="#/sos-admin/customer_student/{{row.objId}}" style="color:blue">编辑</a>
+	                                	<a ng-if="(row.type == 2 || row.type == 9) && row.editableTeacherHandouts && !row.teacherHandouts" href="#/sos-admin/customer_group/{{row.objId}}" style="color:blue">编辑</a>
+										<a ng-if="(row.type == 2 || row.type == 9) && row.teacherHandouts && row.teacherHandouts.packState == 1" href="#/sos-admin/customer_group/{{row.objId}}" style="color:blue">编辑</a>
+										<a ng-if="row.type == 3 && row.editableTeacherHandouts && !row.teacherHandouts" href="#/fb-admin/CoursePlan_Listen/{{row.omsCoursePlanId}}" style="color:blue">编辑</a>
+										<a ng-if="row.type == 3 && row.teacherHandouts && row.teacherHandouts.packState == 1" href="#/fb-admin/CoursePlan_Listen/{{row.omsCoursePlanId}}" style="color:blue">编辑</a>
+									</td>
+									<td>
+			                    		<a ng-if="(row.type == 1 || row.type == 8) && row.editableReviewHomework" href="#/sos-admin/customer_student/{{row.objId}}" style="color:blue">编辑</a>
+										<a ng-if="(row.type == 1 || row.type == 8) && row.reviewHomework && row.teacherHandouts.packState == 1" href="#/sos-admin/customer_student/{{row.objId}}" style="color:blue">编辑</a>
+	                                	<a ng-if="(row.type == 2 || row.type == 9) && row.editableReviewHomework" href="#/sos-admin/customer_group/{{row.objId}}" style="color:blue">编辑</a>
+										<a ng-if="(row.type == 2 || row.type == 9) && row.reviewHomework && row.teacherHandouts.packState == 1" href="#/sos-admin/customer_group/{{row.objId}}" style="color:blue">编辑</a>
+										<a ng-if="row.type == 3 && row.editableReviewHomework" href="#/fb-admin/CoursePlan_Listen/{{row.omsCoursePlanId}}" style="color:blue">编辑</a>
+										<a ng-if="row.type == 3 && row.reviewHomework && row.teacherHandouts.packState == 1" href="#/fb-admin/CoursePlan_Listen/{{row.omsCoursePlanId}}" style="color:blue">编辑</a>
+									</td>
+	                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="text-center" st-pagination="" st-items-by-page="5" st-template="partials/util/pagination.custom.html" colspan="24"></td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </pane>
+            </tabs>
+        </div>
+    </div>
+</div>

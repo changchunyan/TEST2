@@ -1,0 +1,169 @@
+<div class="view-frame" ng-controller="CrmStudentCourseAttendenceSupplementController">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content user-love">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="#">首页</a> <span class="divider"></span></li>
+                <li><a href="#/fb-admin">前台业务</a> <span class="divider"></span></li>
+                <li class="active">体验课管理</li>
+            </ul>
+        </div>
+        <div class="mt-10">
+            <div class="tabs-title border-1 c3">体验课管理</div>
+            <div class="mt-student-m">
+                <ul class="f14 cf">
+                    <li><a class="mt-timeTable" ng-click="showSelectModal()">排体验课</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div st-pipe="getExperiencePageList" st-table="classExperienceTable" class="lh21">
+            <div class="mt-student-m br-gray h-auto no-media ml-0">
+				<div class="mt-select" style="min-height: 35px">
+					<div class="rbg mt-0" style="border: none;">
+						<ul class="h-auto" style="padding-right: 0;float: left">
+							<div class="of">
+								<ul class="one mt-10 h-auto pr-0 input-180">
+									<li class="no-mar ml-0" style="margin-right: 15px;">
+										<label style="text-align: left">学生姓名</label>
+										<p></p>
+										<input placeholder="请输入" id="noMar" ng-model="searchModel.studentName" type="search" style="margin-right: 15px;">
+									</li>
+									<li class="no-mar ml-0" style="margin-right: 15px;">
+										<label style="text-align: left">班级姓名</label>
+										<p></p>
+										<input placeholder="请输入" id="noMar" ng-model="searchModel.className" type="search" style="margin-right: 15px;">
+									</li>
+									<li style="line-height: 28px;margin-right: 15px;">
+										<label style="text-align: left">体验状态</label>
+										<p></p>
+										<select style="margin-top: 13px;margin-right: 15px;" st-search="searchModel.state" ng-model="searchModel.state">
+											<option value="">请选择</option>
+											<option value="1">已体验</option>
+											<option value="2">待体验</option>
+											<option value="3">取消体验</option>
+										</select>
+									</li>
+									<ul class="inline-block time-show lh-auto span-54" style="margin-top: 30px;">
+										<a id="keydown-query" class="mt-btn cf bg-color-blue br ti-0 li-btn-1 pr-0 mt-0" href="javascript:void (0);" ng-click="getExperiencePageList(classExperienceTableState)">查询</a>
+										<a class="mt-btn ml15 brc3 li-btn-1 pr-0 mt-0 ti-0"  id="resetInputAll" ng-click="resetSelect()">重置</a>
+										<a class="more mr-14" style="color:#428bca;" ng-click="changeSelectMore(1,1)">{{selectMoreText}}</a>
+									</ul>
+
+									<li class="mt-three option no-mar" vr-select changeFun="callServerrecordFilterChange" data-mt="{{nextCourseDatas}}" style="margin-right: 0px"><label class="fl bg-none" style="width:auto;">上课时间</label><br>
+										<input class="three-1">
+										<div class="three-1">不限</div>
+										<input class="three-2" readonly type="search" placeholder="" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})" ng-model="searchModel.searchStartTime" style="margin-right: 0">
+										<div class="three-2"></div><span class="dao">到</span>
+										<input class="three-2" readonly type="search" name="" placeholder="" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})" ng-model="searchModel.searchEndTime">
+										<div class="three-2"></div>
+									</li>
+								</ul>
+								<!--更多选项-->
+								<li class="w1" style="min-width:100%;height: 50px;" ng-if="!selectMore">
+									<a ng-click="changeSelectMore(1)" style="margin-top: 33px" href="javascript:void(0);" class="mt-more">&nbsp;</a>
+								</li>
+								<ul class="one h-auto pr-0" ng-show="selectMore">
+									<ul class="h-auto" style="width: 100%;padding-right: 0;border-top: 1px dashed #ccc;margin-top: 20px;padding-top: 20px;">
+										<li style="margin-left: 0;margin-right: 15px;">
+											<label style="text-align: left">任课老师</label>
+											<p></p>
+											<input placeholder="请输入" ng-model="searchModel.teacherName" type="search">
+										</li>
+										<li style="margin-left: 0;margin-right: 15px;">
+											<label style="text-align: left;margin-bottom: 3px;">年级</label>
+											<p></p>
+											<select st-search="searchModel.gradeId" ng-model="searchModel.gradeId" ng-options="option.id as option.name for option in grades">
+												<option value="">请选择</option>
+											</select>
+										</li>
+										<li style="margin-left: 0;margin-right: 15px;">
+											<label style="text-align: left">科目</label>
+											<p></p>
+											<input placeholder="请输入" ng-model="searchModel.subjectName" type="search">
+										</li>
+										<li class="no-mar ml-0">
+											<label style="text-align: left">所属人</label>
+											<p></p>
+											<input placeholder="请输入" id="noMar" ng-model="searchModel.userName" type="search">
+										</li>
+										<!--隐藏更多-->
+										<li class="w1 down" style="min-width: 100%;height: 50px;margin-left: 2%">
+											<a ng-click="changeSelectMore(0)" style="margin-top: 33px" class="mt-more">&nbsp;</a>
+										</li>
+									</ul>
+								</ul>
+							</div>
+						</ul>
+					</div>
+				</div>
+           	</div>
+	        <div class="br-gray mt-list">
+	            <div class="overflow-x">
+	                <table class="table table-bordered table-striped table-condensed mt-table1">
+	                    <thead>
+		                    <tr class="br-gray-t">
+		                        <th>学生姓名</th>
+		                        <th>所属人</th>
+		                        <th>班级名称</th>
+		                        <th>课程类型</th>
+		                        <th>年级</th>
+		                        <th>科目</th>
+		                        <th>上课时间</th>
+		                        <th>体验状态</th>
+		                        <th>任课老师</th>
+		                        <th>全职/兼职</th>
+		                        <th>教师电话</th>
+		                        <th>操作</th>
+		                    </tr>
+	                    </thead>
+	                    <tbody>
+		                    <tr ng-repeat="row in classExperienceList">
+		                        <td>{{row.studentName}}</td>
+		                        <td>{{row.userName}}</td>
+		                        <td>{{row.className}}</td>
+		                        <td>试听课程</td>
+		                        <td>{{row.gradeName}}</td>
+		                        <td>{{row.subjectName}}</td>
+		                        <td>{{row.startTime|date:'yyyy-MM-dd HH:mm:ss'}}</td>
+		                        <td>{{row.state|classExperienceStatus:row.state}}</td>
+		                        <td>{{row.teacherName}}</td>
+		                        <td ng-if="row.partFull==2">全职</td>
+		                        <td ng-if="row.partFull==1">兼职</td>
+		                        <td ng-if="row.partFull==null"></td>
+		                        <td>{{row.teacherMobile}}</td>
+								<td>
+		                            <div ng-if="row.state===2">
+		                                <a class="showUI" id="nw+{{$index}}" ng-click="nw[$index]=true"><span
+		                                        class="glyphicon glyphicon-caozuo" title="操作"></span></a>
+		                                <bubble ng-if="nw[$index]" for="nw+{{$index}}" align="bottom" close="nw[$index]=false"
+		                                        close-action="outerchick " ng-mouseleave="nw[$index]=false;">
+		                                    <ul>
+		                                        <li>
+		                                            <a ng-click="showEditModal(row)">编辑</a>
+		                                        </li>
+		                                        <li>
+		                                            <a ng-click="cancelClassExperience(row)">取消体验</a>
+		                                        </li>
+		                                    </ul>
+		                                </bubble>
+		                            </div>
+		                        </td>
+		                    </tr>
+	                    </tbody>
+	                    <tfoot>
+	                        <tr>
+	                            <td class="text-center" st-pagination="" st-items-by-page="10"
+	                                st-template="partials/util/pagination.custom.html" colspan="15">
+	                            </td>
+	                        </tr>
+                        </tfoot>
+	                </table>
+	            </div>
+	        </div>
+       	</div>
+    </div>
+</div>
+<script src="js/jqDom.js"></script>

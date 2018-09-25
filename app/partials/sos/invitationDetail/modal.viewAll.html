@@ -1,0 +1,88 @@
+<div class="modal crm-invitationDetail-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <form name="form">
+        <div class="modal-header">
+          <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" ng-bind="modalTitle"></h4>
+        </div> 
+        <div class="modal-body">
+        
+        
+        
+        	<div class="row">
+            	<div class="col-sm-4 form-group">
+                	<label for="name" class="col-sm-8 control-label"> 学生姓名</label>
+                    <p>{{CrmInvitationDetailVoForCreate.name}}</p>
+                </div>
+                <div class="col-sm-4 form-group">
+                    <label for="phone" class="col-sm-8 control-label"> 电话</label>
+                    <p>{{CrmInvitationDetailVoForCreate.phone}}</p>
+                </div>
+            </div>
+        	<div class="row">
+            	<div class="col-sm-4 form-group">
+                	<label for="media_channel" class="col-sm-8 control-label"> 渠道来源</label>
+                	<div ng-if="CrmInvitationDetailVoForCreate.mediaChannel==0">本地城镇</div>
+                	<div ng-if="CrmInvitationDetailVoForCreate.mediaChannel==1">本地农业</div>
+                	<div ng-if="CrmInvitationDetailVoForCreate.mediaChannel==2">外地城镇</div>
+                	<div ng-if="CrmInvitationDetailVoForCreate.mediaChannel==3">外地农业</div>
+                </div>
+                <div class="col-sm-4 form-group">
+                    <label for="userId" class="col-sm-8 control-label"> 所属人</label>
+                    <p>{{CrmInvitationDetailVoForCreate.username}}</p>
+                </div>
+            </div>
+        
+        
+        	<div class="row">
+            	<div class="col-sm-4 form-group">
+                	<label for="personId" >personId</label>
+                    <p>{{CrmInvitationDetailVoForCreate.personId}}</p>
+                </div>
+                <div class="col-sm-4 form-group">
+                    <label for="organizationId" >机构ID</label>
+                    <p>{{CrmInvitationDetailVoForCreate.organizationId}}</p>
+                </div>
+            </div>
+            
+            <div class="row">
+            	<div class="col-sm-4 form-group">
+                	<label for="personType" >personType用户类型</label>
+                    <div ng-if="CrmInvitationDetailVoForCreate.personType==1">学生</div>
+                	<div ng-if="CrmInvitationDetailVoForCreate.personType==2">商户机构</div>
+                </div>
+                <div class="col-sm-4 form-group">
+                    <label for="personState" >personState用户状态</label>
+                    <div ng-if="CrmInvitationDetailVoForCreate.personState==1">正式客户</div>
+                	<div ng-if="CrmInvitationDetailVoForCreate.personState==2">未签约leads客户</div>
+                </div>
+            </div>
+            
+            <div class="row">
+            	<div class="col-sm-4 form-group">
+                	<label for="userId" >邀约时间</label>
+                    <p>{{CrmInvitationDetailVoForCreate.invitateTime | date:'yyyy-MM-dd' }}</p>
+                </div>
+                <div class="col-sm-4 form-group">
+                    <label for="communicateTime" >预到访时间</label>
+                    <p>{{ CrmInvitationDetailVoForCreate.receiveTime | date:'yyyy-MM-dd' }}</p>
+                </div>
+            </div>
+        	
+        	<div class="row">
+	            <div class="view-left0 form-group">
+	                <label for="communicateContent" >邀约内容</label>
+	                <p>{{CrmInvitationDetailVoForCreate.invitationContent}}</p>
+	            </div>
+            </div>
+            
+        </div>
+            <div class="text-center">
+                <button type="button" class="btn btn-default" ng-click="$hide()">返回</button>
+	          	<img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+	        </div>
+        </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,91 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true" ng-controller="OrderDetailTransferController">
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle"></h4>
+                </div>
+                <div class="modal-body">
+                    <div><!-- 转让订单课程详情列表-->
+                        <table class="table table-bordered table-striped" st-table="orderTransferOrders" >
+                            <thead>
+                            <tr>
+                                <th>合同编号</th>
+                                <th>学员姓名</th>
+                                <th>签约时间</th>
+                                <th>总价</th>
+                                <th>已上课时</th>
+                                <!--<th>已上课时金额</th>-->
+                                <th>剩余课时</th>
+                                <!--<th>剩余课时金额</th>-->
+                            </tr>
+                            </thead>
+                            <tr ng-repeat="row in orderTransferOrders">
+                                <td>{{row.orderNo}}</td>
+                                <td>{{row.name}}</td>
+                                <td>{{row.contractStartDate | date:'yyyy-MM-dd' }}</td>
+                                <td>{{row.realTotalAmount}}</td>
+                                <td>{{row.totalCourseNum-row.consumeCourseNum}}</td>
+                                <td>{{row.consumeCourseNum}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <hr>
+                    <div><!-- 受让信息-->
+                        <div class="row">
+                            <div class="col-sm-4 form-group">
+                                <label for="agreementNo" class="col-sm-4 control-label">协议编号</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="agreementNo" id="agreementNo"  ng-model="order.agreementNo" ng-maxlength="30" readonly class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group" >
+                                <label for="name" class="col-sm-4 control-label">受让学员姓名</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="name" id="name"  ng-model="order.transferName" ng-maxlength="20" readonly class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group" >
+                                <label for="startDate" class="col-sm-4 control-label">生效日期</label>
+
+                                <div class="col-sm-8">
+                                    <input type="date" name="startDate" id="startDate"  ng-model="order.startDate"  readonly class="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 form-group" >
+                                <label for="endDate" class="col-sm-4 control-label">终止日期</label>
+                                <div class="col-sm-8">
+                                    <input type="date" name="endDate" id="endDate" ng-model="order.endDate " readonly class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group" >
+                                <label for="lectureType" class="col-sm-4 control-label">授课形式</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="order.lectureType" name="lectureType" id="lectureType" class="input-sm form-control" readonly
+                                            ><!--ng-options="option.code as option.name for option in courseTeachingType"-->
+                                        <option value="">-- 请选择 --</option>
+                                        <option value="1" ng-selected="order.lectureType = '1'">一对一</option>
+                                        <option value="2" ng-selected="order.lectureType = '2'">一对多</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group" >
+                                <label for="courseNum" class="col-sm-4 control-label">转让总课时</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="courseNum" id="courseNum"  ng-model="order.transferCourseNum" ng-maxlength="10" readonly class="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                    <img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

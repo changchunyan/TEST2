@@ -1,0 +1,603 @@
+<style>
+    td {
+        white-space: normal
+    }
+</style>
+<div class="view-frame" ng-controller="CustomerStudentController as lsc">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <!--学员客户/一对多列表-->
+    <div ng-show="isList" class="view-content mt-new-ui user-love">
+        <div class="yws-nav">
+	            <div>
+	                <ul class="breadcrumb">
+	                    <li><a href="#/">首页</a> <span class="divider"></span></li>
+	                    <li><a href="#/sos-admin">学员教务</a> <span class="divider"></span></li>
+	                    <li><a ng-click="showListView()">在读学员管理</a> <span class="divider"></span></li>
+	                    <li class="active">一对多管理</li>
+	                </ul>
+	            </div>
+	            <div class="mt-10 br-gray">
+					<div class="tabs-title border-1 c3">一对多管理</div>
+	                <div ng-if="!isTeacherOrTeacherMaster" class="mt-student-m">
+	                    <ul class="f14 cf">
+	                        <!-- <li ng-if="showPermissions('GroupAdd')"><a class="mt-blue" ng-click="addGroup()">添加一对多</a> -->
+	                        <li ng-if="showPermissions('GroupAdd')"><a class="mt-blue" ng-click="showGroupModal(null, 1)">添加一对多</a>
+	                        </li>
+	                        <li ng-if="showPermissions('CustomerAllot')"><a class="mt-gree"
+	                                                                        ng-click="showAllotView()">分配学员</a>
+	                        </li>
+	                    </ul>
+	                </div>
+	            </div>
+	            <div ng-if="!isTeacherOrTeacherMaster" class="br-gray mt-list" ng-if="showPermissions('GroupList')">
+	                <h2 class="pl-20 c3">一对多管理</h2>
+	                <div class="overflow-x">
+	                    <table class="table table-bordered table-striped table-condensed mt-table1"
+	                           st-pipe="getMyCrmCustomerStudentGroupList" st-table="MyCrmCustomerStudentGroupList">
+	                        <thead>
+	                        <tr class="br-gray-t">
+	                            <th>一对多名称</th>
+	                            <th>类型</th>
+	                            <th>一对多人数</th>
+	                            <th>一对多成员</th>
+	                            <th>课时规格</th>
+	                            <th>创建人</th>
+	                            <th>创建时间</th>
+	                            <th>所属人</th>
+	                            <th>所属校区</th>
+	                            <th>操作</th>
+	                        </tr>
+	                        <tr>
+
+	                            <th>
+	                                <input st-search="myCrmCustomerStudentGroupFilter.group_no" placeholder="一对多名称查询"
+	                                       ng-model="myCrmCustomerStudentGroupFilter.group_no" class="input-sm form-control" type="search"/>
+	                            </th>
+	                            <th>&nbsp;</th>
+	                            <th>&nbsp;</th>
+	                            <th>&nbsp;</th>
+	                            <th>
+	                                <select st-search="myCrmCustomerStudentGroupFilter.order_rule" name="groupOrderRule"
+	                                	ng-model="myCrmCustomerStudentGroupFilter.order_rule" id="groupOrderRule" class="input-sm form-control">
+		                                <option value="">-- 请选择 --</option>
+		                                <option value="1">1小时</option>
+		                                <option value="2">40分钟</option>
+		                            </select>
+	                            </th>
+	                            <th>&nbsp;</th>
+	                            <th>&nbsp;</th>
+	                            <th>
+	                                <input ng-model="myCrmCustomerStudentGroupFilter.belong_user_name"
+	                                       st-search="myCrmCustomerStudentGroupFilter.belong_user_name" placeholder="所属人查询"
+	                                       class="input-sm form-control" type="search"/>
+	                            </th>
+	                            <th>&nbsp;</th>
+	                            <th>&nbsp;</th>
+	                        </thead>
+	                        <tbody ng-show="!isMyCrmCustomerStudentGroupListLoading">
+	                        <tr ng-repeat="row in MyCrmCustomerStudentGroupList">
+	                            <td>{{row.group_no}}</td>
+	                            <td>{{row.group_type|productType:row.group_type}}</td>
+	                            <td ng-class="{'font-color-red':row.stu_num*1!=row.student_count*1}">{{row.stu_num}}/{{row.student_count}}</td>
+	                            <td><a ng-click="viewGroupDetail(row)" ng-if="showPermissions('GroupDetail')">查看</a></td>
+	                            <td>{{row.order_rule|courseRuleText:row.order_rule}}</td>
+	                            <td>{{row.created_by_name}}</td>
+	                            <td>{{row.create_at | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+	                            <td>{{row.belong_user_name}}</td>
+	                            <td>{{row.belong_school_name}}</td>
+	                            <td>
+	                                <a class="showUI" id="nw+{{$index}}" ng-click="nw[$index]=true">
+									<span class="glyphicon glyphicon-caozuo" title="操作"></span>
+	                                </a>
+	                                <bubble ng-if="nw[$index]" for="nw+{{$index}}" align="bottom" close="nw[$index]=false"
+	                                        close-action="outerchick " ng-mouseleave="nw[$index]=false;">
+	                                    <ul>
+	                                        <li ng-if="showPermissions('GroupCoursePlan') && row.stu_num===row.student_count">
+	                                            <a ng-click="addCoursePlanInfo(row,2)">一对多排课</a>
+	                                        </li>
+	                                        <li ng-if="showPermissions('GroupDetail')">
+	                                            <a ng-click="viewGroupDetail(row)">查看一对多详细信息</a>
+	                                        </li>
+	                                        <li ng-if="showPermissions('GroupAllot')">
+	                                            <a ng-click="groupAllot(row)">一对多分配</a>
+	                                        </li>
+	                                        <li ng-if="showPermissions('GroupEdit')">
+	                                            <a ng-click="showGroupModal(row,2)">编辑一对多</a>
+	                                        </li>
+	                                        <li ng-if="showPermissions('GroupDelete')">
+	                                            <a ng-click="deleteGroup(row)">删除一对多</a>
+	                                        </li>
+	                                    </ul>
+	                                </bubble>
+	                            </td>
+	                        </tr>
+	                        </tbody>
+	                        <tbody ng-show="isMyCrmCustomerStudentGroupListLoading">
+	                        <tr>
+	                            <td colspan="9" class="text-center">
+	                                <div class="loading-indicator"></div>
+	                            </td>
+	                        </tr>
+	                        </tbody>
+	                        <tfoot>
+	                        <tr>
+	                            <td class="text-center" st-pagination="" st-items-by-page="10"
+	                                st-template="partials/util/pagination.custom.html"
+	                                st-template="partials/util/pagination.custom.html" colspan="9">
+	                            </td>
+	                        </tr>
+	                        </tfoot>
+	                    </table>
+	                </div>
+	            </div>
+	        	<div ng-if="isTeacherOrTeacherMaster" class="br-gray mt-list" ng-if="showPermissions('GroupList')">
+	                <h2 class="pl-20 c3">一对多管理</h2>
+	                <div class="overflow-x">
+	                    <table class="table table-bordered table-striped table-condensed mt-table1"
+	                           st-pipe="getMyCrmCustomerStudentGroupList" st-table="MyCrmCustomerStudentGroupList">
+	                        <thead>
+	                        <tr class="br-gray-t">
+	                            <!-- <th>一对多编号</th> -->
+	                            <th>一对多名称</th>
+	                            <th>一对多人数</th>
+	                            <!-- <th>已上/已排课时</th> -->
+	                            <th>所属校区</th>
+	                            <th>操作</th>
+	                        </tr>
+	                        <tr>
+
+	                            <th>
+	                                <input st-search="myCrmCustomerStudentGroupFilter.group_no" placeholder="一对多名称查询"
+	                                       ng-model="myCrmCustomerStudentGroupFilter.group_no"
+	                                       class="input-sm form-control" type="search"/>
+	                            </th>
+	                            <th>&nbsp;</th>
+	                            <th>&nbsp;</th>
+	                            <th>&nbsp;</th>
+	                        </thead>
+	                        <tbody ng-show="!isMyCrmCustomerStudentGroupListLoading">
+		                        <tr ng-repeat="row in MyCrmCustomerStudentGroupList">
+		                            <td>{{row.group_no}}</td>
+		                            <td>{{row.stu_num}}</td>
+		                            <!-- <td>已上/已排课时</td> -->
+		                            <td>{{row.belong_school_name}}</td>
+		                            <td>
+		                                <a class="showUI" id="nw+{{$index}}" ng-click="nw[$index]=true">
+										<span class="glyphicon glyphicon-caozuo" title="操作"></span>
+		                                </a>
+		                                <bubble ng-if="nw[$index]" for="nw+{{$index}}" align="bottom" close="nw[$index]=false"
+		                                        close-action="outerchick " ng-mouseleave="nw[$index]=false;">
+		                                    <ul>
+		                                        <li ng-if="showPermissions('GroupDetail')">
+		                                            <a ng-click="showGroupDetailView(row)">查看</a>
+		                                        </li>
+		                                    </ul>
+		                                </bubble>
+		                            </td>
+		                        </tr>
+	                        </tbody>
+	                        <tbody ng-show="isMyCrmCustomerStudentGroupListLoading">
+	                        <tr>
+	                            <td colspan="9" class="text-center">
+	                                <div class="loading-indicator"></div>
+	                            </td>
+	                        </tr>
+	                        </tbody>
+	                        <tfoot>
+	                        <tr>
+	                            <td class="text-center" st-pagination="" st-items-by-page="10"
+	                                st-template="partials/util/pagination.custom.html" colspan="4">
+	                            </td>
+	                        </tr>
+	                        </tfoot>
+	                    </table>
+	                </div>
+	        </div>
+	    </div>
+	</div>
+
+	 <!--一对多分配页面-->
+    <div ng-show="isGroupAllot" class="view-content2">
+        <div>
+            <div>
+                <ul class="breadcrumb">
+                    <li><a href="#/">首页</a> <span class="divider"></span></li>
+                    <li><a href="#/sos-admin">学员教务</a> <span class="divider"></span></li>
+                    <li><a ng-click="showListView()">学员管理</a> <span class="divider"></span></li>
+                    <li class="active">学员一对多分配</li>
+                </ul>
+            </div>
+        </div>
+        <div class="details-title">学员一对多分配</div>
+        <div class="tab-content">
+            <div class="table-responsive">
+                <div class="table-title">群组编号:{{groupAllotNo}}</div>
+                <table class="table table-bordered">
+                    <tr>
+                       <td class="info">学员姓名</td>
+                       <td class="info">学员电话</td>
+                       <td class="info">学员年级</td>
+                       <td class="info">课时订单剩余</td>
+                       <td class="info">课时订单已消</td>
+                       <td class="info">电子账户余额</td>
+                       <td class="info">已消费金额</td>
+                       <td class="info" ng-if="!IsSchoolAuit()">操作</td>
+                    </tr>
+                    <tr ng-repeat="row in groupDetailStudentList">
+ 						<td>{{row.studentName}}</td>
+                        <td>{{row.gradeName}}</td>
+                        <td>{{row.studentPhone}}</td>
+                        <td>{{row.courseNum}}</td>
+                        <td>{{row.allPastCoursePlanCount}}</td>
+                        <td>{{row.account_balance}}</td>
+                        <td>{{row.alreadyAmount}}</td>
+                        <td ng-if="!IsSchoolAuit()">
+                            <!-- <a ng-click="showCrmCustomerStudent(row)" ng-if="showPermissions('CustomerView')"><span class="glyphicon glyphicon-search" title="查看学员详情"></span></a>&nbsp; -->
+                            <a ng-click="removeOneStudentOfGroup(row)" ng-if="showPermissions('GroupStudentDelete')"><span class="glyphicon glyphicon-delete" title="删除一对多学员"></span></a>&nbsp;
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="tab-content  ">
+            <div class="table-responsive">
+                <div class="table-title">一对多分配</div>
+                <table class="table text-center">
+                    <tbody>
+                    <tr>
+                        <td style="line-height: 32px;">岗位</td>
+                        <td>
+                            <select ng-model="allotCrmCustomerStudentFilter.position_id"
+                                    name="allotCrmCustomerStudentGroupFilter.position_id"
+                                    id="allotCrmCustomerStudentGroupFilter.position_id"
+                                    class="input-sm form-control ng-pristine ng-untouched ng-valid"
+                                    ng-options="option.id as option.name for option in allAllotPosition"
+                                    ng-change="positionChangeForAllot()">
+                                <option value="" class="" selected="selected">-- 请选择岗位 --</option>
+                                <option value="number:79" label="校长">校长</option>
+                                <option value="number:24" label="呼叫专员">呼叫专员</option>
+                                <option value="number:23" label="呼叫主管">呼叫主管</option>
+                                <option value="number:41" label="课程顾问主管">课程顾问主管</option>
+                                <option value="number:35" label="教师">教师</option>
+                                <option value="number:173" label="PEO">PEO</option>
+                                <option value="number:175" label="产品管理">产品管理</option>
+                                <option value="number:115" label="营销主管">营销主管</option>
+                                <option value="number:86" label="学习顾问">学习顾问</option>
+                                <option value="number:38" label="教务主管">教务主管</option>
+                                <option value="number:87" label="学习顾问主管">学习顾问主管</option>
+                                <option value="number:6" label="校区审核">校区审核</option>
+                                <option value="number:40" label="课程顾问">课程顾问</option>
+                            </select>
+                        </td>
+                        <td style="line-height: 32px;">员工</td>
+                        <td>
+                            <select ng-model="allotCrmCustomerStudentGroupFilter.user_id"
+                                    name="allotCrmCustomerStudentGroupFilter.user_id"
+                                    id="allotCrmCustomerStudentGroupFilter.user_id"
+                                    class="input-sm form-control ng-pristine ng-untouched ng-valid"
+                                    ng-options="option.id as option.name for option in allAllotUser">
+                                <option value="" class="" selected="selected">-- 请选择员工 --</option>
+                            </select>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-success" ng-click="saveGroupAllot()">分配</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!--分配学员线索页面-->
+    <div ng-show="isAllot" class="view-content2">
+        <div>
+            <div>
+                <ul class="breadcrumb">
+                    <li><a href="#/">首页</a> <span class="divider"></span></li>
+                    <li><a href="#/sos-admin">学员教务</a> <span class="divider"></span></li>
+                    <li><a ng-click="showListView()">在读学员管理</a> <span class="divider"></span></li>
+                    <li class="active">学员分配</li>
+                </ul>
+            </div>
+        </div>
+        <div class="details-title">学员分配</div>
+        <!--待分配学员列表-->
+        <div class="tab-content">
+            <div class="table-responsive">
+                <div class="table-title">待分配学员列表</div>
+                <table class="table table-bordered table-striped table-condensed"
+                       st-pipe="getAllotCrmCustomerStudentList" st-table="allotCrmCustomerStudentList">
+                    <thead>
+                    <tr>
+                        <!--<th><input type="checkbox" ng-checked="MyCrmCustomerStudentListForAddGroup.length == MyCrmCustomerStudentListOk.length" ng-click="checkAll()" >全选/反选</th>-->
+                        <th>选择</th>
+                        <th>学员姓名</th>
+                        <th>学员电话</th>
+                        <th>学员年级</th>
+                        <th>渠道来源</th>
+                        <th>来源详情</th>
+                        <th>所属人</th>
+                    </tr>
+                    <tr>
+                        <th>
+                        </th>
+                        <th>
+                            <input st-search="allotCrmCustomerStudentFilter.name" placeholder="姓名查询"
+                                   ng-model="allotCrmCustomerStudentFilter.name" class="input-sm form-control"
+                                   type="search"/>
+                        </th>
+                        <th>
+                            <input st-search="allotCrmCustomerStudentFilter.phone" placeholder="电话查询"
+                                   ng-model="allotCrmCustomerStudentFilter.phone" class="input-sm form-control"
+                                   type="search"/>
+                        </th>
+                        <th>
+                            <select st-search="allotCrmCustomerStudentFilter.grade_id"
+                                    ng-model="allotCrmCustomerStudentFilter.grade_id"
+                                    name="allotCrmCustomerStudentFilter.grade_id"
+                                    id="allotCrmCustomerStudentFilter.grade_id" class="input-sm form-control"
+                                    ng-options="option.id as option.name for option in gradeIds" type="search">
+                                <option value="">-- 请选择查询班级--</option>
+                            </select>
+                        </th>
+                        <th>
+                            <select st-search="allotCrmCustomerStudentFilter.media_channel_id_1"
+                                    ng-model="allotCrmCustomerStudentFilter.media_channel_id_1"
+                                    name="allotCrmCustomerStudentFilter.media_channel_id_1"
+                                    id="allotCrmCustomerStudentFilter.media_channel_id_1" class="input-sm form-control"
+                                    ng-options="option.id as option.name for option in mediaChannel1List"
+                                    ng-change="mediaChannel1ChangeForAllot()" type="search">
+                                <option value="">请选择</option>
+                            </select>
+                        </th>
+                        <th>
+                            <select ng-model="allotCrmCustomerStudentFilter.media_channel_id_2"
+                                    st-search="allotCrmCustomerStudentFilter.media_channel_id_2"
+                                    name="allotCrmCustomerStudentFilter.media_channel_id_2"
+                                    id="allotCrmCustomerStudentFilter.media_channel_id_2" class="input-sm form-control"
+                                    ng-options="option.id as option.name for option in mediaChannel2ListForMyAllot"
+                                    type="search">
+                                <option value="">请选择</option>
+                            </select>
+                        </th>
+                        <th>
+                            <input st-search="allotCrmCustomerStudentFilter.belong_user_name" placeholder="所属人查询"
+                                   ng-model="allotCrmCustomerStudentFilter.belong_user_name"
+                                   class="input-sm form-control" type="search"/>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody ng-show="!isAllotCrmCustomerStudentListLoading">
+                    <tr ng-repeat="row in allotCrmCustomerStudentList">
+                        <td><input type="checkbox" ng-checked="isAllotSelected(row)" ng-click="selectAllotOne(row)">
+                        </td>
+                        <td>{{row.name}}</td>
+                        <td>{{row.phone}}</td>
+                        <td>{{row.grade_name}}</td>
+                        <td>{{row.channel1Name}}</td>
+                        <td>{{row.channel2Name}}</td>
+                        <td>{{row.belong_user_name}}</td>
+                    </tr>
+                    </tbody>
+                    <tbody ng-show="isAllotCrmCustomerStudentListLoading">
+                    <tr>
+                        <td colspan="7" class="text-center">
+                            <div class="loading-indicator"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td class="text-center" st-pagination="" st-items-by-page="10"
+                            st-template="partials/util/pagination.custom.html"
+                            st-template="partials/util/pagination.custom.html" colspan="7">
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <!--已添加学员客户列表-->
+        <div class="tab-content height600">
+            <div class="table-responsive">
+                <div class="table-title">已添加学员客户列表</div>
+                <table class="table table-bordered table-striped table-condensed">
+                    <thead>
+                    <tr>
+                        <th>选择</th>
+                        <th>学员姓名</th>
+                        <th>学员电话</th>
+                        <th>学员年级</th>
+                        <th>渠道来源</th>
+                        <th>来源详情</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="row in MyCrmCustomerStudentAllotListOk">
+                        <td><a ng-click="deleteAllotOne(row)">删除</span></a></td>
+                        <td>{{row.name}}</td>
+                        <td>{{row.phone}}</td>
+                        <td>{{row.grade_name}}</td>
+                        <td>{{row.channel1Name}}</td>
+                        <td>{{row.channel2Name}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div ng-show="MyCrmCustomerStudentAllotListOk.length > 0">
+                    <tabs>
+                        <pane title="本校区分配">
+                            <table class="table text-center">
+                                <tr>
+                                    <td style="line-height: 32px;">岗位</td>
+                                    <td>
+                                        <select ng-model="allotCrmCustomerStudentFilter.position_id"
+                                                name="allotCrmCustomerStudentFilter.position_id"
+                                                id="allotCrmCustomerStudentFilter.position_id"
+                                                class="input-sm form-control"
+                                                ng-options="option.id as option.name for option in allAllotPosition"
+                                                ng-change="positionChangeForAllot()">
+                                            <option value="">-- 请选择岗位 --</option>
+                                        </select>
+                                    </td>
+                                    <td style="line-height: 32px;">员工</td>
+                                    <td>
+                                        <select ng-model="allotCrmCustomerStudentFilter.user_id"
+                                                name="allotCrmCustomerStudentFilter.user_id"
+                                                id="allotCrmCustomerStudentFilter.user_id" class="input-sm form-control"
+                                                ng-options="option.id as option.name for option in allAllotUser">
+                                            <option value="">-- 请选择员工 --</option>
+                                        </select>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                            <br/><br/>
+                            <div class="text-center">
+                                <button type="button" class="btn btn-success" ng-click="saveEmpAllot()">分配</button>
+                            </div>
+                        </pane>
+                        <pane title="跨校区分配" ng-if="showPermissions('SchoolCustomerAllot')">
+                            <!-- <table class="table text-center">
+                                <tr>
+                                    <td style="line-height: 32px;">校区</td>
+                                    <td>
+                                        <select ng-model="allotCrmCustomerStudentFilter.school_master_id"
+                                                name="allotCrmCustomerStudentFilter.school_master_id" id="allotCrmCustomerStudentFilter.school_master_id" class="input-sm form-control"
+                                                ng-options="option.user_id as (option.department_name + '---' + option.user_name) for option in allAllotSchool">
+                                            <option value="">-- 请选择校区 --</option>
+                                        </select>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </table> -->
+                            <table class="table table-bordered table-striped table-condensed"
+                                   st-pipe="getAllSchoolMaster" st-table="schoolMasterList">
+                                <thead>
+                                <tr>
+                                    <th>选择</th>
+                                    <th>校区名称</th>
+                                    <th>校区校长</th>
+                                    <th>大区名称</th>
+                                    <th>区域名称</th>
+                                    <th>省名称</th>
+                                    <th>市名称</th>
+                                    <th>区县名称</th>
+                                </tr>
+                                <tr>
+                                    <th>查询条件</th>
+                                    <th></th>
+                                    <th>
+
+                                    </th>
+                                    <th>
+                                        <select st-search="schoolMasterFilter.district_id"
+                                                ng-model="schoolMasterFilter.district_id"
+                                                name="schoolMasterFilter.district_id"
+                                                id="schoolMasterFilter.district_id" class="input-sm form-control"
+                                                ng-options="option.districtId as option.companyName + '-' +option.districtName for option in DepartmentsOfDistrictList"
+                                                type="search"
+                                                ng-change="getDepartmentsOfRegion()">
+                                            <option value="">-- 请选择大区 --</option>
+                                        </select>
+                                    </th>
+                                    <th>
+                                        <select st-search="schoolMasterFilter.region_id"
+                                                ng-model="schoolMasterFilter.region_id"
+                                                name="schoolMasterFilter.region_id" id="schoolMasterFilter.region_id"
+                                                class="input-sm form-control"
+                                                ng-options="option.regionId as option.regionName for option in DepartmentsOfRegion"
+                                                type="search">
+                                            <option value="">-- 请选择区域 --</option>
+                                        </select>
+                                    </th>
+                                    <th>
+                                        <select st-search="schoolMasterFilter.province_code"
+                                                ng-model="schoolMasterFilter.province_code"
+                                                name="schoolMasterFilter.province_code"
+                                                id="schoolMasterFilter.province_code" class="input-sm form-control"
+                                                ng-options="option.provinceCode as option.provinceName for option in provinceList"
+                                                type="search" ng-change="provinceChangeForBatchAllot()">
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </th>
+                                    <th>
+                                        <select st-search="schoolMasterFilter.city_code"
+                                                ng-model="schoolMasterFilter.city_code"
+                                                name="schoolMasterFilter.city_code" id="schoolMasterFilter.city_code"
+                                                class="input-sm form-control"
+                                                ng-options="option.cityCode as option.cityName for option in cityList"
+                                                ng-change="cityChangeForBatchAllot()" type="search">
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </th>
+                                    <th>
+                                        <select st-search="schoolMasterFilter.area_code"
+                                                ng-model="schoolMasterFilter.area_code"
+                                                name="schoolMasterFilter.area_code" id="schoolMasterFilter.area_code"
+                                                class="input-sm form-control"
+                                                ng-options="option.areaCode as option.areaName for option in areaList"
+                                                type="search">
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </th>
+                                </tr>
+
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="row in schoolMasterList">
+                                    <td><input type="radio" id="allotCrmCustomerStudentFilter.school_master_id"
+                                               name="allotCrmCustomerStudentFilter.school_master_id"
+                                               ng-click="selectSchoolMaster(row)"></td>
+                                    <td>{{row.dName}}</td>
+                                    <td>{{row.uName}}</td>
+                                    <td>{{row.districtPrarentName}}-{{row.districtName}}</td>
+                                    <td>{{row.regionName}}</td>
+                                    <td>{{row.dpName}}</td>
+                                    <td>{{row.dcName}}</td>
+                                    <td>{{row.daName}}</td>
+                                </tr>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td class="text-center" st-pagination="" st-items-by-page="10"
+                                        st-template="partials/util/pagination.custom.html"
+                                        st-template="partials/util/pagination.custom.html" colspan="7">
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                            <br/><br/>
+                            <div class="text-center">
+                                <button type="button" class="btn btn-success" ng-click="saveSchoolAllot()">分配</button>
+                            </div>
+                        </pane>
+                    </tabs>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+

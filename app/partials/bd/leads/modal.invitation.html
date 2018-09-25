@@ -1,0 +1,35 @@
+<div class="modal crm-invitationDetail-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <form name="form">
+        <div class="modal-header">
+          <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" ng-bind="modalTitle"></h4>
+        </div>
+        <div class="modal-body">
+        	<div class="form-group" ng-class="{ 'has-error': form.invitateTime.$dirty && form.invitateTime.$error.required }">
+        		<label for="invitateTime" >* 邀约时间</label>
+                <input type="date" onfocus="(this.type='date')" name="invitateTime" id="invitateTime" class="form-control" ng-model="BdInvitationVoForCreate.invitateTime" readonly="readonly" required/>
+                <span ng-show="form.invitateTime.$dirty && form.invitateTime.$error.required" class="help-block">请输入邀约时间</span>
+            </div>
+            <div class="form-group" ng-class="{ 'has-error': form.receiveTime.$dirty && form.receiveTime.$error.required }">
+        		<label for="receiveTime" >* 预到访时间</label>
+                <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd H:mm'})" onchange="" name="receiveTime" id="receiveTime" class="form-control"
+                       ng-model="BdInvitationVoForCreate.receiveTime" required/>
+                <span ng-show="form.receiveTime.$dirty && form.receiveTime.$error.required" class="help-block">请输入预到访时间</span>
+            </div>
+            <div class="form-group" ng-class="{ 'has-error': form.invitationContent.$dirty && form.invitationContent.$error.required }">
+                <label for="invitationContent" >* 邀约内容</label>
+                <textarea name="invitationContent" id="invitationContent" placeholder="邀约内容..." class="form-control" ng-model="BdInvitationVoForCreate.invitationContent" required/>
+                <span ng-show="form.invitationContent.$dirty && form.invitationContent.$error.required" class="help-block">请输入邀约内容</span>
+            </div>
+        </div>
+            <div class="text-center">
+                <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+	          	<button type="submit" class="btn btn-success c5-lable" ng-click="saveInvitation()" ng-disabled="form.$invalid">保存</button>
+	          <!-- 	<img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" /> -->
+	        </div>
+        </form>
+        </div>
+    </div>
+</div>

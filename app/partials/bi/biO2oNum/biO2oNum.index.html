@@ -1,0 +1,45 @@
+<div class="view-frame" ng-controller="BiBaseController">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    
+    <div class="view-content" ng-controller="BiO2oNumController">
+	    <div>
+		    <ul class="breadcrumb">
+		        <li><a href="">营销报表</a><span class="divider"></span></li>
+		        <li class="active">O2O用户统计</li>
+		    </ul>
+		</div>
+		<!-- 累计统计 -->
+        <div class="default-box" style="margin-bottom: 50px; border: none;" ng-if="currentTable === '1'">
+	        <h4>累计用户统计</h4>
+	        <br>
+        	<div ng-include="'partials/bi/biO2oNum/table.total.html'"></div>
+        </div>
+        <!-- 筛选条件 -->
+		<div ng-include="baseHtmlUrl"></div>
+		
+		<!-- 表格 -->
+		<div class="default-box">
+		    <h4>
+		       	O2O用户统计-新增用户统计- 
+		       	<span ng-if="currentTable==='1'">汇总</span><span ng-if="currentTable==='2'">明细</span>
+		        <span ng-if="!isDay">（从 {{modelStartTime | date : 'yyyy-MM-dd'}} 至 {{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+		        <span ng-if="isDay">（{{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+		        <span ng-if="presentTime">最新统计时间：{{presentTime}}</span>
+		        <button class="btn btn-success bi-list-head" ng-click="exportData()">导出列表</button>
+		        <button class="btn btn-success bi-list-head fr" ng-click="exchangeTable()" ng-if="showPermissions('O2ONumSummary')">
+		        	<span ng-if="currentTable==='1'">数据明细</span>
+		        	<span ng-if="currentTable==='2'">数据汇总</span>
+		        </button>
+		    </h4>
+		    <br/>
+		    <div ng-include="'partials/bi/biO2oNum/biO2oNum.table.html'"></div>
+		</div>
+		<style>
+		    .col-sm-4 control-label {
+		        margin-left: 0px;
+		    }
+		</style>
+    </div>
+</div>

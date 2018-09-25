@@ -1,0 +1,123 @@
+<!-- 筛选条件 -->
+<search on-department-clicked="showSelectDepartment()"
+        department="selectdDepartment"
+        search-model="searchModel"
+        is-school-user="isSchoolUser"
+        provinces="provinces"
+        on-province-changed="getCitysByProvinceCode(searchModel.schoolProvince)"
+        cities="cities"
+        on-reset="reset(isQ)"
+        hide-province-and-city="true"
+        hide-school-type="true"
+        on-search="argJudgement(getSChoolPerformanceByBU)"/>
+<!-- 表格 -->
+<div class="default-box">
+    <h4>业绩汇总
+      <div class="btn-group" role="group" style="float:right;margin-right:20px;margin-top: -5px">
+        <button type="button" class="{{buttonStyle('营销实收业绩')}}" style="margin: 1px 0; border-right:none" ng-click="setDataType('营销实收业绩')">营销实收业绩</button>
+        <button type="button" class="{{buttonStyle('续推实收业绩')}}" style="margin: 1px 0; border-right:none" ng-click="setDataType('续推实收业绩')">续推实收业绩</button>
+        <button type="button" class="{{buttonStyle('消课小时数')}}" style="margin: 1px 0" ng-click="setDataType('消课小时数')">消课小时数</button>
+        <button type="button" class="{{buttonStyle('总实收业绩')}}" style="margin: 1px 0" ng-click="setDataType('总实收业绩')">总实收业绩</button>
+      </div>
+      <div class="btn-group" role="group" style="float:right;margin-right:20px;margin-top: -5px">
+        <button type="button" class="{{viewButtonStyle('日')}}" style="margin: 1px 0; border-right:none" ng-click="setViewType('日')">日</button>
+        <button type="button" class="{{viewButtonStyle('周')}}" style="margin: 1px 0; border-right:none" ng-click="setViewType('周')">周</button>
+        <button type="button" class="{{viewButtonStyle('月')}}" style="margin: 1px 0" ng-click="setViewType('月')">月</button>
+      </div>
+    </h4>
+    <br/>
+    <div class="row bi-confirm-income-chart-container" ng-show="labelsSummary">
+      <canvas class="chart chart-line" chart-data="dataSummary" chart-labels="labelsSummary"
+          chart-series="seriesSummary" chart-click="" legend="true" chart-options="options" chart-legend="true"></canvas>
+    </div>
+
+    <div class="table-responsive">
+        <table st-pipe="getSChoolPerformanceByBU" st-table="tableModel" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th style="font-weight: bold;" rowspan="2">事业部/区域/城市</th>
+                <th class="bi-th1" style="font-weight: bold;" colspan="5">营销数据</th>
+                <th class="bi-th2" style="font-weight: bold;" colspan="5">学管数据</th>
+                <th class="bi-th3" style="font-weight: bold;" colspan="4">教务数据</th>
+                <th class="bi-th4" style="font-weight: bold;">转平台数据</th>
+                <th class="bi-th5" style="font-weight: bold;" colspan="2">总实收数据</th>
+            </tr>
+            <tr>
+                <td class="bi-th1" data-content="指定周期内指定校区新增类型为“新签”的订单数总和"
+                	data-placement="top" webui-popover>签单数</td>
+                <td class="bi-th1" data-content="指定周期内指定校区新增类型为“新签”的订单金额总和"
+                	data-placement="top" webui-popover>签单金额</td>
+                <td class="bi-th1" data-content="指定周期内指定校区新增类型为“新签”的已退费订单金额总和"
+                	data-placement="top" webui-popover>退费金额</td>
+                <td class="bi-th1" data-content="指定周期内指定校区新增类型为“新签”的订单金额总和"
+                	data-placement="top" webui-popover>实收金额</td>
+                <td class="bi-th1" data-content="指定周期内指定校区新增类型为“新签”的订单金额总和除以校区数"
+                  	data-placement="top" webui-popover>校均实收金额</td>
+                <td class="bi-th2" data-content="指定周期内指定校区新增类型为“续费”和渠道为“学习顾问推荐”的订单数总和"
+                	data-placement="top" webui-popover>签单数</td>
+                <td class="bi-th2" data-content="指定周期内指定校区新增订单类型为“续费”和渠道为“学习顾问推荐”的订单记录的总金额数"
+                	data-placement="top" webui-popover>签单金额</td>
+                <td class="bi-th2" data-content="指定周期内指定校区新增订单类型为“续费”和渠道为“学习顾问推荐”的已退费订单记录的总金额数"
+                	data-placement="top" webui-popover>退费金额</td>
+                <td class="bi-th2" data-content="指定周期内指定校区新增订单类型为“续费”和渠道为“学习顾问推荐”的订单记录的总金额数"
+                	data-placement="top" webui-popover>实收金额</td>
+                <td class="bi-th2" data-content="指定周期内指定校区新增订单类型为“续费”和渠道为“学习顾问推荐”的订单记录的总金额数除以校区数"
+                	data-placement="top" webui-popover>校均实收金额</td>
+                <td class="bi-th3" data-content="指定周期内指定校区成功消课的排课记录对应的课时量"
+                	data-placement="left" webui-popover>消课课时</td>
+                <td class="bi-th3" data-content="指定周期内指定校区成功消课的排课记录对应的课时量除以校区数"
+                	data-placement="left" webui-popover>校均消课课时</td>
+                <td class="bi-th3" data-content="指定周期内指定校区成功消课的排课记录对应的课时小时数"
+                	data-placement="left" webui-popover>消课时长</td>
+                  <td class="bi-th3" data-content="指定周期内指定校区成功消课的排课记录对应的课时小时数除以校区数"
+                  	data-placement="left" webui-popover>校均消课时长</td>
+               	<td class="bi-th4">转平台金额</td>
+                <td class="bi-th5">总实收金额</td>
+                <td class="bi-th5">校均总实收金额</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="bu in buSummary">
+                <td>{{bu.schoolName}}</td>
+                <td>{{bu.marketOrderCount}}</td>
+                <td>{{bu.marketOrderAmount}}</td>
+                <td>{{bu.marketRefundAmount}}</td>
+                <td>{{bu.marketRealAmount}}</td>
+                <td>{{(bu.marketRealAmount / bu.numberOfSchools).toFixed(2)}}</td>
+                <td>{{bu.managementOrderCount}}</td>
+                <td>{{bu.managementOrderAmount}}</td>
+                <td>{{bu.managementRefundAmount}}</td>
+                <td>{{bu.managementRealAmount}}</td>
+                <td>{{(bu.managementRealAmount / bu.numberOfSchools).toFixed(2)}}</td>
+                <td>{{bu.courseNum | number : 1}}</td>
+                <td>{{(bu.courseNum / bu.numberOfSchools).toFixed(2)}}</td>
+                <td>{{bu.courseHours | number : 1}}小时</td>
+                <td>{{(bu.courseHours / bu.numberOfSchools).toFixed(2)}}</td>
+                <td>{{bu.changePlatformAmount}}</td>
+                <td>{{bu.totalRealAmount}}</td>
+                <td>{{(bu.totalRealAmount / bu.numberOfSchools).toFixed(2)}}</td>
+            </tr>
+            <tr ng-if="!!buSummaryTotal">
+                <td>汇总</td>
+                <td>{{buSummaryTotal.marketOrderCount}}</td>
+                <td>{{buSummaryTotal.marketOrderAmount}}</td>
+                <td>{{buSummaryTotal.marketRefundAmount}}</td>
+                <td>{{buSummaryTotal.marketRealAmount}}</td>
+                <td>{{(buSummaryTotal.marketRealAmount / buSummaryTotal.numberOfSchools).toFixed(2)}}</td>
+                <td>{{buSummaryTotal.managementOrderCount}}</td>
+                <td>{{buSummaryTotal.managementOrderAmount}}</td>
+                <td>{{buSummaryTotal.managementRefundAmount}}</td>
+                <td>{{buSummaryTotal.managementRealAmount}}</td>
+                <td>{{(buSummaryTotal.managementRealAmount / buSummaryTotal.numberOfSchools).toFixed(2)}}</td>
+                <td>{{buSummaryTotal.courseNum | number : 1}}</td>
+                <td>{{(buSummaryTotal.courseNum / buSummaryTotal.numberOfSchools).toFixed(2)}}</td>
+                <td>{{buSummaryTotal.courseHours | number : 1}}小时</td>
+                <td>{{(buSummaryTotal.courseHours / buSummaryTotal.numberOfSchools).toFixed(2)}}</td>
+                <td>{{buSummaryTotal.changePlatformAmount}}</td>
+                <td>{{buSummaryTotal.totalRealAmount}}</td>
+                <td>{{(buSummaryTotal.totalRealAmount / buSummaryTotal.numberOfSchools).toFixed(2)}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

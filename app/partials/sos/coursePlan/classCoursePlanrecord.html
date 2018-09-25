@@ -1,0 +1,273 @@
+<div class="view-frame" ng-controller="CoursePlanController as cpc">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div ng-show="!isAdding" class="view-content user-love">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="#">首页</a> <span class="divider"></span></li>
+                <li><a href="#/sos-admin">学员教务</a> <span class="divider"></span></li>
+                <li class="active">班级排课消课</li>
+            </ul>
+        </div>
+        <div class="mt-10 br-gray">
+            <div class="tabs-title border-1 c3">排课消课管理</div>
+            <div class="mt-student-m">
+                <ul class="f14 cf bb-1">
+                    <li class="ml-0">
+                        <a class="mt-timeTable" ng-click="classespaike()" style="margin-left: 20px;">班级排课</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="br-gray mt-list">
+            <h2 class="pl-20 c3">排课消课管理</h2>
+            <div class="overflow-x">
+                <table class="table table-bordered table-striped table-condensed mt-table1" st-pipe="ClasscallServerrecord" st-table="displayedrecord">
+                    <thead>
+                        <tr class="br-gray-t">
+                            <th>班级名称</th>
+                            <th>体验班</th>
+                            <th ng-if="!IsYSP">班主任姓名</th>
+                            <th>消课状态</th>
+                            <th>课程名称</th>
+                            <th>年级</th>
+                            <th>科目</th>
+                            <th colspan='2'>上课时间</th>
+                            <th>上课课时</th>
+                            <th>任课老师</th>
+                            <th>全职/兼职</th>
+                            <th>教师电话</th>
+                            <th>课程标题</th>
+                            <th>课前预习</th>
+                            <th>备课笔记</th>
+                            <th>课后作业</th>
+                            <th>实到人数</th>
+                            <th>消课</th>
+                        </tr>
+                        <tr>
+                            <th><input st-search="student_name" placeholder="班级名称" class="input-sm form-control" type="search"
+                                /></th>
+                            <th>
+                                <select st-search="classType" class="input-sm form-control">
+                                <option value=""></option>
+                                <option value="0">否</option>
+                                <option value="1">是</option>
+                            </select>
+                            </th>
+                            <th ng-if="!IsYSP"><input st-search="xueguanname" placeholder="班主任名称" class="input-sm form-control" type="search"
+                                /></th>
+                            <th>
+                                <select st-search="is_past" placeholder="消课状态" class="input-sm form-control">
+                                <option value="">请选择</option>
+                                <option value="1">未消课</option>
+                                <option value="2">已消课</option>
+                            </select>
+                            </th>
+
+
+                            <th><input st-search="coursename" placeholder="查询" class="input-sm form-control" type="search" />
+                            </th>
+                            <th><input st-search="grade_name" placeholder="查询" class="input-sm form-control" type="search" />
+                            </th>
+
+                            <th><input st-search="subject_name" placeholder="科目查询" class="input-sm form-control" type="search"
+                                /></th>
+                            <th>
+                                <input st-search="start_time" placeholder="" class="input-sm form-control" type="date" style="margin-right:9%;" />
+                            </th>
+                            <th>
+                                <input st-search="end_time" placeholder="" class="input-sm form-control" type="date" />
+                            </th>
+                            <th><input st-search="course_num" placeholder="课时" class="input-sm form-control" type="search" />
+                            </th>
+                            <th><input st-search="teacher_name" placeholder="任课老师" class="input-sm form-control" type="search"
+                                /></th>
+                            <th><select st-search="part_full" placeholder="全职/兼职" class="input-sm form-control">
+                            <option value=""></option>
+                            <option value="2">全职</option>
+                            <option value="1">兼职</option>
+                        </select></th>
+                            <th><input st-search="mobile" placeholder="任课老师电话" class="input-sm form-control" type="search" />
+                            </th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody ng-show="!isrendLoading">
+                        <tr ng-if="!$last" ng-repeat="row in displayedrecord">
+                            <td>{{ row.classname }}</td>
+                            <td ng-if="row.classType===2">是</td>
+                            <td ng-if="row.classType!=2"></td>
+                            <td ng-if="!IsYSP">{{ row.xueguanname }}</td>
+                            <td ng-if="row.is_past==0">未消课</td>
+                            <td ng-if="row.is_past==1">已消课</td>
+                            <td ng-if="row.type==3">试听课程</td>
+                            <td ng-if="row.type!=3">{{row.coursename}}</td>
+                            <td>{{row.grade_name}}</td>
+
+                            <td ng-if="row.type!=12">{{row.subject_name}}</td>
+                            <td ng-if="row.type==12 && (row.subject_name).split(' ').length<=2">{{row.subject_name}}</td>
+                            <td ng-if="row.type==12 && (row.subject_name).split(' ').length>2">{{(row.subject_name).split(' ')[0]}},{{(row.subject_name).split(' ')[1]}}...</td>
+                            <td colspan='2' ng-if="row.type!=12">{{row.start_time | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                            <td colspan='2' ng-if="row.type==12">{{(row.start_time).split(' ')[0] | date:'yyyy-MM-dd'}}<a class="open" ng-click='courseSee(row)'
+                                    style="width:40px;" ng-disabled="(row.start_time).split(' ').length">查看</a></td>
+                            <td>{{row.course_num}}</td>
+                            <td>{{row.teacher_name}}</td>
+                            <td ng-if="row.part_full==2">全职</td>
+                            <td ng-if="row.part_full==1">兼职</td>
+                            <td ng-if="row.part_full==null"></td>
+                            <td ng-if="row.type!=12">{{row.mobile}}</td>
+                            <td ng-if="row.type==12"><a class="open" style="width:40px;" ng-click="teacherSee(row)">查看</a></td>
+                            <td>{{row.courseTitle}}</td>
+                            <td>
+                                <span ng-if="isBanKeTeacher && row.lackPreviewHomework">未上传</span>
+                                <!-- 过了上课时间还没有资料的 -->
+                                <span ng-if="isBanKeTeacher && row.isBefore48Hours"></span>
+                                <!-- 课前48小时没有任何操作 -->
+                                <span ng-if="isBanKeTeacher && row.previewHomework && row.previewHomework.packState == 3">未发送</span>
+                                <!-- 资料未发送 -->
+                                <a ng-if="isBanKeTeacher && row.editablePreviewHomework" ng-click="editPreviewHomework(row, 1)">编辑</a>
+                                <!-- 课前48小时内是可以编辑的 -->
+                                <a ng-if="isBanKeTeacher && row.previewHomework && row.previewHomework.packState == 1" ng-click="editPreviewHomework(row, 1)">编辑</a>
+                                <a ng-if="isBanKeTeacher && row.previewHomework && row.previewHomework.packState == 2" ng-click="editPreviewHomework(row, 2)">查看</a>
+                                <a ng-if="!isBanKeTeacher && !row.lackPreviewHomework && row.previewHomework" ng-click="editPreviewHomework(row, 2)">查看</a>
+                            </td>
+                            <td>
+                                <span ng-if="isBanKeTeacher && row.lackTeacherHandouts"></span>
+                                <a ng-if="isBanKeTeacher && row.editableTeacherHandouts && !row.teacherHandouts" ng-click="editTeacherHandouts(row, 1)">编辑</a>
+                                <a ng-if="isBanKeTeacher && row.teacherHandouts && row.teacherHandouts.packState == 1" ng-click="editTeacherHandouts(row, 1)">编辑</a>
+                                <a ng-if="isBanKeTeacher && row.teacherHandouts && row.teacherHandouts.packState == 2" ng-click="editTeacherHandouts(row, 2)">查看</a>
+                                <a ng-if="!isBanKeTeacher && !row.lackTeacherHandouts && row.teacherHandouts" ng-click="editTeacherHandouts(row, 2)">查看</a>
+                            </td>
+                            <td>
+                                <span ng-if="isBanKeTeacher && row.lackReviewHomework"></span>
+                                <a ng-if="isBanKeTeacher && row.editableReviewHomework" ng-click="editReviewHomework(row, 1)">编辑</a>
+                                <a ng-if="isBanKeTeacher && row.reviewHomework && row.reviewHomework.packState == 1" ng-click="editReviewHomework(row, 1)">编辑</a>
+                                <a ng-if="isBanKeTeacher && row.reviewHomework && row.reviewHomework.packState == 2" ng-click="editReviewHomework(row, 2)">查看</a>
+                                <a ng-if="!isBanKeTeacher && !row.lackReviewHomework && row.reviewHomework" ng-click="editReviewHomework(row, 2)">查看</a>
+                            </td>
+                            <!-- <td ng-if="!row.groupId">
+	                           	<span ng-if="isTeacherOrTeacherMaster && row.lackPreviewHomework">未上传</span>过了上课时间还没有资料的
+	                           	<span ng-if="isTeacherOrTeacherMaster && row.isBefore48Hours"></span>课前48小时没有任何操作
+	                           	<span ng-if="isTeacherOrTeacherMaster && row.previewHomework && row.previewHomework.packState == 3">未发送</span>资料未发送
+	                           	<a ng-if="isTeacherOrTeacherMaster && row.editablePreviewHomework" ng-click="editPreviewHomework(row, 1)">编辑</a>课前48小时内是可以编辑的
+	                           	<a ng-if="isTeacherOrTeacherMaster && row.previewHomework && row.previewHomework.packState == 1" ng-click="editPreviewHomework(row, 1)">编辑</a>
+								<a ng-if="isTeacherOrTeacherMaster && row.previewHomework && row.previewHomework.packState == 2" ng-click="editPreviewHomework(row, 2)">查看</a>
+								<a ng-if="!isTeacherOrTeacherMaster && !row.lackPreviewHomework && row.previewHomework && row.previewHomework.packState == 2" ng-click="editPreviewHomework(row, 2)">查看</a>
+							</td>
+							<td ng-if="row.groupId"></td>
+							<td ng-if="!row.groupId">
+	                           	<span ng-if="isTeacherOrTeacherMaster && row.lackTeacherHandouts"></span>
+	                           	<a ng-if="isTeacherOrTeacherMaster && row.editableTeacherHandouts && !row.teacherHandouts" ng-click="editTeacherHandouts(row, 1)">编辑</a>
+								<a ng-if="isTeacherOrTeacherMaster && row.teacherHandouts && row.teacherHandouts.packState == 1" ng-click="editTeacherHandouts(row, 1)">编辑</a>
+								<a ng-if="isTeacherOrTeacherMaster && row.teacherHandouts && row.teacherHandouts.packState == 2" ng-click="editTeacherHandouts(row, 2)">查看</a>
+								<a ng-if="!isTeacherOrTeacherMaster && !row.lackTeacherHandouts && row.teacherHandouts && row.teacherHandouts.packState == 2" ng-click="editTeacherHandouts(row, 2)">查看</a>
+							</td>
+							<td ng-if="row.groupId"></td>
+							<td ng-if="!row.groupId">
+	                           	<span ng-if="isTeacherOrTeacherMaster && row.lackReviewHomework"></span>
+	                           	<a ng-if="isTeacherOrTeacherMaster && row.editableReviewHomework" ng-click="editReviewHomework(row, 1)">编辑</a>
+								<a ng-if="isTeacherOrTeacherMaster && row.reviewHomework && row.reviewHomework.packState == 1" ng-click="editReviewHomework(row, 1)">编辑</a>
+								<a ng-if="isTeacherOrTeacherMaster && row.reviewHomework && row.reviewHomework.packState == 2" ng-click="editReviewHomework(row, 2)">查看</a>
+								<a ng-if="!isTeacherOrTeacherMaster && !row.lackReviewHomework && row.reviewHomework && row.reviewHomework.packState == 2" ng-click="editReviewHomework(row, 2)">查看</a>
+							</td>
+							<td ng-if="row.groupId"></td> -->
+
+
+                            <td>{{row.attendence}}/{{row.count_num}}</td>
+                            <td>
+                                <div>
+                                    <a class="showUI" id="nw+{{$index}}" ng-click="nw[$index]=true"><span
+                                        class="glyphicon glyphicon-caozuo" title="操作"></span></a>
+                                    <bubble ng-if="nw[$index]" for="nw+{{$index}}" align="bottom" close="nw[$index]=false" close-action="outerchick " ng-mouseleave="nw[$index]=false;">
+                                        <!--ng-mouseleave="nw[$index]=false;"-->
+                                        <ul>
+                                            <li ng-if="showPermissions('AttendClassCoursePlan') && row.type!=12">
+                                                <a ng-click="showCallNameCourseModal(row)">点名上课</a>
+                                            </li>
+                                            <li ng-if="showPermissions('AttendClassCoursePlan') && row.type==12">
+                                                <a ng-click="multipleShowCallNameCourseModal(row)">点名上课</a>
+                                            </li>
+                                            <li ng-if="row.is_past==0 && showPermissions('UpdateClassCoursePlan')  && row.type!=12">
+                                                <a ng-click="showEditCoursePlan(row,5)">编辑</a>
+                                            </li>
+                                            <li ng-if="row.is_past==0 && showPermissions('UpdateClassCoursePlan') && row.type==12">
+                                                <a ng-click="multipleshowEditCoursePlan(row)">编辑</a>
+                                            </li>
+                                            <li ng-if="row.is_past==0 && showPermissions('deleteClassCoursePlan') && row.type!=12">
+                                                <a ng-click="remove(row,5)">删除</a>
+                                            </li>
+                                            <li ng-if="row.is_past==0 && showPermissions('deleteClassCoursePlan') && row.type==12">
+                                                <a ng-click="remove(row,14)">删除</a>
+                                            </li>
+                                            <li ng-if="row.is_past==1 && showPermissions('AttendClassCoursePlan')">
+                                                <a ng-click="nw[$index]=false;cancelCallName(row)">撤销上课</a>
+                                            </li>
+                                        </ul>
+                                    </bubble>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody ng-show="isrendLoading">
+                        <tr>
+                            <td colspan="15" class="text-center">
+                                <div class="loading-indicator"></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="15">
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <div class="mt-student-m br-gray h-auto no-media ml-0">
+            <ul class="one mt-10 h-auto pr-0 input-180">
+                <li class="no-mar ml-0"><label>列表条目总数</label>
+                    <input placeholder="{{lastObj.total != null ? lastObj.total : 0}}" ng-model="mtSeach.totalNum" type="text">
+
+                </li>
+                <li><label>总排课课时数</label>
+                    <input placeholder="{{lastObj.sum_plancourse_num != null ? (lastObj.sum_plancourse_num | number:1) : 0}}" ng-model="mtSeach.sumPlanCourseNum"
+                        type="text">
+                </li>
+
+            </ul>
+        </div>
+        <!--<button ng-if="!isTeacher() && !isTeacherMaster()" class="btn " ng-click="showPaikeView(3)">试听排课</button>
+                     <button ng-if="!isTeacher() && !isTeacherMaster()" class="btn " ng-click="showPaikeView(1)">学员排课</button>
+                     <button ng-if="!isTeacher() && !isTeacherMaster()" class="btn " ng-click="showPaikeView(2)">一对多排课</button>
+                     <a class="btn " href="#/sos-admin/teacher_times" >查看老师时间表</a>
+                     <a class="btn " ng-if="!isTeacher() && !isTeacherMaster()" href="#/sos-admin/customer_times" >查看学生时间表</a>
+                     <a class="btn " ng-if="!isTeacher() && !isTeacherMaster()" href="#/sos-admin/customer_times/backToPlan" >查看学生时间表</a>-->
+        <!--<a class="btn" ng-click="CoursePlanquick(1)" ng-class="{true:'btn-success',false:''}[quick[1]]">今日未上课</a>
+            <a class="btn" ng-click="CoursePlanquick(2)" ng-class="{true:'btn-success',false:''}[quick[2]]">今日已上课</a>
+            <a class="btn" ng-click="CoursePlanquick(3)" ng-class="{true:'btn-success',false:''}[quick[3]]">本周未上课</a>
+            <a class="btn" ng-click="CoursePlanquick(4)" ng-class="{true:'btn-success',false:''}[quick[4]]">本周已上课</a>-->
+
+
+    </div>
+    <div class="mt-layer" ng-if="mtLayer">
+        <div class="mt-alert">
+            <h1 class="f18 cf">通知<a class="fr" ng-click="recordClass(0)">&nbsp;</a></h1>
+            <h2 class="mt-h2">您要记录上课的课时是否在系统中已经进行排课？</h2>
+            <ul>
+                <a href="" class="c5" ng-click="recordClass(0)">取消</a>
+                <a href="" class="brbf c43" ng-click="planAlready()">不确定</a>
+                <a href="" class=" b9-lable" ng-click="showPaikeView(1,1)" ng-if="isShowPaikeViewAll()">没有排课</a>
+                <a href="" class=" b9-lable" ng-click="showPaikeView(3,1)" ng-if="!isShowPaikeViewAll()">没有排课</a>
+                <a href="" class=" c5-lable" ng-click="planAlready()">已经排课</a>
+            </ul>
+        </div>
+    </div>
+</div>

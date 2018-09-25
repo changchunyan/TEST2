@@ -1,0 +1,51 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" ng-bind="modalTilePlan"></h4>
+      </div>
+      <div class="modal-body">
+      <div class="row">
+          		<div class="col-sm-12 form-group" style="text-align:center">
+          			<h4>请确认排课信息</h4>
+          		</div>
+          </div>
+          
+      	  <div class="row" style="margin-left:150px;">
+      	  	 <div class="col-sm-6 form-group" style="text-align:center">
+	        	<label class="col-sm-4 control-label" for="startTime" >学生姓名：</label>
+	            <div class="col-sm-8" style="text-align:left">
+	            	{{detail.customer_name}}
+	          	</div>
+	          </div>
+	           
+      	  </div>
+      	  <div class="row" style="margin-left:150px;">
+      	  	<div class="col-sm-6 form-group" style="text-align:center">
+	            <label  class="col-sm-4 control-label">上课教师：</label>
+	            <div class="col-sm-8" style="text-align:left">
+	                {{rowDetail.username}}
+	            </div>
+	        </div>
+      	  
+      	  </div>
+		<div class="row" style="margin-left:150px;">
+		  <div class="col-sm-6 form-group" style="text-align:center">
+            <label  class="col-sm-4 control-label">上课时间：</label>
+            <div class="col-sm-8" style="text-align:left">
+                {{startEndTime}}  
+            </div>
+         </div>
+		</div>
+          
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" ng-click="show.submitPlan(rowDetail)">提交</button>
+        <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+

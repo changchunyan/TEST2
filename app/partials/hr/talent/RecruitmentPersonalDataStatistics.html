@@ -1,0 +1,131 @@
+<div class="view-frame">
+	<div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+	<div class="view-content">
+		<div>
+            <ul class="breadcrumb">
+                <li><a href="">招聘管理</a> <span class="divider"></span></li>
+                <li class="active">招聘数据汇总统计</li>
+            </ul>
+        </div>
+		<form id="search-form " class="c-select-text">
+	        <table   rules="none">
+	            <tr>
+	                <td>
+	                    <label for="executeDateBegin" class="search-form-label">日期</label>
+	                    <input type="text" name="executeDateBegin" id="executeDateBegin" datePicker ng-model="filter.executeDateBegin"
+                       		class="search-form-label" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  onchange="" readonly/>
+	                	------
+                      	<input type="text" name="executeDateEnd" id="executeDateEnd" datePicker ng-model="filter.executeDateEnd"
+                       		class="search-form-label" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  onchange="" readonly/>
+	                </td>
+	                <td>
+	                    <label for="department" class="search-form-label">部门</label>	                    
+	                    <input ng-click="showSelectDepartment()" ng-model="filter.department.name" type="text" name="department" id="department" class="search-form-input" />
+	                </td>
+                </tr>
+                <tr>
+	                <td>
+	                	<label for="channel1" class="search-form-label">一级招聘渠道</label>	                    
+                        <select ng-model="filter.channel1" ng-options="level1.name for level1 in recruitmentChannel track by level1.name" name="channel1" id="channel1" class="search-form-input" >
+                            <option value="">------请选择------</option>
+                        </select>
+                    </td>
+                    <td ng-if="filter.channel1.child.length">
+                    	<label for="channel2" class="search-form-label">二招聘渠道</label>
+                   		<select ng-model="filter.channel2" ng-options="level2.name for level2 in filter.channel1.child track by level2.name" name="channel2" id="channel2" class="search-form-input" >
+                           <option value="">------请选择------</option>
+                       </select>
+                    </td>
+                    <td ng-if="filter.channel1.child.length && filter.channel2.child.length">
+                    	<label for="channel3" class="search-form-label">三招聘渠道</label>
+                        <select ng-model="filter.channel3" ng-options="level3.name for level3 in filter.channel2.child track by level3.name"  name="channel3" id="channel3" class="search-form-input"  >
+                            <option value="">------请选择------</option>
+                        </select>
+	                </td>
+	            </tr>
+	        </table>
+	        <div class="c_center">
+	            <button id="keydown-query" class="btn btn-success" ng-click="getPersonalDataByFilter()">查询</button>
+	            <button class="btn" ng-click="reset3()">重置</button>
+	        </div>
+	    </form>
+    	<div class="table-responsive c-select-text padding-top10" >
+    	<div class="yws-container ">
+            <h4 class="yws-left">列表</h4>
+        </div>
+		<div class="table-responsive" style="overflow:scroll;overflow-y:hidden">
+			<table st-pipe="getPersonalData" st-table="recruitmentPersonalData" class="table table-bordered table-striped">
+				<thead>
+					<tr>
+						<th rowspan="2">招聘人姓名</th>
+						<th rowspan="2">所属机构</th>
+						<th rowspan="2">所属岗位</th>
+						<th colspan="2">简历量</th>
+						<th colspan="2">邀约量</th>
+						<th colspan="2">到访量</th>
+						<th colspan="2">初试</th>
+						<th colspan="2">复试</th>
+						<th colspan="2">参培</th>
+						<th colspan="2">入职</th>
+						<th colspan="2">离职</th>
+					</tr>
+					<tr>
+						<td>教师</td>
+						<td>非教师</td>
+						<td>教师</td>
+						<td>非教师</td>
+						<td>教师</td>
+						<td>非教师</td>
+						<td>教师</td>
+						<td>非教师</td>
+						<td>教师</td>
+						<td>非教师</td>
+						<td>教师</td>
+						<td>非教师</td>
+						<td>教师</td>
+						<td>非教师</td>
+						<td>教师</td>
+						<td>非教师</td>
+					</tr>
+				</thead>
+				<tbody>
+	                <tr ng-repeat="data in recruitmentPersonalData track by $index">
+	                	<td>{{data.userName}}</td>
+	                	<td>{{data.deptName}}</td>
+	                	<td>{{data.positionName}}</td>
+	                	<td>{{data.t_resumeCount}}</td>
+	                	<td>{{data.nt_resumeCount}}</td>
+	                	<td>{{data.t_inviteCount}}</td>
+	                	<td>{{data.nt_inviteCount}}</td>
+	                	<td>{{data.t_visitCount}}</td>
+	                	<td>{{data.nt_visitCount}}</td>
+	                	<td>{{data.t_firstInterviewCount}}</td>
+	                	<td>{{data.nt_firstInterviewCount}}</td>
+	                	<td>{{data.t_secondInterviewCount}}</td>
+	                	<td>{{data.nt_secondInterviewCount}}</td>
+	                	<td>{{data.t_trainingCount}}</td>
+	                	<td>{{data.nt_trainingCount}}</td>
+	                	<td>{{data.t_enrollingCount}}</td>
+	                	<td>{{data.nt_enrollingCount}}</td>
+	                	<td>{{data.t_resignCount}}</td>
+	                	<td>{{data.nt_resignCount}}</td>
+	                </tr>
+	            </tbody>
+				<tbody ng-show="isLoading">
+				<tr>
+					<td colspan="18" class="text-center"><div class="loading-indicator"></div>
+					</td>
+				</tr>
+				</tbody>
+				<tfoot>
+				<tr>
+					<td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="18" />
+				</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+	</div>
+</div>

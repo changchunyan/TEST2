@@ -1,0 +1,259 @@
+<div class="modal orderModal"  tabindex="-1" role="dialog" aria-hidden="true" ng-controller="AddTeacherCoursesController as acc">
+    <div class="modal-dialog">
+        <div class="modal-content" >
+            <form name="addTeacherCourseForm" role="form" class="form-horizontal showcase-form"  novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="title"></h4>
+                </div>
+                <div class="modal-body pb-20">
+                    <div class="modal-tab-panel padding-20-40" set-no-edit="" is-edit="acc.isEdit">
+                        <div set-no-edit="" is-edit="acc.view.isOwnCourse">
+                            <div class="row ">
+                                <div class="col-sm-6" >
+                                    <label for="Course.courseTypeId1">教师:{{acc.Teacher.name}}</label>
+                                </div>
+                            </div>
+                            <div class="row " set-no-edit="" is-edit="true">
+                                <div class="col-sm-6" ng-class="{ 'has-error': CourseOnlineform.Course.omsProductTypeId.$dirty && CourseOnlineform.Course.omsProductTypeId.$error.required }">
+                                    <label for="Course.omsProductTypeId1">产品类型名称</label>
+                                    <select ng-model="Course.omsProductTypeId" name="Course.omsProductTypeId" id="Course.omsProductTypeId1" class="form-control"
+                                            ng-options="option.id as option.name for option in ProductTypeList" ng-change="omsProductTypeIdChange()" required disabled="disabled">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-6" ng-class="{ 'has-error': CourseOnlineform.Course.courseTypeId.$dirty && CourseOnlineform.Course.courseTypeId.$error.required }">
+                                    <label for="Course.courseTypeId1">课程类型名称</label>
+                                    <select ng-model="Course.courseTypeId" name="Course.course_type_id" id="Course.courseTypeId1" class="form-control"
+                                            ng-options="option.id as option.name for option in CourseTypeListByFilter"  required>
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row ">
+                                <div class="col-sm-6" ng-class="{ 'has-error': CourseOnlineform.Course.gradeId.$dirty && CourseOnlineform.Course.gradeId.$error.required }">
+                                    <label for="Course.gradeId1">年级名称</label>
+                                    <select ng-model="Course.gradeId" name="Course.gradeId" id="Course.gradeId1" class="form-control"
+                                            ng-options="option.id as option.name for option in gradeIds"  required>
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-6" ng-class="{ 'has-error': CourseOnlineform.Course.name.$dirty && CourseOnlineform.Course.name.$error.required }">
+                                    <label for="Course.name1">产品名称</label>
+                                    <input type="text" name="Course.name" id="Course.name1" class="form-control" ng-model="Course.name" ng-maxlength="20" required />
+                                </div>
+                            </div>
+                            <div class="row ">
+                                <div class="col-sm-6" ng-class="{ 'has-error': CourseOnlineform.Course.subjectId.$dirty && CourseOnlineform.Course.subjectId.$error.required }">
+                                    <label for="Course.subjectId" > 产品科目</label>
+                                    <select ng-model="Course.subjectId" name="Course.subjectId" id="Course.subjectId" class=" form-control"
+                                            ng-options="option.id as option.name for option in subjectIds" required>
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-6" ng-class="{ 'has-error': CourseOnlineform.Course.isShelve.$dirty && CourseOnlineform.Course.isShelve.$error.required }">
+                                    <label for="Course.isShelve" >产品状态</label>
+                                    <select ng-model="Course.isShelve" name=Course.isShelve" id="Course.isShelve" class=" form-control"
+                                            ng-options="option.id as option.name for option in isShelveSelect" required disabled="disabled">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row ">
+                                <div class="col-sm-6" ng-class="{ 'has-error': CourseOnlineform.Course.minPrice.$dirty && CourseOnlineform.Course.minPrice.$error.required }">
+                                    <label for="Course.minPrice">产品价格(低)</label>
+                                    <input ng-pattern="/^[1-9][0-9]*$/" type="number" name="Course.minPrice" id="Course.minPrice" class="form-control" ng-model="Course.minPrice"
+                                           ng-maxlength="10" required />
+                                </div>
+                                <div class="col-sm-6" ng-class="{ 'has-error': CourseOnlineform.Course.maxPrice.$dirty && CourseOnlineform.Course.maxPrice.$error.required }">
+                                    <label for="Course.maxPrice">产品价格(高)</label>
+                                    <input ng-pattern="/^[1-9][0-9]*$/" type="number" name="Course.maxPrice" id="Course.maxPrice" class="form-control" ng-model="Course.maxPrice"
+                                           ng-maxlength="10" required />
+                                </div>
+                            </div>
+                            <div class="row ">
+                                <div class="col-sm-6" ng-class="{ 'has-error': CourseOnlineform.Course.courseTypeId.$dirty && CourseOnlineform.Course.courseTypeId.$error.required }">
+                                    <label for="Course.expiredDays">有效期</label>
+                                    <select ng-model="Course.expiredDays" name="Course.expiredDays" id="Course.expiredDays" class="form-control"
+                                            ng-options="option.id as option.name for option in expiredDaysSelect"  required>
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-6" ng-class="{ 'has-error': Courseform.Course.standardNum.$dirty && Courseform.Course.standardNum.$error.required }">
+                                    <label for="Course.standardNum">总课时</label>
+                                    <input ng-pattern="/^(([1-9][0-9]*)|([0-9]+\.[0,5]{1}))$/" type="text" name="Course.standardNum" id="Course.standardNum" class="form-control" ng-model="Course.standardNum" ng-maxlength="20" required />
+                                </div>
+                            </div>
+                          <!--  <div class="row ">
+                                <div class="col-sm-12" >
+                                    <label for="file">图片</label>
+                                    <div class="col-md-12">
+                                        <img ng-src="{{imageSrc}}" style="max-width:300px;max-height:300px;margin:0 auto;display:block;" />
+                                    </div>
+                                    <input id="file" type="file" img-model="Course.courseImage"/>
+                                </div>
+                            </div>-->
+                            <div class="row ">
+                                <div class="col-sm-12" >
+                                    <label>图片（必填）</label>
+                                    <div class="col-md-12">
+                                        <img ng-src="{{imageSrc}}" style="max-width:300px;max-height:300px;margin:0 auto;display:block;" />
+                                    </div>
+                                    <div class="col-sm-12"><label for="file1" style="border: 1px solid #3e70c5; display: inline-block;width:74px;height: 22px;line-height: 22px;color:#3e70c5;font-size: 12px" class="text-center">选取文件</label></div>
+                                    <input id="file1" class="hide" type="file" img-model="Course.courseImage"/>
+                                </div>
+                            </div>
+                            <div class="row ">
+                                <div class="col-sm-12" ng-class="{ 'has-error': CourseOnlineform.Course.teachingTarget.$dirty }">
+                                    <label for="Course.teachingTarget">教学目标</label>
+                                    <textarea name="Course.teachingTarget" id="Course.teachingTarget" class="form-control br-0" ng-model="Course.teachingTarget" ng-maxlength="150"  rows="3"></textarea>
+                                </div>
+                            </div>
+                            <br>
+                            <label>课程介绍列表如下（至少有一个）:</label><hr>
+                            <div class="row " ng-repeat="courIntro in courseIntroList">
+                                    <div class="col-sm-2 pd-right0" >
+                                        <label for="courseNumSeq1">序号</label>
+                                        <input readonly type="text" name="courseNumSeq1" id="courseNumSeq1" class="form-control br-0" ng-model="courIntro.courseNumSeq" ng-maxlength="20"  required/>
+                                    </div>
+                                    <div class="col-sm-4" >
+                                        <label for="courseContent1">内容</label>
+                                        <textarea  class="form-control br-0" rows="3" ng-disabled="!acc.view.isOwnCourse" name="courseContent1" id="courseContent1" ng-model="courIntro.courseContent"  ng-maxlength="50" placeholder="最多可输入50字" required>
+                                        </textarea>
+                                    </div>
+                                    <div class="col-sm-4" >
+                                        <label for="courseMaterial1">材料</label>
+                                        <textarea  class="form-control br-0" rows="3" ng-disabled="!acc.view.isOwnCourse" name="courseMaterial1" id="courseMaterial1" ng-model="courIntro.courseMaterial"  ng-maxlength="50" placeholder="最多可输入50字" required>
+                                        </textarea>
+                                    </div>
+                                    <div class="col-sm-2 pd-right0" style="padding-top: 20px;" >
+                                        <button class="btn btn-danger"  ng-disabled="!acc.view.isOwnCourse" ng-if="!courIntro.isNotFirst" ng-click="deleteCourIntro(courIntro.courseNumSeq)">删除</button>
+                                    </div>
+
+                                </div>
+                            <hr>
+                            <div>
+                                <!--  <div class="row ">
+                                      <div class="col-sm-4" >
+                                          序号
+                                          {{courseIntroList.length+1}}
+                                          &lt;!&ndash;<input type="text" name="courseNumSeq" id="courseNumSeq" class="form-control" ng-model="courseIntroList.length+1" ng-maxlength="10"  />&ndash;&gt;
+                                      </div>
+                                      <div class="col-sm-4" >
+                                          内容
+                                          <textarea class="form-control" rows="3" name="courseContent" id="courseContent" ng-model="courseContent"  ng-maxlength="50" placeholder="最多可输入50字">
+                                          </textarea>
+                                      </div>
+                                      <div class="col-sm-4" >
+                                          材料
+                                          <textarea class="form-control" rows="3" name="courseMaterial" id="courseMaterial" ng-model="courseMaterial"  ng-maxlength="50" placeholder="最多可输入50字" >
+                                          </textarea>
+                                      </div>
+                                  </div>-->
+                                <button type="button" class="btn btn-success" ng-click="acc.addCourseIntro()" >添加课程介绍</button>
+                                <button type="button" class="btn btn-success" ng-click="acc.clearCourseIntro()" >清空课程介绍</button>
+                            </div>
+                            <br />
+                            <hr>
+                        </div>
+                        <!--上课方式-->
+                        <!--上课方式-->
+                        <div>
+                            <div class="row">
+                                <div class="col-sm-12 h-50">
+                                    上课方式
+                                </div>
+                                <div class="col-sm-12 ">
+                                    <!-- <div class="col-sm-1">
+                                         <input type="checkbox" ng-click="" ng-checked="true"/>
+                                     </div>-->
+                                    <div class="col-sm-6 pd-right0">
+                                        <span class="fl lh-35">老师上门</span>
+                                            <input class="col-sm-6 lh-35 ml-10 pr-0" ng-pattern="/^[1-9][0-9]*$/" type="number" name="teacherToHomePrice" ng-model="Course.teacherToHomePrice "
+                                                   ng-change="acc.view.ifInLowBetweenHigh(Course.teacherToHomePrice,addTeacherCourseForm.teacherToHomePrice)">
+                                        <p class="col-sm-12 font-color-red" ng-show="addTeacherCourseForm.teacherToHomePrice.$dirty && addTeacherCourseForm.teacherToHomePrice.$invalid
+                                        && !addTeacherCourseForm.teacherToHomePrice.$focused">
+                                            <small class="error" ng-show="addTeacherCourseForm.teacherToHomePrice.$error.pattern"></small>
+                                            必须在 产品价格(低) 和 产品价格(高)</p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <span class="fl lh-35">校区</span>
+                                        <input  class="col-sm-6 ml-10 lh-35 pr-0" ng-pattern="/^[1-9][0-9]*$/" type="number" name="studentToCampusPrice" ng-model="Course.studentToCampusPrice"
+                                               ng-change="acc.view.ifInLowBetweenHigh(Course.studentToCampusPrice,addTeacherCourseForm.studentToCampusPrice)">
+                                        <p  class="col-sm-12 font-color-red"  ng-show="addTeacherCourseForm.studentToCampusPrice.$dirty && addTeacherCourseForm.studentToCampusPrice.$invalid
+                                                    && !addTeacherCourseForm.studentToCampusPrice.$focused">
+                                            <small class="error" ng-show="addTeacherCourseForm.studentToCampusPrice.$error.pattern">必须为正整数</small>
+                                            必须在 产品价格(低) 和 产品价格(高)</p>
+                                    </div>
+
+                                    <!--<div  class="col-sm-5 font-color-red" ng-show="addTeacherCourseForm.teacherToHomePrice.$dirty && addTeacherCourseForm.teacherToHomePrice.$invalid
+                                        && !addTeacherCourseForm.teacherToHomePrice.$focused">
+                                        <small class="error" ng-show="addTeacherCourseForm.teacherToHomePrice.$error.pattern"></small>
+                                        必须在 产品价格(低) 和 产品价格(高)
+                                    </div>-->
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    上课方式
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="col-sm-9 ">
+                                    <div class="col-sm-1">
+                                        <input type="checkbox" name="person-action" value="go_home" ng-model="Course.teacherToHome"/>
+                                    </div>
+                                    <div class="col-sm-2 pd-right0">
+                                        老师上门
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input ng-pattern="/^[1-9][0-9]*$/" type="number" name="teacherToHomePrice" ng-model="Course.teacherToHomePrice " required
+                                               ng-change="acc.view.ifInLowBetweenHigh(Course.teacherToHomePrice,addTeacherCourseForm.teacherToHomePrice)" class="form-control">
+                                    </div>
+                                    <div  class="col-sm-5 font-color-red" ng-show="addTeacherCourseForm.teacherToHomePrice.$dirty && addTeacherCourseForm.teacherToHomePrice.$invalid
+                                        && !addTeacherCourseForm.teacherToHomePrice.$focused">
+                                        <small class="error" ng-show="addTeacherCourseForm.teacherToHomePrice.$error.pattern"></small>
+                                        必须在 产品价格(低) 和 产品价格(之间)
+                                    </div>
+                                </div>
+                            </div>
+                            <div  class="row">
+                                <div class="col-sm-9 ">
+                                    <div class="col-sm-1 ">
+                                        <input type="checkbox" name="person-action" value="go_to_school" ng-model="Course.studentToCampus" ng-checked="true" ng-required="!Course.studentToCampus"/>
+                                    </div>
+                                    <div class="col-sm-2 pd-right0">
+                                        校区
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input ng-pattern="/^[1-9][0-9]*$/" type="number" name="studentToCampusPrice" ng-model="Course.studentToCampusPrice" required
+                                               ng-change="acc.view.ifInLowBetweenHigh(Course.studentToCampusPrice,addTeacherCourseForm.studentToCampusPrice)" class="form-control">
+                                    </div>
+                                    <div  class="col-sm-5 font-color-red"  ng-show="addTeacherCourseForm.studentToCampusPrice.$dirty && addTeacherCourseForm.studentToCampusPrice.$invalid
+                                                    && !addTeacherCourseForm.studentToCampusPrice.$focused">
+                                        <small class="error" ng-show="addTeacherCourseForm.studentToCampusPrice.$error.pattern">必须为正整数</small>
+                                        必须在 产品价格(低) 和 产品价格(之间)
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>-->
+                    </div>
+
+                    <!--<div class="modal-footer">-->
+                        <!--<button type="button" class="btn btn-default"  ng-click="$hide()">取消</button>-->
+                        <!--&lt;!&ndash;<button type="button" class="btn btn-success" ng-style="isShowSubmit" ng-disabled="updateOrderForm.$invalid"  ng-click="modalSubmit()">保存</button>&lt;!&ndash;    &ndash;&gt;&ndash;&gt;-->
+                        <!--&lt;!&ndash;<button ng-if="showPermissions('OrderEditSave')" type="button" class="btn btn-success" ng-disabled="updateOrderForm.$invalid"  ng-click="updateOrder()">保存</button>&lt;!&ndash;    &ndash;&gt;&ndash;&gt;-->
+                    <!--</div>-->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                    <button type="submit" ng-if="acc.isEdit" class="btn btn-success js-edit-bottom c5-lable" ng-click="acc.submitController()" ng-disabled="addTeacherCourseForm.$invalid">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

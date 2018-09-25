@@ -1,0 +1,77 @@
+<div class="modal crm-invitationRemind-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <form name="form">
+        <div class="modal-header">
+          <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" ng-bind="modalTitle"></h4>
+        </div>
+        <div class="modal-body">
+        
+         
+        
+        	<div class="row">
+            	<div class="col-sm-4 form-group">
+                	<label for="name" class="col-sm-8 control-label"> 学生姓名</label>
+                    <p>{{CrmInvitationRemindVoForCreate.name}}</p>
+                </div>
+                <div class="col-sm-4 form-group">
+                    <label for="phone" class="col-sm-8 control-label"> 电话</label>
+                    <p>{{CrmInvitationRemindVoForCreate.phone}}</p>
+                </div>
+            </div>
+        	<div class="row">
+            	<div class="col-sm-4 form-group">
+                    <label for="mediaChannel" class="col-sm-8 control-label"> 渠道来源</label>
+                	<div ng-if="CrmInvitationRemindVoForCreate.mediaChannel==0">本地城镇</div>
+                	<div ng-if="CrmInvitationRemindVoForCreate.mediaChannel==1">本地农业</div>
+                	<div ng-if="CrmInvitationRemindVoForCreate.mediaChannel==2">外地城镇</div>
+                	<div ng-if="CrmInvitationRemindVoForCreate.mediaChannel==3">外地农业</div>
+                </div>
+                <div class="col-sm-4 form-group">
+                    <label for="personId" >personId</label>
+                    <p>{{CrmInvitationRemindVoForCreate.personId}}</p>
+                </div>
+            </div>
+        
+        
+        	<div class="row">
+            	<div class="col-sm-4 form-group">
+                	<label for="organizationId" >机构ID</label>
+                    <p>{{CrmInvitationRemindVoForCreate.organizationId}}</p>
+                </div>
+                <div class="col-sm-4 form-group">
+                    <label for="personType" >personType用户类型</label>
+                    <div ng-if="CrmInvitationRemindVoForCreate.personType==1">学生</div>
+                	<div ng-if="CrmInvitationRemindVoForCreate.personType==2">商户机构</div>
+                </div>
+            </div>
+            
+            <div class="row">
+            	<div class="col-sm-4 form-group">
+                	<label for="personState" >personState用户状态</label>
+                    <div ng-if="CrmInvitationRemindVoForCreate.personState==1">正式客户</div>
+                	<div ng-if="CrmInvitationRemindVoForCreate.personState==2">未签约leads客户</div>
+                </div>
+                <div class="col-sm-4 form-group">
+                	<label for="communicateTime" >提醒时间</label>
+                    <p>{{ CrmInvitationRemindVoForCreate.remindTime | date:'yyyy-MM-dd' }}</p>
+                </div>
+            </div>
+            
+        	<div class="row">
+	            <div class="view-left0 form-group">
+	                <label for="remindContent" >提醒内容</label>
+	                <p>{{CrmInvitationRemindVoForCreate.remindContent}}</p>
+	            </div>
+            </div>
+            
+        </div>
+            <div class="text-center">
+                <button type="button" class="btn btn-default" ng-click="$hide()">返回</button>
+	          	<img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+	        </div>
+        </form>
+        </div>
+    </div>
+</div>

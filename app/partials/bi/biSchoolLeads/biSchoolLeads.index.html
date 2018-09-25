@@ -1,0 +1,22 @@
+<div class="row" ng-controller="BiBaseController">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content" ng-controller="BiSchoolLeadsController">
+	    <div>
+		    <ul class="breadcrumb">
+		        <li><img ng-src="img/icon/bi/yingxiao.png" src="img/icon/bi/yingxiao.png"> 校区业绩<span class="divider"></span></li>
+		        <li class="active">客户信息</li>
+		    </ul>
+		  </div>
+      <tabs pane-changed="getTabIndex(selectedPane)" ng-if="!isSchoolUser">
+      	<pane title="各校区客户信息统计">
+      		<div ng-include="commonHtmlUrl" ng-if="currentTable==='1'"></div>
+      	</pane>
+      	<pane title="区域客户信息汇总">
+      		<div ng-include="commonHtmlUrl" ng-if="currentTable==='2'"></div>
+      	</pane>
+      </tabs>
+      <div ng-include="commonHtmlUrl" ng-if="isSchoolUser"></div>
+    </div>
+</div>

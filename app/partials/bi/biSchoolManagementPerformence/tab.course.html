@@ -1,0 +1,32 @@
+<div class="table-responsive" style=" overflow-y:hidden">
+	<!-- 表格  -->
+    <table st-pipe="getStatistics" st-table="schoolManagementPerformences" class="table table-bordered table-striped" 
+    	ng-if="channelTab === '3'">
+        <thead>
+        <tr>
+        	<td style="font-weight: bold;">排名
+        	<td style="font-weight: bold;">姓名</td>
+        	<td style="font-weight: bold;">岗位</td>
+        	<td ng-if="!isSchoolUser" style="font-weight: bold;">所属校区</td>
+        	<td style="font-weight: bold;">排课课时</td>
+        	<td style="font-weight: bold;">消耗课时</td>
+        </tr>
+        </thead>
+        <tbody>
+	        <tr ng-repeat="model in statisticsModels">
+	         	<td>{{$index+1+statisticsTableState.pagination.start}}</td>
+	         	<td>{{model.userName}}</td>
+	         	<td>{{model.positionName}}</td>
+	         	<td ng-if="!isSchoolUser">{{model.schoolName}}</td>
+	         	<td>{{model.courseCount}}</td>
+	         	<td>{{model.coursePastCount}}</td>
+	        </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="13" class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" >
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

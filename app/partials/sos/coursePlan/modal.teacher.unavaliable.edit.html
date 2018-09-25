@@ -1,0 +1,63 @@
+<div class="modal oms-record-modal" tabindex="-1" role="dialog"
+	aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form name="form">
+				<div class="modal-header">
+					<button type="button" class="close" aria-label="Close"
+						ng-click="$hide()">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" ng-bind="editTitle"></h4>
+				</div>
+				<div class="modal-body yws-container">
+					<div class="row">
+						<div class="col-sm-6 form-group">
+							<label class="col-sm-4 control-label">选择日期</label>
+							<div class="col-sm-8">
+								<input type="text" datepicker=""
+									onclick="WdatePicker()" onchange="" readonly=""
+									name="startTime" ng-model="selectTime.date"
+									placeholder="" class="form-control ng-pristine "
+									required>
+							</div>
+						</div>
+						<div class="col-sm-6 form-group">
+							<span class="col-sm-4 control-label">
+								<input name="allDay" type="checkbox" ng-click="checkAllDay()" ng-model="selectTime.allDay">
+								&nbsp;&nbsp;全天&nbsp;
+							</span>
+						</div>
+					</div>
+					<div class="row" style="text-align: center">
+						<div class="col-sm-6 form-group">
+							<label class="col-sm-4 control-label">开始时间</label>
+							<div class="col-sm-8">
+								<input type="text" datepicker=""
+									onclick="WdatePicker({dateFmt:'H:mm'})" onchange="" readonly=""
+									name="startTime" ng-model="selectTime.startTime"
+									placeholder="开始时间" class="form-control ng-pristine "
+									required>
+							</div>
+						</div>
+						<div class="col-sm-6 form-group">
+							<label class="col-sm-4 control-label">结束时间</label>
+							<div class="col-sm-8">
+								<input type="text" datepicker=""
+									onclick="WdatePicker({dateFmt:'H:mm'})" onchange="" readonly=""
+									name="endTime" ng-model="selectTime.endTime"
+									placeholder="结束时间" class="form-control ng-pristine "
+									required>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="text-center">
+						<button class="btn btn-success" ng-click="update()">确定</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

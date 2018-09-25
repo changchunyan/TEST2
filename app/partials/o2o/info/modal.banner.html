@@ -1,0 +1,53 @@
+<div class="modal banner-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form name="bannerForm" role="form" class="form-horizontal showcase-form" novalidate="">
+
+        <div class="modal-header">
+          <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" ng-bind="modalTitleForBanner"></h4>
+        </div>
+
+
+        <div class="modal-body">
+              <div ng-class="{ 'has-error': bannerForm.banner.name.$dirty && bannerForm.banner.name.$error.required }">
+                  <label for="banner.name">轮播标题</label>
+                  <input type="text" name="banner.name" id="banner.name" class="form-control" ng-model="banner.name" ng-maxlength="20" required />
+              </div><br/>
+              <div ng-class="{ 'has-error': bannerForm.banner.link.$dirty && bannerForm.banner.link.$error.required }">
+                  <label for="banner.name">轮播链接</label>
+                  <input type="text" name="banner.link" id="banner.link" class="form-control" ng-model="banner.link" required />
+              </div><br/>
+              <!-- <div ng-class="{ 'has-error': bannerForm.banner.sort.$dirty && bannerForm.banner.sort.$error.required }">
+                  <label for="banner.name">轮播排序</label>
+                  <select ng-model="banner.sort" name="banner.sort" id="banner.sort" class="form-control"
+                                            ng-options="option for option in sortList" required>
+                      <option value="">-- 请选择 --</option>
+                  </select>
+              </div><br/> -->
+              <div ng-class="{ 'has-error': bannerForm.banner.picPath.$dirty && bannerForm.banner.picPath.$error.required }">
+                      <label for="bannerForm.banner.picPath">图片</label>
+                      <div class="col-md-12">
+                          <img  ng-src="{{imageSrc}}" style="max-width:300px;max-height:300px;margin:0 auto;display:block;" />
+                      </div>
+                      <input id="bannerForm.banner.picPath" type="file" img-model="banner.picPath" required/>
+              </div><br/>
+              <div ng-class="{ 'has-error': bannerForm.banner.state.$dirty && bannerForm.banner.state.$error.required }">
+                  <label for="banner.name">轮播状态</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                  <span>
+                    <input type="radio" name="banner.state" id="banner.state" ng-model="banner.state" ng-checked="banner.state == true" value="true" required />打开
+                    <input type="radio" name="banner.state" id="banner.state" ng-model="banner.state"  ng-checked="banner.state == false" value="false" required />关闭
+                  </span>
+              </div><br/>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+          <button type="submit" class="btn btn-success" ng-click="updateBanner()" ng-disabled="bannerForm.$invalid">更新</button>
+          <img ng-if="dataLoadingForbanner" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,191 @@
+<div class="view-frame" ng-controller="PaymentListController as cpc">
+    <div class="view-left" style="height:100%">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div ng-show="!isAdding" class="view-content user-love">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="#/">首页</a> <span class="divider"></span></li>
+                <li><a href="#/fb-admin">前台业务</a> <span class="divider"></span></li>
+                <li><a ng-click="fb-admin/order">普通订单管理</a> <span class="divider"></span></li>
+                <li class="active">交费记录管理</li>
+            </ul>
+        </div>
+        <!-- 查询通道  -->
+        <div st-pipe="callServerrecord" st-table="displayedrecord" class="lh21">
+            <!--TODO:查询条件-->
+            <div class="mt-student-m br-gray h-auto no-media ml-0">
+                <h2 class="h2-title">交费记录查询</h2>
+                <ul class="f14 cf bb-1">
+                    <li>
+                        <a class="mt-export " ng-click="exportSummary()">导出交费记录</a>
+                    </li>
+                </ul>
+                <ul class="one mt-10 h-auto pr-0 input-180">
+                    <li class="no-mar ml-0">
+                    	<label>学生姓名</label>
+                        <input placeholder="请输入" id="name" ng-model="paymentFilter.name" type="search">
+                    </li>
+                    <li>
+                    	<label>合同编号</label>
+                        <input placeholder="请输入" ng-model="paymentFilter.orderNo" type="search">
+                    </li>
+                    <li>
+                    	<label class="belongTo">业绩所属人</label>
+                        <input placeholder="请输入" ng-model="paymentFilter.owner" type="search">
+                    </li>
+                    <li>
+                    	<label class="belongTo">经办人</label>
+                        <input placeholder="请输入" ng-model="paymentFilter.createBy" type="search">
+                    </li>
+                    <ul class="inline-block time-show lh-auto span-54">
+                        <span  ng-class="{'active':mtSeach.new,'keydow_query':true}" ng-click="changeSelct('new')" class="active">新签</span>
+                        <span  ng-class="{'active':mtSeach.recomend,'keydow_query':true}" ng-click="changeSelct('recomend')" class="active">推荐</span>
+                        <span  ng-class="{'active':mtSeach.renewals,'keydow_query':true}" ng-click="changeSelct('renewals')" class="active">续费</span>
+                    </ul>
+                </ul>
+                <ul class="one h-auto pr-0">
+                    <div class="mt-select" style="min-height: 35px">
+                        <div class="rbg mt-0" style="border: none;">
+                            <ul class="h-auto" style="padding-right: 0">
+                                <div class="of">
+                                    <li class="mt-three option no-mar" vr-select changeFun="callServerrecordFilterChange" data-mt="{{payDatas}}" style="margin-right: 20px"><label class="fl bg-none" style="width:auto;">交费日期</label>
+                                        <input class="three-1">
+                                        <div class="three-1">月初至今</div>
+                                        <input class="three-2" readonly type="search" placeholder="" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})" ng-model="paymentFilter.pay_start_time">
+                                        <div class="three-2"></div><span class="dao">到</span>
+                                        <input class="three-2" readonly type="search" name="" placeholder="" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})" ng-model="paymentFilter.pay_end_time">
+                                        <div class="three-2"></div>
+                                    </li>
+                                    <li class="mt-three option no-mar" vr-select changeFun="callServerrecordFilterChange" data-mt="{{contractDatas}}" style="margin-right: 20px"><label class="fl bg-none" style="width:auto;">签约日期</label>
+                                        <input class="three-1">
+                                        <div class="three-1">不限</div>
+                                        <input class="three-2" readonly type="search" placeholder="" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})" ng-model="paymentFilter.contract_start_time">
+                                        <div class="three-2"></div><span class="dao">到</span>
+                                        <input class="three-2" readonly type="search" name="" placeholder="" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})" ng-model="paymentFilter.contract_end_time">
+                                        <div class="three-2"></div>
+                                    </li>
+                                    <ul class="inline-block time-show lh-auto span-54">
+                                        <a id="keydown-query" class="mt-btn cf bg-color-blue br ti-0 li-btn-1 pr-0 mt-0" href="javascript:void (0);" ng-click="callServerrecordFilterChange()">查询</a>
+                                        <a class="mt-btn ml15 brc3 li-btn-1 pr-0 mt-0 ti-0"  id="resetInputAll" ng-click="resetSelect()">重置</a>
+                                    </ul>
+                                    <!--更多选项-->
+                                    <!-- <li class="w1" ng-if="!selectMore">
+                                        <a ng-click="changeSelectMore(1)" href="javascript:void(0);" class="mt-more">&nbsp;</a>
+                                    </li> -->
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                </ul>
+            </div>
+            <div class="br-gray mt-list">
+                <h2 class="pl-20 c3">交费记录列表</h2>
+                <div class="overflow-x">
+                    <table class="table table-bordered table-striped table-condensed mt-table1" st-table="" st-pipe="getPaymentList">
+                        <thead>
+                        <tr class="br-gray-t">
+                            <th>学生姓名</th>
+                            <th>手机号</th>
+                            <th>合同编号</th>
+                            <th>签约类型</th>
+                            <th>交费类型</th>
+                            <th>签约日期</th>
+                            <th>签约金额</th>
+                            <th>交费金额</th>
+                            <th>交费日期</th>
+                            <th>当前尾款</th>
+                            <th>业绩所属人</th>
+                            <th>经办人</th>
+                        </tr>
+                        </thead>
+                        <tbody ng-show="!isrendLoading">
+                        <tr ng-repeat="row in displayedrecord">
+
+                            <td>{{ row.stu_name }}</td>
+                            <td>{{ row.stu_phone}}</td>
+                            <td>{{ row.orderNo }}<span ng-if="row.serviceType" data-attr="server">服务费</span></td>
+                            <td ng-show="row.order_type == 1">新签</td>
+                            <td ng-show="row.order_type == 2">续费</td>
+                            <td ng-show="row.order_type == 3">返课</td>
+                            <td ng-show="row.order_type == 4">转课</td>
+                            <td ng-show="row.order_type == 5">推荐</td>
+                            <td ng-show="row.order_type == 6">试听</td>
+                            <td ng-show="row.order_type == 8">赠课</td>
+                            <td ng-show="row.payType == 1">正常</td>
+                            <td ng-show="row.payType == 2">结转</td>
+                            <td>{{row.contract_start_date | date:'yyyy-MM-dd'}}</td>
+                            <td>{{ row.real_total_amount }}</td>
+                            <td>{{ row.payAmount }}</td>
+                            <td>{{row.payDate | date:'yyyy-MM-dd'}}</td>
+                            <td>{{row.payDueAmount}}</td>
+                            <td>{{row.belong_name}}</td>
+                            <td>{{row.create_name}}</td>
+
+                        </tr>
+                        </tbody>
+                        <tbody ng-show="isrendLoading">
+                        <tr>
+                            <td colspan="15" class="text-center">
+                                <div class="loading-indicator"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-items-by-page="10"
+                                st-template="partials/util/pagination.custom.html" colspan="15">
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="mt-student-m br-gray h-auto no-media ml-0">
+            <ul class="one mt-10 h-auto pr-0 input-180">
+                <li class="no-mar ml-0"><label>总签约金额</label>
+                    <input placeholder="{{tongji.realTotalAmount?tongji.realTotalAmount:0}}" ng-model="tongji.realTotalAmount" type="text">
+                </li>
+                <li><label>总交费金额</label>
+                    <input placeholder="{{tongji.payAmount?tongji.payAmount:0}}" ng-model="tongji.payAmount"
+                           type="text">
+                </li>
+                <li><label class="belongTo">总尾款金额</label>
+                    <input placeholder="{{tongji.payDueAmount?tongji.payDueAmount:0}}" ng-model="tongji.payDueAmount"
+                           type="text">
+                </li>
+                <li><label class="belongTo">结转金额</label>
+                    <input placeholder="{{tongji.carryOverAmount?tongji.carryOverAmount:0}}" ng-model="tongji.carryOverAmount"
+                           type="text">
+                </li>
+            </ul>
+        </div>
+        <!--<button ng-if="!isTeacher() && !isTeacherMaster()" class="btn " ng-click="showPaikeView(3)">试听排课</button>
+	                 <button ng-if="!isTeacher() && !isTeacherMaster()" class="btn " ng-click="showPaikeView(1)">学员排课</button>
+	                 <button ng-if="!isTeacher() && !isTeacherMaster()" class="btn " ng-click="showPaikeView(2)">一对多排课</button>
+                     <a class="btn " href="#/sos-admin/teacher_times" >查看老师时间表</a>
+                     <a class="btn " ng-if="!isTeacher() && !isTeacherMaster()" href="#/sos-admin/customer_times" >查看学生时间表</a>
+                     <a class="btn " ng-if="!isTeacher() && !isTeacherMaster()" href="#/sos-admin/customer_times/backToPlan" >查看学生时间表</a>-->
+        <!--<a class="btn" ng-click="CoursePlanquick(1)" ng-class="{true:'btn-success',false:''}[quick[1]]">今日未上课</a>
+            <a class="btn" ng-click="CoursePlanquick(2)" ng-class="{true:'btn-success',false:''}[quick[2]]">今日已上课</a>
+            <a class="btn" ng-click="CoursePlanquick(3)" ng-class="{true:'btn-success',false:''}[quick[3]]">本周未上课</a>
+            <a class="btn" ng-click="CoursePlanquick(4)" ng-class="{true:'btn-success',false:''}[quick[4]]">本周已上课</a>-->
+
+
+    </div>
+    <div class="mt-layer" ng-if="mtLayer">
+        <div class="mt-alert">
+            <h1 class="f18 cf">通知<a class="fr" ng-click="recordClass(0)">&nbsp;</a></h1>
+            <h2 class="mt-h2">您要记录上课的课时是否在系统中已经进行排课？</h2>
+            <ul>
+                <a href="" class="c5" ng-click="recordClass(0)">取消</a>
+                <a href="" class="brbf c43" ng-click="planAlready()">不确定</a>
+                <a href="" class=" b9-lable" ng-click="showPaikeView(1,1)" ng-if="isShowPaikeViewAll()">没有排课</a>
+                <a href="" class=" b9-lable" ng-click="showPaikeView(3,1)" ng-if="!isShowPaikeViewAll()">没有排课</a>
+                <a href="" class=" c5-lable" ng-click="planAlready()">已经排课</a>
+            </ul>
+        </div>
+    </div>
+</div>
+<script src="js/jqDom.js"></script>

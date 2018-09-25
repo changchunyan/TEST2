@@ -1,0 +1,186 @@
+<style>
+    h3 span.borderActive {
+        border-top: 4px solid #00bcd4;
+    }
+
+    .left-tragger {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .left-span {
+        border-bottom: 1px solid #dfdfdf;
+        border-right: 1px solid #dfdfdf;
+    }
+
+    .right-span {
+        border-bottom: 1px solid #dfdfdf;
+        border-left: 1px solid #dfdfdf;
+    }
+</style>
+<div class="view-frame" ng-controller="PreNotesController">
+    <div class="view-left">
+        <nav-side menu-data="menu.subMenu"></nav-side>
+    </div>
+    <div class="view-content user-love">
+
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="#/tars">教研系统</a> <span class="divider"></span></li>
+                <li class="active">试卷库</li>
+            </ul>
+        </div>
+        <div class="tabs-title br-gray-t c3">
+            试卷库<i>?</i>
+        </div>
+
+
+        <div ng-if="!pdfUrl" style="background:#fff; height:50px; display:flex; align-items:center; padding:0 30px;" class="mt-input-group pra">
+            <label style="color:#000000; font-weight:400;">学段</label>
+            <select ng-model="$paperLib.paperTableState.stageId" ng-options="option.id as option.name for option in paperStageList" style="margin-right:30px;color:#74748b;width:200px;">
+                    <!-- <option value="">请选择</option> -->
+                </select>
+            <label style="color:#000000; font-weight:400;">科目</label>
+            <select ng-model="$paperLib.paperTableState.subjectId" ng-options="option.id as option.name for option in paperSubjectList"
+                style="margin-right:30px;width:200px;color:#74748b;">
+                    <option value="">请选择</option>
+                </select>
+            <div style="flex:1;">
+
+            </div>
+            <div class="fr">
+                <input name="" placeholder="请输入关键字" ng-model="$paperLib.paperTableState.query" style="width:200px;color:#74748b;">
+                <a><i class="glyphicon glyphicon-search"></i> </a>
+            </div>
+        </div>
+        <!--查询部分-->
+        <div class="form-option of mt-20" ng-if="!pdfUrl">
+            <div class="tars-left of m0 fl" st-pipe="$paperLib.getStudyStage" st-table="paperAllList">
+
+                <div class="left-tragger">
+                    <h3 class="c3 f16 strong" style="display:flex;text-align:center; cursor:pointer;">
+                        <span style="flex:1;" ng-click="$paperLib.switchPaperClass(1)" ng-class="{'borderActive':$paperLib.Synchronize}">同步</span>
+                        <span style="flex:1;" ng-click="$paperLib.switchPaperClass(0)" ng-class="{'borderActive':!$paperLib.Synchronize}">
+                            {{$paperLib.paperTableState.stageId == 3?"小升初":($paperLib.paperTableState.stageId == 1?"中考":($paperLib.paperTableState.stageId == 2?"高考":null))}}
+                        </span>
+                    </h3>
+
+                    <div ng-if="$paperLib.Synchronize" style="padding:0 20px;">
+                        <div style="display:flex;">
+                            <select ng-model="$paperLib.paperTableState.versionId" ng-options="option.id as option.name for option in paperVersionList"
+                                class="col-sm-6" name="" id="" style="margin-right:10px;">
+                                                        <option value="">教材版本</option>
+                                                    </select>
+                            <select ng-model="$paperLib.paperTableState.directoryId" ng-options="option.id as option.gradeName for option in paperGradeList"
+                                class="col-sm-6" name="" id="">
+                                                        <option value="">分册</option>
+                                                    </select>
+                        </div>
+                        <h3 class="f14"><a ng-click="$paperLib.clickOpen(1,'note')">展开</a><a>&nbsp;|&nbsp;</a><a ng-click="$paperLib.clickOpen(0,'note')">收缩</a>
+                            <a class="mt-clear fr" ng-click="$paperLib.clickClear('note')">清除已选</a>
+                        </h3>
+
+
+                        <div style="overflow-y: auto !important;min-height: 113px;max-height: 345px">
+                            <div ng-repeat="one in KnowledgePointsList1" ng-init="one.index = $index">
+                                <h4 ng-if="one.children" class="f14" ng-class="{'active':one.open}" ng-click="$paperLib.clickOpenOne(one)">
+                                    {{one.dictName}}</h4>
+                                <ul class="one" ng-if="!one.children">
+                                    <li ng-if="!one.children" ng-class="{'active':one.select}" class="min-ht23 f14" ng-click="$paperLib.clickSelect(one,one.index,one.index,$index)">
+                                        {{one.dictName}}</li>
+                                </ul>
+                                <ul class="f12" ng-show="one.open">
+                                    <li ng-class="{'active':two.select}" class="min-ht23" ng-repeat="two in one.children" ng-click="$paperLib.clickSelect(two,one.index,one.index,$index)">{{two.dictName}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div ng-if="!$paperLib.Synchronize" style="padding:0 20px;">
+                        <h3 class="f14"><a ng-click="$paperLib.clickOpen(1,'note')">展开</a><a>&nbsp;|&nbsp;</a><a ng-click="$paperLib.clickOpen(0,'note')">收缩</a>
+                            <a class="mt-clear fr" ng-click="$paperLib.clickClear('note')">清除已选</a>
+                        </h3>
+
+
+                        <div style="overflow-y: auto !important;min-height: 113px;max-height: 345px">
+                            <div ng-repeat="one in KnowledgePointsList2" ng-init="one.index = $index">
+                                <h4 ng-if="one.children" class="f14" ng-class="{'active':one.open}" ng-click="$paperLib.clickOpenOne(one)">
+                                    {{one.dictName}}</h4>
+                                <ul class="one" ng-if="!one.children">
+                                    <li ng-if="!one.children" ng-class="{'active':one.select}" class="min-ht23 f14" ng-click="$paperLib.clickSelect(one,one.index,one.index,$index)">
+                                        {{one.dictName}}</li>
+                                </ul>
+                                <ul class="f12" ng-show="one.open">
+                                    <li ng-class="{'active':two.select}" class="min-ht23" ng-repeat="two in one.children" ng-click="$paperLib.clickSelect(two,one.index,one.index,$index)">{{two.dictName}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="of fr mt-tars-r">
+                <div class="of tars-right" ng-if="!pdfUrl">
+                    <h3 style="padding-left:20px;">
+                        资料表
+                    </h3>
+                    <div class="notes-lib">
+                        <div>
+                            <div class="tars-content of">
+                                <div class="tars-item" ng-repeat="el in paperAllList">
+                                    <h3 style="display:flex; height:auto; padding:6px;"><a style="line-height:1.5; flex:1;" ng-click="Pdf.setUrl(el,2)">{{el.name}}</a>
+                                        <a style="width:45px; height:24px; margin-top:5px;" class="fr mt-clear f12 ml15" ng-click="_modal.pre(el)">应用</a>
+                                        <a style="width:45px; height:24px; margin-top:5px;" class="fr mt-clear f12 ml15" ng-click="_modal.correction(el,1)">纠错</a>
+                                        <a style="width:45px; height:24px; display:block; margin-top:5px;" class="fr mt-clear f12 ml15" ng-click="downloadReName(el.name,el.path,el.id,2)"
+                                            href="javascript:void(0)">下载</a>
+                                        
+                                    </h3>
+                                    <p class="cf8 f14">
+                                        <span class="mt-user">上传人：{{el.uploaderName}}</span>
+                                        <span class="ml-10 pl-0 cf8">|</span>
+                                        <span class="mt-time ml-10">上传时间：{{el.uploadTime}}</span>
+                                        <span class="ml-10 pl-0 cf8">|</span>
+                                        <span class="mt-view ml-10">浏览次数：{{el.viewTimes}}</span>
+                                        <span class="ml-10 pl-0 cf8">|</span>
+                                        <span class="mt-download ml-10">下载次数：{{el.downloadTimes}}</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="mt-page f14" id="mt_page">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div ng-include="$url.pdf" ng-if="pdfUrl"></div>
+        <!-- <div class="mt-input-group pra"><label class="c3 f16 strong pl-20">试卷列表</label>
+                    <input name="" class="pl-10 f14" placeholder="输入试卷" ng-model="$paperLib.paperTableState.query">
+                    <a><i class="glyphicon glyphicon-search"></i> </a>
+                </div>
+                <div class="tars-content of">
+                    <div class="tars-item" ng-repeat="el in paperAllList">
+                        <h3>
+                            <a ng-click="Pdf.setUrl(el,2)">{{el.name}}</a>
+                            <a class="fr mt-clear f12" ng-click="downloadReName(el.name,el.path,el.id,2)" href="javascript:void(0)">下载word</a>
+                        </h3>
+                        <p class="cf8 f14">
+                            <span class="mt-user">上传人：{{el.uploaderName}}</span>
+                            <span class="ml-10 pl-0 cf8">|</span>
+                            <span class="mt-time ml-10">上传时间：{{el.uploadTime}}</span>
+                            <span class="mt-view ml-10">浏览次数：{{el.viewTimes}}</span>
+                            <span class="mt-download ml-10">下载次数：{{el.downloadTimes}}</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="mt-page f14" id="mt_page"></div> -->
+
+
+
+    </div>
+</div>

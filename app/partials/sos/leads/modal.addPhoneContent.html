@@ -1,0 +1,45 @@
+<link href="css/smarty.css" rel="stylesheet">
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true" style="overflow-y:auto">
+    <div class="modal-dialog" style="width:80%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" ng-bind="modalTitleForCallPhone"></h4>
+            </div>
+            <div class="table-responsive">
+                <form name="addPhoneContentForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                    <div class="modal-body mt-modal-order">
+                        <div>
+                            <!-- <input type="hidden" id="createLead" ng-model="order.createLead" value="1"/> -->
+                            <div>
+                                <div class="col-sm-4 form-group ">
+                                    <label  class="control-label">* 沟通内容</label>
+                                    <div class="col-sm-6">
+                                        <textarea name="callRecord" id="callRecord" ng-model="crmStudentCallRecord.callRecord" required></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 form-group">
+                                    <label class="control-label"> 下次跟进时间</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"
+                                               onchange="" readonly name="nextCallTime"
+                                               id="nextCallTime" ng-model="crmStudentCallRecord.nextCallTime"
+                                               required class="form-control"/>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                        <button type="button" class="btn btn-success c5-lable" ng-disabled="addPhoneContentForm.$invalid" ng-click="saveCallRecord();callWaihuPhone();$hide()" >保存
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

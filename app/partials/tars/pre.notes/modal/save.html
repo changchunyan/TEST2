@@ -1,0 +1,53 @@
+<div class="modal crm-invitationDetail-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="form">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="_modal.canlce()"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="preModalTitle"></h4>
+                </div>
+                <div class="modal-body pb-20">
+                    <!--查询结果列-->
+                    <div class="br-gray pl-0">
+                        <table class="table mt-table1">
+                            <thead><tr>
+                                <th>上课对象</th>
+                                <th>上课类型</th>
+                                <th>上课时间</th>
+                                <th>上课课时</th>
+                                <th>课程标题</th>
+                            </tr></thead>
+                            <tbody><tr class="tl">
+                                <td>{{coursePlanDetail.objName}}</td>
+                                <td>{{coursePlanDetail.sk_type}}</td>
+                                <td>{{coursePlanDetail.startTime|date:'yyyy-MM:dd HH:mm'}}</td>
+                                <td>{{coursePlanDetail.courseNum}}</td>
+                                <td>{{coursePlanDetail.title}}</td>
+                            </tr></tbody>
+                        </table>
+                    </div>
+                    <!--查询条件列-->
+                    <div class="form-option">
+                        <div class="mt-input-group pra br-0" style="padding: 20px 0 20px 50px">
+                            <label class="f14">标题</label>
+                            <input required name="" ng-model="coursePlanDetail.newTitle" placeholder="最多可输入10个字符" ng-maxlength="10" style="width:50%;">
+                        </div>
+                            <p class="cf8 tl">应用备课笔记
+                                <a class="ml-5" ng-if="coursePlanDetail.teacherHandouts" data="{{cwDetail.path}}" ng-click="_modal.apply()"><label class="mr-5">{{coursePlanDetail.teacherHandouts.filename}}</label><span style="margin-left: 3px" ng-if=" coursePlanDetail.teacherHandouts.filename!=cwDetail.path">替换</span></a>
+                                <a class="ml-5" ng-if="!( coursePlanDetail.teacherHandouts)" ng-click="_modal.apply()"><img src="img/tars/aplct.png" style="width:22px;"><span style="margin-left: 3px" >应用</span>
+                            <!--<label for="file" class="ml-5"><img src="img/tars/aplct.png" style="width:22px;"></label><a class="ml-5" ng-click="file=!file">应用</a></p>
+                        <input type="file" ng-model="file" name="file" id="file" required class="hide">-->
+                            <!--<label class="mr-5" ng-if="coursePlanDetail.path||cwDetail.path">{{coursePlanDetail.path||cwDetail.path}}</label><img src="img/tars/aplct.png" style="width:22px;"><span style="margin-left: 3px" ng-click="apply()">应用</span>--></a>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="text-center">
+                        <button type="button" class="btn btn-default" ng-disabled="form.$invalid||!coursePlanDetail.teacherHandouts.filename" ng-click="_modal.savePack(0)">发送</button>
+                        <button type="button" class="btn btn-success c5-lable" ng-disabled="form.$invalid||!coursePlanDetail.teacherHandouts.filename" ng-click="_modal.savePack(1)" data="{{form.$invalid}}" data-1="{{coursePlanDetail.teacherHandouts.filename}}">保存</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

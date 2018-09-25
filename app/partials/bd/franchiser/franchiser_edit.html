@@ -1,0 +1,348 @@
+<div class="view-frame" ng-controller="BdFranchiserEditController as lsc">
+    <div class="view-left">
+        <nav-side menu-data="menu.subMenu"></nav-side>
+    </div>
+
+    <div class="view-content">
+        <div>
+            <div>
+                <ul class="breadcrumb">
+                    <li><a href="#/">首页</a> <span class="divider"></span></li>
+                    <li><a href="#/bd-admin">招商客户关系管理</a> <span class="divider"></span></li>
+                    <li><a href="#/bd-admin/franchiser_list">加盟信息管理</a> <span class="divider"></span></li>
+                    <li class="active" ng-if="isAdding">加盟信息添加</li>
+                    <li class="active" ng-if="!isAdding">加盟信息修改</li>
+                </ul>
+            </div>
+        </div>
+
+        <form name="franchiserForm" role="form" class="form-horizontal showcase-form" novalidate="">
+            <div class="tab-panel">
+                <div>
+                    <div class="col-sm-12 form-group">
+                        <ul class="breadcrumb">
+                            <li align="center">加盟商加盟通知书</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 form-group">
+                        <label for="name" class="col-sm-4 control-label">签约加盟商姓名</label>
+                        <div class="col-sm-8">
+                            <input ng-disabled="detail.name" type="text" name="name" id="name" placeholder="2到10个字符" class="form-control"
+                                   ng-model="detail.name" ng-maxlength="10" ng-minlength="2" required/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group" >
+                        <label for="contact_name" class="col-sm-4 control-label">校区联系人姓名</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="contact_name" id="contact_name" placeholder="2到10个字符" class="form-control"
+                                   ng-model="detail.contact_name" ng-maxlength="10" ng-minlength="2" required/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group">
+                        <label for="contact_phone" class="col-sm-4 control-label">校区联系人电话</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="contact_phone" id="contact_phone" class="form-control"
+                                   ng-model="detail.contact_phone" required ng-maxlength="12" ng-minlength="11" required/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 form-group">
+                        <label for="email" class="col-sm-4 control-label">电子邮箱</label>
+                        <div class="col-sm-8">
+                            <input type="email" name="email" id="email" class="form-control" ng-model="detail.email" required/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group" >
+                        <label for="contract_no" class="col-sm-4 control-label">合同编号</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="contract_no" id="contract_no" class="form-control" ng-model="detail.contract_no" required/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 form-group">
+                        <label for="contract_starttime" class="col-sm-4 control-label">合同开始日期</label>
+                        <div class="col-sm-8">
+                            <input type="date" onfocus="(this.type='date')" id="contract_starttime" class="form-control" ng-model="detail.contract_starttime" required/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group" >
+                        <label for="contract_endtime" class="col-sm-4 control-label">合同结束日期</label>
+                        <div class="col-sm-8">
+                            <input type="date" onfocus="(this.type='date')" id="contract_endtime" class="form-control" ng-model="detail.contract_endtime" required/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 form-group">
+                        <label class="col-sm-4 control-label">加盟城市 省</label>
+                        <div class="col-sm-8">
+                            <select ng-model="detail.province" name="province" id="province" class="form-control"
+                                    ng-options="option.provinceCode as option.provinceName for option in provinceList"
+                                    ng-change="provinceChanged()" required>
+                                <option value="">-- 请选择 --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group">
+                        <label class="col-sm-4 control-label">市</label>
+                        <div class="col-sm-8">
+                            <select ng-model="detail.city" name="city" id="city" class="form-control"
+                                    ng-options="option.cityCode as option.cityName for option in cityList"
+                                    ng-change="cityChanged()" required>
+                                <option value="">-- 请选择 --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group">
+                        <label class="col-sm-4 control-label">区(县)</label>
+                        <div class="col-sm-8">
+                            <select ng-model="detail.area" name="area" id="area" class="form-control"
+                                    ng-options="option.areaCode as option.areaName for option in areaList" required>
+                                <option value="">-- 请选择 --</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 form-group" >
+                        <label for="address" class="col-sm-4 control-label">通讯地址</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="address" id="address" class="form-control" ng-model="detail.address" required/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 form-group" >
+                        <label for="is_first" class="col-sm-4 control-label">是否首次加盟</label>
+                        <div class="col-sm-8">
+                            <select ng-model="detail.is_first" name="is_first" id="is_first" class="form-control"
+                                    ng-options="option.code as option.name for option in isFirstList" required>
+                                <option value="">-- 请选择 --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group" >
+                        <label for="referee_name" class="col-sm-4 control-label">推荐人姓名</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="referee_name" id="referee_name" class="form-control" ng-model="detail.referee_name"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group" >
+                        <label for="is_stock_partnership" class="col-sm-4 control-label">是否股份合作</label>
+                        <div class="col-sm-8">
+                            <select ng-model="detail.is_stock_partnership" name="is_stock_partnership" id="is_stock_partnership" class="form-control"
+                                    ng-options="option.code as option.name for option in isStockPartnershipList" required>
+                                <option value="">-- 请选择 --</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 form-group" >
+                        <label class="col-sm-4 control-label">股份比例 优胜</label>
+                        <div class="col-sm-8">
+                            <input ng-disabled="detail.is_stock_partnership==2" type="number" name="stock_by_yws" id="stock_by_yws" class="form-control" ng-model="detail.stock_by_yws" placeholder='%'/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group" >
+                        <label class="col-sm-4 control-label">股份比例 投资人</label>
+                        <div class="col-sm-8">
+                            <input ng-disabled="detail.is_stock_partnership==2"  type="number" name="stock_by_investor" id="stock_by_investor" class="form-control" ng-model="detail.stock_by_investor" placeholder='%'/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group" >
+                        <label for="postpone_time" class="col-sm-4 control-label">延期支持时间</label>
+                        <div class="col-sm-8">
+                            <select ng-model="detail.postpone_time" id="postpone_time" class="form-control"
+                                    ng-options="option.code as option.name for option in postponeTimeList" required>
+                                <option value="">-- 请选择 --</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 form-group" >
+                        <label for="equity_ratio" class="col-sm-4 control-label">权益金比例</label>
+                        <div class="col-sm-8">
+                            <input type="number" name="equity_ratio" id="equity_ratio" class="form-control" ng-model="detail.equity_ratio" required/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group" >
+                        <label for="city_level" class="col-sm-4 control-label">城市级别</label>
+                        <div class="col-sm-8">
+                            <select ng-model="detail.city_level" id="city_level" class="form-control"
+                                    ng-options="option.code as option.name for option in cityLevelList" required>
+                                <option value="">-- 请选择 --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group" >
+                        <label for="join_form" class="col-sm-4 control-label">加盟形式</label>
+                        <div class="col-sm-8">
+                            <select ng-model="detail.join_form" id="join_form" class="form-control"
+                                    ng-options="option.code as option.name for option in joinFormList" required>
+                                <option value="">-- 请选择 --</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-panel">
+                <div>
+                        <div class="col-sm-12 form-group">
+                            <ul class="breadcrumb">
+                                <li align="center">加盟费用</li>
+                            </ul>
+                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 form-group">
+                        <label for="fee" class="col-sm-4 control-label">加盟费</label>
+                        <div class="col-sm-8">
+                            <input type="number" name="fee" id="fee" class="form-control" ng-model="detail.fee" required/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group" >
+                        <label for="deposit" class="col-sm-4 control-label">保证金</label>
+                        <div class="col-sm-8">
+                            <input type="number" name="deposit" id="deposit" class="form-control" ng-model="detail.deposit" required/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group">
+                        <label for="design_fee" class="col-sm-4 control-label">建校设计费</label>
+                        <div class="col-sm-8">
+                            <input type="number" name="design_fee" id="design_fee" class="form-control" ng-model="detail.design_fee" required/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 form-group">
+                        <label for="cctv_fee" class="col-sm-4 control-label">CCTV使用费</label>
+                        <div class="col-sm-8">
+                            <input type="number" name="cctv_fee" id="cctv_fee" class="form-control" ng-model="detail.cctv_fee" required/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group" >
+                        <label for="yws_fee" class="col-sm-4 control-label">YWS使用费</label>
+                        <div class="col-sm-8">
+                            <input type="number" name="yws_fee" id="yws_fee" class="form-control" ng-model="detail.yws_fee" required/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group">
+                        <label for="book_fee" class="col-sm-4 control-label">教材费</label>
+                        <div class="col-sm-8">
+                            <input type="number" name="book_fee" id="book_fee" class="form-control" ng-model="detail.book_fee" required/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 form-group">
+                        <label for="other_fee" class="col-sm-4 control-label">其他费用</label>
+                        <div class="col-sm-8">
+                            <input type="number" name="other_fee" id="other_fee" class="form-control" ng-model="detail.other_fee" required/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group" >
+                        <label class="col-sm-4 control-label">总计</label>
+                        <div class="col-sm-8"><input type="number" class="form-control" value="{{detail.fee+detail.deposit+detail.design_fee+detail.cctv_fee+detail.yws_fee+detail.book_fee+detail.other_fee}}" readonly/></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-panel">
+                <div>
+                        <div class="col-sm-12 form-group">
+                            <ul class="breadcrumb">
+                                <li align="center">加盟项目类别</li>
+                            </ul>
+                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 form-group" >
+                        <label for="project_type" class="col-sm-4 control-label">加盟项目类别</label>
+                        <div class="col-sm-8">
+                            <select ng-model="detail.project_type" id="project_type" class="form-control"
+                                    ng-options="option.code as option.name for option in projectTypeList"
+                                    ng-change="projectChanged()" required>
+                                <option value="">-- 请选择 --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group" >
+                        <label for="project_detail" class="col-sm-4 control-label">项目详情</label>
+                        <div class="col-sm-8">
+                            <select ng-model="detail.project_detail" id="project_detail" class="form-control"
+                                    ng-options="option.code as option.name for option in projectDetailList" required>
+                                <option value="">-- 请选择 --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group" >
+                        <label for="cctv_period" class="col-sm-4 control-label">CCTV标识使用周期</label>
+                        <div class="col-sm-8">
+                            <select ng-model="detail.cctv_period" id="cctv_period" class="form-control"
+                                    ng-options="option.code as option.name for option in cctvPeriodList" required>
+                                <option value="">-- 请选择 --</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-panel">
+                <div>
+                    <div class="col-sm-12 form-group">
+                        <ul class="breadcrumb">
+                            <li align="center">加盟商情况描述</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 form-group">
+                        <label for="invest_ability" class="col-sm-1 control-label width10_3">投资能力</label>
+                        <div class="col-sm-10 width84_3">
+                            <input type="text" name="invest_ability" id="invest_ability" class="form-control" ng-model="detail.invest_ability" required/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 form-group">
+                        <label for="characteristic" class="col-sm-1 control-label width10_3">性格特征</label>
+                        <div class="col-sm-10 width84_3">
+                            <input type="text" name="characteristic" id="characteristic" class="form-control" ng-model="detail.characteristic" required/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 form-group">
+                        <label for="city_profile" class="col-sm-1 control-label width10_3">城市概况</label>
+                        <div class="col-sm-10 width84_3">
+                            <input type="text" name="city_profile" id="city_profile" class="form-control" ng-model="detail.city_profile" required/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 form-group">
+                        <label for="special_need" class="col-sm-1 control-label width10_3">特殊需求点</label>
+                        <div class="col-sm-10 width84_3">
+                            <input type="text" name="special_need" id="special_need" class="form-control" ng-model="detail.special_need" required/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="text-center">
+                <button class="btn btn-success c5-lable" ng-disabled="franchiserForm.$invalid" ng-click="save()">保存</button>
+                <!--<button class="btn btn-success" ng-click="createLeadsStudent(form)">保存</button>-->
+                <button class="btn btn-default" ng-click="showList()">取消</button>
+            </div>
+        </form>
+    </div>
+</div>
+

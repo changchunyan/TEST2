@@ -1,0 +1,23 @@
+<div class="modal crm-invitationDetail-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-small" style="width: 640px">
+        <div class="modal-content">
+            <form name="form">
+                <div class="modal-body text-center" style="padding: 40px 0;border-radius: 10px;">
+                    <div class="form-group"
+                         ng-class="{ 'has-error': form.communicateTime.$dirty && form.communicateTime.$error.required }">
+                        <img src="img/icon/util/jgao.png" style="width: 176px;height: 118px;">
+                        <h1 style="padding: 0 20px;    font-size: 22px;
+    text-align: left;">{{waringtitle}}</h1>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="text-center">
+                        <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                        <button type="submit" class="btn btn-success" ng-click="waringModalFun()">确定
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

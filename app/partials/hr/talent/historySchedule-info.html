@@ -1,0 +1,178 @@
+<div class="row">
+	<div class="col-sm-12">
+		<div class="content" style="min-height: 300px;">
+			<div class="wrapper">
+				<div class="main">
+					<div class="year">
+						<a style="display: block;width: 40px;height: 40px; position: relative;left: 230px;z-index: 9;">
+							<span class="glyphicon glyphicon-plus" style="font-size: 40px; visibility: hidden;"></span>
+						</a>
+						<div class="title">个人招聘流程记录</div>
+						<div class="list">
+							<ul>
+								<li ng-repeat="schedule in historyTalent.recruitmentSchedule track by $index" class="cls">
+									<div ng-if="(schedule.recruitmentNode === null)
+											|| ((schedule.recruitmentNode.name != '简历初选')
+											&& (schedule.recruitmentNode.name != '转让'))">
+										<a style="display: block; margin-left: 25px; height: 20px; width: 30px;"> </a>
+										<div class="intro">
+											<div class="row">
+												<div class="col-sm-4 form-group">
+													<label for="stateTime" class="col-sm-4 control-label">* 流程时间</label>
+													<div class="col-sm-8">
+														<input type="text" name="stateTime" id="stateTime"  class="form-control" ng-model="schedule.scheduleDate" disabled>
+													</div>
+												</div>
+												<div class="col-sm-4 form-group">
+													<label for="recruitmentNode" class="col-sm-4 control-label">* 招聘阶段</label>
+													<div class="col-sm-8">
+														<select class="form-control" id = "recruitmentNode" ng-model="schedule.recruitmentNode"
+																ng-options="p.name for p in allRecruitmentPoints track by p.name" disabled="disabled">
+															<option value="">---请选择---</option>
+														</select>
+													</div>
+												</div>
+												<div class="col-sm-4 form-group" ng-if="schedule.recruitmentNode.name == '首次到访前邀约诺访' || schedule.recruitmentNode.name == '首次到访后邀约诺访'">
+													<label class="col-sm-4 control-label">诺访日期：</label>
+													<div class="col-sm-8">
+														<input type="text" datePicker ng-model="schedule.visitTime" class="form-control" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"  onchange="" disabled/>
+													</div>
+												</div>
+												<div class="col-sm-4 form-group">
+													<label for="executor" class="col-sm-4 control-label">* 操作人</label>
+													<div class="col-sm-8">
+														<input type="text" name="age" id="executor" class="form-control" ng-model="schedule.executor" disabled>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<label for="executor" class="col-sm-1 control-label">* 备  注</label>
+												<div class="col-sm-11">
+													<textarea class="form-control" rows="3" ng-model="schedule.scheduleDescription" disabled="disabled"></textarea>
+												</div>
+											</div>
+										</div>
+										<!--<div>
+											<div class="date">
+												<input type="text" datePicker ng-model="schedule.scheduleDate" class="form-control" disabled="disabled"/>
+												&lt;!&ndash;<input type="date" ng-model="schedule.scheduleDate" class="form-control" disabled />&ndash;&gt;
+												<br/>
+												<label class="control-label">操作人：{{schedule.executor}}</label>
+											</div>
+											<div class="intro">
+												<select class="form-control" ng-model="schedule.recruitmentNode"
+														ng-options="p.name for p in allRecruitmentPoints track by p.name" disabled>
+													<option value="">-&#45;&#45;请选择-&#45;&#45;</option>
+												</select><br />
+												<div ng-if="schedule.recruitmentNode.name == '邀约诺访'">
+													<label class="control-label">诺访日期：</label>
+													<input type="text" datePicker ng-model="schedule.visitTime" class="form-control" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"  onchange="" disabled/>
+												</div><br/>
+												<textarea class="form-control" rows="3" ng-model="schedule.scheduleDescription" disabled></textarea>
+												<br/>
+											</div>
+										</div>-->
+									</div>
+									<div ng-if="schedule.recruitmentNode.name === '简历初选'">
+										<div class="intro">
+											<div class="row">
+												<div class="col-sm-4 form-group">
+													<label for="stateTime" class="col-sm-4 control-label">* 流程时间</label>
+													<div class="col-sm-8">
+														<input type="text" name="stateTime" id="stateTime"  class="form-control" ng-model="schedule.scheduleDate" disabled>
+													</div>
+												</div>
+												<div class="col-sm-4 form-group">
+													<label for="recruitmentNode" class="col-sm-4 control-label">* 招聘阶段</label>
+													<div class="col-sm-8">
+														<select class="form-control" id = "recruitmentNode" ng-model="schedule.recruitmentNode"
+																ng-options="p.name for p in allRecruitmentPoints track by p.name" disabled="disabled">
+															<option value="">---请选择---</option>
+														</select>
+													</div>
+												</div>
+												<div class="col-sm-4 form-group">
+													<label for="executor" class="col-sm-4 control-label">* 操作人</label>
+													<div class="col-sm-8">
+														<input type="text" name="age" id="executor" class="form-control" ng-model="schedule.executor" disabled>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<label for="executor" class="col-sm-1 control-label">* 备  注</label>
+												<div class="col-sm-11">
+													<textarea class="form-control" rows="3" ng-model="schedule.scheduleDescription" disabled="disabled"></textarea>
+												</div>
+											</div>
+										</div>
+										<!--<div>
+											<div class="date">
+												<input type="text" datePicker ng-model="schedule.scheduleDate" class="form-control" disabled="disabled"/>
+												&lt;!&ndash;<input type="date" ng-model="schedule.scheduleDate" class="form-control" readonly="readonly"/>&ndash;&gt;
+												<br/>
+												<label class="control-label">操作人：{{schedule.executor}}</label>
+											</div>
+											<div class="intro">
+												<input class="form-control" ng-model="schedule.recruitmentNode.name" value="{{schedule.recruitmentNode.name}}" readonly="readonly">
+												<br>
+												<textarea class="form-control" rows="3" ng-model="schedule.scheduleDescription" readonly="readonly"></textarea>
+												<br/>
+											</div>
+										</div>-->
+									</div>
+									<div ng-if="schedule.recruitmentNode.name === '转让'">
+										<div class="intro">
+											<div class="row">
+												<div class="col-sm-4 form-group">
+													<label for="stateTime" class="col-sm-4 control-label">* 诺访日期</label>
+													<div class="col-sm-8">
+														<input type="text" name="stateTime" id="stateTime"  class="form-control" ng-model="schedule.scheduleDate" disabled>
+													</div>
+												</div>
+												<div class="col-sm-4 form-group">
+													<label for="recruitmentNode" class="col-sm-4 control-label">* 招聘阶段</label>
+													<div class="col-sm-8">
+														<select class="form-control" id = "recruitmentNode" ng-model="schedule.recruitmentNode"
+																ng-options="p.name for p in allRecruitmentPoints track by p.name" disabled="disabled">
+															<option value="">---请选择---</option>
+														</select>
+													</div>
+												</div>
+												<div class="col-sm-4 form-group">
+													<label for="executor" class="col-sm-4 control-label">* 操作人</label>
+													<div class="col-sm-8">
+														<input type="text" name="age" id="executor" class="form-control" ng-model="schedule.executor" disabled>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<label for="executor" class="col-sm-1 control-label">* 备  注</label>
+												<div class="col-sm-11">
+													<textarea class="form-control" rows="3" ng-model="schedule.scheduleDescription" disabled="disabled"></textarea>
+												</div>
+											</div>
+										</div>
+										<!--<div>
+											<div class="date">
+												<input type="text" datePicker ng-model="schedule.scheduleDate" class="form-control" disabled="disabled"/>
+												&lt;!&ndash;<input type="date" ng-model="schedule.scheduleDate" class="form-control" readonly="readonly"/>&ndash;&gt;
+												<br/>
+												<label class="control-label">操作人：{{schedule.executor}}</label>
+											</div>
+											<div class="intro">
+												<input class="form-control" ng-model="schedule.recruitmentNode.name" value="{{schedule.recruitmentNode.name}}" readonly="readonly">
+												<br>
+												<textarea class="form-control" rows="3" ng-model="schedule.scheduleDescription" readonly="readonly"></textarea>
+												<br/>
+											</div>
+										</div>-->
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

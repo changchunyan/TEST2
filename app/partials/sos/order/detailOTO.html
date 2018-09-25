@@ -1,0 +1,236 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true" style="overflow-y:auto" ng-controller="OrderDetailOTOController">
+    <div class="modal-dialog">
+        <div class="modal-content " >
+            <form>
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitleDetail"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="col-sm-10">
+                        <div class="row ">
+                            <div class="col-sm-6 form-group" >
+                                <label for="orderNo" class="col-sm-4 control-label"> 合同编号</label>
+                                <div class="col-sm-4">
+                                    <input type="text" readonly  name="orderNo" id="orderNo"  ng-model="order.orderNo" class="input-sm form-control" readonly/>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 form-group" >
+                                <label for="name" class="col-sm-4 control-label">学员姓名</label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="name" id="name" readonly ng-model="order.name" placeholder="1到20个字符" ng-maxlength="20" ng-minlength="1"  class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 form-group" >
+                                <label for="orderType" class="col-sm-4 control-label">* 订单类型</label>
+                                <div class="col-sm-6" id="orderType">
+                                    <input type="text" readonly ng-if="order.orderType == 1" value="新签" class="form-control" />
+                                    <input type="text" readonly ng-if="order.orderType == 2" value="续费" class="form-control" />
+                                    <input type="text" readonly ng-if="order.orderType == 3" value="返课" class="form-control" />
+                                    <input type="text" readonly ng-if="order.orderType == 5" value="推荐单" class="form-control" />
+                                    <input type="text" readonly ng-if="order.orderType == 7" value="线上O2O" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-sm-6 form-group" >
+                                <label for="orderStatus" class="col-sm-4 control-label">* 订单状态</label>
+                                <div class="col-sm-6" id="orderStatus">
+                                    <input type="text" readonly ng-if="order.orderStatus == 1" value="录入订单" class="form-control" />
+                                    <input type="text" readonly ng-if="order.orderStatus == 2" value="支付定金" class="form-control" />
+                                    <input type="text" readonly ng-if="order.orderStatus == 3" value="审核通过" class="form-control" />
+                                    <input type="text" readonly ng-if="order.orderStatus == 5" value="已退单" class="form-control" />
+                                    <input type="text" readonly ng-if="order.orderStatus == 6" value="已转课" class="form-control" />
+                                    <input type="text" readonly ng-if="order.orderStatus == 7" value="已生成合同" class="form-control" />
+                                    <input type="text" readonly ng-if="order.orderStatus == 8" value="已结课" class="form-control" />
+                                    <input type="text" readonly ng-if="order.orderStatus == 9" value="已退" class="form-control" />
+                                    <input type="text" readonly ng-if="order.orderStatus == 10" value="退费中" class="form-control" />
+                                    <input type="text" readonly ng-if="order.orderStatus == 11" value="转课中" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 form-group">
+                                <label for="tradeAt" class="col-sm-4 control-label">成交时间</label>
+                                <div class="col-sm-6">
+                                    <input type="date" value="{{order.tradeAt | date:'yyyy-MM-dd' }}" readonly name="tradeAt" id="tradeAt"  ng-model="order.tradeAt" class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                <label for="teacherName" class="col-sm-4 control-label">授课老师</label>
+                                <div class="col-sm-6">
+                                    <input type="text" value="{{order.teacherName}}" readonly name="teacherName" id="teacherName"  ng-model="order.teacherName" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 form-group" >
+                                <label for="classType" class="col-sm-4 control-label">* 上课方式</label>
+                                <div class="col-sm-6" id="classType">
+                                    <input type="text" readonly ng-if="order.classType == 1" value="教师上门" class="form-control" />
+                                    <input type="text" readonly ng-if="order.classType == 2" value="学生到店" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                <label for="classAddress" class="col-sm-4 control-label">授课地点</label>
+                                <div class="col-sm-6">
+                                    <input type="text" ng-model="order.classAddress" readonly name="classAddress" id="classAddress" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 form-group" >
+                                <label for="studentName" class="col-sm-4 control-label">实际上课学员</label>
+                                <div class="col-sm-6">
+                                    <input type="text" ng-model="order.studentName" readonly name="studentName" id="studentName" class="form-control" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div><!-- 课程列表 -->
+                        <table class="table table-bordered table-striped" st-table="order.orderCourses" >
+                            <thead>
+                            <tr>
+                                <th>课程ID</th>
+                                <th>课程类型</th>
+                                <th>课程名称</th>
+                                <th>年级</th>
+                                <th>科目</th>
+                                <th>性质</th>
+                                <th>实际单价</th>
+                                <th>课时量</th>
+                                <th>总价</th>
+                                <th>试听老师</th>
+                            </tr>
+                            </thead>
+                            <tr ng-repeat="row in order.orderCourses">
+                                <td>{{row.courseId}}</td>
+                                <td>{{row.courseTypeName}}</td>
+                                <td>{{row.courseName}}</td>
+                                <td>{{row.gradeName}}</td>
+                                <td>{{row.subjectName}}</td>
+                                <td ng-show="row.courseProperty == 1">正课</td>
+                                <td ng-show="row.courseProperty == 2">赠课</td>
+                                <td ng-show="row.courseProperty == 3">返课</td>
+                                <td ng-show="row.courseProperty == 4">试听课</td>
+                                <td ng-show="row.courseProperty == null || row.courseProperty == 0 ">其他</td>
+                                <td>{{row.actualPrice}}</td>
+                                <td>{{row.originalNum}}</td>
+                                <td>{{row.actualPrice*row.originalNum | number:2}}</td>
+                                <td>
+                                    <select ng-if="row.isCourseAudition == 1" disabled ng-model="row.teacherId" name="row.teacherId" class="input-sm form-control"
+                                            ng-options="option.teacherId as option.teacherName for option in Teachers">
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>总计</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>{{order.totalOriginalNum}}</td>
+                                <td>{{order.totalPrice | number:2}}</td>
+                                <!--<td></td>-->
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div><!-- 订单课程汇总信息-->
+                        <div class="row">
+                            <div class="col-sm-4 form-group" >
+                                <label for="totalPrice" class="col-sm-4 control-label">课程总价</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="totalPrice" id="totalPrice" readonly ng-model="order.totalPrice" ng-pattern="/^[1-9]\d*|0$/" ng-maxlength="10"  class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group" >
+                                <label for="realPayAmount" class="col-sm-4 control-label">优惠后金额</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="realPayAmount" id="realPayAmount" readonly ng-model="order.realPayAmount" ng-pattern="/^([1-9]\d*|0)(\.\d{1,2})?$/" ng-maxlength="10"  class="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 form-group" >
+                                <label for="privilegeAmount" class="col-sm-4 control-label">优惠金额</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="privilegeAmount" id="privilegeAmount" readonly ng-model="order.privilegeAmount" ng-pattern="/^[1-9]\d*|0$/" ng-maxlength="10" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4  form-group">
+                                <label for="customerBelonger" class="col-sm-4 control-label">*所属学习顾问</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="order.customerBelonger" disabled name="customerBelonger" id="customerBelonger" class="input-sm form-control"
+                                            ng-options="option.user.id as option.user.name for option in customerBelongers">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        </div>
+						<div class="row" >
+							<div class="col-sm-4 form-group">
+								<label for="currentMonthPastCourse" class="col-sm-4 control-label">本月消课小时数</label>
+								<div class="col-sm-8" id="currentMonthPastCourse">
+									{{currentMonthPastCourse}}
+								</div>
+							</div>
+                            <div class="col-sm-4 form-group">
+                                <label for="currentMonthPastCourseIncome" class="col-sm-4 control-label">本月消课收入</label>
+                                <div class="col-sm-8" id="currentMonthPastCourseIncome">
+                                    {{currentMonthPastCourse*averageCoursePrice | number:3}}
+                                </div>
+                            </div>
+						</div>
+						<div class="row">
+							<div class="col-sm-4 form-group">
+								<label for="totalPastCourse" class="col-sm-4 control-label">累计消课小时数</label>
+								<div class="col-sm-8" id="totalPastCourse">
+									{{totalPastCourse}}
+								</div>
+							</div>
+							<div class="col-sm-4 form-group">
+								<label for="totalPastCourseIncome" class="col-sm-4 control-label">累计消课收入</label>
+								<div class="col-sm-8" id="totalPastCourseIncome">
+									{{totalPastCourse*averageCoursePrice | number:3}}
+								</div>
+							</div>
+						</div>
+						<div class="row">
+                            <div class="col-sm-4 form-group">
+                                <label for="totalLeftCourse" class="col-sm-4 control-label">剩余课时数</label>
+                                <div class="col-sm-8" id="totalLeftCourse">
+                                    {{order.totalOriginalNum-totalPastCourse}}
+                                </div>
+                            </div>
+							<div class="col-sm-4 form-group">
+								<label for="extraAmount" class="col-sm-4 control-label">订单剩余金额</label>
+								<div class="col-sm-8" id="extraAmount">
+									{{order.realTotalAmount-totalPastCourse*averageCoursePrice | number:3}}
+								</div>
+							</div>
+						</div>
+                    </div>
+                <div class="modal-footer">
+                   <!-- <button type="button" class="btn btn-success" ng-show="(order.orderStatus == 1 || order.orderStatus == 2) && order.orderType != 4" ng-if="showPermissions('OrderEdit')" ng-click="chargeOrder(order)">收费</button>
+                    <button type="button" class="btn btn-success" ng-show="(order.orderStatus == 1 || order.orderStatus == 2) && order.orderType != 4" ng-if="showPermissions('OrderEdit')" ng-click="editOrder(order)">修改</button>
+                    <button type="button" class="btn btn-success" ng-show="(order.orderStatus == 1 || order.orderStatus == 2) && order.orderType != 4" ng-if="showPermissions('OrderAudit')" ng-click="auditOrder(order)">审核</button>
+                    <button type="button" class="btn btn-success" ng-show="(order.orderStatus == 1 || order.orderStatus == 2) && order.orderType != 4" ng-if="showPermissions('OrderAudit')" ng-click="chargeBackOrder(order)">退单</button>-->
+                    <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                    <img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<style>
+lable{
+    padding-top: 7px;
+}
+</style>

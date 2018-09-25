@@ -1,0 +1,162 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+  	<div class="modal-dialog">
+    	<div class="modal-content">
+      		<div class="modal-header">
+        		<button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+        		<h4 class="modal-title" ng-bind="teacherModelTitle"></h4>
+      		</div>
+      		<div class="modal-body">
+      		    <div class="plan-top-left-title" style="color:#3e70c5 ">
+      		    	<input type="checkbox" name="timeSearch" id="timeSearch"  value="1" ng-click="showTimeSearch()">按时间段查询可用的教师
+      		    </div>
+      		    <div id="timeShow" style="display:none">
+			  		<div class="row">
+			  		    <div class="col-sm-6 form-group" style="text-align:center">
+		        			<label class="col-sm-4 control-label" for="startTime" >上课日期</label>
+		           			<div class="col-sm-8">
+		           				<input type="date" name="startDate" id="startDate" ng-model="select.startDate"  class="form-control" ng-change="getEndTimeNew()" onfocus="(this.type='date')" value="{{ select.startDate | date:'yyyy-MM-dd' }}"  required/>
+		        			</div>
+	        			</div>
+			            <div class="col-sm-6 form-group" style="text-align:center">
+							<label  class="col-sm-4 control-label">上课时间</label>
+							<div class="col-sm-3">
+								<input type="text"  name="leadsName1" id="time1"
+									   ng-model="select.time1" placeholder="时" class="form-control ng-pristine " required=""  ng-change="getEndTimeNew()"  ng-focus="getEndTimeNew()">
+							</div>
+							<div class="col-sm-1">
+								<span style="font-size: 20px;">:</span>
+							</div>
+							<div class="col-sm-4">
+								<input type="text"  name="leadsName1" id="time2"
+									   ng-model="select.time2" placeholder="分" class="form-control ng-pristine " required="" ng-change="getEndTimeNew()" ng-focus="getEndTimeNew()">
+							</div>
+			           </div>
+			        </div>
+			        <div class="row">
+			        	<div class="col-sm-6 form-group" style="text-align:center">
+				            <label  class="col-sm-4 control-label">上课时长</label>
+				            <div class="col-sm-8">
+				                <select ng-model="select.timeSize"
+				                        name="select.timeSize"  class="input-sm form-control"
+				                        ng-options="option.id as option.name for option in TIME_SIZE" type="search" required="" ng-change="getEndTimeNew()">
+				                    <option value="">请选择</option>
+				                </select>
+				            </div>
+			            </div>
+			            <div class="col-sm-6 form-group" style="text-align:center">
+				            <label  class="col-sm-4 control-label">下课时间</label>
+				            <div class="col-sm-8">
+				                <input ype="text"  readonly="" name=timeEnd
+				                       ng-model="select.timeEnd" placeholder="自动生成" class="form-control ng-pristine " required="">
+				            </div>
+			            </div>
+			        </div>
+			        <div class="row">
+			        	<div class="col-sm-6 form-group" style="text-align:left">
+			        		<span id="timeSpand">&nbsp;&nbsp;&nbsp;&nbsp;{{startEndTime}}</span>
+			        	</div>
+			        	<div class="col-sm-6 form-group" style="text-align:center">
+			        		<button type="button" class="btn btn-default" ng-click="getTeachersListByFilter()">确定</button>
+			  				<button type="button" class="btn btn-default" ng-click="resetSearch()">重置</button>
+			        	</div>
+			        </div>
+		        </div>
+		        <div class="table-responsive"  >
+						  <table class="table table-bordered table-striped table-condensed" st-pipe="getTeachersList" st-table="schoolTeacherList">
+							<thead class="table table-bordered table-striped table-condensed">
+								 <tr>
+								     <th></th>
+									 <th>老师姓名</th>
+									 <th>手机</th>
+									 <th>全职/兼职</th>
+									 <th>校区</th>
+									 <th>科目</th>
+									 <th>年级段</th>
+									 <th>师资等级</th>
+								 </tr>
+								 <tr>
+								 	<th></th>
+								 	<th>
+								 		<input type="search" name="teacherName" id="teacherName" ng-model="teacherFilter.teacherName" placeholder="姓名查询" st-search="teacherName" class="input-sm form-control"  />
+								 	</th>
+								 	<th>
+								 		<input type="search" name="mobile" id="mobile" ng-model="teacherFilter.mobile" placeholder="手机号查询" st-search="mobile" class="input-sm form-control" />
+								 	</th>
+								 	<th>
+								 		<select name="partFull" id="partFull" ng-model="teacherFilter.partFull" st-search="partFull" class="input-sm form-control" style="width:120px;">
+											<option value ="" >--请选择--</option>
+											<option value ="1">兼职</option>
+											<option value ="2">全职</option>
+										</select>
+								 	</th>
+								 	<th>
+								 		<input type="search" name="departmentName" id="departmentName" ng-model="teacherFilter.departmentName" st-search="departmentName" style="display: inline-block;" class="input-sm form-control" />
+								 		<img src="img/icon/util/wen.png" class="icon-wen" style="width: 16px;height: 16px" title="可输入其他校区进行查询"/>
+								 	</th>
+								 	<th>
+								 	</th>
+								 	<th>
+								 		<select type="search" name="teacherGrade" id="teacherGrade" ng-model="teacherFilter.teacherGrade" st-search="teacherGrade"  class="input-sm form-control"  style="width:120px;">
+								 			<option value="" >--请选择--</option>
+								 			<option value="1">小学</option>
+								 			<option value="2">初中</option>
+								 			<option value="3">高中</option>
+								 		</select>
+								 	</th>
+								 	<th>
+								 		<select type="search" name="teacherLevel" id = "teacherLevel" ng-model="teacherFilter.teacherLevel" st-search="teacherLevel" class="input-sm form-control"  style="width:120px;">
+								 			<option value="" >--请选择--</option>
+								 			<option value="1">特级教师 </option>
+								 			<option value="2">金牌教师</option>  
+								 			<option value="3">全优教师</option>
+								 			<option value="4">优秀教师</option>
+								 		</select>
+								 	</th>
+								 </tr>
+							 </thead>
+							 <tbody>
+								<tr ng-repeat="row in CStudentSchoolTeacherList.list">
+								    <td>
+								    	<input type="radio" ng-checked="isBtnSelectedTeacher(row)" name="teacherRadio" value="{{$index}}" >
+								    </td>
+									<td>
+										{{row.username}}
+									</td>
+									<td>{{row.mobile}}</td>
+									<td><span ng-if="row.part_full == 1">兼职</span>
+										<span ng-if="row.part_full == 2">全职</span>
+									</td>
+									<td>{{row.deptname}}</td>
+									<td>{{row.subject_name}}</td>
+									<td>{{row.teacher_grade}}</td>
+									<td>
+									   	<span ng-if="row.teacher_level == 1">特级教师</span>
+										<span ng-if="row.teacher_level == 2">金牌教师</span>
+										<span ng-if="row.teacher_level == 3">全优教师</span>
+										<span ng-if="row.teacher_level == 4">优秀教师</span>
+									</td>
+								</tr>
+							 </tbody>
+							 <tbody ng-show="isRemindLoading">
+								  <tr>
+									  <td colspan="8" class="text-center"><div class="loading-indicator"></div></td>
+								  </tr>
+							 </tbody>
+							 <tfoot>
+								<tr>
+									<td class="text-center" st-pagination="t1" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="8">
+									</td>
+								</tr>
+							 </tfoot>
+						 </table>
+					 </div>
+      			</div>
+			<div class="modal-footer">
+			  	<button type="button" class="btn btn-success" ng-click="selectTeacher()">确定</button>
+			  	<button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+			</div>
+    	</div>
+  	</div>
+</div>
+
+

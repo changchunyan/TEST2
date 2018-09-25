@@ -1,0 +1,62 @@
+<style>
+    td{white-space: normal;word-wrap : break-word }
+</style>
+<div class="view-frame" ng-controller="WagClassTimeDetailController as WagClassTimeDetailController">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div  class="view-content user-love">
+        <div class="br-gray ">
+            <h2 class="pl-20 c3">基础数据</h2>
+            <div class="overflow-x">
+                <table class="table table-bordered table-striped table-condensed ">
+                    <thead>
+                    <tr class="br-gray-t">
+                        <th>员工姓名</th>
+                        <th>岗位</th>
+                        <th>手机号</th>
+                        <th>课时数</th>
+                        <th>4小时学员数</th>
+                        <th>续推成功订单数</th>
+                        <th>转课时订单数</th>
+                        <th>转平台订单数</th>
+                        <th>退费订单数</th>
+                    </tr>
+                    </thead>
+                    <tbody ng-show="!isrendLoading">
+                    <tr ng-repeat="row in empDataList">
+
+                        <td>{{row.empName}}</td>
+                        <td>{{row.posName}}</td>
+                        <td>{{row.mobile}}</td>
+                        <td ng-click="courseTimeDetail(row)">{{row.course_num}}</td>
+                        <td ng-click="fourHourOrder(row)">{{row.fourHourStuNum}}</td>
+                        <td ng-click="xtOrder(row)">{{row.renewalsOrderNum}}</td>
+                        <td ng-click="queryTeacherOrderOut(row)">{{row.transferOrderNum}}</td>
+                        <td ng-click="transferPlatOrder(row)">{{row.transferPlatOrderNum}}</td>
+                        <td ng-click="refundOrder(row)">{{row.refundOrderNum}}</td>
+
+                    </tr>
+                    </tbody>
+                    <tbody ng-show="isrendLoading">
+                    <tr>
+                        <td colspan="15" class="text-center">
+                            <div class="loading-indicator"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <!--<tfoot>
+                    <tr>
+                        <td class="text-center" st-pagination="" st-items-by-page="10"
+                            st-template="partials/util/pagination.custom.html" colspan="15">
+                        </td>
+                    </tr>
+                    </tfoot>-->
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+

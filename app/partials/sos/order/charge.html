@@ -1,0 +1,109 @@
+<div class="modal " tabindex="-1" role="dialog" aria-hidden="true" ng-controller="OrderChargeController">
+    <div class="modal-dialog" style="width:60%;min-width: 995px;">
+        <div class="modal-content">
+            <form name="chargeOrderForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header ">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle"></h4>
+                </div>
+                <div class="modal-body mt-modal-order" ng-init="initOrderPayDate()">
+                    <div class="">
+                        <div class="row ">
+                            <div class="col-sm-3 clearfix">
+                                <label for="realTotalAmount" readonly class="control-label">* 实际订单价格</label>
+                                <div class="col-sm-3">
+                                    <input type="text" ng-if="order.orderStatus != 14" name="realTotalAmount"
+                                           ng-pattern="/^[1-9]\d*\b|0$/" disabled id="realTotalAmount"
+                                           ng-value="order.totalPrice - order.privilegeAmount | number:2"
+                                           ng-maxlength="10" required
+                                           class="form-control" style="width:100px;"/>
+                                    <input type="text" ng-if="order.orderStatus == 14" name="realTotalAmount" disabled
+                                           id="realTotalAmount" class="form-control"
+                                           ng-value="order.totalPrice - order.privilegeAmount | number:2"
+                                           style="width:100px;"/>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3 clearfix">
+                                <label for="realPayAmount" class="control-label">* 已付价格</label>
+                                <div class="col-sm-3">
+                                    <input type="text" name="realPayAmount" id="realPayAmount" disabled
+                                           ng-pattern="/^[1-9]\d*\b|0$/" ng-model="order.realPayAmount"
+                                           ng-maxlength="10" class="form-control" style="width:100px;"/>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 clearfix">
+                                <label for="payDueAmount" class="control-label" style="min-width:94px;">* 尾款金额</label>
+                                <div class="col-sm-3">
+                                    <input ng-if="order.orderStatus != 14" type="text" name="payDueAmount"
+                                           id="payDueAmount" disabled
+                                           ng-value="order.totalPrice - order.privilegeAmount - order.realPayAmount -order.supplementaryFee | number:2"
+                                           ng-maxlength="10" class="form-control" style="width:100px;"/>
+                                    <input ng-if="order.orderStatus == 14" type="text" name="payDueAmount"
+                                           id="payDueAmount" disabled
+                                           ng-value="order.totalPrice - order.privilegeAmount - order.realPayAmount -order.supplementaryFee | number:2"
+                                           class="form-control" style="width:100px;"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-dashed"></div>
+                        <div class="row ">
+                            <div class="col-sm-6 form-group">
+                                <label for="supplementaryFee" class="control-label" style="line-height: 4.5;
+    width: 110px;">* 本次收费金额</label>
+                                <div class="col-sm-8 col-md-5 col-lg-6" style="padding:10px;">
+                                    <input type="text" name="supplementaryFee" id="supplementaryFee"
+                                           ng-pattern="/^[1-9]\d*\b|0$/" ng-model="order.supplementaryFee"
+                                           ng-maxlength="10" required class="form-control" ng-change="isSaveShow()"/>
+                                    <input type="hidden" name="orderNo" id="orderNo" ng-model="order.orderNo"
+                                           class="input-sm form-control" readonly/>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                <label data-toggle="tooltip" data-placement="bottom" data-original-title="按所选交费日期统计业绩"
+                                       for="payDueAmount" class="control-label" style="line-height: 3;
+    width: 110px;">* 交费日期</label>
+                                <div class="col-sm-8 col-md-5 col-lg-6">
+                                    <!-- datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="" readonly-->
+                                    <!-- ng-disabled="!isModyfied"-->
+                                    <!--ng-value="order.payDate | date:'yyyy-MM-dd' " name="order.payDate" -->
+                                    <input  ng-disabled="!isModyfied" type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" onchange="" readonly
+                                           id="order.payDate"
+                                           ng-value="order.payDate | date:'yyyy-MM-dd HH:mm:ss' "
+                                           ng-model="order.payDate" required class="form-control"/>
+                                    <!--<label for="payDueAmount" class="control-label" style="    position: absolute;
+    top: 0;
+    right: 13px;"></label>-->
+                                    <!-- ( 收费日期可以修改 ) -->
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table class="table "></table>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+
+                    <button type="button" class="btn btn-success" ng-if="isSaveShowFlag && (!order.paymentTempFlag) "
+                            ng-disabled="chargeOrderForm.$invalid"
+                            ng-click="chargeOrder()">保存
+                    </button>
+
+                    <button type="button" class="btn btn-success"
+                            ng-if="isSaveShowFlag && order.paymentTempFlag && ((order.totalPrice*100 - order.privilegeAmount*100 - order.realPayAmount*100 -order.supplementaryFee*100)/100).toFixed(2)>=0"
+                            ng-disabled="chargeOrderForm.$invalid" ng-click="saveTempChargeRecord()">保存
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $("[data-toggle='tooltip']").tooltip();
+    });
+
+</script>

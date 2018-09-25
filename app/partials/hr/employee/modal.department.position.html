@@ -1,0 +1,31 @@
+<div class="modal admin-permission-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="form">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="deptPosModalTitle"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group" ng-class="{ 'has-error': form.department.$dirty && form.department.$error.required }">
+
+                        <label for="department">部门</label>
+                        <input ng-click="showSelectDepartment()" ng-model="employee.department.name" type="text" name="department" id="department"  class="form-control" required/>
+                        <span ng-show="form.department.$dirty && form.department.$error.required" class="help-block">请选择部门</span>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': form.position.$dirty && form.position.$error.required }">
+                        <label for="position">岗位</label>
+                        <select ng-options="position.name for position in positions track by position.id"
+                                ng-model="employee.position" name="position" id="position" class="form-control" required>
+                        </select>
+                       <span ng-show="form.position.$dirty && form.position.$error.required" class="help-block">请输入权限描述</span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                    <button type="submit" class="btn btn-success c5-lable" ng-click="saveDeptPos()" ng-disabled="form.$invalid">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

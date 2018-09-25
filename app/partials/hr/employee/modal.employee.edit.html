@@ -1,0 +1,42 @@
+<div class="modal hr-employees-detail" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="hideEditView()"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" ng-bind="editModalTitle"></h4>
+            </div>
+            <form name="form">
+	            <div class="modal-body form-horizontal">
+	            	<div>
+	                    <label for="partFull" class="">兼职/全职</label>
+	                    <select ng-model="employee.partFull" name="partFull" id="partFull"
+	                            class="" ng-options="tl.id as tl.name for tl in dictData.partFull" required ng-change="changePart()">
+	                        <option value="">------请选择------</option>
+	                    </select>
+	                    	请先选择（兼职/全职） 属性，再去补全其他信息
+	                </div>
+	               <!--  <div class="yws-container ">
+	                    <div class="yws-right">
+	                        <input type="checkbox" ng-click="departure()">
+	                        <label>已离职</label>
+	                    </div>
+	                </div> -->
+	                <div class="modal-tabs"  ng-if="employee.partFull != undefined">
+	                    <tabs>
+	                        <pane ng-repeat="tab in editTabs track by $index | orderBy : 'id'" title="{{tab.title}}" flag="{{tab.flag}}">
+	                            <div ng-include="tab.template"></div>
+	                        </pane>
+	                    </tabs>
+	                    <!--<div ng-model="editTabs.activeTab" bs-tabs>-->
+	                        <!--<div ng-repeat="tab in editTabs track by $index" title="{{ tab.title }}" ng-include="tab.template" bs-pane></div>-->
+	                    <!--</div>-->
+	               </div>
+	            </div>
+	            <div class="modal-footer">
+	                <button class="btn btn-success c5-lable" ng-click="inputResignationReason(0)" ng-disabled="form.$invalid">保存</button>
+	                <button class="btn btn-default" ng-click="hideEditView()">取消</button>
+	            </div>
+            </form>
+        </div>
+    </div>
+</div>

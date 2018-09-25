@@ -1,0 +1,56 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="transferClassForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">转班：{{transferClassTitle}}</h4>
+                </div>
+                <div class="modal-body">
+                	<div>
+                		<span><label>{{transferClassTitle}}&nbsp;当前就读班级:</label></span>
+                		<span style="float: right;"><input type="checkbox"  ng-click="filterClassStatus()"/>过滤结业班级</span>
+                	</div>
+                    <table class="table table-bordered table-striped" st-table="currentClassTable" st-pipe="getClassAttendenceList">
+                        <thead>
+                            <tr>
+                                <th>班级名称</th>
+                                <th>结业状态</th>
+                                <th>科目</th>
+                                <th>上课时间</th>
+                                <th>老师</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tr ng-repeat="row in studentCurrentClassList">
+                        	<td>{{row.name}}</td>
+                        	<td>{{row.status|classStatus:row.status}}</td>
+                        	<td>{{row.subjectName}}</td>
+                        	<td>
+								<div ng-repeat="element in row.classTimeList">
+                                       <ul>
+                                           <li class="lh20">{{element.startDate}}<span class="pl-10">{{element.startTime}}-{{element.endTime}}</span></li>
+                                       </ul>
+								</div>
+							</td>
+                        	<td>{{row.teacherName}}</td>
+                        	<td class="mt-select" style="width: 20px;">
+                        		<a class="mt-btn cf bg-color-blue br" style="margin: auto;" ng-click="showAvailableClassView(row)">转班</a>
+                        	</td>
+                        </tr>
+                        <tfoot>
+							<tr>
+								<td class="text-center" st-pagination="t1" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="8">
+								</td>
+							</tr>
+						</tfoot>
+                    </table>   
+                </div>
+                <br>
+                <div class="modal-footer">
+                	<button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

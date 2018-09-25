@@ -1,0 +1,44 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class=" modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+               	<h4 class="modal-title" ng-bind="transferModalTitle"></h4>
+            </div>
+            <div class="modal-body">
+            	<form name="form" class="form-horizontal">
+            		<div class="row" style="margin-left:20%">
+		            	<div class="col-sm-8 form-group">
+							<label for="department" class="col-sm-4 control-label">求职部门及岗位：</label>
+		                    <div class="col-sm-8">
+		                        <input id="department" type="text" class="form-control" ng-click="showTransferDepartment()" ng-model="hrTalent.department.name" required />
+		                        <select name="position" id="position" ng-options="position.name for position in positions track by position.id" ng-model="hrTalent.position" class="  form-control" ng-change="getRecruitmentNeed(hrTalent.department.id, hrTalent.position.id)" required >
+		                            <option value="">------请选择------</option>
+		                        </select>
+		                    </div>
+		                    <label for="recruitmentId" class="col-sm-4 control-label" ng-if="hrTalent.showRecruitmentNeed == true">所属招聘需求：</label>
+		                    <div class="col-sm-8" ng-if="hrTalent.showRecruitmentNeed == true">
+		                        <select name="recruitmentId" id="recruitmentId" ng-options="recruitment.responsible.user.name for recruitment in hrTalent.recruitmentList track by recruitment.id"
+		                                ng-model="hrTalent.recruitment" class="  form-control" required>
+		                            <option value="">------请选择------</option>
+		                        </select>
+		                    </div>
+						</div>
+					</div>
+					<div class="row" style="margin-left:20%">
+						<div class="col-sm-8 form-group">
+							<label class="col-sm-4 control-label">* 转让理由：</label>
+							<div class="col-sm-8">
+								<textarea ng-model="hrTalent.transferReason" class="form-control" rows="3" required/>
+							</div>
+						</div>
+					</div>
+				</form>
+				<div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="hideTransferView()">取消</button>
+                    <button type="button" class="btn btn-success" ng-click="saveTransferTalent()" ng-disabled="form.$invalid">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

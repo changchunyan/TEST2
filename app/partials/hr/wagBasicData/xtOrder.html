@@ -1,0 +1,66 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide();"><span aria-hidden="true">&times;</span></button>
+                <h4 >课时数</h4>
+            </div>
+
+
+
+            <div class="modal-body pb-20 ">
+
+                <!-- 表格 -->
+                <div id="exportable" class="br-gray pl-0" style="">
+                    <table   class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th >合同编号</th>
+                            <th >学员姓名</th>
+                            <th >联系方式</th>
+                            <th >订单类型</th>
+                            <th >渠道来源</th>
+                            <th >渠道详情</th>
+                            <th >合同金额</th>
+                            <th >授课教师</th>
+                            <th >签约时间</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr  ng-repeat="row in xtOrderList">
+                            <td >{{row.order_no}}</td>
+                            <td >{{row.stuName}}</td>
+                            <td >{{row.phone}}</td>
+                            <td >{{row.order_type}}</td>
+                            <td >{{row.channelSource}}</td>
+                            <td >{{row.channelDetail}}</td>
+                            <td >{{row.real_pay_amount}}</td>
+                            <td >{{row.teacherName}}</td>
+                            <td >{{row.contractDate}}</td>
+                        </tr>
+                        </tbody>
+                        <!--        <tfoot>
+                                <tr>
+                                    <td colspan="6" class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html"></td>
+                                </tr>
+                                </tfoot>-->
+                    </table>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <!-- <div class="text-center yws-container margin-top-10 margin-bottom-10">
+                     <div class="yws-left">
+                         <button ng-if="type == 3"  type="button" class="btn btn-default" ng-click="createLeads()">创建新意向客户</button>
+                     </div>
+                     <div class="yws-right">
+                         &lt;!&ndash;<button ng-if="type == 1 || type == 3" type="button" class="btn btn-default" ng-click="forwardPlanPage()">对选中学生进行排课</button>&ndash;&gt;
+                         &lt;!&ndash;<button ng-if="type == 2" type="button" class="btn btn-default" ng-click="forwardPlanPage()">对选中一对多进行排课</button>&ndash;&gt;
+                         <button type="button" class="btn btn-default" ng-click="$hide();">取消</button>
+                     </div>
+
+                 </div>-->
+            </div>
+        </div>
+    </div>
+</div>

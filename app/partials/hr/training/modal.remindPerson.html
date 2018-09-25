@@ -1,0 +1,112 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" style="width:790px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" ng-bind="remindPersonModalTitle"></h4>
+            </div>
+			<div class="modal-body of pb-20">
+				<div class="c-select-text">
+					<label for="name" class="search-form-label">员工姓名</label>
+					<input type="text" name="name" id="name" class="search-form-input"
+			        	ng-model="remindFilter.name"  />
+					<label for="employeeId" class="search-form-label">员工工号</label>
+					<input type="text" name="employeeId" id="employeeId" class="search-form-input"
+			       		ng-model="remindFilter.employeeId" />
+					<label for="registeredResidenceType" class="search-form-label">户口性质</label>
+		        	<select ng-model="remindFilter.registeredResidenceType" name="registeredResidenceType" id="registeredResidenceType"
+	                    class="search-form-input" ng-options="tl.id as tl.name for tl in dictData.registeredResidenceType">
+	                	<option value="">------请选择------</option>
+	            	</select> 
+		            <label for="department" class="search-form-label">所属机构</label>
+					<input ng-click="showSelectDepartment()" ng-model="remindFilter.department.name" type="text" name="department" id="department"  
+						class="search-form-input" />
+					<label for="trainingDate" class="search-form-label">所属岗位</label>
+				    <select ng-options="position.name for position in positions track by position.id"
+		                    ng-model="remindFilter.position" name="position" id="position" class="search-form-input">
+		            </select>   
+					<label for="educationDegree" class="search-form-label">学历</label>
+					<select ng-model="remindFilter.educationDegree" name="educationDegree" id="educationDegree"
+					        class="search-form-input" ng-options="tl.id as tl.name for tl in dictData.educationDegree">
+					    <option value="">------请选择------</option>
+					</select>
+					<label for="subject" class="search-form-label">学科</label>
+			       	<select ng-model="remindFilter.subject" name="subject" id="subject" class="search-form-input"
+		                    ng-options="subject.name for subject in subjects">
+		                <option value="">------请选择------</option>
+		            </select>  
+					<label for="workingYears" class="search-form-label">司龄</label>
+					<input type="text" name="workingYears" id="workingYears" class="search-form-input"
+				       ng-model="remindFilter.workingYears"  />    
+					<label for="employmentType" class="search-form-label">在职状态</label>  
+			       	<select ng-model="remindFilter.employmentType" name="employmentType" id="employmentType"
+		                    class="search-form-input" ng-options="tl.id as tl.name for tl in dictData.employmentType">
+		                <option value="">------请选择------</option>
+		            </select>  
+					<label for="employer" class="search-form-label">合同签署单位</label>
+				    <select ng-model="remindFilter.employer" name="employer" id="employer"
+		                    class="search-form-input" ng-options="tl.id as tl.name for tl in dictData.employer">
+		                <option value="">------请选择------</option>
+		            </select>
+					<label for="employmentLevel" class="search-form-label">职级</label>	       
+				    <select ng-model="remindFilter.employmentLevel" name="employmentLevel" id="employmentLevel"
+					        class="search-form-input" ng-options="tl.id as tl.name for tl in dictData.employmentLevel">
+					    <option value="">------请选择------</option>
+					</select>     
+					<label for="starLevel" class="search-form-label">星级</label>
+				    <select ng-model="remindFilter.starLevel" name="starLevel" id="starLevel"
+		                    class="search-form-input" ng-options="tl.id as tl.name for tl in dictData.starLevel">
+		                <option value="">------请选择------</option>
+		            </select>
+					<label for="hiringDateBegin" class="search-form-label">入职日期</label>
+					<input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange=""   
+						name="hiringDateBegin" id="hiringDateBegin" class="search-form-input" ng-model="remindFilter.hiringDateBegin"  />  
+					<label class="search-form-label">——————</label>
+					<input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange=""   
+						name="hiringDateEnd" id="hiringDateEnd" class="search-form-input" ng-model="remindFilter.hiringDateEnd"  />  
+					<label for="contractType" class="search-form-label">合同类型</label>
+					<select ng-model="remindFilter.contractType" name="contractType" id="contractType"
+		                    class="search-form-input" ng-options="tl.id as tl.name for tl in dictData.contractType">
+		                <option value="">------请选择------</option>
+		            </select>    
+					<div class="c_center">
+					    <button class="btn" ng-click=getToBeRemindedPersonByFilter(1)>查询</button>
+					    <button class="btn" ng-click="resetRemindFilter()">重置</button>
+					</div>
+				</div>
+	        	<div style="margin-left:120px;">
+	            	<div style="float:left;">
+	                	<label class="search-form-label">待选择项:({{selectableSize}})</label><br/>
+	                    <select ng-model="addPerson" multiple style="width: 200px;height:172px;" >
+	                         <option ng-repeat="user in selectableUsers track by $index" value="{{user.id}}" ng-dblclick="togglePerson(user)">
+	                            {{user.name}}
+	                    </select><br/>
+	                    <input ng-if="loadMoreFlag == true" type="button" ng-click="loadMore()" style="width: 200px;margin-top:-5px;border-top:none;background:#CCCCCC" value="》》》点击加载更多》》》" />
+	            		<input ng-if="loadMoreFlag == false" type="button"  style="width: 200px;margin-top:-5px;border-top:none;background:#CCCCCC" value="》》》无更多结果可加载》》》" disabled/>
+	            	</div>
+	                <div style="float:left;width:100px;margin-top:50px;margin-left:20px;">
+	                    <button type="button" class="btn btn-default" ng-click="addPersonToRight(addPerson)">添加---&gt;</button>
+	                    <br/>
+	                    <button  type="button" class="btn btn-default" ng-click="removePersonFromRight(removePerson)">删除&lt;---</button>
+	                    <br/>
+	                    <button  type="button" class="btn btn-default" ng-click="addAllToRight()">全部添加</button>
+	                    <br/>
+	                    <button  type="button" class="btn btn-default" ng-click="removeAllFromRight()">全部删除</button>
+	                </div>
+	                <div style="float:left;">
+	                	<label class="search-form-label">已选择项:({{selectedUsers.length}})</label><br/>
+	                    <select ng-model="removePerson" multiple style="width: 200px;height:172px;">
+	                        <option ng-repeat="user in selectedUsers track by $index" value="{{user.id}}" ng-dblclick="togglePerson(user)">
+	                            {{user.name}}
+	                    </select>
+	                </div>
+	       		</div>
+			</div>
+		    <div class="modal-footer">
+		    		<button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+		        	<button type="button" class="btn btn-success c5-lable" ng-click="saveSelectPerson()">保存</button>
+		    	</div>
+		    </div>
+	    </div>
+    </div>
+</div>

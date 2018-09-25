@@ -1,0 +1,114 @@
+<div class="modal oms-record-modal" tabindex="-1" role="dialog"
+	aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form name="form">
+				<div class="modal-header">
+					<button type="button" class="close" aria-label="Close"
+						ng-click="$hide()">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" ng-bind="tsmodalTitle"></h4>
+				</div>
+				<div class="modal-body yws-container pb-20">
+					<div class="yws-left  br-gray pl-0">
+						<table class="table table-bordered table-striped table-condensed mt-table1"
+							st-pipe="getSelectedTeacherList" st-table="teacherLists">
+							<thead class="table table-bordered table-striped table-condensed">
+								<tr>
+									<th>选择</th>
+									<th>老师姓名</th>
+									<th>手机</th>
+									<th>全职/兼职</th>
+									<th>校区</th>
+									<th>科目</th>
+									<th>年级段</th>
+									<th>师资等级</th>
+								</tr>
+								<tr>
+									<th></th>
+									<th><input type="search" name="teacher_name"
+										id="teacher_name" ng-model="teacherFilter2.teacher_name"
+										placeholder="姓名查询" st-search="teacher_name"
+										class="input-sm form-control" /></th>
+									<th><input type="search" name="teacher_phone" id="teacher_phone"
+										ng-model="teacherFilter2.teacher_phone" placeholder="手机号查询"
+										st-search="mobile" class="input-sm form-control" /></th>
+									<th><select st-search="part_full" ng-model="teacherFilter2.part_full" name="part_full" id="part_full"
+						                        class="input-sm form-control" ng-options="tl.id as tl.name for tl in dictData.partFull">
+						                    <option value="">---请选择---</option>
+						                </select></th>
+									<th><input type="search" name="school"
+										id="school" ng-model="school"
+										style="display: inline-block;"
+										class="input-sm form-control" disabled/> 
+									</th>
+									<th>
+										<!--科目--> <select st-search="subSt"
+										ng-model="teacherFilter2.subject_id" name="subject_id"
+										id="subject_id" class="input-sm form-control"
+										ng-options="option.id as option.name for option in allSubject"
+										type="search">
+											<option value="">-- 请选择 --</option>
+									</select>
+									</th>
+									<th><select st-search="grade" ng-model="teacherFilter2.grade" name="grade" id="grade"
+					                        class="input-sm form-control" ng-options="tl.id as tl.name for tl in dictData.grade">
+					                    <option value="">---请选择---</option>
+					                </select></th>
+									<th>
+										<!-- 1:特级教师  2:金牌教师  3:全优教师  4:优秀教师--> 
+										<select st-search="teacher_level" ng-model="teacherFilter2.teacher_level" name="teacher_level" id="teacher_level"
+						                        class="input-sm form-control" ng-options="tl.id as tl.name for tl in dictData.teacherLevel">
+						                    <option value="">---请选择---</option>
+						                </select>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="row in teacherLists track by $index">
+									<td>
+		                            	<input type="radio" id="selectedTeacher" name="selectedTeacher" ng-model="temp" value="{{$index}}"></input>
+		                            </td>
+									<td>{{row.username}}</td>
+									<td>{{row.mobile}}</td>
+									<td>
+										<span ng-if="row.part_full == 1">兼职</span> 
+										<span ng-if="row.part_full == 2">全职</span>
+									</td>
+									<td>{{row.deptname}}</td>
+									<td>{{row.subject_name}}</td>
+									<td>{{row.teacher_grade}}</td>
+									<td ng-if="row.teacher_level == 1">特级教师</td>
+									<td ng-if="row.teacher_level == 2">金牌教师</td>
+									<td ng-if="row.teacher_level == 3">全优教师</td>
+									<td ng-if="row.teacher_level == 4">优秀教师</td>
+									<td ng-if="!row.teacher_level"></td>
+								</tr>
+							</tbody>
+							<tbody ng-show="isLoading">
+					            <tr>
+					                <td colspan="8" class="text-center"><div class="loading-indicator"></div>
+					                </td>
+					            </tr>
+					        </tbody>
+							<tfoot>
+								<tr>
+									<td class="text-center" st-pagination=""
+										st-items-by-page="10"
+										st-template="partials/util/pagination.custom.html" colspan="8">
+									</td>
+								</tr>
+							</tfoot>
+						</table>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="text-center">
+						<button class="btn btn-success" ng-click="teacherSelected()">确定</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

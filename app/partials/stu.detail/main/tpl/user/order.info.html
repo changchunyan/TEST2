@@ -1,0 +1,372 @@
+<div class="mt-input-group pra br-0">
+    <!--<div class="mt-modal-group">-->
+        <!--<div class="col-33">-->
+            <!--<label>渠道来源:</label>-->
+            <!--<span>{{detailForUpdate.channel1Name}}</span>-->
+
+        <!--</div>-->
+        <!--<div class="col-33">-->
+            <!--<label>来源详情:</label>-->
+            <!--<span>{{detailForUpdate.channel2Name}}</span>-->
+
+        <!--</div>-->
+        <!--<div class="col-33 cl">-->
+            <!--<label>创建人:</label>-->
+            <!--<span>{{detailForUpdate.create_by_name}}</span>-->
+        <!--</div>-->
+        <!--<div class="col-33">-->
+            <!--<label>推荐人:</label>-->
+            <!--<span>{{detailForUpdate.inviter_name}}</span>-->
+        <!--</div>-->
+    <!--</div>-->
+</div>
+<div class="modal-body mt-modal-recording">
+    <tabs pane-changed="getTabIndex(selectedPane)">
+        <pane title="线下订单信息">
+            <div class="table-responsive">
+                <!--<div class="table-title">订单列表</div>-->
+                <table class="table table-bordered table-striped table-condensed mt-table1"
+                       st-pipe="callServerNormalOrderTab" st-table="normalOrders">
+                    <thead>
+                    <tr>
+                        <th>合同编号</th>
+                        <th>订单类型</th>
+                        <th>订单性质</th>
+                        <th>订单状态</th>
+                        <th>充值金额</th>
+                        <th>剩余金额</th>
+                        <th>总课时</th>
+                        <th>剩余课时</th>
+                        <th>总价</th>
+                        <th>实际总价</th>
+                        <th>优惠金额</th>
+                        <th>实付金额</th>
+                        <th>尾款金额</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody ng-show="!isNormalOrderLoading">
+                    <tr ng-repeat="row in normalOrders">
+                        <td  ng-controller="OrderManagementController">
+                            <div ng-if="row.hasSlaveInfos" ng-click="getSuborders(row)"><img src="img/more.png?v=1.0" style="width: 20px;">&nbsp;{{row.orderNo}}</div>
+                            <div ng-if="!row.hasSlaveInfos" >{{row.orderNo}}</div>
+                        </td>
+                       <!-- <td ng-if="row.orderNo==row.originalOrderNo"></td>
+                        <td ng-if="row.orderNo!=row.originalOrderNo">{{row.orderNo}}</td>-->
+                        <td ng-show="row.orderType == 1">新签</td>
+                        <td ng-show="row.orderType == 2">续费</td>
+                        <td ng-show="row.orderType == 3">返课</td>
+                        <td ng-show="row.orderType == 4">转课</td>
+                        <td ng-show="row.orderType == 5">推荐</td>
+                        <td ng-show="row.orderType == 6">试听</td>
+                        <td ng-show="row.orderType == 8">赠课</td>
+                        <td ng-if="row.orderCategory == 1">买课程</td>
+                        <td ng-if="row.orderCategory == 3">充值</td>
+                        <!-- 订单状态 -->
+                        <td ng-show="row.orderStatus == 1">录入订单</td>
+                        <td ng-show="row.orderStatus == 2">支付定金</td>
+                        <td ng-show="row.orderStatus == 3">审核通过</td>
+                        <!--<td ng-show="row.orderStatus == 4">审核未通过 </td>-->
+                        <td ng-show="row.orderStatus == 5">已退单</td>
+                        <td ng-show="row.orderStatus == 6">已转课</td>
+                        <td ng-show="row.orderStatus == 7">已生成合同</td>
+                        <td ng-show="row.orderStatus == 8">已结课</td>
+                        <td ng-show="row.orderStatus == 9">已退费</td>
+                        <td ng-show="row.orderStatus == 10">退费中</td>
+                        <td ng-show="row.orderStatus == 11">转课中</td>
+                        <td ng-show="row.orderStatus == 12">已关闭</td>
+                        <td ng-if = "row.orderCategory == 3">{{row.totalPrice}}</td>
+                        <td ng-if = "row.orderCategory == 3">{{row.additionalAmount}}</td>
+                        <td ng-if = "row.orderCategory != 3"></td>
+                        <td ng-if = "row.orderCategory != 3"></td>
+                        <td>{{row.originalNumSum}}</td>
+                        <td>{{row.courseNumSum}}</td>
+                        <td ng-if = "row.orderCategory == 3">{{row.totalPrice}}</td>
+                        <td ng-if = "row.orderCategory != 3">{{(row.realTotalAmount+row.privilegeAmount) | number:2}}</td>
+                        <td>{{row.realTotalAmount}}</td>
+                        <td>{{row.privilegeAmount}}</td>
+                        <td>{{row.realPayAmount}}</td>
+                        <td>{{row.payDueAmount}}</td>
+                        <td ng-controller="OrderManagementController">
+                            <a class="showUI" id="nw2+{{$index}}" ng-click="nw2[$index]=true"><span
+                                    class="glyphicon glyphicon-caozuo" title="操作"></span></a>
+                            <bubble ng-if="nw2[$index]" for="nw2+{{$index}}" align="bottom"
+                                    close="nw2[$index]=false" close-action="outerchick "
+                                    ng-mouseleave="nw2[$index]=false;" >
+                                <ul>
+                                    <!--<li ng-click="showOrderDetails(row)">-->
+                                    <li ng-click="detailOrder(row)">
+                                        <a>订单详情</a>
+                                    </li>
+                                    <!-- <li ng-if="row.orderCategory !=3 && row.orderStatus != 10 && row.orderStatus != 8
+                                        && row.orderStatus != 9 && row.orderStatus != 5 && row.orderStatus != 6 && row.orderStatus != 11
+                                        && row.orderType != 3 && row.orderType != 4 && showPermissions('RefundApply')"
+                                        ng-click="applyRefund(row.orderNo)">
+                                        <a>申请退费</a>
+                                    </li> -->
+                                    <li ng-if="row.orderCategory !=3 && row.orderStatus == 3
+                                                && row.orderType != 3 && row.orderType != 4 && showPermissions('RefundApply')"
+                                        ng-click="applyRefund(row)">
+                                        <a>申请退费</a></li><!--.orderNo-->
+
+                                    <li ng-if="row.orderStatus == 10 " ng-click="cancleRefund(row)">
+                                        <a>撤销退费</a>
+                                    </li>
+
+
+                                    <!-- 2016/10/10 -->
+                                    <!--<li ng-if="(row.orderStatus == 1 || row.orderStatus == 2) && row.orderType != 4"
+                                        ng-click="chargeOrder(row)">
+                                        <a>收费</a>
+                                    </li>-->
+                                    <li ng-if="(row.orderCategory == 1 || row.orderCategory == 3) && (row.orderStatus == 1 || row.orderStatus == 2) && row.orderType != 4 && showPermissions('OrderEdit') && row.payAllDueAmount!==0"
+                                        ng-click="ordersMoreChargeInit(row)">
+                                        <a>收费</a>
+                                    </li>
+                                    <li ng-if="row.orderCategory == 1&&(row.orderStatus == 1 || row.orderStatus == 2) && row.orderType != 4"
+                                        ng-click="editOrder(row)">
+                                        <a>修改</a>
+                                    </li>
+                                    <li ng-if="row.orderCategory == 3 && (row.orderStatus == 1 || row.orderStatus == 2) && row.orderType != 4 && showPermissions('OrderEdit')"
+                                        ng-click="editOrderTopup(row)">
+                                        <a>修改</a>
+                                    </li>
+                                    <li ng-if="(row.orderCategory == 1||row.orderCategory == 3) && (row.orderStatus == 1 || row.orderStatus == 2) && row.orderType != 4 && showPermissions('OrderAudit')  && canOperateMore"
+                                        ng-click="detailOrder(row,7)">
+                                        <!--ng-click="auditOrder(row)"-->
+                                        <a>审核</a>
+                                    </li>
+<!--
+                                    <li ng-if="(row.orderStatus == 1 || row.orderStatus == 2) && row.orderType != 4 && showPermissions('OrderAudit')"
+                                        ng-click="auditOrder(row)" >
+                                        <a>审核</a>
+                                    </li>-->
+                                   <!-- <li ng-if="(row.orderStatus == 1 || row.orderStatus == 2) && row.orderType != 4  && showPermissions('OrderAudit')"
+                                        ng-click="chargeBackOrder(row)">
+                                        <a>退单</a>
+                                    </li>-->
+                                    <li ng-if="row.orderFlag != 1 && row.orderCategory == 1 && (row.orderStatus == 1 || row.orderStatus == 2 || (row.orderStatus == 3 && hasChargeBackOrderPermission ) ) && row.orderType != 4 && showPermissions('OrderAudit')"
+                                        ng-click="detailOrder(row,8)"
+                                    >
+                                        <!--ng-click="chargeBackOrder(row)"-->
+                                        <a>退单</a>
+                                    </li>
+
+                                    <li ng-if="row.orderStatus == 11"
+                                        ng-click="auditTransferOrderBackNew(row)">
+                                        <a>撤销转课</a>
+                                    </li>
+                                </ul>
+                            </bubble>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tbody ng-show="isNormalOrderLoading">
+                    <tr>
+                        <td colspan="7" class="text-center">
+                            <div class="loading-indicator"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td class="text-center" st-pagination="" st-items-by-page="10"
+                            st-template="partials/util/pagination.custom.html"
+                            st-template="partials/util/pagination.custom.html" colspan="12">
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </pane>
+        <pane title="线上订单信息">
+            <div class="table-responsive">
+                <!--<div class="table-title">订单列表</div>-->
+                <table class="table table-bordered table-striped table-condensed mt-table1"
+                       st-pipe="callServerO2OOrderTab" st-table="o2oOrders">
+                    <thead>
+                    <tr>
+                        <th>订单号</th>
+                        <th>订单类型</th>
+                        <th>订单状态</th>
+                        <th>成交时间</th>
+                        <th>教师</th>
+                        <th>上课方式</th>
+                        <th>授课地点</th>
+                        <th>优惠后金额</th>
+                        <th>优惠金额</th>
+                        <th>总课时</th>
+                        <th>剩余课时</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody ng-show="!iso2oOrderLoading">
+                    <tr ng-repeat="row in o2oOrders">
+                        <td>{{row.orderNo}}</td>
+                        <td>线上O2O</td>
+                        <td ng-show="row.orderStatus == 1">待支付</td>
+                        <td ng-show="row.orderStatus == 3">进行中</td>
+                        <td ng-show="row.orderStatus == 6">已转课</td>
+                        <td ng-show="row.orderStatus == 8">已完成</td>
+                        <td ng-show="row.orderStatus == 9">已退款</td>
+                        <td ng-show="row.orderStatus == 10">退款中</td>
+                        <td ng-show="row.orderStatus == 11">转课中</td>
+                        <td ng-show="row.orderStatus == 12">已关闭</td>
+                        <td>{{row.tradeAt | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                        <td>{{row.teacherName}}</td>
+                        <td ng-show="row.classType == 1">教师上门</td>
+                        <td ng-show="row.classType == 2">校区上课</td>
+                        <td ng-show="row.classType == 3">选择校区</td>
+                        <td ng-show="row.classType == 4">协商地点</td>
+                        <td>{{row.classAddress}}</td>
+                        <td>{{row.realPayAmount}}</td>
+                        <td>{{row.privilegeAmount}}</td>
+                        <td>{{row.originalNum}}</td>
+                        <td>{{row.courseNum}}</td>
+                        <td>
+                            <a class="showUI" id="nw3+{{$index}}" ng-click="nw3[$index]=true"><span
+                                    class="glyphicon glyphicon-caozuo" title="操作"></span></a>
+                            <bubble ng-if="nw3[$index]" for="nw3+{{$index}}" align="bottom"
+                                    close="nw3[$index]=false" close-action="outerchick "
+                                    ng-mouseleave="nw3[$index]=false;">
+                                <ul>
+                                    <li ng-click="showOrderDetails(row)">
+                                        <a>订单详情</a>
+                                    </li>
+                                    <li ng-if="row.orderStatus != 10 && row.orderStatus != 9
+                                            	&& row.orderStatus != 5 && row.orderStatus != 6
+                                            	&& row.orderType != 3 && row.orderType != 4
+                                            	&& showPermissions('RefundApply')" ng-click="applyRefund(row.orderNo,row.orderCategory)">
+                                        <a>申请退费</a>
+                                    </li>
+                                    <li ng-if="row.orderStatus == 10" ng-click="cancleRefund(row)">
+                                        <a>撤销退费</a>
+                                    </li>
+                                </ul>
+                            </bubble>
+                            <!-- <a ng-click="showOrderDetails(row)"><span class="glyphicon glyphicon-plus" title="订单详情"></span></a>
+                            <a ng-if="row.orderStatus != 10 && row.orderStatus != 9 && row.orderStatus != 5 && row.orderStatus != 6 && row.orderType != 3 && row.orderType != 4 && showPermissions('RefundApply')"
+                               ng-click="applyRefund(row.orderNo)">
+                                <span class="glyphicon glyphicon-tui" title="申请退费"></span>
+                            </a> -->
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tbody ng-show="iso2oOrderLoading">
+                    <tr>
+                        <td colspan="7" class="text-center">
+                            <div class="loading-indicator"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td class="text-center" st-pagination="" st-items-by-page="10"
+                            st-template="partials/util/pagination.custom.html"
+                            st-template="partials/util/pagination.custom.html" colspan="12">
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </pane>
+        <pane title="交费信息">
+            <div class="table-responsive">
+                <!--<div class="table-title">交费列表</div>-->
+                <table class="table table-bordered table-striped table-condensed mt-table1" st-pipe="callServerPaymentTab"
+                       st-table="payments">
+                    <thead>
+                    <tr>
+                        <th>合同编号</th>
+                        <th>交费类型</th>
+                        <th>交费日期</th>
+                        <th>交费金额</th>
+                        <th>尾款金额</th>
+                        <th>经办人</th>
+                    </tr>
+                    </thead>
+                    <tbody ng-show="!isPaymentLoading">
+                    <tr ng-repeat="row in payments">
+                        <td>{{row.orderNo}}</td>
+                        <td ng-if="row.orderCategory == 1">买课程</td>
+                        <td ng-if="row.orderCategory == 3">充值</td>
+                        <td>{{row.payDate | date:'yyyy-MM-dd'}}</td>
+                        <td>{{row.payAmount}}</td>
+                        <td>{{row.payDueAmount}}</td>
+                        <td>{{row.operatorName}}</td>
+                    </tr>
+                    </tbody>
+                    <tbody ng-show="isPaymentLoading">
+                    <tr>
+                        <td colspan="12" class="text-center">
+                            <div class="loading-indicator"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td class="text-center" st-pagination="" st-items-by-page="10"
+                            st-template="partials/util/pagination.custom.html"
+                            st-template="partials/util/pagination.custom.html" colspan="12">
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </pane>
+        <pane title="返课信息">
+            <div class="table-responsive">
+                <!--<div class="table-title">返课列表</div>-->
+                <table class="table table-bordered table-striped table-condensed mt-table1"
+                       st-pipe="callServerRestitutionTab" st-table="restitutions">
+                    <thead>
+                    <tr>
+                        <th>返课编号</th>
+                        <th>合同编号</th>
+                        <!--<th>返课学员姓名</th>-->
+                        <!--<th>联系方式</th>-->
+                        <th>返课课时</th>
+                        <th>返课原因</th>
+                        <!--<th>返课时间</th>-->
+                        <th>返课状态</th>
+                        <th>返课添加人</th>
+                    </tr>
+                    </thead>
+                    <tbody ng-show="!isRestitutionLoading">
+                    <tr ng-repeat="row in restitutions">
+                        <td>{{row.agreementNo}}</td>
+                        <td>{{row.orderNo}}</td>
+                        <!--<td>{{row.name}}</td>
+                        <td>{{row.phone}}</td>-->
+                        <td>{{row.originalNum}}</td>
+                        <td>{{row.reason}}</td>
+                        <!--<td>{{row.contractStartDate | date:'yyyy-MM-dd' }}</td>-->
+                        <td ng-show="row.orderStatus == 1">未审核</td>
+                        <td ng-show="row.orderStatus == 2">已审核</td>
+                        <td ng-show="row.orderStatus == 4">已退单</td>
+                        <td>{{row.operatorName}}</td>
+                    </tr>
+                    </tbody>
+                    <tbody ng-show="isRestitutionLoading">
+                    <tr>
+                        <td colspan="12" class="text-center">
+                            <div class="loading-indicator"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td class="text-center" st-pagination="" st-items-by-page="10"
+                            st-template="partials/util/pagination.custom.html"
+                            st-template="partials/util/pagination.custom.html" colspan="12">
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </pane>
+        <pane title="兑换余额信息">
+            <div ng-include="'partials/sos/customer/tab.exchangeBalanceRecord.html?v=1.2'"></div>
+        </pane>
+    </tabs>
+</div>

@@ -1,0 +1,120 @@
+<div class="view-frame" ng-controller="BdInvitationController as idc">
+    <div class="view-left">
+        <nav-side menu-data="menu.subMenu"></nav-side>
+    </div>
+    <div ng-show="isList" class="view-content">
+        <div>
+            <div>
+                <ul class="breadcrumb">
+                    <li><a href="#/">首页</a> <span class="divider"></span></li>
+                    <li><a href="#/bd-admin">招商客户关系管理</a> <span class="divider"></span></li>
+                    <li><a ng-click="hideAddView()">邀约管理</a> <span class="divider"></span></li>
+                    <li class="active">邀约列表</li>
+                </ul>
+            </div>
+            <div class="operations-panel">
+            </div>
+        </div>
+        <br/><br/>
+
+        <tabs>
+            <pane title="邀约列表">
+                <div class="table-responsive" style="overflow:scroll;overflow-y:hidden">
+                    <table class="table table-bordered table-striped table-condensed" st-pipe="getBdInvitationList" st-table="bdInvitationList">
+                        <thead>
+                        <tr>
+                            <th>操作</th>
+                            <th>leads姓名</th>
+                            <th>电话</th>
+                            <th>邀约状态</th>
+                            <th>省</th>
+                            <th>市</th>
+                            <th>区(县)</th>
+                            <th>邀约时间</th>
+                            <th>预到访时间</th>
+                            <th ng-show="showPermissions('BdInvitationStateModify')">是否到访</th>
+                            <th>邀约人</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th><input st-search="bdInvitationFilter.name" ng-model="bdInvitationFilter.name" ng-maxlength="20" placeholder="" class="input-sm form-control" type="search"/></th>
+                            <th><input ng-if="!showPermissions('BdLeadsAllot')" st-search="bdInvitationFilter.phone" ng-model="bdInvitationFilter.phone" ng-maxlength="12" placeholder="" class="input-sm form-control" type="search"/></th>
+                            <th>
+                                <select st-search="bdInvitationFilter.state" ng-model="bdInvitationFilter.state"
+                                        name="state" id="state" class="input-sm form-control"
+                                        ng-options="option.code as option.name for option in invitationStateList" type="search">
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </th>
+                            <th ng-if="false"><input st-search="bdInvitationFilter.email" ng-model="bdInvitationFilter.email" placeholder="" class="input-sm form-control" type="search"/></th>
+                            <th>
+                                <select st-search="bdInvitationFilter.province" ng-model="bdInvitationFilter.province"
+                                        name="province" id="province" class="input-sm form-control"
+                                        ng-options="option.provinceCode as option.provinceName for option in provinceList" ng-change="privinceChangeForFilter()" type="search">
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </th>
+                            <th>
+                                <select ng-model="bdInvitationFilter.city" st-search="bdInvitationFilter.city"
+                                        name="city" id="city" class="input-sm form-control"
+                                        ng-options="option.cityCode as option.cityName for option in cityList" ng-change="cityChangeForFilter()" type="search">
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </th>
+                            <th>
+                                <select ng-model="bdInvitationFilter.area" st-search="bdInvitationFilter.area"
+                                        name="area" id="area" class="input-sm form-control"
+                                        ng-options="option.areaCode as option.areaName for option in areaList" type="search">
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </th>
+                            <th><input ng-model="bdInvitationFilter.invitate_time" st-search="bdInvitationFilter.invitate_time"
+                                       placeholder="" type="text" datepicker="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="" readonly=""  class="input-sm form-control" /></th>
+                            <th><input ng-model="bdInvitationFilter.receive_time" st-search="bdInvitationFilter.receive_time"
+                                       placeholder="" type="text" datepicker="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="" readonly=""  class="input-sm form-control" /></th>
+                            <th ng-show="showPermissions('BdInvitationStateModify')"></th>
+                            <th><input st-search="bdInvitationFilter.invitator_name" ng-model="bdInvitationFilter.invitator_name"
+                                       placeholder="" class="input-sm form-control" type="text" ng-maxlength="20"/></th>
+                        </tr>
+                        </thead>
+                        <tbody ng-show="!isBdInvitationLoading">
+                        <tr ng-repeat="row in bdInvitationList">
+                            <td style="width:47px">
+                                <a ng-click="removeInvitation(row)" title="删除"><span class="glyphicon glyphicon-delete"></span></a>
+                                <!--<a ng-click="visitInvitation(row)" ng-if="row.state_name!='已到访'"><span class="glyphicon glyphicon-ok"></span></a>-->
+                            </td>
+                            <td>{{row.name}}</td>
+                            <td>{{row.phone}}</td>
+                            <td>{{row.state_name}}</td>
+                            <td>{{row.province_name}}</td>
+                            <td>{{row.city_name}}</td>
+                            <td>{{row.area_name}}</td>
+                            <td >{{ row.invitate_time | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+                            <td >{{ row.receive_time | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+                            <td ng-show="showPermissions('BdInvitationStateModify')">
+                                <button ng-show="row.state == 0" class="btn" ng-click="markVisited(row)">已到访</button>
+                                <button ng-show="row.state == 0" class="btn" ng-click="markUnvisited(row)">未到访</button>
+                            </td>
+                            <td>{{row.invitator_name}}</td>
+                        </tr>
+                        </tbody>
+                        <tbody ng-show="isLoading">
+                        <tr>
+                            <td colspan="10" class="text-center"><div class="loading-indicator"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="12">
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </pane>
+        </tabs>
+    </div>
+
+</div>
+

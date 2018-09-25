@@ -1,0 +1,238 @@
+<div class="default-box form-horizontal yws-container">
+    <div class="col-sm-4">
+        <label for="division" class="col-sm-4 control-label">事业部：</label>
+        <div class="col-sm-8 form-group">
+            <select ng-model="searchModel.divisionId" name="divisionId" id="divisionId" class="form-control"
+            	ng-options="division.id as division.name for division in divisions"
+            	ng-change="getDistrictsByDivision(searchModel.divisionId)" ng-disabled="!canQueryChildDivisions">
+                <option value="">------全部------</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <label for="schoolArea" class="col-sm-4 control-label">大区：</label>
+        <div class="col-sm-8 form-group">
+            <select ng-model="departmentArea.id" name="departmentAreaId" id="departmentAreaId" class="form-control"
+                    ng-options="departmentArea.id as departmentArea.name for departmentArea in departmentAreas"
+                    ng-change="getRegionByDistrict(departmentArea.id)" ng-disabled="!canQueryChildDistricts">
+                <option value="">------全部------</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-sm-4">
+    	<label for="schoolArea" class="col-sm-4 control-label">区域：</label>
+    	<div class="col-sm-8 form-group">
+	    	<select ng-model="departmentRegion.id" name="departmentRegionId" id="departmentRegionId" class="form-control"
+	                 ng-options="departmentRegion.id as departmentRegion.name for departmentRegion in regions"
+	                 ng-change="getSchoolsByArea(departmentRegion.id)" ng-disabled="!canQueryChildRegions">
+	             <option value="">------全部------</option>
+	     	</select>
+     	</div>
+	</div>
+	<div class="col-sm-4">
+      	<label for="schoolType" class="col-sm-4 control-label">校区类型：</label>
+      	<div class="col-sm-8 form-group">
+	        <select ng-model="searchModel.schoolType" name="schoolType" id="schoolType" class="form-control"
+	        	ng-change="getSchoolsByType(searchModel.schoolType)" ng-disabled="!canQueryChildSchools">
+	            <option value="">------全部------</option>
+	            <option value="1">直营校区</option>
+	            <option value="2">合作校区</option>
+	            <option value="3">直盟校区</option>
+	        </select>
+      	</div>
+  	</div>
+  	<div class="col-sm-4">
+		<label for="schoolProvince" class="col-sm-4 control-label">省：</label>
+        <div class="col-sm-8 form-group">
+            <select ng-model="searchModel.schoolProvince" name="schoolProvince" id="schoolProvince" class="form-control"
+                    ng-options="province.provinceCode as province.provinceName for province in provinces"
+                    ng-change="getCitysByProvinceCode(searchModel.schoolProvince)" ng-disabled="!canQueryChildSchools">
+                <option value="">------全部------</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-sm-4">
+       	<label for="schoolCity" class="col-sm-4 control-label">城市：</label>
+        <div class="col-sm-8 form-group">
+            <select ng-model="searchModel.schoolCity" name="schoolCity" id="schoolCity" class="form-control"
+                    ng-options="city.cityCode as city.cityName for city in cities" ng-disabled="!canQueryChildSchools">
+                <option value="">------全部------</option>
+            </select>
+        </div>
+    </div>
+	<div class="col-sm-4">
+        <label for="schoolName" class="col-sm-4 control-label">校区：</label>
+        <div class="col-sm-8 form-group">
+	        <select ng-model="searchModel.schoolId" name="schoolId" id="schoolId" class="form-control"
+	                ng-options="school.id as school.name for school in departmentSchools" ng-disabled="!canQueryChildSchools">
+	            <option value="">------全部------</option>
+	        </select>
+	    </div>
+    </div>
+    <div class="col-sm-4">
+        <label for="gradeName" class="col-sm-4 control-label">年级：</label>
+        <div class="col-sm-8 form-group">
+	        <select ng-model="searchModel.gradeName" name="gradeName" id="gradeName" class="form-control"
+	                ng-options="grade.name as grade.name for grade in grades">
+	            <option value="">------全部------</option>
+	        </select>
+	    </div>
+    </div>
+    <div class="col-sm-4">
+        <label for="subjectName" class="col-sm-4 control-label">科目：</label>
+        <div class="col-sm-8 form-group">
+	        <select ng-model="searchModel.subjectName" name="subjectName" id="subjectName" class="form-control"
+	                ng-options="subject.name as subject.name for subject in subjects">
+	            <option value="">------全部------</option>
+	        </select>
+	    </div>
+    </div>
+    <div class="col-sm-4">
+        <label for="teacherName" class="col-sm-4 control-label">教师姓名：</label>
+        <div class="col-sm-8 form-group">
+	        <input ng-model="searchModel.teacherName" type="text" name="teacherName" id="teacherName"
+	               class="form-control"/>
+	    </div>
+    </div>
+    <div class="col-sm-4">
+        <label for="studentName" class="col-sm-4 control-label">学生姓名：</label>
+        <div class="col-sm-8 form-group">
+	        <input ng-model="searchModel.studentName" type="text" name="studentName" id="studentName"
+	               class="form-control"/>
+	    </div>
+    </div>
+    <div class="col-sm-4">
+        <label for="improvePointRatio" class="col-sm-4 control-label">提分：</label>
+        <div class="col-sm-8 form-group">
+	        <select ng-model="searchModel.knowledgeMasterGrade" name="knowledgeMasterGrade" id="knowledgeMasterGrade" class="form-control">
+	            <option value="">------全部------</option>
+                <option value="1">是</option>
+                <option value="0">否</option>
+	        </select>
+	    </div>
+    </div>
+    <div class="col-sm-4">
+        <label for="satisfiedRatio" class="col-sm-4 control-label">满意：</label>
+        <div class="col-sm-8 form-group">
+	        <select ng-model="searchModel.summaryPlanGrade" name="summaryPlanGrade" id="summaryPlanGrade" class="form-control">
+	            <option value="">------全部------</option>
+                <option value="1">是</option>
+                <option value="0">否</option>
+	        </select>
+	    </div>
+    </div>
+    <div class="col-sm-4">
+        <label for="recommendation" class="col-sm-4 control-label">学员建议：</label>
+        <div class="col-sm-8 form-group">
+	        <input ng-model="searchModel.recommendation" type="text" name="recommendation" id="recommendation"
+	               class="form-control"/>
+	    </div>
+    </div>
+    <div class="col-sm-4">
+        <label for="statTime" class="col-sm-4 control-label">评价日期：</label>
+        <div class="col-sm-8 form-group">
+	        <input ng-model="searchModel.evaluateStartTime" type="text" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',readOnly:true})" 
+		            	onchange="" name="evaluateStartTime" id="evaluateStartTime"  class="search-form-label"/>
+		            到
+	        <input ng-model="searchModel.evaluateEndTime" type="text" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',readOnly:true})" 
+		            	onchange="" name="evaluateEndTime" id="evaluateEndTime" class="search-form-label"/>
+		</div>
+    </div>
+    <div class="col-sm-4">
+        <label for="lessonStartDate" class="col-sm-4 control-label">上课日期：</label>
+        <div class="col-sm-8 form-group">
+	        <input ng-model="searchModel.haveClassTime" type="text" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',readOnly:true})" 
+		            	onchange="" name="haveClassTime" id="haveClassTime" class="search-form-label"/>
+        	到
+	        <input ng-model="searchModel.overClassTime" type="text" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',readOnly:true})" 
+		            	onchange="" name="overClassTime" id="overClassTime" class="search-form-label"/>
+		</div>
+    </div>
+    <div class="row">
+        <div class="c_center yws-container">
+            <button id="keydown-query" class="btn btn-success" ng-click="getStatisticsByFilter()">查询</button>
+            <button class="btn" ng-click="resetSearch()">重置</button>
+        </div>
+	</div>
+</div>
+<!-- 表格 -->
+<div class="default-box">
+	<h4>
+      	 教师评价
+      	<span> - 教师月评</span>
+    	<button class="btn btn-success bi-list-head" ng-click="getStatisticsAll()">导出列表</button>
+    </h4>
+    <br>
+    <div class="table-responsive">
+        <table st-pipe="getStatistics" st-table="statisticsModels" class="table table-bordered table-striped"
+               ng-if="dataPrepareReady && currentTab===2">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>事业部</th>
+                <th>大区</th>
+                <th>区域</th>
+                <th>校区</th>
+                <th>教师姓名</th>
+                <th>学生姓名</th>
+                <th>上课时间</th>
+                <th>年级</th>
+                <th>科目</th>
+                <th st-sort="knowledge_master_grade" id="pjsftf">是否提分</th>
+                <th st-sort="summary_plan_grade" id="pjsfmy">是否满意</th>
+                <th style="width: 80px;max-width: 149px;overflow: hidden;">建议</th>
+                <th st-sort="created_at">评价时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="row in statisticsModels">
+            	<td>{{$index+1+statisticsTableState.pagination.start}}</td>
+                <td>{{row.schoolDivision}}</td>
+                <td>{{row.districtName}}</td>
+                <td>{{row.schoolRegion}}</td>
+                <td>{{row.schoolName}}</td>
+                <td>{{row.teacherName}}</td>
+                <td>{{row.studentName}}</td>
+                <td>{{row.lessonStartDate}}</td>
+                <td>{{row.gradeName}}</td>
+                <td>{{row.subjectName}}</td>
+                <td>{{row.knowledgeMasterGrade}}</td>
+                <td>{{row.summaryPlanGrade}}</td>
+                <td style="width: 80px;max-width: 149px;overflow: hidden;" title="{{row.recommendation}}">
+                    <a ng-click="openTextWindow(row.recommendation)" style="text-decoration: underline;">{{row.recommendation}}</a>
+                </td>
+                <td>{{row.createdAt}}</td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+            	<td class="text-center">
+            		每页
+            		<select ng-model="selectedPageSize.size" name="selectedPage" id="selectedPage"
+            			ng-options="pageSize.size as pageSize.size for pageSize in pageSizes">
+			        </select>
+			                        条
+            	</td>
+                <td colspan="30" class="text-center" st-pagination="" st-items-by-page="selectedPageSize.size"
+                    st-template="partials/util/pagination.custom.html">
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    window.load = pause();
+    function pause(){
+        window.setTimeout("tooltipShow()", 1000);
+    }
+    function tooltipShow() {
+        var node = $("#pjsftf");
+        var content = '学习是否有提分';
+        node.webuiPopover({content:content,trigger:'hover'});
+        
+        var node1 = $("#pjsfmy");
+        var content = '老师教学是否满意';
+        node1.webuiPopover({content:content,trigger:'hover'});
+    }
+</script>

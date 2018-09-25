@@ -1,0 +1,126 @@
+<link href="css/smarty.css" rel="stylesheet">
+<style>
+    .modal-dialog, .modal-content {
+        min-width: 500px !important;
+        width: 500px !important;
+    }
+
+    .modal-body {
+        box-sizing: border-box;
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+
+    .modal-body input, .modal-body textarea {
+        width: 80%;
+    }
+
+    .modal-body input {
+        height: 35px;
+        line-height: 35px;
+    }
+</style>
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true" style="overflow-y:auto">
+    <div class="modal-dialog"><!--
+        TODO:内容从payrollEdit里面取
+    -->
+        <form role="form" name="payrollModal" class="form-inline" novalidate="">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">编辑个人工资条</h4>
+                </div>
+                <div class="modal-body mt-modal-order">
+                    <table>
+                        <tr>
+                            <td><label>姓名：{{payrollEdit.userName}}</label></td>
+                            <td><label>岗位：{{payrollEdit.positionName}}</label></td>
+                        </tr>
+                        <tr>
+                            <td><label>固定工资</label></td>
+                            <td><input type="number" ng-model="payrollEdit.basePay" required></td>
+                        </tr>
+                        <tr>
+                            <td><label>绩效工资</label></td>
+                            <td><input type="number" ng-model="payrollEdit.performancePay" required></td>
+                        </tr>
+                        <tr>
+                            <td><label>补贴</label></td>
+                            <td><input type="number" ng-model="payrollEdit.allowance" required></td>
+                        </tr>
+                        <tr>
+                            <td><label>奖金及提成</label></td>
+                            <td><input type="number" ng-model="payrollEdit.bonus" required></td>
+                        </tr>
+                        <tr>
+                            <td><label>补发</label></td>
+                            <td><input type="number" ng-model="payrollEdit.reissue" required></td>
+                        </tr>
+                        <tr>
+                            <td><label>请假/缺勤</label></td>
+                            <td><input type="number" ng-model="payrollEdit.dayoff" required></td>
+                        </tr>
+                        <tr>
+                            <td><label>迟到/早退扣款</label></td>
+                            <td><input type="number" ng-model="payrollEdit.fineLate" required></td>
+                        </tr>
+                        <tr>
+                            <td><label>罚款</label></td>
+                            <td><input type="number" ng-model="payrollEdit.penalty" required></td>
+                        </tr>
+                        <tr>
+                            <td><label>工服</label></td>
+                            <td><input type="number" ng-model="payrollEdit.findSuit" required></td>
+                        </tr>
+                        <tr>
+                            <td><label>社保</label></td>
+                            <td><input type="number" ng-model="payrollEdit.insurance" required></td>
+                        </tr>
+                        <tr>
+                            <td><label>公积金</label></td>
+                            <td><input type="number" ng-model="payrollEdit.housingFund" required></td>
+                        </tr>
+                        <tr>
+                            <td><label>社保公积金合计</label></td>
+                            <td><input type="number" ng-model="payrollEdit.insuranceFundSum" required></td>
+                        </tr>
+                        <tr>
+                            <td><label>应发工资</label></td>
+                            <td><input type="number" ng-model="payrollEdit.grossPay" required></td>
+                        </tr>
+                        <tr>
+                            <td><label>个税</label></td>
+                            <td><input type="number" ng-model="payrollEdit.tax" required></td>
+                        </tr>
+                        <tr>
+                            <td><label>实发工资</label></td>
+                            <td><input type="number" ng-model="payrollEdit.finalPay" required></td>
+                        </tr>
+                        <tr>
+                            <td><label>备注</label></td>
+                            <td><textarea rows="5" ng-model="payrollEdit.remark"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p>&nbsp;<br>
+                                    <span style="color:red;">* 除“备注”外，其他列均为必填项，没有输入0</span></p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer margin-top20">
+                    <button type="button" class="btn btn-default" ng-click="$hide()">
+                        取消
+                    </button>
+                    <button type="button" class="btn btn-success c5-lable" ng-click="savePayrollByRow()"
+                            ng-disabled="payrollModal.$invalid || payrollModal.$pending">
+                        确定
+                    </button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+

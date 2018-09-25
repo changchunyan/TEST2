@@ -1,0 +1,236 @@
+<style>
+    .laifangmain .title {
+        height: 30px;
+        border-bottom: 1px solid #aaa;
+        text-align: left;
+        line-height: 30px;
+        color: #666
+    }
+
+    .titlesec {
+        height: 30px;
+        line-height: 30px;
+        text-align: left;
+        color: #666
+    }
+
+    .chengzhang {
+        max-height: 500px;
+        overflow: scroll!important;
+    }
+
+    .htr {
+        height: 62px!important;
+    }
+
+    .table tr td {
+        border-top: 0px!important;
+    }
+
+    .tbhead td {
+        font-weight: bold
+    }
+
+    .laifangmain {
+        font-size: 14px;
+    }
+
+    td {
+        vertical-align: top;
+    }
+</style>
+<div class="laifangmain" ng-if="allsorcecon">
+    <p class="title">查看</p>
+    <p class="titlesec">基本信息</p>
+    <div ng-include="'partials/stu.detail/main/tpl/leads/info.html'+v" class="chakanmain"></div>
+    <div style="height:2px;border-bottom: 1px dashed #aaa;margin-top:20px">
+
+    </div>
+    <!--<p class="titlesec">客户成长记录</p>-->
+    <!--<img src="./img/v3.index/act/icon-kehu.png">-->
+    <div class="chengzhang">
+        <p style="text-align: left;">客户成长记录</p>
+        <table class="table mt-scroll">
+            <tbody>
+                <tr class="tbhead htr">
+                    <td>
+
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+                        所属人
+                    </td>
+                    <td>
+                        操作
+                    </td>
+                </tr>
+
+                <tr class="htr">
+                    <td style="text-align: left!important;padding-left:60px;">
+                        <a href="javascript:void(0)" ng-click="addtaoyue(detailnew)"><img src="./img/laifang/btn_add.png" style="height:40px;width:40px;vertical-align:middle;cursor: pointer"/> 添加邀约/到访记录</a>
+                        <div style="position: relative;margin-top:25px;margin-bottom: 22px;">
+                            <img src="./img/laifang/link.png" style="height:72px;width:6px;vertical-align:middle;margin-top:-56px;margin-bottom: -55px;margin-left:17px"
+                            />
+                        </div>
+                    </td>
+                </tr>
+                <tr class="htr">
+                    <td style="text-align: left!important;padding-left:60px;">
+                        <a href="javascript:void(0)" ng-click="addInvitationCommunication(detailnew)"><img src="./img/laifang/btn_add.png" style="height:40px;width:40px;vertical-align:middle;cursor: pointer"/> 添加沟通记录</a>
+                        <div style="position: relative;margin-top:25px;margin-bottom: 22px;">
+                            <img src="./img/laifang/link.png" style="height:72px;width:6px;vertical-align:middle;margin-top:-56px;margin-bottom: -55px;margin-left:17px"
+                            />
+                        </div>
+                    </td>
+                </tr>
+                <tr ng-repeat="row in detailForUpdate.growthList" class="htr">
+                    <!--row.temp_group_id 一对多试听有，其他的试听都没有-->
+                    <td style="text-align: left!important;padding-left:60px;" ng-if="row.type==4  && row.temp_group_id">
+                        <img src="./img/laifang/ic_try_listen.png" style="height:40px;width:40px;vertical-align:middle" />&nbsp;&nbsp;一对多试听
+                        <div style="position: relative;margin-top:25px;margin-bottom: 22px;">
+                            <img src="./img/laifang/link.png" style="height:80px;width:6px;vertical-align:middle;margin-top:-60px;margin-bottom: -65px;margin-left:17px"
+                            />
+                        </div>
+                    </td>
+
+                    <td style="text-align: left!important;padding-left:60px;" ng-if="row.type==4 && row.course_type != 15 && row.course_type != 16 && !row.temp_group_id">
+                        <img src="./img/laifang/ic_try_listen.png" style="height:40px;width:40px;vertical-align:middle" />&nbsp;&nbsp;一对一试听
+                        <div style="position: relative;margin-top:25px;margin-bottom: 22px;">
+                            <img src="./img/laifang/link.png" style="height:80px;width:6px;vertical-align:middle;margin-top:-60px;margin-bottom: -65px;margin-left:17px"
+                            />
+                        </div>
+                    </td>
+
+                    <td style="text-align: left!important;padding-left:60px;" ng-if="row.type==4 && row.course_type == 15 && !row.temp_group_id">
+                        <img src="./img/laifang/ic_try_listen.png" style="height:40px;width:40px;vertical-align:middle" />&nbsp;&nbsp;扩科试听课
+                        <div style="position: relative;margin-top:25px;margin-bottom: 22px;">
+                            <img src="./img/laifang/link.png" style="height:80px;width:6px;vertical-align:middle;margin-top:-60px;margin-bottom: -65px;margin-left:17px"
+                            />
+                        </div>
+                    </td>
+
+                    <td style="text-align: left!important;padding-left:60px;" ng-if="row.type == 4 && row.course_type == 16 && !row.temp_group_id">
+                        <img src="./img/laifang/ic_try_listen.png" style="height:40px;width:40px;vertical-align:middle" />&nbsp;&nbsp;换老师试听课
+                        <div style="position: relative;margin-top:25px;margin-bottom: 22px;">
+                            <img src="./img/laifang/link.png" style="height:80px;width:6px;vertical-align:middle;margin-top:-60px;margin-bottom: -65px;margin-left:17px"
+                            />
+                        </div>
+                    </td>
+
+                    <td style="text-align: left!important;padding-left:60px;" ng-if="row.type==3">
+                        <img src="./img/laifang/ic_visit.png" style="height:40px;width:40px;vertical-align:middle" />&nbsp;&nbsp;到访记录
+                        <div style="position: relative;margin-top:25px;margin-bottom: 22px;">
+                            <img src="./img/laifang/link.png" style="height:80px;width:6px;vertical-align:middle;margin-top:-60px;margin-bottom: -65px;margin-left:17px"
+                            />
+                        </div>
+                    </td>
+                    <td style="text-align: left!important;padding-left:60px;" ng-if="row.type==2">
+                        <img src="./img/laifang/ic_invite.png" style="height:40px;width:40px;vertical-align:middle" />&nbsp;&nbsp;邀约记录
+                        <div style="position: relative;margin-top:25px;margin-bottom: 22px;">
+                            <img src="./img/laifang/link.png" style="height:80px;width:6px;vertical-align:middle;margin-top:-60px;margin-bottom: -65px;margin-left:17px"
+                            />
+                        </div>
+                    </td>
+                    <td style="text-align: left!important;padding-left:60px;" ng-if="row.type==1">
+                        <img src="./img/laifang/ic_talk.png" style="height:40px;width:40px;vertical-align:middle" />&nbsp;&nbsp;沟通记录
+                        <div style="position: relative;margin-top:25px;margin-bottom: 22px;">
+                            <img src="./img/laifang/link.png" style="height:80px;width:6px;vertical-align:middle;margin-top:-60px;margin-bottom: -65px;margin-left:17px"
+                            />
+                        </div>
+                    </td>
+
+
+                    <td ng-if="row.type==1" style="text-align: left!important;">
+                        <!--沟通-->
+                        {{row.communicate_time | date:'yyyy-MM-dd'}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{row.communicate_content}}
+                    </td>
+                    <td ng-if="row.type==2" style="text-align: left!important;">
+                        <!--邀约-->
+                        {{row.invitate_time | date:'yyyy-MM-dd'}}&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span ng-if="row.invitation_content_type && row.invitation_content_type==1">物料领取</span>
+                        <span ng-if="row.invitation_content_type && row.invitation_content_type==2">活动</span>
+                        <span ng-if="row.invitation_content_type && row.invitation_content_type==3">测评</span>
+                        <span ng-if="row.invitation_content_type && row.invitation_content_type==4">讲座</span>
+                        <span ng-if="row.invitation_content_type && row.invitation_content_type==5">托管自习</span>
+                        <span ng-if="!row.invitation_content_type">{{row.invitation_content}}</span>
+                    </td>
+                    <td ng-if="row.type==3" style="text-align: left!important;">
+                        <!--到访-->
+
+                        <span ng-if="row.visit_state==1">{{(row.view_time)| date:'yyyy-MM-dd'}}&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <!--{{row.visit_state?row.visit_state:row.visit_content_type}}-->
+                        <span ng-if="row.visit_state==1">已到访</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span ng-if="row.visit_state==2">未到访</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span ng-if="row.visit_content_type==1 && row.visit_state==1">物料领取</span>
+                        <span ng-if="row.visit_content_type==2 && row.visit_state==1">活动</span>
+                        <span ng-if="row.visit_content_type==3 && row.visit_state==1">测评</span>
+                        <span ng-if="row.visit_content_type==4 && row.visit_state==1">讲座</span>
+                        <span ng-if="row.visit_content_type==5 && row.visit_state==1">托管自习</span>
+                    </td>
+                    <td ng-if="row.type==4" style="text-align: left!important;">
+                        {{row.start_time | date:'yyyy-MM-dd'}}&nbsp;&nbsp;&nbsp;&nbsp;试听课程&nbsp;&nbsp;&nbsp;&nbsp; {{row.start_time | date:'HH:mm:ss'}}--{{row.end_time
+                        | date:'HH:mm:ss'}}&nbsp;&nbsp;&nbsp;&nbsp; {{row.course_num}}小时&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span ng-if="row.is_past==0">未消课</span>
+                        <span ng-if="row.is_past==1">已消课</span>
+                    </td>
+                    <!--  ng-if="row.type==4" -->
+                    <td style="text-align: left!important;">
+                        <span ng-if="row.type==4">
+                            {{row.schoolName}}
+                        </span>
+                    </td>
+                    <!-- <td ng-if="row.type!=4" style="text-align: left!important;">
+                        <span>
+                                {{row.schoolName}}
+                        </span>
+                    </td> -->
+
+                    <td>
+                        {{detailForUpdate.belong_user_name}}
+                    </td>
+                    <td ng-if="row.type==1" style="text-align: left!important;padding-left:60px;">
+                        <!--沟通的操作-->
+                        <a href="javascript:void(0)" title="编辑" ng-click="editInvitationCommunication(row)"><span class="glyphicon glyphicon-edit" style="font-size:18px;color:#aaa"></span>
+                            <a href="javascript:void(0)" title="删除" ng-click="deleteInvitationCommunication(row)"><span class="glyphicon glyphicon-trash" style="font-size:18px;color:#aaa"></span>
+                    </td>
+                    <td ng-if="row.type==2" style="text-align: left!important;padding-left:60px;">
+                        <!--邀约的操作-->
+                            <a ng-if="row.visit_state==0" href="javascript:void(0)" title="确认到访" ng-click="laifangedit(row)"><span class="glyphicon glyphicon-check" style="font-size:18px;color:#aaa"></span>
+                            <a ng-if="row.visit_state==0"href="javascript:void(0)" title="编辑" ng-click="editInvitationDetail(row)"><span class="glyphicon glyphicon-edit" style="font-size:18px;color:#aaa"></span>
+                            <a ng-if="row.visit_state==0" href="javascript:void(0)" title="删除" ng-click="deleteInvitationDetail(row)"><span class="glyphicon glyphicon-trash" style="font-size:18px;color:#aaa"></span>
+                    </td>
+                    <td ng-if="row.type==3" style="text-align: left!important;padding-left:60px;">
+                        <!--到访的操作-->
+                            <a href="javascript:void(0)" title="编辑" ng-click="laifangedit(row,1)"><span class="glyphicon glyphicon-edit" style="font-size:18px;color:#aaa"></span>
+                            <a href="javascript:void(0)" title="删除" ng-click="deleteInvitationDetail(row)"><span class="glyphicon glyphicon-trash" style="font-size:18px;color:#aaa"></span>
+                    </td>
+
+                </tr>
+                <!--<tr>-->
+                   <!--<td style="position: relative">-->
+                       <!--<img src="./img/laifang/link.png" style="height:90px;width:6px;vertical-align:middle;margin-top:-70px;margin-bottom: -60px;" />测 试 的恶恶-->
+                   <!--</td>-->
+                <!--</tr>-->
+                <tr  class="htr">
+                    <td style="text-align: left!important;padding-left:60px;">
+                        <img src="./img/laifang/ic_add_customer.png" style="height:40px;width:40px;vertical-align:middle"/>&nbsp;&nbsp;新增客户
+                    </td>
+                    <td style="text-align: left!important;">
+                        {{detailForUpdate.create_at | date:'yyyy-MM-dd'}}
+                    </td>
+                    <td></td>
+                    <td>
+                        {{detailForUpdate.belong_user_name}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<mt-tabs tabel="stuTabs" index="selectIndex" url="loadUrl"></mt-tabs>
+<div ng-include="loadUrl" class="form-option pb-20"></div>

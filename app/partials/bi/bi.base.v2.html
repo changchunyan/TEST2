@@ -1,0 +1,22 @@
+<div class="default-box form-horizontal yws-container row">
+    <div class="col-sm-4">
+        <label for="startTime" class="col-sm-4 control-label">开始时间：</label>
+        <div class="col-sm-8 form-group">
+            <input onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,readOnly:true})"
+                   ng-model="searchModel.startTime" type="text" name="startTime" id="startTime" class="form-control" ng-value="searchModel.startTime | date:'yyyy-MM-dd'" ng-blur="updateDate('startTime')"/>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <label for="endTime" class="col-sm-4 control-label">结束时间：</label>
+        <div class="col-sm-8 form-group">
+            <input onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,readOnly:true})"
+                   ng-model="searchModel.endTime" type="text" name="endTime" id="endTime" class="form-control" ng-value="searchModel.endTime | date:'yyyy-MM-dd'" ng-blur="updateDate('endTime')"/>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="c_center  yws-container">
+            <button id="keydown-query" class="btn btn-success" ng-click="argJudgement(getDataByFilter)">查询</button>
+            <button class="btn" ng-click="reset(isQ)">重置</button>
+        </div>
+    </div>
+</div>

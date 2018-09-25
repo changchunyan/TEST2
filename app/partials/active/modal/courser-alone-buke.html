@@ -1,0 +1,57 @@
+<div class="modal alone-buke" tabindex="-1" role="dialog" style="display: block">
+    <form class="modal-dialog form-horizontal" name="bk">
+        <div class="modal-content mt-label-h2">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">单独补课</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row ml-0">
+                    <div class="form-group col-sm-12">
+                        <ul class="row mt-li-bg">
+                            <li class="col-sm-6">学生姓名：<span data-JSON="{{detail}}">{{supplementUpdateFilter.studentName}}</span></li>
+                            <li class="col-sm-6">班级名称：<span>{{supplementUpdateFilter.className}}</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row paike">
+                    <div class="row m0 mt-form-control mt-10">
+                        <div class="col-sm-6 form-group m0">
+                            <label class="lable-h2 fl">排课科目</label>
+                            <span style="line-height: 40px;margin-left: 10px;">{{supplementUpdateFilter.courseName}}</span>
+                        </div>
+                        <div class="col-sm-6 form-group m0">
+                            <label class="lable-h2 fl">选择老师</label>
+                            <select ng-model="supplementUpdateFilter.supplementTeacherId" name="supplementTeacherId" id="supplementTeacherId"
+                                    class="form-control ng-pristine ml-0"
+                                    ng-options="option.userId as option.username for option in subjectTeacherGroup" ng-change="selectTeacher()" required>
+                                <option value="">请选择</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr>
+                    <ul>
+                        <li>
+                            计费状态：<span ng-if="supplementUpdateFilter.isCharging == 0">未计费</span><span ng-if="supplementUpdateFilter.isCharging == 1">已计费</span>
+                        </li>
+                        <li ng-if="supplementUpdateFilter.isCharging == 0">
+                            <input type="checkbox" id="chargeIng" name="chargeIng" value="1">
+                            <span>计费({{supplementUpdateFilter.plan_available_num}})</span>
+                        </li>
+                        <li>
+                            上课日期：
+                            <input  class="form-control" ng-model="supplementDate" name="supplementDate"  datepicker="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" required onchange="">
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 20px">
+                <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                <button type="button" class="btn btn-success c5-lable" ng-click="submitAlone()" ng-disabled="bk.$invalid">
+                    确定
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

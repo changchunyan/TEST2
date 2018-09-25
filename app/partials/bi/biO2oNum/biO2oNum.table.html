@@ -1,0 +1,65 @@
+<div class="table-responsive" style=" overflow-y:hidden">
+	<!-- 汇总表格  -->
+    <table st-pipe="getSummary" st-table="o2oNums" class="table table-bordered table-striped" 
+    	ng-if="currentTable === '1'">
+        <thead>
+        <tr>
+        	<td style="font-weight: bold;" data-content="指定周期内，新增的“线上O2O”渠道的用户" data-placement="top" webui-popover>新增用户数</td>
+        	<td style="font-weight: bold;" data-content="指定周期内，自发注册的用户" data-placement="top" webui-popover>自然用户数</td>
+        	<td style="font-weight: bold;" data-content="指定周期内，通过他人推荐注册的用户" data-placement="top" webui-popover>推荐用户数</td>
+        	<td style="font-weight: bold;" data-content="指定周期内，学生端用户(包含老学员)推荐的新增用户数" data-placement="top" webui-popover>学生推荐用户数</td>
+        	<td style="font-weight: bold;" data-content="指定周期内，教师端用户推荐的新增用户数" data-placement="top" webui-popover>教师推荐用户数</td>
+        	<td style="font-weight: bold;" data-content="指定周期内，注册且完成首次登录的用户数" data-placement="top" webui-popover>激活数</td>
+        	<td style="font-weight: bold;" data-content="指定周期内，注册且完成初次登录的用户数/新增用户数" data-placement="left" webui-popover>激活率</td>
+        </tr>
+        </thead>
+        <tbody>
+	        <tr>
+	         	<td>{{summaryModels.o2oNum}}</td>
+	         	<td>{{summaryModels.registerNum}}</td>
+	         	<td>{{summaryModels.recommendNum}}</td>
+	         	<td>{{summaryModels.studentRecommendNum}}</td>
+	         	<td>{{summaryModels.teacherRecommendNum}}</td>
+	         	<td>{{summaryModels.loginNum}}</td>
+	         	<td>{{summaryModels.loginRatio}}</td>
+	        </tr>
+        </tbody>
+    </table>
+    <!-- 明细表格  -->
+    <table st-pipe="getStatistics" st-table="o2oNums" class="table table-bordered table-striped" 
+    	ng-if="currentTable === '2'">
+        <thead>
+        <tr>
+        	<td style="font-weight: bold;">序号</td>
+        	<td style="font-weight: bold;">校区</td>
+        	<td style="font-weight: bold;" data-content="指定周期内，属于该校区的学生端用户和教师端用户所推荐的新增用户数" 
+        		data-placement="top" webui-popover>推荐用户数</td>
+        	<td style="font-weight: bold;" data-content="指定周期内，属于该校区的学生端用户所推荐的新增用户数" 
+        		data-placement="top" webui-popover>学生推荐用户数</td>
+        	<td style="font-weight: bold;" data-content="指定周期内，属于该校区的教师端用户所推荐的新增用户数" 
+        		data-placement="top" webui-popover>教师推荐用户数</td>
+        	<td style="font-weight: bold;" data-content="指定周期内，属于该校区推荐的新增用户完成登录的人数" 
+        		data-placement="top" webui-popover>激活数</td>
+        	<td style="font-weight: bold;" data-content="指定周期内，属于该校区推荐的新增用户完成登录的人数/属于该校区推荐的新增用户数" 
+        		data-placement="left" webui-popover>激活率</td>
+        </tr>
+        </thead>
+        <tbody>
+	        <tr ng-repeat="model in statisticsModels">
+	         	<td>{{$index+1+statisticsTableState.pagination.start}}</td>
+	         	<td>{{model.schoolName}}</td>
+	         	<td>{{model.recommendNum}}</td>
+	         	<td>{{model.studentRecommendNum}}</td>
+	         	<td>{{model.teacherRecommendNum}}</td>
+	         	<td>{{model.loginNum}}</td>
+	         	<td>{{model.loginRatio}}</td>
+	        </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="13" class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" >
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

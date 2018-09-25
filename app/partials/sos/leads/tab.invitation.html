@@ -1,0 +1,45 @@
+<div class="row m0">
+	<div class="table-responsive">
+        <h2 class="c3 tl">记录列表</h2>
+		<table class="table table-bordered table-striped table-condensed" st-pipe="getInvitationList" st-table="CrmLeadsStudentInvitationList">
+			<thead>
+			<tr>
+				<th>邀约时间</th>
+				<th>预到访时间</th>
+				<th>邀约内容</th>
+				<th>邀约人</th>
+				<th ng-if="false">创建人</th>
+				<th ng-if="false">创建时间</th>
+				<th>邀约操作</th>
+			</tr>
+			</thead>
+			<tbody ng-show="!isInvitationLoading">
+			<tr ng-repeat="row in CrmLeadsStudentInvitationList">
+	
+				<td>{{ row.invitateTime | date:'yyyy-MM-dd HH:mm' }}</td>
+				<td>{{ row.receiveTime | date:'yyyy-MM-dd HH:mm' }}</td>
+				<td>{{row.invitationContent}}</td>
+				<td>{{row.username}}</td>
+				<td ng-if="false">{{row.createBy}}</td>
+				<td ng-if="false">{{ row.createAt | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+				<td>
+					<a ng-click="visit(row,1)" ng-if="showPermissions('VisitConfirm')&&row.state==0"><span class="glyphicon glyphicon-shenhe" title="确认到访"></span></a>&nbsp;
+					<a ng-if="showPermissions('makeInvication')" ng-click="editInvitationDetail(row)"><span class="glyphicon glyphicon-pencil" title="编辑邀约"></span></a>&nbsp;
+					<a ng-if="showPermissions('makeInvication')" ng-click="deleteInvitationDetail(row)"><span class="glyphicon glyphicon-delete" title="删除邀约"></span></a>&nbsp;
+				</td>
+			</tr>
+			</tbody>
+			<tbody ng-show="isInvitationLoading">
+			<tr>
+				<td colspan="7" class="text-center"><div class="loading-indicator"></div></td>
+			</tr>
+			</tbody>
+			<tfoot>
+			<tr>
+				<td class="text-center" st-pagination="" st-items-by-page="5" colspan="7" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html">
+				</td>
+			</tr>
+			</tfoot>
+		</table>
+	</div>
+</div>

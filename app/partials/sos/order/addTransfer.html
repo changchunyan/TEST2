@@ -1,0 +1,282 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true" ng-controller="OrderAddTransferController">
+    <div class="modal-dialog" style="width:70%;">
+        <div class="modal-content">
+        	<div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" ng-bind="modalTitle"></h4>
+            </div>
+            <tabs>
+                <pane title="课时订单转课">
+                    <div class="table-responsive">
+			            <form name="addTransferForm" role="form" class="form-horizontal showcase-form" novalidate="">
+			                 <div class="modal-body mt-modal-order">
+			                    <div>
+			                    	<input type="radio" name="transferWay"  value="1" ng-model="order.transferWay" ng-click="changTransferWay(1)" />整订单转给单一学员&nbsp;&nbsp;
+									<input type="radio" name="transferWay"  value="2" ng-model="order.transferWay" ng-click="changTransferWay(2)" />拆订单转给多学员&nbsp;&nbsp;
+			                    </div>
+			                    <div class="br-gray modal-input pl-0"><!-- 转让订单课程详情列表-->
+			                        <table class="table table-bordered table-striped" st-table="orderTransferAvailableOrders" >
+			                            <thead>
+			                            <tr>
+			                                <th ng-if="row.change_platform_status!=1">选择</th>
+			                                <th>合同编号</th>
+			                                <th>学员姓名</th>
+			                                <th>签约时间</th>
+			                                <th>总价</th>
+			                                <th>已上课时</th>
+			                                <th>剩余课时</th>
+			                            </tr>
+			                            </thead>
+			                            <tr ng-repeat="row in orderTransferAvailableOrders">
+			                                <td ng-if="row.change_platform_status!=1"><input type="checkbox" ng-click="selectOne(row)"></td>
+			                                <td ng-if="row.change_platform_status===1" data-content="转平台订单，无法转课" data-placement="top" webui-popover><input type="checkbox" disabled="disabled"></td>
+			                                <td ng-if="row.orderNo!=row.originalOrderNo">{{row.orderNo}}</td>
+			                                <td ng-if="row.orderNo==row.originalOrderNo"></td>
+			                                <td>{{row.name}}</td>
+			                                <td>{{row.contractStartDate | date:'yyyy-MM-dd'  }}</td>
+			                                <td>{{row.realTotalAmount}}</td>
+			                                <td>{{(row.totalCourseNum-row.consumeCourseNum) | number:1}}</td>
+			                                <td>{{row.consumeCourseNum}}</td>
+			                            </tr>
+			                        </table>
+			                    </div>
+			                    <hr>
+			                    <div ng-if="order.transferWay == 1"><!-- 受让信息  一对一转课-->
+			                        <div class="row">
+			                            <div class="col-sm-4 form-group">
+			                                <label for="agreementNo" class=" control-label">协议编号</label>
+			                                <div class="col-sm-8">
+			                                    <input type="text" name="agreementNo" id="agreementNo" placeholder="系统自动生成" ng-model="order.agreementNo" ng-maxlength="10" ng-readonly="true" class="input-sm form-control"/>
+			                                </div>
+			                            </div>
+			                            <input type="hidden" name="transferId" id="transferId"  ng-model="order.transferId" />
+			                            <div class="col-sm-4 form-group" >
+			                                <label for="name" class=" control-label">受让学员姓名</label>
+			                                <div class="col-sm-6 col-md-6 col-lg-6">
+			                                    <input type="text" readonly name="name" id="name"  ng-model="order.name" ng-maxlength="20" required class="input-sm" style="width:70%;"/>
+			                                    <a ng-click="searchCustomers()"><span class="glyphicon glyphicon-search" ></span></a>
+			                                </div>
+			                            </div>
+			                            <div class="col-sm-4 form-group" >
+			                                <label for="startDate" class=" control-label">生效日期</label>
+			                                <div class="col-sm-8">
+			                                    <!--<input type="date" value="{{order.startDate | date:'yyyy-MM-dd' }}" name="startDate" id="startDate"  ng-model="order.startDate" required class="input-sm form-control" />-->
+			                                    <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="" readonly value="{{order.startDate | date:'yyyy-MM-dd' }}" name="startDate" id="startDate"  ng-model="order.startDate" required class="input-sm form-control" />
+			                                </div>
+			                            </div>
+			                        </div>
+			                        <div class="row">
+			                            <div class="col-sm-4 form-group" >
+			                                <label for="endDate" class=" control-label">终止日期</label>
+			                                <div class="col-sm-8">
+			                                    <!--<input type="date" value="{{order.endDate | date:'yyyy-MM-dd' }}" name="endDate" id="endDate"  ng-model="order.endDate" required class="input-sm form-control"/>-->
+			                                    <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="" readonly  value="{{order.endDate | date:'yyyy-MM-dd' }}" name="endDate" id="endDate"  ng-model="order.endDate" required class="input-sm form-control"/>
+			                                </div>
+			                            </div>
+			                            <div class="col-sm-4 form-group" >
+			                                <label for="lectureType" class=" control-label">授课形式</label>
+			                                <div class="col-sm-8">
+			                                    <select ng-model="order.lectureType" name="orderType" id="lectureType" class="input-sm form-control" required
+			                                            ng-options="option.code as option.name for option in courseTeachingType">
+			                                        <option value="">-- 请选择 --</option>
+			                                    </select>
+			                                </div>
+			                            </div>
+			                            <div class="col-sm-4 form-group" >
+			                                <label for="courseNum" class=" control-label">转让总课时</label>
+			                                <div class="col-sm-8">
+			                                    <input type="text" name="courseNum" id="courseNum" readonly ng-model="order.courseNum" ng-maxlength="10" required class="input-sm form-control"/>
+			                                </div>
+			                            </div>
+			                        </div>
+			                    </div>
+			                    <!-- 一对多转课 -->
+			                    <div ng-if="order.transferWay == 2">
+			                    	<div class="row">
+			                            <div class="col-sm-6 form-group" >
+			                                <label for="name" class=" control-label">受让学员姓名</label>
+			                                <div class="col-sm-6 col-md-6 col-lg-6">
+			                                    <input type="text" readonly name="name" id="name"  ng-model="order.name" ng-maxlength="100" required class="input-sm" style="width:90%;"/>
+			                                    <a ng-click="searchCustomers()"><span class="glyphicon glyphicon-search" ></span></a>
+			                                </div>
+			                            </div>
+			                            <div class="col-sm-4 form-group" >
+			                                <label for="name" class=" control-label">
+			                                	<input type="checkbox" ng-model="order.isContain" ng-click="selectContain()" ng-checked="order.isContain">包含本学员
+			                                </label>
+			                                <div class="col-sm-6 col-md-6 col-lg-6"></div>
+			                            </div>
+			                        </div>
+			                       <div class="overflow-x">
+				                         <table class="table table-bordered table-striped" st-table="orderTransferAvailableOrders" >
+				                            <thead>
+				                            <tr>
+				                                <th>课程名称</th>
+				                                <th>科目</th>
+				                                <th>课时性质</th>
+				                                <th>签约时间</th>
+				                                <th>购买课时/次</th>
+				                                <th>剩余课时/次</th>
+				                                <th>待分配课时/次</th>
+				                                <th ng-repeat = "obj in transferStudents">
+				                                	{{obj.name}}
+				                                </th>
+				                            </tr>
+				                            </thead>
+				                            <tr ng-repeat="row in order.orderCourses" name="orderCourse">
+				                                <td>{{row.course_name}}</td>
+				                                <td>{{row.subject_name}}</td>
+	                                            <td ng-show="row.course_property == 1">正课</td>
+	                                            <td ng-show="row.course_property == 2">赠课</td>
+	                                            <td ng-show="row.course_property == 3">返课</td>
+	                                            <td ng-show="row.course_property == 4">试听课</td>
+	                                            <td ng-show="row.course_property == null || row.course_property == 0 ">其他</td>
+	                                            <td>{{row.contract_start_date | date:'yyyy-MM-dd'  }}</td>
+				                                <td>{{row.original_num}}</td>
+				                                <td>{{row.course_num}}</td>
+				                                <td>{{row.plan_available_num - numStaticCours[$index] | number:1}}</td>
+				                                <td ng-repeat = "obj1 in row.nums track by $index" data-1="{{row.nums}}">
+				                                	<input type="text" ng-value="obj1" ng-pattern="doubleNumReg" ng-change="changeCourseNum()" ng-model="row.nums[$index]"
+				                                	 placeholder="数字"
+                                                     ng-focus="isFocus(row,$index);"
+                                                     ng-blur="isBlur(row,$index);">
+				                                </td>
+				                            </tr>
+				                            <!-- 增加转让课时的显示 -->
+				                            <tr>
+				                            	<td colspan="6"></td>
+				                            	<td >{{order.transferCourseNum}}</td>
+				                            	<td ng-repeat="num in numStatic track by $index">
+				                            		{{num}}
+				                            	</td>
+				                            </tr>
+				                        </table>
+			                        </div>
+			                        <div class="row">
+			                        	<div class="col-sm-4 form-group" >
+			                                <label for="startDate" class=" control-label">生效日期</label>
+			                                <div class="col-sm-8">
+			                                    <!--<input type="date" value="{{order.startDate | date:'yyyy-MM-dd' }}" name="startDate" id="startDate"  ng-model="order.startDate" required class="input-sm form-control" />-->
+			                                    <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="" readonly value="{{order.startDate | date:'yyyy-MM-dd' }}" name="startDate" id="startDate"  ng-model="order.startDate" required class="input-sm form-control" />
+			                                </div>
+			                            </div>
+			                            
+			                            <div class="col-sm-4 form-group" >
+			                                <label for="endDate" class=" control-label">终止日期</label>
+			                                <div class="col-sm-8">
+			                                    <!--<input type="date" value="{{order.endDate | date:'yyyy-MM-dd' }}" name="endDate" id="endDate"  ng-model="order.endDate" required class="input-sm form-control"/>-->
+			                                    <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="" readonly  value="{{order.endDate | date:'yyyy-MM-dd' }}" name="endDate" id="endDate"  ng-model="order.endDate" required class="input-sm form-control"/>
+			                                </div>
+			                            </div>
+			                            <div class="col-sm-4 form-group" >
+			                                <label for="courseNum" class=" control-label">转让总课时</label>
+			                                <div class="col-sm-8">
+			                                    <input type="text" name="courseNum" id="courseNum" readonly ng-value="order.transferCourseNum | number:1"
+			                                    ng-model="order.transferCourseNum" ng-maxlength="10" required class="input-sm form-control"/>
+			                                </div>
+			                            </div>
+			                            
+			                        </div>
+			                    </div>
+			                </div>
+			                <div class="modal-footer">
+			                    <button type="button" class="btn btn-success c5-lable" ng-disabled="addTransferForm.$invalid || order.TransferInvalid" ng-click="saveTransferOrder()">保存</button><!--ng-disabled="addTransferForm.$invalid"-->
+			                    <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+			                    <img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+			                </div>
+			            </form>
+	            	</div>
+	             </pane>
+	             <pane title="充值订单转课">
+                    <div class="table-responsive">
+			            <form name="orderRechargeTransferForm" role="form" class="form-horizontal showcase-form" novalidate="">
+			                
+			                <div class="modal-body mt-modal-order">
+			                    <div class="br-gray modal-input pl-0"><!-- 转让订单课程详情列表-->
+			                        <table class="table table-bordered table-striped" st-table="orderRechargeTransferAvailableOrders" >
+			                            <thead>
+			                            <tr>
+			                                <th>选择</th>
+			                                <th>合同编号</th>
+			                                <th>学员姓名</th>
+			                                <th>签约时间</th>
+			                                <th>总价</th>
+			                                <th>已消金额</th>
+			                                <th>剩余金额</th>
+			                            </tr>
+			                            </thead>
+			                            <tr ng-repeat="row in orderRechargeTransferAvailableOrders">
+			                                <td><input type="radio" name = "orderRechargeTransferRadio" ng-click="checkOne(row)" ></td>
+			                                <td ng-if="row.orderNo!=row.originalOrderNo">{{row.orderNo}}</td>
+			                                <td ng-if="row.orderNo==row.originalOrderNo"></td>
+			                                <td>{{row.name}}</td>
+			                                <td>{{row.contractStartDate | date:'yyyy-MM-dd'  }}</td>
+			                                <td>{{row.totalPrice}}</td>
+			                                <td>{{row.totalPrice-row.additionalAmount}}</td>
+			                                <td>{{row.additionalAmount}}</td>
+			                            </tr>
+			                        </table>
+			                    </div>
+			                    <hr>
+			                    <div><!-- 受让信息-->
+			                        <div class="row">
+			                            <div class="col-sm-4 form-group">
+			                                <label for="agreementNo" class=" control-label">协议编号</label>
+			                                <div class="col-sm-8">
+			                                    <input type="text" name="agreementNo" id="agreementNo" placeholder="系统自动生成" ng-model="order.agreementNo" ng-maxlength="10" ng-readonly="true" class="input-sm form-control"/>
+			                                </div>
+			                            </div>
+			                            <input type="hidden" name="transferId" id="transferId"  ng-model="order.transferId" />
+			                            <div class="col-sm-4 form-group" >
+			                                <label for="name" class=" control-label">受让学员姓名</label>
+			                                <div class="col-sm-6 col-md-6 col-lg-6">
+			                                    <input type="text" readonly name="rechargeName" id="rechargeName"  ng-model="order.rechargeName" ng-maxlength="20" required class="input-sm" style="width:70%;"/>
+			                                    <a ng-click="searchRechargeCustomers()"><span class="glyphicon glyphicon-search" ></span></a>
+			                                </div>
+			                            </div>
+			                            <div class="col-sm-4 form-group" >
+			                                <label for="startDate" class=" control-label">生效日期</label>
+			                                <div class="col-sm-8">
+			                                    <!--<input type="date" value="{{order.startDate | date:'yyyy-MM-dd' }}" name="startDate" id="startDate"  ng-model="order.startDate" required class="input-sm form-control" />-->
+			                                    <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="" readonly value="{{order.startDate | date:'yyyy-MM-dd' }}" name="startDate" id="startDate"  ng-model="order.startDate" required class="input-sm form-control" />
+			                                </div>
+			                            </div>
+			                        </div>
+			                        <div class="row">
+			                            <div class="col-sm-4 form-group" >
+			                                <label for="endDate" class=" control-label">终止日期</label>
+			                                <div class="col-sm-8">
+			                                    <!--<input type="date" value="{{order.endDate | date:'yyyy-MM-dd' }}" name="endDate" id="endDate"  ng-model="order.endDate" required class="input-sm form-control"/>-->
+			                                    <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="" readonly  value="{{order.endDate | date:'yyyy-MM-dd' }}" name="endDate" id="endDate"  ng-model="order.endDate" required class="input-sm form-control"/>
+			                                </div>
+			                            </div>
+			                            <div class="col-sm-4 form-group" >
+			                                <label for="lectureType" class=" control-label">授课形式</label>
+			                                <div class="col-sm-8">
+			                                    <select ng-model="order.lectureType" name="orderType" id="lectureType" class="input-sm form-control" required
+			                                            ng-options="option.code as option.name for option in courseTeachingType">
+			                                        <option value="">-- 请选择 --</option>
+			                                    </select>
+			                                </div>
+			                            </div>
+			                            <div class="col-sm-4 form-group" >
+			                                <label for="totalAmount" class=" control-label">转让总金额</label>
+			                                <div class="col-sm-8">
+			                                    <input type="text" name="totalAmount" id="totalAmount" readonly ng-model="order.totalAmount" ng-maxlength="10" required class="input-sm form-control"/>
+			                                </div>
+			                            </div>
+			                        </div>
+			                    </div>
+			                </div>
+			                <div class="modal-footer">
+			                    <button type="button" class="btn btn-success c5-lable" ng-disabled="orderRechargeTransferForm.$invalid" ng-click="saveRechargeTransferOrder()">保存</button><!--ng-disabled="addTransferForm.$invalid"-->
+			                    <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+			                    <img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+			                </div>
+			            </form>
+	            	</div>
+	             </pane>
+	         </tabs>
+        </div>
+    </div>
+</div>

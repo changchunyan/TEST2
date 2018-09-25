@@ -1,0 +1,120 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true" ng-controller="SNPCourseRecordController as controller">
+    <form class="modal-dialog form-horizontal" name="coursePlan">
+        <div class="modal-content mt-label-h2">
+            <div class="modal-header">
+              <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">托管记录</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row ml-0">
+                    <div class="form-group col-sm-12">
+                        <ul class="row mt-li-bg">
+                            <li class="col-sm-4">
+                              班级名称：<input type="text" autocomplete="off" value="{{selectedClass.name}}" ng-model="filter.name" ng-change="getClassList()"
+                                             style="border: none;border-bottom: 1px solid;background-color: inherit;height: 30px;width:200px;" />
+                            </li>
+                            <ul class="order_mess_show" ng-show="showClassSelector" style="margin-top: 40px;margin-left: 115px;width: 200px">
+                                <li ng-repeat="row in resultList" ng-click="selectClass($index)"
+                                    style="color: #1a2b3c;font-size: 12px;width: 100%;text-indent: 0;background-image: none;">
+                                    <span style="margin: 0;display: inline;">{{row.name}}</span>
+                                </li>
+                            </ul>
+                            <li class="col-sm-4">托管老师：<span>{{selectedClass.teacherName}}</span></li>
+                            <li class="col-sm-4">托管日期：<span style="font-size:0.8em">
+                                <input type="text" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd', onpicked: function() {$(this).trigger('change')}})" ng-model="recordDate" placeholder="请选择托管日期" required=""
+                                       style="background-color:rgba(255,255,255,0);color:white;border:none;min-width:100px;border-bottom: 1px solid white"
+                                       ng-change="getClassStudents()">
+                                （点击日期修改）
+                              </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div  class="br-gray pl-0 time-show-2">
+                    <table class="table table-bordered table-striped mt-table1">
+                        <thead>
+                        <tr>
+                            <th>学生姓名</th>
+                            <th>电话</th>
+                            <th>
+                                <div class="time-show br0 pl-0">
+                                    <span style="width:30px;" ng-class="{'active':allAttendence()}" ng-click="selectAllArrival()" class="">到校</span>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="time-show br0 pl-0">
+                                    <span style="width:40px;" ng-class="{'active':allHomeworkStarted(), 'disabled':!allAttendence()}" ng-click="selectAllHomeworkStarted()" class="">开始作业</span>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="time-show br0 pl-0">
+                                    <span style="width:40px;" ng-class="{'active':allHomeworkEnded(), 'disabled':!allAttendence() || !allHomeworkStarted()}" ng-click="selectAllHomeworkEnded()" class="">完成作业</span>
+                                </div>
+                            </th>
+                            <th><div class="time-show br0 pl-0">加分项</div></th>
+                            <th><div class="time-show br0 pl-0">减分项</div></th>
+                            <th>
+                                <div class="time-show br0 pl-0">
+                                    <span style="width:30px;" ng-class="{'active':allLeave(), 'disabled':!allAttendence()}" ng-click="selectAllLeave()" class="">离校</span>
+                                </div>
+                            </th>
+                            <th>缺席原因</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+	                        <tr ng-repeat="student in classStudents">
+	                            <td>{{student.studentName}}</td>
+	                            <td>{{student.phone}}</td>
+                              <td>
+                                    <div class="time-show br0 pl-0">
+                                        <span style="width:30px;" ng-class="{'active':student.isAttendence}" ng-click="markArrival(student)" class="">到校</span>
+                                    </div>
+	                            </td>
+                              <td>
+                                    <div class="time-show br0 pl-0">
+                                        <span style="width:30px;" ng-class="{'active':student.homeworkStarted, 'disabled':!student.isAttendence}" ng-click="markHomeworkStart(student)">开始</span>
+                                    </div>
+	                            </td>
+                              <td>
+                                    <div class="time-show br0 pl-0">
+                                        <span style="width:30px;" ng-class="{'active':student.homeworkEnded, 'disabled':!student.isAttendence || !student.homeworkStarted}" ng-click="markHomeworkEnd(student)" class="">完成</span>
+                                    </div>
+	                            </td>
+                              <td><a class="mt-btn brc3 li-btn-1 mt-0 ti-0" style="padding: 3px 5px; width: 20px" ng-click="showAddScoreView(student)" ng-disabled="student.isAttendence">加分</a></td>
+                              <td><a class="mt-btn brc3 li-btn-1 mt-0 ti-0" style="padding: 3px 5px; width: 20px" ng-click="showSubScoreView(student)" ng-disabled="student.isAttendence">减分</a></td>
+                              <td>
+                                    <div class="time-show br0 pl-0">
+                                        <span style="width:30px;"
+                                              ng-class="{'active':student.leave, 'disabled':!student.isAttendence}" ng-click="markLeave(student)" class="">离校</span>
+                                    </div>
+	                            </td>
+	                            <td>
+	                            	<select ng-model="student.reason" name="reason" id="reason" class="form-control"
+                                        ng-change="selectReason(student)" value="" style="margin-left:0px" ng-disabled="student.isAttendence">
+			                            <option value=""></option>
+                                  <option ng-repeat="reason in absenceReasons" value="{{reason.id}}" ng-selected="reason.id==student.reason">{{reason.name}}</option>
+						                    </select>
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <td>总计{{classStudentsTotal}}人</td>
+	                            <td>&nbsp;</td>
+	                            <td>{{countArrival()}} 人</td>
+                              <td>{{countHomeworkStarted()}} 人</td>
+                              <td>{{countHomeworkEnded()}} 人</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                              <td>{{countLeave()}} 人</td>
+                              <td>&nbsp;</td>
+	                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 20px">
+                <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                <button type="button" class="btn btn-success c5-lable" ng-click="submitRecord()" ng-disabled="coursePlan.$invalid">提交</button>
+            </div>
+        </div>
+    </form>
+</div>

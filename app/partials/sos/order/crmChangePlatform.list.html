@@ -1,0 +1,153 @@
+<div class="view-frame" ng-controller="CrmChangePlatformController">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content mt-new-ui user-love">
+        <div class="yws-nav">
+            <ul class="breadcrumb">
+                <li><a href="#/">首页</a> <span class="divider"></span></li>
+                <li><a href="#/fb-admin">前台业务</a> <span class="divider"></span></li>
+                <li><a ng-click="fb-admin/order">普通订单管理</a> <span class="divider"></span></li>
+                <li class="active">转平台记录列表</li>
+            </ul>
+        </div>
+        <div class="br-gray mt-list">
+            <h2><span class="h2-span">转平台记录列表</span><a class="mt-blue select-col cf f14 hide" ng-click="showCol(1)">选择列</a></h2>
+            <tabs pane-changed="getTabIndex(selectedPane)">
+                <pane title="转出">
+                    <div class="overflow-x" ng-if="channelTab==='1'">
+                        <!-- isShowCol-->
+                        <table class="table table-bordered table-striped table-condensed mt-table1" st-pipe="getCrmPlatformList" st-table="oneOrders">
+                            <thead>
+                                <tr class="br-gray-t">
+                                    <th>学员姓名</th>
+                                    <th>手机号</th>
+                                    <th st-sort="orderNo">合同编号</th>
+                                    <th>状态</th>
+                                    <th>转平台日期</th>
+                                    <th>总实收金额</th>
+                                    <th>总剩余实收金额</th>
+                                    <th>转出校区</th>
+                                    <th>转入校区</th>
+                                    <th>转出业绩</th>
+                                    <th>操作</th>
+                                </tr>
+
+                            </thead>
+                            <tbody ng-show="!isLoading">
+                                <tr ng-repeat="row in PlatformListFrom">
+                                    <td>{{row.crmStudentName}}</td>
+                                    <td>{{row.crmStudentPhone}}</td>
+                                    <td title="{{row.changeOrderNo}}">{{row.changeOrderNo|omitted:20}}</td>
+                                    <td ng-if="row.status == 1">待转出审核</td>
+                                    <td ng-if="row.status == 2">待转入审核</td>
+                                    <td ng-if="row.status == 3">审核通过</td>
+                                    <td ng-if="row.status == 4">审核未通过</td>
+                                    <td>{{row.changePlatformDate | date:'yyyy-MM-dd'}}</td>
+                                    <td>{{row.totalActualAmount}}</td>
+                                    <td>{{row.totalActualSurplusAmount}}</td>
+                                    <td>{{row.oldPlatformName}}</td>
+                                    <td>{{row.newPlatformName}}</td>
+                                    <td>{{row.changePlatformAmount}}</td>
+                                    <td>
+                                        <a class="showUI" id="nw+{{$index}}" ng-click="nw[$index]=true"><span
+                                    class="glyphicon glyphicon-caozuo" title="操作"></span></a>
+                                        <bubble ng-if="nw[$index]" for="nw+{{$index}}" align="bottom" close="nw[$index]=false" close-action="outerchick " ng-mouseleave="nw[$index]=false;">
+                                            <ul>
+                                                <li ng-if="row.status == 1" ng-click="showAuditChangePlatform(row)">
+                                                    <a>审核</a>
+                                                </li>
+                                                <li ng-if="row.status != 3 && row.status != 4 " ng-click="changePlatformBack(row)">
+                                                    <a>撤销</a>
+                                                </li>
+                                            </ul>
+                                        </bubble>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody ng-show="isLoading">
+                                <tr>
+                                    <td colspan="10" class="text-center">
+                                        <div class="loading-indicator"></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="10">
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </pane>
+                <pane title="转入">
+                    <div class="overflow-x" ng-if="channelTab==='0'">
+                        <!-- isShowCol-->
+                        <table class="table table-bordered table-striped table-condensed mt-table1" st-pipe="getCrmPlatformList" st-table="">
+                            <thead>
+                                <tr class="br-gray-t">
+                                    <th>学员姓名</th>
+                                    <th>手机号</th>
+                                    <th st-sort="orderNo">合同编号</th>
+                                    <th>状态</th>
+                                    <th>转平台日期</th>
+                                    <th>总实收金额</th>
+                                    <th>总剩余实收金额</th>
+                                    <th>转出校区</th>
+                                    <th>转入校区</th>
+                                    <th>转入业绩</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody ng-show="!isLoading">
+                                <tr ng-repeat="row in PlatformListTo">
+                                    <td>{{row.crmStudentName}}</td>
+                                    <td>{{row.crmStudentPhone}}</td>
+                                    <td title="{{row.changeOrderNo}}">{{row.changeOrderNo|omitted:20}}</td>
+                                    <td ng-if="row.status == 1">待转出审核</td>
+                                    <td ng-if="row.status == 2">待转入审核</td>
+                                    <td ng-if="row.status == 3">审核通过</td>
+                                    <td ng-if="row.status == 4">审核未通过</td>
+                                    <td>{{row.changePlatformDate | date:'yyyy-MM-dd'}}</td>
+                                    <td>{{row.totalActualAmount}}</td>
+                                    <td>{{row.totalActualSurplusAmount}}</td>
+                                    <td>{{row.oldPlatformName}}</td>
+                                    <td>{{row.newPlatformName}}</td>
+                                    <td>{{row.changePlatformAmount}}</td>
+                                    <td>
+                                        <a class="showUI" id="nw+{{$index}}" ng-click="nw[$index]=true"><span
+                                            class="glyphicon glyphicon-caozuo" title="操作"></span></a>
+                                        <bubble ng-if="nw[$index]" for="nw+{{$index}}" align="bottom" close="nw[$index]=false" close-action="outerchick " ng-mouseleave="nw[$index]=false;">
+                                            <ul>
+                                                <li ng-if="row.status == 2" ng-click="showAuditChangePlatform(row)">
+                                                    <a>审核</a>
+                                                </li>
+                                                <li ng-if="row.status == 2" ng-click="changePlatformBack(row)">
+                                                    <a>撤销</a>
+                                                </li>
+                                            </ul>
+                                        </bubble>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody ng-show="isLoading">
+                                <tr>
+                                    <td colspan="10" class="text-center">
+                                        <div class="loading-indicator"></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="10">
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </pane>
+            </tabs>
+        </div>
+    </div>
+</div>

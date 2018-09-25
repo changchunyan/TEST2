@@ -1,0 +1,71 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true" style="overflow-y:auto">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="membershipCardOrderForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle"></h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="order.id" id="order.id"  ng-model="order.id" />
+                    <div class="col-sm-12">
+                        <div class="row ">
+                            <div class="col-sm-12 " ng-class="{ 'has-error': membershipCardOrderForm.orderNo.$dirty && addMembershipCardOrderForm.orderNo.$error.required && orderNoExist}">
+                                <label for="orderNo" class="col-sm-4 control-label">* 注册手机号</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="order.phone" id="order.phone" ng-readonly="" ng-model="order.phone" required class="input-sm form-control"/>
+                               </div>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col-sm-12 " >
+                                <label for="order.cardType" class="col-sm-4 control-label">* 会员卡类型</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="order.cardType" name="order.cardType" id="order.cardType" class="col-sm-4 form-control" required
+                                            ng-options="option.id as option.name for option in orderCardTypeSelect" style="    position: relative;
+    left: 8px;">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col-sm-12 " >
+                                <label for="order.orderStatus" class="col-sm-4 control-label">* 订单状态</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="order.orderStatus" name="order.orderStatus" id="order.orderStatus" class="col-sm-4 form-control" required
+                                            ng-options="option.id as option.name for option in orderStatusSelect" style="    position: relative;
+    left: 8px;">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row ">
+                            <div class="col-sm-12 " ng-class="{ 'has-error': membershipCardOrderForm.orderNo.$dirty && addMembershipCardOrderForm.orderNo.$error.required && orderNoExist}">
+                                <label for="orderNo" class="col-sm-4 control-label">* 实付款</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="orderNo" id="orderNo"  ng-model="order.orderNo" required class="input-sm form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"  ng-click="$hide()" style="position: relative;left: -160px;top: 11px;">取消</button>
+                    <button type="button" class="btn btn-success c5-lable" ng-disabled="membershipCardOrderForm.$invalid"  ng-click="modalMembershipCardSubmit()" style="    position: relative;
+    left: -143px;
+    top: 12px;">保存</button>
+                    <img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<style>
+.col-sm-12{
+    margin-left: -20px;
+    margin-top: 10px;
+}
+</style>

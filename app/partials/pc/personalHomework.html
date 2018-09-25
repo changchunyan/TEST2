@@ -1,0 +1,113 @@
+<div class="view-frame">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content user-love">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="#">首页</a> <span class="divider"></span></li>
+                <li><a href="#/personal-admin">个人中心</a> <span class="divider"></span></li>
+                <li class="active">个人作业库</li>
+            </ul>
+        </div>
+        <div st-pipe="getHomeworkPackList" st-table="homeworkPackList" class="lh21">
+            <div class="mt-student-m br-gray h-auto no-media ml-0">
+                <ul class="one mt-10 h-auto pr-0">
+                    <li>
+                    	<label>上课对象</label>
+                        <input placeholder="请输入" name="name" id="name" ng-model="homeworkFilter.name" type="search" />
+                    </li>
+                    <li>
+                    	<label class="belongTo">类型</label>
+                    	<select id="packType" ng-model="homeworkFilter.packType" type="search" >
+               				<option value="">---请选择---</option>
+               				<option value="1">课前作业</option>
+               				<option value="4">课后作业</option>
+           				</select>
+                    </li>
+                    <li>
+                    	<label>年级</label>
+                    	<select id="gradeId" ng-model="homeworkFilter.gradeId" type="search" ng-options="tl.id as tl.name for tl in gradeIds">
+             				<option value="">---请选择---</option>
+         				</select> 
+                    </li>
+                    <li>
+                    	<label class="belongTo">科目</label>
+                    	<select id="subjectId" ng-model="homeworkFilter.subjectId" type="search" ng-options="tl.id as tl.name for tl in subjectIds">
+               				<option value="">---请选择---</option>
+           				</select>
+                    </li>
+                    <li>
+                    	<label class="belongTo">时间</label>
+	                    <input placeholder="请选择" type="text" name="startTime" id="startTime" datePicker ng-model="homeworkFilter.startTime"
+	                    	onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  onchange="" readonly/>
+                    </li>
+                    <li>
+                    	<button id="keydown-query" class="btn btn-success btn-select btn-base" ng-click="getPackByFilter(4)">查询</button>
+                    </li>
+                    <li>
+                    	<button class="btn btn-reast btn-base" ng-click="reset()">重置</button>
+                    </li>
+                </ul>
+            </div>
+            <div class="br-gray mt-list">
+                <h2 class="pl-20 c3">作业列表</h2>
+                <div class="overflow-x">
+                    <table class="table table-bordered table-striped table-condensed mt-table1">
+                        <thead>
+                        <tr class="br-gray-t">
+                            <th>作业</th>
+                            <th>类型</th>
+			                <th>年级</th>
+			                <th>科目</th>
+			                <th>上课时间</th>
+			                <th>上课对象</th>
+			                <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+				            <tr ng-repeat="row in homeworkPackList track by $index">
+				                <td>{{row.filename}}</td>
+				                <td ng-if="row.type == 1">课前作业</td>
+				                <td ng-if="row.type == 4">课后作业</td>
+				                <td>{{row.gradeName}}</td>
+				                <td>{{row.subjectName}}</td>
+				                <td>{{row.startTime | date : 'yyyy-MM-dd HH:mm'}}</td>
+				                <td>{{row.courseObjName}}</td>
+				                <td>
+					                <a class="showUI" id="nw+{{$index}}"  ng-click="nw[$index]=true"><span class="glyphicon glyphicon-caozuo" title="操作"></span></a>
+						                <bubble  ng-if="nw[$index]" for="nw+{{$index}}" align="bottom" close="nw[$index]=false" close-action="outerchick " ng-mouseleave="nw[$index]=false;">
+						                    <ul>
+						                        <li>
+						                            <a href={{row.viewPath}} target="_blank">查看</a>
+						                        </li>
+						                        <li>
+						                            <a href="{{row.downloadPath}}" download="资料">下载</a>
+						                        </li>
+						                        <li>
+						                            <a ng-click="deletePack(row, 4)">删除</a>
+						                        </li>
+						                    </ul>
+						                </bubble>
+					                </a>
+					            </td>
+				            </tr>
+			            </tbody>
+                        <tbody ng-show="isLoading">
+				            <tr>
+				                <td colspan="7" class="text-center"><div class="loading-indicator"></div>
+				                </td>
+				            </tr>
+			            </tbody>
+                        <tfoot>
+				            <tr>
+				                <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="7">
+				                </td>
+				            </tr>
+			            </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

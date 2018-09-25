@@ -1,0 +1,115 @@
+<div class="modal-tab-panel">
+	<div ng-repeat="workingExperience in hrTalent.hrWorkingExperiences track by $index">
+		<div class="tab-content-block">
+			<div class="col-sm-6 form-group">
+				<label for="company" class="col-sm-3 control-label">公司：</label>
+				<div class="col-sm-9">
+					<input type="text" placeholder="不超过10个字符" name="company" id="company" class="form-control" ng-model="workingExperience.company" disabled/>
+				</div>
+			</div>
+			<div class="col-sm-6 form-group">
+				<label for="position" class="col-sm-3 control-label">职位：</label>
+				<div class="col-sm-9">
+					<input type="text" name="position" id="position" class="form-control" ng-model="workingExperience.position" disabled/>
+				</div>
+			</div>
+
+			<div class="col-sm-6 form-group">
+				<label for="entrance_date" class="col-sm-3 control-label">入职时间：</label>
+				<div class="col-sm-9">
+					<input type="text" id="entrance_date" class="form-control" datePicker ng-model="workingExperience.entrance_date" onclick="WdatePicker({dateFmt:'yyyy-MM'})"  onchange="" disabled/>
+					<!--<input type="date" name="entrance_date" id="entrance_date" class="form-control" ng-model="workingExperience.entrance_date" required/>-->
+				</div>
+			</div>
+			<div class="col-sm-6 form-group">
+				<label for="entrance_date" class="col-sm-3 control-label">离职时间：</label>
+				<div class="col-sm-9">
+					<input ng-if="!workingExperience.up_to_now" type="text" id="departure_date" class="col-sm-8 form-control-base " datePicker ng-model="workingExperience.departure_date" onclick="WdatePicker({dateFmt:'yyyy-MM'})"  onchange="" disabled/>
+					<input class="col-sm-1" ng-model="workingExperience.up_to_now" type="checkbox" disabled/>
+					<label class="col-sm-3  control-label">至今：</label>
+
+				</div>
+				<div ng-class="{'col-sm-4':!workingExperience.up_to_now, 'col-sm-9':workingExperience.up_to_now}">
+
+				</div>
+			</div>
+
+
+			<div class="col-sm-6 form-group">
+				<label for="salary" class="col-sm-3 control-label">薪资：</label>
+				<div class="col-sm-9">
+					<input type="text" name="salary" id="salary" class="form-control" ng-model="workingExperience.salary" disabled/>
+				</div>
+			</div>
+			<div class="col-sm-12 form-group">
+				<label for="description" class="col-sm-1-5 control-label">工作描述：</label>
+				<div class="col-sm-10-5">
+					<textarea type="text" rows="5" placeholder="不超过140个字符" name="position" id="description" class="form-control" ng-model="workingExperience.description" disabled/>
+				</div>
+			</div>
+
+			<div class="yws-container width100">
+				<div class="yws-right">
+					<button class="btn btn-danger" ng-click="deleteWorkingExperience($index)">删除</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--<div ng-repeat="hrWorkingExperience in hrTalent.hrWorkingExperiences track by $index">
+		<div>
+			<div class="row">
+				<div class="col-sm-6 form-group">
+					<label for="company" class="col-sm-4 control-label">公司：</label>
+					<div class="col-sm-8">
+						<input type="text" name="company" id="company" class="form-control" ng-model="hrWorkingExperience.company" disabled="disabled"/>
+					</div>
+				</div>
+				<div class="col-sm-6 form-group">
+					<label for="position" class="col-sm-4 control-label">职位：</label>
+					<div class="col-sm-8">
+						<input type="text" name="position" id="position" class="form-control" ng-model="hrWorkingExperience.position" disabled="disabled"/>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6 form-group">
+					<label for="entrance_date" class="col-sm-4 control-label">入职时间：</label>
+					<div class="col-sm-8">
+						<input type="text" id="entrance_date" class="form-control" datePicker ng-model="hrWorkingExperience.entrance_date" onclick="WdatePicker({dateFmt:'yyyy-MM'})"  onchange="" disabled/>
+					</div>
+				</div>
+				&lt;!&ndash;<div class="col-sm-6 form-group">&ndash;&gt;
+					&lt;!&ndash;<label for="departure_date" class="col-sm-4 control-label">离职时间：</label>&ndash;&gt;
+					&lt;!&ndash;<div class="col-sm-8">&ndash;&gt;
+						&lt;!&ndash;<input type="text" id="departure_date" class="form-control" datePicker ng-model="hrWorkingExperience.departure_date" onclick="WdatePicker({dateFmt:'yyyy-MM'})"  onchange="" disabled/>&ndash;&gt;
+					&lt;!&ndash;</div>&ndash;&gt;
+				&lt;!&ndash;</div>&ndash;&gt;
+				<div class="col-sm-6 form-group">
+					<label for="departure_date" class="col-sm-4 control-label">离职时间：</label>
+					<div class="col-sm-5">
+						<input disabled ng-if="!hrWorkingExperience.up_to_now" type="text" id="departure_date" class="form-control" datePicker ng-model="hrWorkingExperience.departure_date" onclick="WdatePicker({dateFmt:'yyyy-MM'})"  onchange=""/>
+					</div>
+					<div ng-class="{'col-sm-3':!hrWorkingExperience.up_to_now, 'col-sm-8':hrWorkingExperience.up_to_now}">
+						<label style="float:left;">至今：</label>
+						<input disabled style="float:left;" ng-model="hrWorkingExperience.up_to_now" type="checkbox" class="form-control"/>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6 form-group">
+					<label for="description" class="col-sm-4 control-label">工作描述：</label>
+					<div class="col-sm-8">
+						<textarea type="text" rows="5" placeholder="不超过140个字符" name="position" id="description" class="form-control" ng-model="hrWorkingExperience.description" disabled/>
+					</div>
+				</div>
+				<div class="col-sm-6 form-group">
+					<label for="salary" class="col-sm-4 control-label">薪资：</label>
+					<div class="col-sm-8">
+						<input type="text" name="salary" id="salary" class="form-control" ng-model="hrWorkingExperience.salary" disabled="disabled"/>
+					</div>
+				</div>
+			</div>
+		</div>
+		<hr/>
+	</div>-->
+</div>

@@ -1,0 +1,43 @@
+<ul id="guiZe">
+    <!--TODO:注册积分设置\完善个人信息积分设置\分享资讯积分设置\消课一次积分设置\评价教师积分设置-->
+    <p ng-if="zore" style="color: #ff8486" class="f14">您还有未填写的信息或您填写的数据必须大于0</p>
+    <li class="f16 cf8" ng-repeat="el in list" ng-init="el.desp = el.desp||{}">
+        <!--注册积分设置-->
+        <p ng-if="detail.group_id==1" ng-class="{'pl-40':$index}"  ng-init="el.desp.text='新用户注册，加value分'"><label class="f16">新用户注册，加</label>
+            <input name="name" ng-model="el.desp.value" class="tc">分<a ng-if="$index" class="ml-10 color-fc990a" ng-click="deleteListByIndex($index)">删除</a>
+        </p>
+        <!--完善个人信息积分设置-->
+        <p ng-if="detail.group_id==2" ng-init="el.desp.text='完善个人信息，加value分'"><label class="f16">完善个人信息，加</label>
+            <input name="name" ng-model="el.desp.value" class="tc">分
+        </p>
+        <!--分享资讯积分设置-->
+        <p ng-if="detail.group_id==4" ng-init="el.desp.text='分享资讯，加value分'"><label class="f16">分享资讯，加</label>
+            <input name="name" ng-model="el.desp.value" class="tc">分
+        </p>
+        <!--消课一次积分设置-->
+        <p ng-if="detail.group_id==7" ng-init="el.desp.text='消课一次，加value分'"><label class="f16">消课一次，加</label>
+            <input name="name" ng-model="el.desp.value" class="tc">分
+        </p>
+        <!--评价教师积分设置-->
+        <p ng-if="detail.group_id==9" ng-init="el.desp.text='评价教师，加value分'"><label class="f16">评价教师，加</label>
+            <input name="name" ng-model="el.desp.value" class="tc">分
+        </p>
+        <!--购买课程积分设置-->
+        <p ng-if="detail.group_id==6" ng-init="el.desp.text='消费Num元,加value分'"><label class="f16">消费</label><input name="" ng-model="el.desp.Num" class="tc">元,加<input
+                name="name" ng-model="el.desp.value" class="tc">分
+        </p>
+        <!--教师评分5星，加积分设置-->
+        <p ng-if="detail.group_id==8" ng-class="{'pl-40':$index}" ng-init="el.desp.text='教师评分Num星，加value分'"><label class="f16">教师评分{{el.desp.Num=5-$index}}星，加</label>
+            <input name="name" ng-model="el.desp.value" class="tc">分<a ng-if="$index" class="ml-10 color-fc990a" ng-click="deleteListByIndex($index)">删除</a>
+        </p>
+        <!--邀请积分设置-->
+        <p ng-if="detail.group_id==5" ng-class="{'pl-40':$index}" ng-init="el.desp.text='邀请Num个好友成功，加value分'"><label class="f16">邀请</label><input name="" ng-model="el.desp.Num" class="tc">个好友成功，加</label>
+            <input name="name" ng-model="el.desp.value" class="tc">分<a ng-if="$index" class="ml-10 color-fc990a" ng-click="deleteListByIndex($index)">删除</a>
+        </p>
+        <!--签到-->
+        <p ng-if="detail.group_id==3" ng-class="{'pl-40':$index}" ng-init="el.desp.text='连续签到Num天,加value分'">
+            <label class="f16">连续签到</label><input name="" ng-model="el.desp.Num" class="tc">天,加<input
+                name="name" ng-model="el.desp.value" class="tc">分<a ng-if="$index" class="ml-10 color-fc990a" ng-click="deleteListByIndex($index)">删除</a></p>
+    </li>
+    <li ng-if="detail.group_id==3||detail.group_id==5||detail.group_id==8"><a class="add-rule" ng-click="add()">添加规则</a></li>
+</ul>

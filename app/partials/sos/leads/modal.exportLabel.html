@@ -1,0 +1,95 @@
+
+<style>
+    .modal-body{
+        background-color: #f9f9f9;
+        padding: 20px;
+    }
+    .modal-li{
+        /*margin: 20px 0;*/
+        padding: 20px;
+    }
+    .modal-li-title{
+        font-size: 20px;
+    }
+    .form-horizontal .form-group{
+        margin: 0 0 20px 0;
+    }
+    .bg-f1{
+        background-color: #f1f4f9;
+        margin-left: -15px;
+        margin-right: -15px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+</style>
+<div class="modal crm-importLeads-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" style="width:600px;">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide();hideUploadModal()"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">导出</h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal-li">
+                    <form class="form-inline" name="exportForm" novalidate>
+                        <div class="form-group">
+                            <label>起始页码</label>
+                            <div class="input-group">
+                                <!--<input type="text" class="form-control" ng-change="exportPageNumberChange(e.exportStartPageNumber,e.exportEndPageNumber)" required placeholder="请输入起始页码" min="1" ng-model="e.exportStartPageNumber">-->
+                                <input type="text" class="form-control" ng-input="exportPageNumberChange(e.exportStartPageNumber,e.exportEndPageNumber)" required placeholder="请输入起始页码" ng-model="e.exportStartPageNumber">
+                                <!-- oninput="this.value=this.value.replace(/[^\d]+/g,'')" -->
+                                <div class="input-group-addon">页</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>终止页码</label>
+                            <div class="input-group">
+                                <!--oninput="this.value=this.value.replace(/[^\d]+/g,'')"-->
+                                <input type="text" class="form-control" ng-input="exportPageNumberChange(e.exportStartPageNumber,e.exportEndPageNumber)" required placeholder="请输入终止页码" ng-model="e.exportEndPageNumber">
+                                <div class="input-group-addon">页</div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-li">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="text-center">
+                    <button class="btn btn-success" ng-disabled="canSubmit" ng-click="exportCustomer()">导出</button>
+                    <button class="btn btn-default" ng-click="$hide();hideUploadModal()">取消</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<!--<script style="display:none">-->
+<!--$(function(){-->
+<!--$(".yes-radio").on("click",function() {-->
+<!--if (!$(this).hasClass("radio-checked")) {-->
+<!--$(this).parents('.modal-body').find(".radio-checked").removeClass("radio-checked");-->
+<!--$(this).addClass("radio-checked");-->
+<!--}-->
+<!--})-->
+<!--});-->
+<!--</script>-->
+<!--<script type="text/javascript">-->
+<!--window.load = pause();-->
+<!--function pause(){-->
+<!--window.setTimeout("tooltipShow()", 1000);-->
+<!--}-->
+<!--function tooltipShow() {-->
+<!--var node = $("#hint");-->
+<!--var content = '1. 步骤：填写默认信息 -> 上传文件（可下载处理过的excel查看无法解析部分） -> 确认导入（如有重复或异常数据可下载excel查看）。<br/>2. 系统将按照手机号（客户、母亲、父亲）、年级、省、姓名（客户、母亲、父亲）、性别尽量解析数据，少数顺序错乱不影响。<br/>3. 录入人、录入地点等无效信息请删除，以免影响数据正确性。<br/> ';-->
+<!--node.webuiPopover({content:content,trigger:'hover'});-->
+<!--}-->
+<!--</script>-->

@@ -1,0 +1,59 @@
+/*==============================
+ * 教研新分页ui
+ * @李世明 2016-12-06
+ *==============================*/
+.mt-page ul li:before,.mt-page ul li.active:before{
+    display:block;clear:both;content:"";visibility:hidden;height:0;
+    width:0;
+}
+.mt-page ul li{
+    float: left;
+    /*min-width:26px;*/
+    overflow: hidden;
+    border: 1px solid #e5e5e5;
+    line-height: 30px;
+    text-align: center;
+    margin-left:6px;
+    border-radius: 4px;
+    padding: 0 5px;
+}
+.mt-page ul{
+    padding: 23px 10px 0 5px;
+}
+.mt-page ul li a{
+    color: #898989 !important;
+    height: 23px;
+    display: block;
+    line-height: 25px;
+}
+.mt-page ul .active a{
+    color: #fff !important;
+}
+.mt-page ul li.active{
+    border: none;
+    background: #67ba2f;
+}
+.mt-page ul,.mt-page div,.page-info{
+    float: left;
+    font-size: 14px;
+    color: #898989;
+}
+.page-info{
+    min-width:110px;
+    max-width:177px;
+}
+#go_pg_num{
+    width: 32px;
+    height: 25px;
+    border: none;
+    border-bottom: 1px solid #dbdfee;
+    text-align: center;
+}
+.page-btn{
+    margin-left: 10px;
+    background: #67ba2f;
+    color: #fff;
+    border-radius: 4px;
+    padding:5px 10px;
+    cursor: pointer;
+}

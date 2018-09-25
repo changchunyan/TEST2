@@ -1,0 +1,28 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true" ng-controller="SNPCourseRecordScoreController as controller">
+    <form class="modal-dialog form-horizontal" name="coursePlan">
+        <div class="modal-content mt-label-h2">
+            <div class="modal-header">
+              <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">{{scoreType == 'add' ? '加分项' : '减分项'}}</h4>
+            </div>
+            <div class="modal-body">
+              <div class="row" ng-repeat="group in localScoreGroups" style="margin: 0px 20px;background-color: #f2f2f2;border:1px solid #f2f2f2">
+                <div class="col-sm-4" style="text-align:center;padding:10px 0px">
+                  {{group.name}}
+                </div>
+                <div class="col-sm-8" style="background-color: white;border:1px solid #f2f2f2;padding:10px 0px">
+                  <div class="col-sm-3" ng-repeat="score in group.scores" style="margin-bottom: 10px;margin-left: 20px">
+                    <div class="time-show br0 pl-0">
+                        <span ng-class="{'active':scoreSelected(score)}" ng-click="selectScore(score)" class=""  style="width:auto">{{score.name}}({{score.score}})</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 20px">
+                <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                <button type="button" class="btn btn-success c5-lable" ng-click="confirmScore()" ng-disabled="coursePlan.$invalid">确定</button>
+            </div>
+        </div>
+    </form>
+</div>

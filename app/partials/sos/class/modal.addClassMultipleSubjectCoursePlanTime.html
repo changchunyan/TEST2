@@ -1,0 +1,282 @@
+<style>
+    .active-week{
+        background:#dfdfdf !important;
+        color:#fff !important;
+    }
+</style>
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" style=""  ng-if="coursePlanEntrance ==  'addClass'">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide();clearAllMultipleCourseData()"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" ng-bind="addMultipleCourseTitle"></h4>
+            </div>
+            <div class="modal-body">
+                <div style="display:flex;">
+                    <button  class="btn btn-default" ng-init="index" style="flex:1;padding-right:0;padding-left:0;" ng-class="{'active-week':activeDay == $index}" ng-repeat="day in week" ng-click="chooseTheDayOfWeek($index,day.startDate)" >
+						<span  style="position:relative;width:100%;height:100%; display:inline-block;">
+							{{day.startDate}}
+							<em class="badge" ng-if="day.count" style="background:#5891ba;position:absolute;right:0px;top:-15px;">{{day.count}}</em>
+						</span>
+                        <input type="radio" name="weekRadio"  value="{{$index+1}}" ng-checked="activeDay == $index" ng-show="false">
+                    </button>
+                </div>
+
+                <div>
+                    <table class="table table-bordered table-striped mt-table1" style="text-align: center">
+                        <thead>
+                        <tr>
+                            <th>科目</th>
+                            <th>上课老师</th>
+                            <th>上课时间</th>
+                            <th>上课时长</th>
+                            <th>下课时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="courseTimeAddList">
+                        <tr ng-repeat="option in LessonTimeList" ng-show="option.day == activeDay+1">
+
+                            <td>
+                                <select name="option.multipleCourseSelectTime.subjectId"  ng-model="option.multipleCourseSelectTime.subjectId" ng-change="getMultipleCourseTeachers(option.multipleCourseSelectTime.subjectId,$index)">
+                                    <option value="">-- 请选择 --</option>
+                                    <option value="{{subject.id}}" ng-selected="option.multipleCourseSelectTime.subjectId == subject.id" ng-repeat="subject in option.subject">{{subject.name}}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="" id="" ng-model="option.multipleCourseSelectTime.teacherId" ng-change="changeLessonTimeListTeacher($index,option.multipleCourseSelectTime.teacherId)">
+                                    <option value="">-- 请选择 --</option>
+                                    <option value="{{teacher.userId}}" ng-selected="option.multipleCourseSelectTime.teacherId == teacher.userId" ng-repeat="teacher in option.teacher">{{teacher.username}}</option>
+                                </select>
+                            </td>
+                            <td style="display:flex;">
+                                <input type="text"  name="leadsName1" id="time1"
+                                       ng-model="option.multipleCourseSelectTime.time1" placeholder="时" class="form-control ng-pristine " required=""  ng-change="getMultipleCourseEndTime($index)"  ng-focus="getMultipleCourseEndTime($index)">
+                                <span style="font-size: 20px;">:</span>
+                                <input type="text"  name="leadsName1" id="time2"
+                                       ng-model="option.multipleCourseSelectTime.time2" placeholder="分" class="form-control ng-pristine " required="" ng-change="getMultipleCourseEndTime($index)" ng-focus="getMultipleCourseEndTime($index)">
+                            </td>
+                            <td>
+                                <select ng-model="option.multipleCourseSelectTime.timeSize"
+                                        name="classMultipleSubjectCourseSelectTimeSize"  class="input-sm form-control"
+                                        type="search" required="" ng-change="getMultipleCourseEndTime($index)">
+                                    <option value="">请选择</option>
+                                    <option value="{{timeSizes.id}}" ng-selected="option.multipleCourseSelectTime.timeSize == timeSizes.id" ng-repeat="timeSizes in TIME_SIZE1">{{timeSizes.name}}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input ype="text"  readonly="" name="timeEnd"
+                                       ng-model="option.multipleCourseSelectTime.timeEnd" placeholder="自动生成" class="form-control ng-pristine" required="">
+
+                            </td>
+                            <td>
+                                <a ng-click="deleteMultipleCoursePlanTime($index)" title="删除"><span
+                                        class="glyphicon glyphicon-delete"></span></a> &nbsp;
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td>
+                                <select name="classMultipleInfo.subjectId" ng-click="checkWeek()" ng-change="getMultipleCourseTeachers(classMultipleInfo.subjectId)" class="input-sm form-control" type="search" ng-model="classMultipleInfo.subjectId">
+                                    <option value="">-- 请选择 --</option>
+                                    <option value="{{option.id}}" ng-repeat="option in omsSubject">{{option.name}}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select  ng-click="checkWeek()" name="classMultipleInfo.teacherId" id="classMultipleInfo.teacherId" class="input-sm form-control" type="search" ng-model="classMultipleInfo.teacherId"
+                                ">
+                                <option value="">-- 请选择 --</option>
+                                <option value="{{option.userId}}" ng-repeat="option in multipleCourseTeachersList">{{option.username}}</option>
+                                </select>
+                            </td>
+                            <td style="display:flex;">
+                                <input type="text"  name="leadsName1" id="time1"
+                                       ng-model="multipleCourseSelectTime.time1" placeholder="时" class="form-control ng-pristine " required=""  ng-change="getMultipleCourseEndTime()"  ng-focus="getMultipleCourseEndTime()">
+                                <span style="font-size: 20px;">:</span>
+                                <input type="text"  name="leadsName1" id="time2"
+                                       ng-model="multipleCourseSelectTime.time2" placeholder="分" class="form-control ng-pristine " required="" ng-change="getMultipleCourseEndTime()" ng-focus="getMultipleCourseEndTime()">
+                            </td>
+                            <td>
+                                <select ng-model="multipleCourseSelectTime.timeSize"
+                                        name="classMultipleSubjectCourseSelectTimeSize"  class="input-sm form-control"
+                                        ng-options="option.id as option.name for option in TIME_SIZE1" type="search" required="" ng-change="getMultipleCourseEndTime()">
+                                    <option value="">请选择</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input ype="text"  readonly="" name="timeEnd"
+                                       ng-model="multipleCourseSelectTime.timeEnd" placeholder="自动生成" class="form-control ng-pristine " required="">
+                            </td>
+
+                            <td>
+
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td colspan="5" class=" h-50">
+                                <button ng-click="addLessonTime()" class="btn btn-default"  ng-disabled="!addIsLegitimate">添加</button>
+                            </td>
+                        </tr>
+
+                        </tfoot>
+                    </table>
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success c5-lable" ng-click="addMultipleCoursePlanTime()">确定</button>
+                <button type="button" class="btn btn-default" ng-click="$hide();clearAllMultipleCourseData()">取消</button>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <div class="modal-dialog" style="" ng-if="coursePlanEntrance == 'editCoursePlan'">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide();clearAllMultipleCourseData()"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" ng-bind="addMultipleCourseTitle"></h4>
+            </div>
+            <div class="modal-body">
+                <div style="display:flex;">
+                    <button ng-disabled="$index != activeDay" class="btn btn-default" ng-init="index" style="flex:1;padding-right:0;padding-left:0;" ng-class="{'active-week':activeDay == $index}" ng-repeat="day in week" ng-click="chooseTheDayOfWeek($index,day.startDate)" >
+						<span  style="position:relative;width:100%;height:100%; display:inline-block;">
+							{{day.startDate}}
+							<em class="badge" ng-if="day.count" style="background:#5891ba;position:absolute;right:0px;top:-15px; ">{{day.count}}</em>
+						</span>
+                        <input type="radio" name="weekRadio"  value="{{$index+1}}" ng-checked="activeDay == $index" ng-show="false">
+                    </button>
+                </div>
+
+                <div>
+                    <table class="table table-bordered table-striped mt-table1" style="text-align: center">
+                        <thead>
+                        <tr>
+                            <th>科目</th>
+                            <th>上课老师</th>
+                            <th>上课时间</th>
+                            <th>上课时长</th>
+                            <th>下课时间</th>
+                            <th>操作</th>
+                        </tr>
+
+                        </thead>
+                        <tbody id="courseTimeAddList">
+
+                        <tr ng-repeat="option in LessonTimeList">
+
+                            <td>
+                                <select name="option.multipleCourseSelectTime.subjectId"  ng-model="option.multipleCourseSelectTime.subjectId" ng-change="getMultipleCourseTeachers(option.multipleCourseSelectTime.subjectId,$index)">
+                                    <option value="">-- 请选择 --</option>
+                                    <option value="{{subject.id}}" ng-selected="option.multipleCourseSelectTime.subjectId == subject.id" ng-repeat="subject in option.subject">{{subject.name}}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input ng-if="!option.teacher"  ng-click="option.teacher?null:getMultipleCourseTeachers(option.multipleCourseSelectTime.subjectId,$index,1)" type="text" readonly ng-model="option.teacherName">
+                                <select  ng-if="option.teacher" name="" id="" ng-model="option.multipleCourseSelectTime.teacherId" ng-change="changeLessonTimeListTeacher($index,option.multipleCourseSelectTime.teacherId)">
+                                    <option value="" >-- 请选择 --</option>
+                                    <option value="{{teacher.userId}}" ng-selected="option.multipleCourseSelectTime.teacherId == teacher.userId" ng-repeat="teacher in option.teacher">{{teacher.username}}</option>
+                                </select>
+                            </td>
+                            <td style="display:flex;">
+                                <input type="text"  name="leadsName1" id="time1"
+                                       ng-model="option.multipleCourseSelectTime.time1" placeholder="时" class="form-control ng-pristine " required=""  ng-change="getMultipleCourseEndTime($index)"  ng-focus="getMultipleCourseEndTime($index)">
+                                <span style="font-size: 20px;">:</span>
+                                <input type="text"  name="leadsName1" id="time2"
+                                       ng-model="option.multipleCourseSelectTime.time2" placeholder="分" class="form-control ng-pristine " required="" ng-change="getMultipleCourseEndTime($index)" ng-focus="getMultipleCourseEndTime($index)">
+                            </td>
+                            <td>
+                                <select ng-model="option.multipleCourseSelectTime.timeSize"
+                                        name="classMultipleSubjectCourseSelectTimeSize"  class="input-sm form-control"
+                                        type="search" required="" ng-change="getMultipleCourseEndTime($index)">
+                                    <option value="">请选择</option>
+                                    <option value="{{timeSizes.id}}" ng-selected="option.multipleCourseSelectTime.timeSize == timeSizes.id" ng-repeat="timeSizes in TIME_SIZE1">{{timeSizes.name}}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input ype="text"  readonly="" name="timeEnd"
+                                       ng-model="option.multipleCourseSelectTime.timeEnd" placeholder="自动生成" class="form-control ng-pristine" required="">
+
+                            </td>
+                            <td>
+                                <a ng-click="deleteMultipleCoursePlanTime($index)" title="删除"><span
+                                        class="glyphicon glyphicon-delete"></span></a> &nbsp;
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot ng-if="false">
+                        <tr>
+                            <td>
+                                <select ng-click="checkWeek()" name="classMultipleInfo.subjectId" ng-change="getMultipleCourseTeachers(classMultipleInfo.subjectId)" class="input-sm form-control" type="search" ng-model="classMultipleInfo.subjectId">
+                                    <option value="">-- 请选择 --</option>
+                                    <option value="{{option.id}}" ng-repeat="option in omsSubject">{{option.name}}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select ng-click="checkWeek()"  name="classMultipleInfo.teacherId" id="classMultipleInfo.teacherId" class="input-sm form-control" type="search" ng-model="classMultipleInfo.teacherId"
+                                ">
+                                <option value="">-- 请选择 --</option>
+                                <option value="{{option.userId}}" ng-repeat="option in multipleCourseTeachersList">{{option.username}}</option>
+                                </select>
+                            </td>
+                            <td style="display:flex;">
+                                <input type="text"  name="leadsName1" id="time1"
+                                       ng-model="multipleCourseSelectTime.time1" placeholder="时" class="form-control ng-pristine " required=""  ng-change="getMultipleCourseEndTime()"  ng-focus="getMultipleCourseEndTime()">
+                                <span style="font-size: 20px;">:</span>
+                                <input type="text"  name="leadsName1" id="time2"
+                                       ng-model="multipleCourseSelectTime.time2" placeholder="分" class="form-control ng-pristine " required="" ng-change="getMultipleCourseEndTime()" ng-focus="getMultipleCourseEndTime()">
+                            </td>
+                            <td>
+                                <select ng-model="multipleCourseSelectTime.timeSize"
+                                        name="classMultipleSubjectCourseSelectTimeSize"  class="input-sm form-control"
+                                        ng-options="option.id as option.name for option in TIME_SIZE1" type="search" required="" ng-change="getMultipleCourseEndTime()">
+                                    <option value="">请选择</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input ype="text"  readonly="" name="timeEnd"
+                                       ng-model="multipleCourseSelectTime.timeEnd" placeholder="自动生成" class="form-control ng-pristine " required="">
+                            </td>
+
+                            <td>
+
+                            </td>
+
+                        </tr>
+
+                        <!--<tr>-->
+                        <!--<td colspan="5" class=" h-50">-->
+                        <!--<button ng-click="addLessonTime()" class="btn btn-default"  ng-disabled="!addIsLegitimate">添加</button>-->
+                        <!--</td>-->
+                        <!--</tr>-->
+                        </tfoot>
+                    </table>
+
+
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success c5-lable" ng-click="addMultipleCoursePlanTime()">确定</button>
+                <button type="button" class="btn btn-default" ng-click="$hide();clearAllMultipleCourseData()">取消</button>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+</div>

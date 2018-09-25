@@ -1,0 +1,88 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="selectCourseForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="selectCourseTitle"></h4>
+                </div>
+                <div class="modal-body">
+                    <div style="overflow: hidden">
+                        <div class="table-responsive border-ccc" >
+                            <table class="table table-bordered table-striped table-condensed" st-pipe="getCourseList" st-table="CourseList">
+                                <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>名称</th>
+                                    <th>年级</th>
+                                    <th>科目</th>
+                                    <th>创建时间</th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <input type="checkbox" ng-checked="isSelectedAllCourse()" ng-click="selectAllCourse()" class="needsclick">
+                                    </th>
+                                    <th>
+                                        <input st-search="CourseListFilter.name" placeholder="搜索课程" ng-model="CourseListFilter.name" class="input-sm form-control" type="search"/>
+                                    </th>
+                                    <th>
+                                        <select st-search="CourseListFilter.gradeId" ng-model="CourseListFilter.gradeId"
+                                                name="CourseListFilter.gradeId" id="CourseListFilter.gradeId" class="input-sm form-control"
+                                                ng-options="option.id as option.name for option in gradeList" type="search" ng-change="onGradeChange()">
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </th>
+                                    <th>
+                                        <select st-search="CourseListFilter.subjectId" ng-model="CourseListFilter.subjectId"
+                                                name="CourseListFilter.subjectId" id="CourseListFilter.subjectId" class="input-sm form-control"
+                                                ng-options="option.id as option.name for option in subjectList" type="search">
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </th>
+                                    <th>
+                                        <input ng-model="CourseListFilter.createAt" st-search="CourseListFilter.createAt" type="date" class="input-sm form-control ng-valid needsclick ng-dirty ng-valid-date ng-touched">
+                                        <!--<input st-search="CourseListFilter.createAt" placeholder="" class="input-sm form-control needsclick" type="search" datepicker="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd ',minDate:'2000-01-01 00:00:00',maxDate:'2030-12-31 23:59:59'})" onchange="" readonly="">-->
+                                    </th>
+                                </thead>
+                                <tbody ng-show="!isCourseListLoading">
+                                <tr ng-repeat="row in CourseList">
+                                    <td><input type="checkbox" ng-checked="isCourseSelected(row)" ng-click="selectOneCourse(row,$event)" ></td>
+                                    <td>{{row.name}}</td>
+                                    <td>{{row.gradeName}}</td>
+                                    <td>{{row.subjectName}}</td>
+                                    <td>{{row.createAt | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                                </tr>
+                                </tbody>
+                                <tbody ng-show="isCourseListLoading">
+                                <tr>
+                                    <td colspan="14" class="text-center"><div class="loading-indicator"></div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="14"></td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer margin-top20">
+                    <button type="button" class="btn btn-default"  ng-click="$hide()">取消</button>
+                    <button type="button" class="btn btn-success"  ng-click="doSelectCourse()">确定</button><!-- -->
+                    <img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+<style>
+    .col-sm-6{
+        padding-top: 10px;
+    }
+   .form-horizontal .control-label{
+    padding-top: 17px;
+   }
+</style>

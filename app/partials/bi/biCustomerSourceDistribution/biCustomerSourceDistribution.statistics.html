@@ -1,0 +1,60 @@
+<!-- 筛选条件 -->
+<div ng-include="baseHtmlUrl" style="padding: 0px 15px"></div>
+<!-- 表格 -->
+<div class="default-box">
+    <h4>
+                        客户来源分布
+        <span ng-if="!isDay">（从 {{modelStartTime | date : 'yyyy-MM-dd'}} 至 {{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+        <span ng-if="isDay">（{{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+        <span ng-if="presentTime">最新统计时间：{{presentTime}}</span>
+        <button class="btn btn-success bi-list-head" ng-click="getStatisticsAll()">导出列表</button>
+    </h4>
+    <br/>
+    <div class="table-responsive">
+        <table st-pipe="getStatistics" st-table="tableModel" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th style="font-weight: bold;" rowspan="1">序号</th>
+                <th style="font-weight: bold;" rowspan="1"><span>渠道</span></th>
+                <th style="font-weight: bold;" rowspan="1"><span>客户数量</span></th>
+                <th style="font-weight: bold;" rowspan="1"><span>比例</span></th>
+                <th style="font-weight: bold;" rowspan="1"><span>到访人数</span></th>
+                <th style="font-weight: bold;" rowspan="1"><span>到访率</span></th>
+                <th style="font-weight: bold;" rowspan="1"><span>体验人数</span></th>
+                <th style="font-weight: bold;" rowspan="1"><span>体验率</span></th>
+                <th style="font-weight: bold;" rowspan="1"><span>签单人数</span></th>
+                <th style="font-weight: bold;" rowspan="1"><span>签单率</span></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-if="!$last" ng-repeat="statisticsModel in statisticsModels">
+                <td>{{$index + 1}}</td>
+                <td>{{statisticsModel.channelName}}</td>
+                <td>{{statisticsModel.customerNum}}</td>
+                <td>{{(statisticsModel.customerNum/statisticsModels[statisticsModels.length-1].customerSum)*100 | number:2}}%</td>
+                <td>{{statisticsModel.arrivalNum}}</td>
+                <td>{{(statisticsModel.arrivalNum/statisticsModel.customerNum)*100 | number:2}}%</td>
+                <td>{{statisticsModel.experienceNum}}</td>
+                <td>{{(statisticsModel.experienceNum/statisticsModel.customerNum)*100 | number:2}}%</td>
+                <td>{{statisticsModel.orderNum}}</td>
+                <td>{{(statisticsModel.orderNum/statisticsModel.customerNum)*100 | number:2}}%</td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr style="height: 40px">
+                <td colspan="2" align="center">总计</td>
+                <td>{{statisticsModels[statisticsModels.length-1].customerSum}}</td>
+                <td>{{statisticsModels[statisticsModels.length-1].customerRatio}}</td>
+                <td>{{statisticsModels[statisticsModels.length-1].arrivalSum}}</td>
+                <td>{{statisticsModels[statisticsModels.length-1].arrivalRateSum*100| number:2}}%</td>
+                <td>{{statisticsModels[statisticsModels.length-1].experienceSum}}</td>
+                <td>{{statisticsModels[statisticsModels.length-1].experienceRateSum*100| number:2}}%</td>
+                <td>{{statisticsModels[statisticsModels.length-1].orderSum}}</td>
+                <td>{{statisticsModels[statisticsModels.length-1].orderRateSum*100| number:2}}%</td>
+            </tr>
+            </tfoot>
+
+        </table>
+
+    </div>
+</div>

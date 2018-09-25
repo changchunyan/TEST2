@@ -1,0 +1,22 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" style="width: 500px">
+        <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="title"></h4>
+                </div>
+                <div class="modal-body pb-20" ng-click="gotoshiting(detailForUpdate)">
+                    添加邀约记录成功，是否继续试听排课？
+                </div>
+            <div class="modal-footer">
+                <div class="text-center"><!-- ng-controller="LeadsStudentController as xxx"-->
+                    <button class="btn btn-default" ng-click=" $hide()" >取消</button>
+                    <button class="btn btn-success" ng-click="gotoshiting(detailForUpdate)" >试听排课</button><!-- ng-click="findHaveDaoFang(detailForUpdate)"  ng-click="gotoshiting()"-->
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

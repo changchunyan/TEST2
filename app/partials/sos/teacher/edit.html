@@ -1,0 +1,105 @@
+<!--
+<div class="modal orderModal"  tabindex="-1" role="dialog" aria-hidden="true" ng-controller="TeacherCoursesController as tcc">
+    <div class="modal-dialog">
+        <div class="modal-content" >
+
+        </div>
+    </div>
+</div>
+-->
+
+<div class="view-frame" ng-controller="TeacherCoursesController as tcc">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content" >
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="#/">首页</a> <span class="divider"></span></li>
+                <li><a href="#/sos-admin">学员教务</a> <span class="divider"></span></li>
+                <li><a href="#/sos-admin/teacher">教师管理</a> <span class="divider"></span></li>
+                <li><a href="#/sos-admin/teacher">教师列表</a> <span class="divider"></span></li>
+                <li class="active">教师课程详情</li>
+            </ul>
+        </div>
+        <div class="details-title">
+            <span class="details-title-left">教师课程信息详情</span>
+            <div class="details-title-right">
+                <!--  <div class="title-right-btn">
+                    <button class="btn btn-primary" ng-click="tcc.showAddTeacherCourseView()">创建课程</button>
+                </div> -->
+                <div class="title-right-btn" >
+                    <button class="btn btn-primary" ng-click="tcc.showSelectedTeacherCourseView()">选择课程</button>
+                </div>
+               <!-- <div class="title-right-btn" >
+                    <button class="btn btn-success" ng-click="tcc.showTimeTeacherCourseView()">可上课时间</button>
+                </div>-->
+            </div>
+        </div>
+        <div class="plan-details">
+            <div class="plan-contents">
+                <div class="plan-details-title">教师课程信息列表</div>
+                <table st-pipe="callTeacherCoursesController" st-table="" class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>课程名称</th>
+                        <th>科目</th>
+                        <th>校区上课定价</th>
+                        <th>教师上门定价</th>
+                        <th>总课时</th>
+
+                        <th>年级</th>
+                        <th>课程类型</th>
+                        <th>状态</th>
+                        <th>添加时间</th>
+
+                        <th>操作</th>
+
+                    </tr>
+                    </thead>
+                    <tbody ng-if="!tcc.isLoadingTeacherCourseList">
+                    <tr ng-repeat="row in teacherCoursesList">
+
+
+                        <td>{{row.name}}</td>
+                        <td>{{row.subjectName}}</td>
+                        <td>{{row.studentToCampusPrice}}</td>
+                        <td>{{row.teacherToHomePrice}}</td>
+                        <td>{{row.standardNum}}</td>
+
+                        <td>{{row.gradeName}}</td>
+                        <td>{{row.courseTypeName}}</td>
+                        <td ng-if="row.isShelve ==1">上架</td>
+                        <td ng-if="row.isShelve !=1">下架</td>
+                        <td>{{row.createAt | date:'yyyy-MM-dd' }}</td>
+
+                        <td>
+                            <a ng-click="tcc.showDetailTeacherCourseView(row)" title="查看"><span class="glyphicon glyphicon-plus"></span></a> &nbsp;
+                                <span ng-if="tcc.isEdit">
+                                    <a ng-click="tcc.showEidtTeacherCourseView(row)" title="编辑"><span class="glyphicon glyphicon-pencil"></span></a>&nbsp;
+                                    <a ng-click="tcc.deleteTeacherCourseController(row)" title="删除" ><span class="glyphicon glyphicon-delete"></span></a> &nbsp;
+                                    <span ng-if="tcc.view.checkPrice(row)">
+                                         <a ng-if="row.isShelve ==1" ng-click="tcc.upDownCourse(row)" title="下架"><span class="glyphicon glyphicon-save"></span></a>
+                                         <a ng-if="row.isShelve !=1" ng-click="tcc.upDownCourse(row)" title="上架"><span class="glyphicon glyphicon-open"></span></a> &nbsp;
+                                    </span>
+
+                                </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tbody ng-if="tcc.isLoadingTeacherCourseList">
+                    <tr>
+                        <td colspan="24" class="text-center"><div class="loading-indicator"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="10"></td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

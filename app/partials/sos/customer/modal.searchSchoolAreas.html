@@ -1,0 +1,66 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true"  ng-controller="SearchSchoolAreasCtrl as ssc">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="addTransferForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle"></h4>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <table class="table table-bordered table-striped table-condensed" st-pipe="callSchoolAreas" st-table="schoolAreas">
+                            <thead>
+                            <tr>
+                                <th>选择</th>
+                               <!-- <th>ID</th>-->
+                                <th>id</th>
+                                <th>校区</th>
+                                <th>校长</th>
+                            </tr>
+                          <!--  <tr>
+                                <th colspan="1">
+
+                                </th>
+                                <th colspan="1">
+                                    <input st-search="schoolAreasFilter.subjectId" placeholder="id查询"
+                                           ng-model="schoolAreasFilter.subjectId" class="input-sm form-control" type="search"/>
+                                </th>
+                                <th colspan="1">
+                                    <input st-search="schoolAreasFilter.userName" placeholder="校区查询"
+                                           ng-model="schoolAreasFilter.userName" class="input-sm form-control" type="search"/>
+                                </th>
+
+                                <th colspan="1">
+                                    <input st-search="schoolAreasFilter.schoolName" placeholder="校长查询"
+                                           ng-model="schoolAreasFilter.schoolName" class="input-sm form-control" type="search"/>
+                                </th>
+                            </tr>-->
+
+                            </thead>
+                            <tbody ng-show="!isLoading">
+                            <tr ng-repeat="row in schoolAreas">
+                                <td><input type="checkbox"  ng-click="selectedSchoolArea(row)" ></td>
+                                <!--<td>{{row.leads_studetn_id}}</td>-->
+                                <td>{{row.uid}}</td>
+                                <td>{{row.dName}}</td>
+                                <td>{{row.uName}}</td>
+                            </tr>
+                            </tbody>
+                            <tbody ng-show="isLoading">
+                            <tr>
+                                <td colspan="12" class="text-center"><div class="loading-indicator"></div></td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="12">
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

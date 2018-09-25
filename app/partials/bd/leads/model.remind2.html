@@ -1,0 +1,54 @@
+<div class="modal crm-invitationRemind-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <form name="form">
+        <div class="modal-header">
+          <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" ng-bind="title"></h4>
+        </div>
+        <div class="modal-body">
+            <div class="row ">
+                <div class="col-sm-6 form-group">
+                    <label for="name" class="col-sm-4 control-label"> 姓名：</label>
+                    <div class="col-sm-6">
+                        <input type="text" readonly="" name="name" id="name" ng-model="remindLead.name" class="input-sm form-control ng-pristine ng-untouched ng-valid">
+                    </div>
+                </div>
+                <div class="col-sm-6 form-group">
+                    <label for="owner_name" class="col-sm-4 control-label">所属人：</label>
+                    <div class="col-sm-6">
+                        <input type="text" readonly="" name="owner_name" id="owner_name" ng-model="remindLead.owner_name" class="input-sm form-control ng-pristine ng-untouched ng-valid">
+                    </div>
+                </div>
+            </div>
+            <div class="row ">
+                <div class="col-sm-6 form-group">
+                    <label for="mediaOriginName" class="col-sm-4 control-label"> 渠道来源：</label>
+                    <div class="col-sm-6">
+                        <input type="text" readonly="" name="mediaOriginName" id="mediaOriginName" ng-model="remindLead.mediaOriginName" class="input-sm form-control ng-pristine ng-untouched ng-valid">
+                    </div>
+                </div>
+                <div class="col-sm-6 form-group">
+                    <label for="mediaDetailName" class="col-sm-4 control-label">渠道详情：</label>
+                    <div class="col-sm-6">
+                        <input type="text" readonly="" name="mediaDetailName" id="mediaDetailName" ng-model="remindLead.mediaDetailName" class="input-sm form-control ng-pristine ng-untouched ng-valid">
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group" ng-class="{ 'has-error': form.remindContent.$dirty && form.remindContent.$error.required }">
+                <label for="remindContent" >* 添加提醒</label>
+                <textarea name="remindContent" id="remindContent" placeholder="提醒内容..." class="form-control" ng-model="BdRemindVoForCreate.remindContent" ng-maxlength="200" required/>
+                <span ng-show="form.remindContent.$dirty && form.remindContent.$error.required" class="help-block">请输入提醒内容</span>
+            </div>
+        </div>
+            <div class="text-center">
+                <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+	          	<button type="submit" class="btn btn-success c5-lable" ng-click="saveRemind()" ng-disabled="form.$invalid">保存</button>
+	          <!-- 	<img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" /> -->
+	        </div>
+        </form>
+        </div>
+    </div>
+</div>

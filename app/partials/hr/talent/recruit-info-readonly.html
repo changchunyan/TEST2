@@ -1,0 +1,144 @@
+<script type="text/javascript">
+	window.load = pause();
+	function pause(){
+	    window.setTimeout("show()", 20);
+	}
+	function show() {
+		 $("#editStar2").raty({
+			path:"img/hr",
+			score: angular.element('#editStar2Value').val()
+		 });
+	}
+</script>
+<style>
+	.father-show{
+		position: relative;
+	}
+
+	.right-show{
+		position:absolute;
+		top:0;
+		right: 10px;
+		width:100%;
+		height:450px
+	}
+	.zhong{
+		text-align: center;
+		font-size: 28px;
+	}
+	.show-block{
+		margin-top: 40px;
+	}
+	.content .main .year .list ul li .intro, .content .main .year .list ul li .more{
+		width: auto;
+	}
+
+</style>
+
+<div class="modal-tab-panel ">
+	<input ng-model="hrTalent.id" hidden="true"/>
+	<div class="row father-show">
+		<div class="col-sm-4 ">
+			<div class="row">
+                <div class="col-sm-12 form-group" ng-class="{ 'has-error': form.partFull.$dirty && form.partFull.$error.required }">
+                    <label for="partFull" class="col-sm-4 control-label">兼职/全职：</label>
+                    <div class="col-sm-8">
+                        <select ng-model="hrTalent.part_full" name="partFull" id="partFull" class="form-control"
+								ng-options="dd.id as dd.name for dd in dictData.partFull" disabled>
+							<option value="">------请选择------</option>
+						</select>
+                    </div>
+                </div>
+            </div>
+			<div class="row">
+				<div class="col-sm-12 form-group" ng-class="{ 'has-error': form.resume_resource.$dirty && form.resume_resource.$error.required }">
+					<label for="resume_resource" class="col-sm-4 control-label">简历来源：</label> 
+					<div class="col-sm-8">
+						<select ng-model="hrTalent.resume_resource" name="resume_resource" id="resume_resource" class="  form-control" disabled="disabled">
+							<option value="">------请选择------</option>
+							<option value="1">对方投递</option>
+							<option value="2">主动搜索</option>
+							<option value="3">直接到访</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12 form-group">
+					<label for="department" class="col-sm-4 control-label">求职部门及岗位：</label>
+					<div class="col-sm-8">
+		            	<input id="department" type="text" class="  form-control" ng-click="showSelectDepartment()" ng-model="hrTalent.department.name" disabled="disabled"/>
+			            <select name="position" id="position" ng-options="position.name for position in positions track by position.id" ng-model="hrTalent.position" class="  form-control" disabled="disabled">
+			                <option value="">------请选择------</option>
+			            </select>
+			        </div>
+					<label for="recruitmentId" class="col-sm-4 control-label" ng-if="hrTalent.showRecruitmentNeed == true">所属招聘需求：</label>
+					<div class="col-sm-8" ng-if="hrTalent.showRecruitmentNeed == true">
+						<select name="recruitmentId" id="recruitmentId" ng-options="recruitment.responsible.user.name for recruitment in hrTalent.recruitmentList track by recruitment.id"
+								ng-model="hrTalent.recruitment" class="  form-control" disabled>
+							<option value="">------请选择------</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="row ">
+				<div class="col-sm-12 form-group" ng-class="{ 'has-error': form.recruitment_channel_level_one.$dirty && form.recruitment_channel_level_one.$error.required }">
+					<label for="recruitment_channel_level_one" class="col-sm-4 control-label">招聘渠道：</label>
+					<div class="col-sm-8" id="recruitment_channel_level_one">
+						<select ng-model="hrTalent.channel1" ng-options="level1.name for level1 in recruitmentChannel track by level1.name" name="channel1" id="channel1" class="  form-control" disabled="disabled">
+							<option value="">------请选择------</option>
+						</select>
+						<select ng-model="hrTalent.channel2" ng-options="level2.name for level2 in hrTalent.channel1.child track by level2.name" ng-if="hrTalent.channel1.child.length" name="channel2" id="channel2" class="  form-control" disabled="disabled">
+							<option value="">------请选择------</option>
+						</select>
+                        <select ng-model="hrTalent.channel3" ng-options="level3.name for level3 in hrTalent.channel2.child track by level3.name" ng-if="hrTalent.channel1.child.length && hrTalent.channel2.child.length" name="channel3" id="channel3" class="form-control" required >
+							<option value="">------请选择------</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12 form-group">
+					<label for="resume_name" class="col-sm-4 control-label">简历附件：</label>
+					<div class="col-sm-8" id="resume_name">
+						<a ng-click="download(hrTalent)" download="{{hrTalent.resume_name}}" title="下载简历">下载简历</a>
+<!-- 						<a ng-click="download(hrTalent)" download="{{hrTalent.displayFileName}}" title="下载简历">下载简历</a> -->
+					</div>
+				</div>
+			</div>
+			<!--<div class="row">
+				<div class="col-sm-6 form-group">
+					<label class="col-sm-4 control-label">符合程度:</label>
+					<div class="col-sm-8">
+						<input id="editStar2Value" hidden="true" value="{{hrTalent.meet_degree}}" />
+						<span id="editStar2" class="talent-star" disabled="disabled"></span>
+					</div>
+				</div>
+			</div>-->
+			<div class="row">
+				<div class="col-sm-12 form-group">
+					<label class="col-sm-4 control-label">* 符合程度:</label>
+					<div class="col-sm-8">
+			        	<span class="talent-star">
+	                    	<img ng-if="(hrTalent.meet_degree >= 1)" src="img/hr/star-on.png" alt="1" title="bad">
+	                    	<img ng-if="(hrTalent.meet_degree < 1)" src="img/hr/star-off.png" alt="1" title="bad">
+	                    	<img ng-if="(hrTalent.meet_degree >= 2)" src="img/hr/star-on.png" alt="2" title="poor">
+	                    	<img ng-if="(hrTalent.meet_degree < 2)" src="img/hr/star-off.png" alt="2" title="poor">
+	                    	<img ng-if="(hrTalent.meet_degree >= 3)" src="img/hr/star-on.png" alt="3" title="regular">
+	                    	<img ng-if="(hrTalent.meet_degree < 3)" src="img/hr/star-off.png" alt="3" title="regular">
+	                    	<img ng-if="(hrTalent.meet_degree >= 4)" src="img/hr/star-on.png" alt="4" title="good">
+	                    	<img ng-if="(hrTalent.meet_degree < 4)" src="img/hr/star-off.png" alt="4" title="good">
+	                    	<img ng-if="(hrTalent.meet_degree >= 5)" src="img/hr/star-on.png" alt="5" title="gorgeous">
+	                    	<img ng-if="(hrTalent.meet_degree < 5)" src="img/hr/star-off.png" alt="5" title="gorgeous">
+	                    </span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-8 ">
+			<div class="base-box" >
+				<div ng-include="'partials/hr/talent/schedule-info-readonly.html'"></div>
+			</div>
+		</div>
+	</div>
+</div>

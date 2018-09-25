@@ -1,0 +1,58 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="addTransferForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle"></h4>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <table class="table table-bordered table-striped table-condensed" st-pipe="getLeadsList" st-table="CrmLeadsStudentList">
+                            <thead>
+                            <tr>
+                                <th>选择</th>
+                               <!-- <th>ID</th>-->
+                                <th>id</th>
+                                <th>姓名</th>
+                                <th>账户名</th>
+                                <th>Email</th>
+                                <th>创建时间</th>
+                            </tr>
+                            <tr>
+                                <th colspan="8">
+                                    <input st-search="schoolCrmLeadsStudentFilter.userName" placeholder="姓名查询"
+                                           ng-model="schoolCrmLeadsStudentFilter.userName" class="input-sm form-control" type="search"/>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody ng-show="!isLoading">
+                            <tr ng-repeat="row in CrmLeadsStudentList">
+                                <td><input type="checkbox"  ng-click="selectTransferLeads(row)" ></td>
+                                <!--<td>{{row.leads_studetn_id}}</td>-->
+                                <td>{{row.user.id}}</td>
+                                <td>{{row.user.name}}</td>
+                                <td>{{row.user.account}}</td>
+                                <td>{{row.user.email}}</td>
+                                <td>{{row.user.createdAt |date:'yyyy-MM-dd'}}</td>
+
+
+                            </tr>
+                            </tbody>
+                            <tbody ng-show="isLoading">
+                            <tr>
+                                <td colspan="12" class="text-center"><div class="loading-indicator"></div></td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="12"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

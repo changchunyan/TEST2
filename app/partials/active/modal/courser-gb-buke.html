@@ -1,0 +1,121 @@
+<div class="modal new-buke" tabindex="-1" role="dialog" aria-hidden="true">
+    <form class="modal-dialog form-horizontal" name="coursePlan" data-flag>
+        <div class="modal-content mt-label-h2">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">跟班补课</h4>
+            </div>
+            <div class="modal-body gb-buke" st-pipe="getClassCoursePlans" st-table="CourseList">
+                <!--旧的头部文件-->
+                <ul>
+                    <li><span>课程名称：</span><input type="text" readonly ng-model="supplementUpdateFilter.courseName"></li>
+                    <li><span>班级名称：</span><input type="text" readonly ng-model="supplementUpdateFilter.supplementClassName" required onchange=""></li>
+                    <button id="chose-button" type="button" class="btn btn-default bg-color-blue" ng-click="showDetial(4,4)">选择班级</button>
+                    <!--<li class="mt-three option no-bg" vr-select data-mt="{{toConsumeLessonDatas}}"><label class="five">上课时间 </label>-->
+                        <!--<input class="three-1" ng-model="myCrmCustomerStudentFilter.toConsumeLesson" placeholder=""  value="">-->
+                        <!--<div class="three-1">不限</div>-->
+                        <!--<input class="three-2" ng-model="myCrmCustomerStudentFilter.toConsumeLessonStart" type="number" min="0"  ng-maxlength="4">-->
+                        <!--<div class="three-2"></div><span class="dao">到</span>-->
+                        <!--<input class="three-2" ng-model="myCrmCustomerStudentFilter.toConsumeLessonEnd" type="number" min="0"  ng-maxlength="4">-->
+                        <!--<div class="three-2"></div></li>-->
+                    <!--<input class="button-2 " type="button" value="查询">-->
+                    <div class="col-sm-12">
+                        <ul class="one h-auto pr-0">
+                            <div class="mt-select" style="min-height: 35px">
+                                <div class="rbg mt-0" style="border: none;">
+                                    <ul class="h-auto" style="padding-right: 0">
+                                        <div class="of">
+                                            <li class="mt-three option no-mar fl" vr-select data-mt="{{nextCourseDatas}}" style="margin-left:0;margin-right: 20px;width: 510px;"><label class="fl bg-none" style="width:auto;font-size: 14px">上课时间</label>
+                                                <input class="three-1">
+                                                <div style="padding-left: 10px" class="three-1">不限</div>
+                                                <input class="three-2" readonly type="search" name="bk_start_time" placeholder="" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" ng-model="searchModel.start_time">
+                                                <div class="three-2"></div><span class="dao">到</span>
+                                                <input class="three-2" readonly type="search" name="bk_end_time" placeholder="" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" ng-model="searchModel.end_time">
+                                                <div class="three-2"></div>
+                                            </li>
+                                            <!--<li class="mt-three option no-mar fl" vr-select data-mt="{{nextCourseDatas}}"
+                                                style="margin-left:0;margin-right: 20px;width: 510px;"><label class="fl bg-none" style="width:auto;font-size: 14px">上课时间
+                                            </label>
+                                                <input class="three-1">
+                                                <div style="padding-left: 10px" class="three-1">不限</div>
+                                                <input class="three-2" readonly type="search" placeholder="" datepicker name="bk_start_time"
+                                                       onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})" ng-model="searchModel.start_time">
+                                                <div class="three-2"></div><span class="dao">到</span>
+                                                <input class="three-2" readonly type="search" name="bk_end_time" placeholder=""
+                                                       datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})" ng-
+                                                       model="searchModel.end_time">
+                                                <div class="three-2"></div>
+                                            </li>-->
+                                            <ul class="inline-block fl time-show lh-auto span-54">
+                                                <a class="mt-btn cf bg-color-blue br ti-0 li-btn-1 pr-0 mt-0"
+                                                   href="javascript:void (0);" ng-click="getClassCoursePlans(classCoursePlanTableState)">查询</a>
+                                            </ul>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </div>
+                        </ul>
+                    </div>
+                </ul>
+                <div class="row">
+                    <div class="table-responsive yws-left border-ccc br-gray  pl-0" style="width:100%">
+                        <table class="table table-bordered table-striped table-condensed mt-table1">
+                            <thead>
+                            <tr>
+                                <th>选择</th>
+                                <th>上课时间</th>
+                                <th>星期</th>
+                                <th>上课时长</th>
+                                <th>上课老师</th>
+                                <th>实到人数</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="row in classCoursePlans">
+                                <td class="vr">
+                                    <label for="_input{{$index}}" class="radio-vr" ng-class="{'active':row.selectTrue}" style="width:28px;"></label>
+                                    <input type="radio" name="classCoursePlanRadio" id="_input{{$index}}" ng-click="selectClassCoursePlan('classCoursePlans',$index)"
+                                           class="hide" value="{{$index}}"/>
+                                </td>
+                                <td>{{row.startTime|date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                                <td></td>
+                                <td>{{row.course_num}}小时</td>
+                                <td>{{row.teacher_name}}</td>
+                                <td>{{row.count_num}}/{{row.plan_count}}</td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td colspan="6" class="text-center" st-pagination="" st-items-by-page="10" st-
+                                    template="partials/util/pagination.custom.html"></td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 20px">
+                <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                <button type="button" class="btn btn-success c5-lable" ng-click="editClassExperience()" ng-disabled="coursePlan.$invalid">
+                    保存
+                </button>
+            </div>
+        </div>
+    </form>
+    <script>
+        (function () {
+            setTimeout(function () {
+                var flag = angular.element('[data-flag]')
+                var _dom =  $(flag).find('div.three-1')
+                _dom.trigger('click',_dom)
+                setTimeout(function () {
+                    $(document).find('[data-flag]').find('.select-option').find('li').eq(3).trigger('click')
+                    console.log($(document).find('[data-flag]').find('.select-option').find('li').eq(3).html())
+                })
+            },100)
+        })()
+    </script>
+    <script src="js/jqDom.js"></script>
+</div>

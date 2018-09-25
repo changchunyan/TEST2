@@ -1,0 +1,30 @@
+<div class="view-frame">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content">
+
+        <div>
+            <ul class="breadcrumb">
+                <li class="active"></li>
+            </ul>
+        </div>
+
+        <div class="tabs-title">修改个人信息
+            <div class="leads-top-btn">
+                <div class="operations-panel">
+                    <button class="btn btn-primary" ng-click="inputResignationReason(4)">保存修改</button>
+                    <button class="btn btn-primary" ng-click="cancle()">取消修改</button>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <tabs>
+                <pane ng-repeat="tab in personalInfoTabs track by $index| orderBy : 'id'" title="{{tab.title}}">
+                    <div ng-include="tab.template"></div>
+                </pane>
+            </tabs>
+        </div>
+    </div>
+</div>

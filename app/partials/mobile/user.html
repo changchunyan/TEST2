@@ -1,0 +1,43 @@
+<link rel="stylesheet" href="bower_components/mobile-angular-ui/dist/css/mobile-angular-ui-base.min.css">
+<!--头部-->
+<div class="navbar navbar-app navbar-absolute-top m-top">
+    <div class="navbar-brand navbar-brand-center" ui-yield-to="title">
+        <img src="img/main/logo.png" class="m-top-logo">
+    </div>
+</div>
+<!--底部导航-->
+<div class="navbar navbar-app navbar-absolute-bottom m-footer">
+    <div class="btn-group justified">
+        <a href="#/fb-admin/leads_student_myself" class="btn btn-navbar ">客户</a>
+        <a href="#/fb-admin/InvitationChild" class="btn btn-navbar">邀约</a>
+        <a href="#/mobile/user" class="btn btn-navbar active">我</a>
+    </div>
+</div>
+<!--主体部分-->
+<div class="app-body" ng-controller="mobileUserCtrl">
+    <form  name="userForm" style="margin-top: 40px;">
+        <div class="text-h40">
+                <label  class="yws-xs-4">姓名</label>
+                <label class="width60 text-left">
+                    {{currentUser.name}}
+                </label>
+        </div>
+        <div class="text-h40">
+            <label  class="yws-xs-4">岗位</label>
+            <label class="width60 text-left">
+                {{currentUser.position_name}}
+            </label>
+        </div>
+        <div class="text-h40">
+            <label  class="yws-xs-4">绑定电话</label>
+            <input type="tel" class="width60" ng-model="landline" ng-maxlength="32" required>
+
+
+        </div>
+        <div style="text-align: center">
+            <button type="button" class="btn btn-success text-h32 c5-lable" style="width: 40%;margin-top: 40px;" ng-click="saveLandline(landline)"  ng-disabled="userForm.$invalid">保存</button>
+            <br />
+            <button type="button" class="btn btn-primary text-h32" style="width: 40%;margin-top: 20px;" ng-click="logout()"  >退出登录</button>
+        </div>
+    </form>
+</div>

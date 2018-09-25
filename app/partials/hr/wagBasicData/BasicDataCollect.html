@@ -1,0 +1,108 @@
+<style>
+    td{white-space: normal;word-wrap : break-word }
+</style>
+<div class="view-frame" ng-controller="WagClassTimeDetailController as WagClassTimeDetailController">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content user-love">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="#">首页</a> <span class="divider"></span></li>
+                <li><a href="#/sos-admin">薪酬管理</a> <span class="divider"></span></li>
+                <li><a href="#">基础数据汇总</a> <span class="divider"></span></li>
+            </ul>
+        </div>
+        <div st-pipe="getempDataList" st-table="empDataList" class="lh21">
+            <!--TODO:查询条件-->
+            <div class="mt-student-m br-gray h-auto no-media ml-0">
+
+                <ul class="one h-auto pr-0">
+                    <div class="mt-select" style="min-height: 35px">
+                        <div class="rbg mt-0" style="border: none;">
+                            <ul class="h-auto" style="padding-right: 0">
+                                <div class="of">
+                                    <li class="mt-three option no-mar" vr-select changeFun="callServerrecordFilterChange" data-mt="{{nextCourseDatas}}" style="margin-right: 20px"><label class="fl bg-none" style="width:auto;">薪酬周期</label>
+                                        <input class="three-1">
+                                        <div class="three-1">不限</div>
+                                        <input class="three-2" readonly type="search" placeholder="" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})" ng-model="mtSeach.start_time">
+                                        <div class="three-2"></div><span class="dao">到</span>
+                                        <input class="three-2" readonly type="search" name="" placeholder="" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})" ng-model="mtSeach.end_time">
+                                        <div class="three-2"></div>
+                                    </li>
+                                    <ul class="inline-block time-show lh-auto span-54">
+
+                                        <a id="keydown-query" class="mt-btn cf bg-color-blue br ti-0 li-btn-1 pr-0 mt-0" href="javascript:void (0);" ng-click="callServerrecordFilterChange()">查询</a>
+
+
+                                    </ul>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                </ul>
+
+            </div>
+
+            <div class="br-gray mt-list">
+                <h2 class="pl-20 c3">教务/h2>
+                <div class="overflow-x">
+                    <table class="table table-bordered table-striped table-condensed mt-table1">
+                        <thead>
+                        <tr class="br-gray-t">
+                            <th>基础数据汇总名称</th>
+                            <th>课时数</th>
+                            <th>续推金额</th>
+                            <th>薪酬周期</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody ng-show="!isrendLoading">
+                        <tr ng-repeat="row in empDataList">
+
+                            <td>{{row.name}}</td>
+                            <td>{{row.courseNum}}</td>
+                            <td>{{row.jine}}</td>
+                            <td>{{row.salaryCycle}}</td>
+
+                        </tr>
+                        </tbody>
+                        <tbody ng-show="isrendLoading">
+                        <tr>
+                            <td colspan="15" class="text-center">
+                                <div class="loading-indicator"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-items-by-page="10"
+                                st-template="partials/util/pagination.custom.html" colspan="15">
+                            </td>
+                        </tr>
+                        </tfoot>
+
+                        <!--<tbody ng-show="isrendLoading">
+                        <tr>
+                            <td colspan="15" class="text-center">
+                                <div class="loading-indicator"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-items-by-page="10"
+                                st-template="partials/util/pagination.custom.html" colspan="15">
+                            </td>
+                        </tr>
+                        </tfoot>-->
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/jqDom.js"></script>
+
+
+
+

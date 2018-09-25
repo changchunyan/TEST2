@@ -1,0 +1,35 @@
+<style>
+	.font-red{
+		color: red !important;
+		font-weight: bold !important;
+	}
+	.font-default{
+		color: #1b1b1b !important;
+	}
+	.font-green{
+		color: green !important;
+		font-weight: bold !important;
+	}
+</style>
+<div class="view-frame" ng-controller="BiBaseController">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content" ng-controller="BiSchoolPerformenceProgressController">
+	    <div>
+		    <ul class="breadcrumb">
+		        <li><img ng-src="img/icon/bi/yingxiao.png" src="img/icon/bi/yingxiao.png"> 校区业绩<span class="divider"></span></li>
+		        <li class="active">目标进度</li>
+		    </ul>
+		</div>
+        <tabs pane-changed="getTabIndex(selectedPane)" ng-if="!isSchoolUser">
+        	<pane title="各校区进度">
+        		<div ng-include="'partials/bi/biSchoolPerformenceProgress/biSchoolPerformenceProgress.statistics.html'" ng-if="channelTab==='0'"></div>
+        	</pane>
+        	<pane title="区域进度" ng-if="!isSchoolUser">
+        		<div ng-include="'partials/bi/biSchoolPerformenceProgress/biSchoolPerformenceProgress.summary.html'" ng-if="channelTab==='1'"></div>
+        	</pane>
+        </tabs>
+        <div ng-include="'partials/bi/biSchoolPerformenceProgress/biSchoolPerformenceProgress.statistics.html'" ng-if="isSchoolUser"></div>
+    </div>
+</div>

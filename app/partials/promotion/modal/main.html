@@ -1,0 +1,24 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true" ng-controller="PromotionMTContoller">
+    <form class="modal-dialog form-horizontal" name="coursePlan">
+        <div class="modal-content mt-label-h2">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">升班关系</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <mt-tabs tabel="tabels" index="selectIndex" url="loadUrl"></mt-tabs>
+                    <div ng-include="loadUrl" class="form-option pb-20"></div>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 20px">
+                <button type="button" class="btn btn-default" ng-click="$hide()">关闭</button>
+                <!--<button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                <button type="button" class="btn btn-success c5-lable" ng-click="submitAudit()" ng-disabled="coursePlan.$invalid">
+                    确定
+                </button>-->
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,77 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true"  >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="form" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="usePackExistTitle"></h4>
+                </div>
+                <div class="modal-body">
+                   	<div st-pipe="getPackList" st-table="getPackList">
+				        <div>
+				        	<label>上课对象</label>
+			                <input placeholder="请输入" id="p_condition.name" ng-model="p_condition.name" type="search">
+			                <label>年级</label>
+			                <select id="p_condition.gradeId" ng-model="p_condition.gradeId" type="search" ng-options="tl.id as tl.name for tl in gradeIds">
+               					<option value="">---请选择---</option>
+           					</select>
+			                <label>科目</label>
+			                <select id="p_condition.subjectId" ng-model="p_condition.subjectId" type="search" ng-options="tl.id as tl.name for tl in subjectIds">
+               					<option value="">---请选择---</option>
+           					</select>
+			                <label>时间</label>
+			                <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange=""  name="p_condition.startTime" id="p_condition.startTime" 
+                           		ng-model="p_condition.startTime"  />  	
+			                <button type="button" class="btn btn-success" ng-click="getPackByFilter()">查询</button>
+			        	</div>
+			        	
+			        	<div class="br-gray mt-list">
+			                <h2><span class="h2-span">资料列表</span></h2>
+			                <div class="overflow-x">
+			                    <table class="table table-bordered table-striped mt-scroll" style="background-color: #fff;">
+			                        <thead>
+			                        <tr>
+			                            <th class="pr55">上课对象</th>
+			                            <th class="pr55">年级</th>
+			                            <th class="pr55">科目</th>
+			                            <th class="pr55">上课时间</th>
+			                            <th ng-if="p_condition.type == 1" class="pr55">预习资料</th>
+			                            <th ng-if="p_condition.type == 3" class="pr55">备课笔记</th>
+			                            <th ng-if="p_condition.type == 4" class="pr55">课后作业</th>
+			                            <th class="pr55">操作</th>
+			                        </tr>
+			                        <tbody>
+				                        <tr ng-repeat="row in packList">
+				                            <td>{{row.courseObjName}}</td>
+				                            <td>{{row.gradeName}}</td>
+				                            <td>{{row.subjectName}}</td>
+				                            <td>{{row.startTime | date : 'yyyy-MM-dd hh:mm:ss'}}</td>
+				                            <td><a href={{row.viewPath}} target="_blank">{{row.filename}}</a></td>
+				                            <td><a ng-click="selectPack(row)">选择</a></td>
+				                        </tr>
+			                        </tbody>
+			                        <tbody ng-show="isLoading">
+				                        <tr>
+				                            <td colspan="8" class="text-center"><div class="loading-indicator"></div>
+				                            </td>
+				                        </tr>
+			                        </tbody>
+			                        <tfoot>
+				                        <tr>
+				                            <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="8">
+				                            </td>
+				                        </tr>
+			                        </tfoot>
+			                    </table>
+			                </div>
+			            </div>   
+            
+		        	</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success c5-lable" ng-click="$hide()" ng-disabled="form.$invalid">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

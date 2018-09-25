@@ -1,0 +1,46 @@
+<div class="view-frame" ng-controller="addWorkFlowCtl as addCtl">
+    <div class="view-left">
+        <nav-side menu-data="menu.subMenu"></nav-side>
+        <div class="">创建</div>
+    </div>
+    <div  class="view-content" >
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="#/">首页</a> <span class="divider"></span></li>
+                <li><a href="#/workflowManager-admin">工作流管理</a> <span class="divider"></span></li>
+                <li class="active">发起工作流</li>
+            </ul>
+        </div>
+        <div class="details-title">发起工作流</div>
+        <div class="tabs-wrap">
+            <div class="yws-container">
+                <div class="add-left yws-left">
+                    <div class="add-left-title">流程选择</div>
+                    <div class="add-left-contents">
+                       <a ng-repeat="row in flowLists" class="li-default " ng-class="{true: 'active', false: 'inactive'}[row.key == showFlowList.key]" ng-click="selectedFlow(row)">{{row.info.name}}</a>
+                    </div>
+                    <div class="links-bottom"></div>
+                </div>
+                <div class="add-content yws-right">
+                    <div class="add-right-title">工流程名称</div>
+                    <div class="add-right-contents yws-container">
+                       <div class="col-sm-10"><input type="text" class="form-control " disabled ng-model="showFlowList.info.name"></div>
+                        <button class="col-sm-2 btn btn-success" ng-click="startFlow()">开始办理</button>
+                    </div>
+                    <div class="add-right-title">步骤说明</div>
+                    <div class="add-right-contents">
+                        <div class="li-default" ng-repeat="row in showFlowList.info.steps">{{row}}</div>
+
+                    </div>
+                    <div class="add-right-title">流程说明</div>
+                    <div class="add-right-contents">
+                        <div type="text" class="" ng-bind="showFlowList.info.desc"></div>
+
+                    </div>
+                    <div class="links-bottom"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

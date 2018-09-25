@@ -1,0 +1,63 @@
+<div class="modal-tab-panel">
+	<div class="yws-container">
+		<div class="yws-right">
+			<button class="btn btn-success" ng-click="addWorkHistory()">新增</button>
+		</div>
+	</div>
+
+	<div ng-repeat="workingExperience in employee.workingExperienceList track by $index">
+		<div class="tab-content-block">
+			<div class="col-sm-6 form-group">
+				<label for="company" class="col-sm-3 control-label">公司：</label>
+				<div class="col-sm-9">
+					<input type="text" placeholder="不超过10个字符" name="company" id="company" class="form-control" ng-model="workingExperience.company" required/>
+				</div>
+			</div>
+			<div class="col-sm-6 form-group">
+				<label for="position" class="col-sm-3 control-label">职位：</label>
+				<div class="col-sm-9">
+					<input type="text" name="position" id="position" class="form-control" ng-model="workingExperience.position" />
+				</div>
+			</div>
+
+			<div class="col-sm-6 form-group">
+				<label for="entrance_date" class="col-sm-3 control-label">入职时间：</label>
+				<div class="col-sm-9">
+					<input type="text" id="entrance_date" class="form-control" datePicker ng-model="workingExperience.entrance_date" onclick="WdatePicker({dateFmt:'yyyy-MM'})"  onchange="" required readonly/>
+					<!--<input type="date" name="entrance_date" id="entrance_date" class="form-control" ng-model="workingExperience.entrance_date" required/>-->
+				</div>
+			</div>
+			<div class="col-sm-6 form-group">
+				<label for="entrance_date" class="col-sm-3 control-label">离职时间：</label>
+				<div class="col-sm-9">
+					<input ng-if="!workingExperience.up_to_now" type="text" id="departure_date" class="col-sm-8 form-control-base " datePicker ng-model="workingExperience.departure_date" onclick="WdatePicker({dateFmt:'yyyy-MM'})"  onchange="" readonly/>
+					<input class="col-sm-1" ng-model="workingExperience.up_to_now" type="checkbox"/>
+					<label class="col-sm-3  control-label">至今：</label>
+				</div>
+				<div ng-class="{'col-sm-4':!workingExperience.up_to_now, 'col-sm-9':workingExperience.up_to_now}">
+
+				</div>
+			</div>
+
+
+			<div class="col-sm-6 form-group">
+				<label for="salary" class="col-sm-3 control-label">薪资：</label>
+				<div class="col-sm-9">
+					<input type="text" name="salary" id="salary" class="form-control" ng-model="workingExperience.salary"/>
+				</div>
+			</div>
+			<div class="col-sm-12 form-group">
+				<label for="description" class="col-sm-1-5 control-label">工作描述：</label>
+				<div class="col-sm-10-5">
+					<textarea type="text" rows="5" placeholder="不超过140个字符" name="position" id="description" class="form-control" ng-model="workingExperience.description" required/>
+				</div>
+			</div>
+
+			<div class="yws-container width100">
+				<div class="yws-right">
+					<button class="btn btn-danger" ng-click="deleteWorkingExperience($index)">删除</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

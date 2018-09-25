@@ -1,0 +1,83 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <form class="modal-dialog form-horizontal mt-fenpei label-34" name="createStudentClassForm" role="form">
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" ng-bind="viewCoursePlanTimeTiele"></h4>
+
+            </div>
+
+            <!--<div class="modal-body mt-lable-fl">-->
+                <!--<h2 class="cf8 f16">{{multipleCoursePlanTimeList.startDate}}</h2>-->
+                <!--<div class="row m0">-->
+                    <!--<div class="br-gray pl-0">-->
+                        <!--<h2 class="pl-20">上课时间列表</h2>-->
+                        <!--<table class="table table-bordered table-striped mt-table1">-->
+                            <!--<thead>-->
+                            <!--<tr>-->
+                                <!--<th>科目</th>-->
+                                <!--<th>上课老师</th>-->
+                                <!--<th>上课时间</th>-->
+                                <!--<th>上课时长</th>-->
+                                <!--<th>下课时间</th>-->
+                            <!--</tr>-->
+                            <!--</thead>-->
+                            <!--<tbody id="courseTimeAddList">-->
+                            <!--<tr ng-repeat="i in multipleCoursePlanTimeList.detail">-->
+                                <!--<td>{{i.subjectName}}</td>-->
+                                <!--<td>{{i.teacherName}}</td>-->
+                                <!--<td>{{i.startTime}}</td>-->
+                                <!--<td>{{i.timelongName}}</td>-->
+                                <!--<td>{{i.endTime}}</td>-->
+                            <!--</tr>-->
+                            <!--</tbody>-->
+
+                        <!--</table>-->
+                    <!--</div>-->
+
+                <!--</div>-->
+            <!--</div>-->
+
+            <div class="modal-body mt-lable-fl" ng-repeat="startDate in multipleCoursePlanTimeList">
+                <h2 class="cf8 f16">{{startDate.startDate}}</h2>
+                <div class="row m0">
+                    <div class="br-gray pl-0">
+                        <h2 class="pl-20">上课时间列表</h2>
+                        <table class="table table-bordered table-striped mt-table1">
+                            <thead>
+                            <tr>
+                                <th>科目</th>
+                                <th>上课老师</th>
+                                <th>上课时间</th>
+                                <th>上课时长</th>
+                                <th>下课时间</th>
+                            </tr>
+                            </thead>
+                            <tbody id="courseTimeAddList">
+                            <tr ng-repeat="i in startDate.detail">
+                                <td>{{i.subjectName}}</td>
+                                <td>{{i.teacherName}}</td>
+                                <td>{{i.startTime}}</td>
+                                <td>{{i.timelongName}}</td>
+                                <td>{{i.endTime}}</td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="modal-footer time-show-2">
+
+            </div>
+        </div>
+	</form>
+</div>
+
+

@@ -1,0 +1,125 @@
+<div class="mt-mlr-0 f16 look of mt-lable-fl label-90" ng-if="detailTab==='1'">
+    <div class="mt-contener pt-20 brt-dashed">
+        <div class="row ">
+            <div class="col-sm-4"><label for="name">学员姓名：</label><input id="name" class="col-sm-5"
+                                                                        ng-model="searchStudent.name"/>
+            </div>
+            <div class="col-sm-4"><label for="phone" class="w67">电话：</label><input id="phone" class="col-sm-5"
+                                                                                   ng-model="searchStudent.phone"/>
+            </div>
+            <div class="col-sm-4 f14">
+                <a class="mt-btn cf bg-color-blue br btnNobr"
+                   ng-click="getJoinClassStudentsByFilter()">查询
+                </a>
+                <a class="mt-btn ml15 brc3 btnAndbr"
+                   ng-click="resetSearchStudent()">重置
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="mt-contener pt-20">
+        <div class="row" ng-if="studentClass.status===0">
+            <div class="col-sm-7 form-group m0">
+                <a ng-if="!isBanKeTeacher && showPermissions('AllotStudentToClass')" class="mt-btn cf bg-color-blue br btnNobr"
+                        ng-click="traggerExpansion(1)">分班
+                </a>
+            </div>
+            <div class="col-sm-4 col-sm-offset-1">
+                <a class="icon icon-show" ng-if="expansion" ng-click="traggerExpansion(0)">收起</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="br-gray pl-0 pr-0" style="overflow-x: auto" ng-class="{'col-sm-7':expansion,'col-sm-12':!expansion}">
+                <table class="table table-bordered table-striped mt-table1" st-pipe="getJoinClassStudents"
+                       st-table="allClassStudentsTable" ng-if="detailTab==='1'">
+                    <thead>
+                    <tr>
+                        <th style="padding-left: 10px" ng-if="studentClass.status===0&&expansion"><div class="time-show br0 pl-0">
+                            <span style="width:30px;" ng-class="{'active':out}" ng-click="selectAll('joinStudents','out','selected','crmStudentId')" class="">&nbsp;</span>
+                        </div></th>
+                        <th>姓名</th>
+                        <th>电话</th>
+                        <th>性别</th>
+                        <th>年级</th>
+                        <th>公立学校</th>
+                        <th>剩余课时</th>
+                        <th>成长顾问</th>
+                        <th>入班时间</th>
+                        <th>出班时间</th>
+                        <th ng-if="studentClass.status===0&&expansion">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="row in joinStudents">
+                        <td style="padding-left: 10px" ng-if="studentClass.status==0&&expansion">
+                            <div class="time-show br0 pl-0">
+                                <span style="width:30px;" ng-class="{'active':row.selected}" ng-click="selectOne($index,'joinStudents','outList','selected','crmStudentId')" class="">&nbsp;</span>
+                            </div>
+                        </td>
+                        <td>{{row.studentName}}</td>
+                        <td>{{row.phone}}</td>
+                        <td ng-show="row.gender == true">男</td>
+                        <td ng-show="row.gender == false">女</td>
+                        <td ng-show="row.gender == null"></td>
+                        <td>{{row.gradeName}}</td>
+                        <td>{{row.schoolName}}</td>
+                        <td>{{row.courseCount}}</td>
+                        <td>{{row.belongUserName}}</td>
+                        <td><a ng-click="showJoinOrExitRecordModal(row)">{{row.joinTime | date : 'yyyy-MM-dd'}}</a></td>
+                        <td>{{row.exitTime | date : 'yyyy-MM-dd'}}</td>
+                        <td ng-if="studentClass.status===0&&expansion"><a ng-click="showJoinOrExitModal(row, 1)" class="cf-5">出班</a></td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="13" class="text-center" st-pagination="" st-items-by-page="10"
+                            st-template="partials/util/pagination.custom.html">
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="pr-0" ng-class="{'col-sm-1':expansion,'hide':!expansion}">
+                <p class="p-icon">
+                    <a class="icon-add" ng-click="batchJoinOrExitClass('joinList',0)">添加</a>
+                    <a class="icon-remove" ng-click="batchJoinOrExitClass('outList',1)">移除</a>
+                </p>
+            </div>
+            <div class="br-gray col-sm-4 pl-0 pr-0" ng-class="{'col-sm-4':expansion,'hide':!expansion}">
+                <table class="table table-bordered table-striped mt-table1" st-pipe="getUnAssignedStudents"
+                                                           st-table="unAssignedStudentsTable">
+                <thead>
+                <tr>
+                    <th style="padding-left: 10px"><div class="time-show br0 pl-0">
+                        <span style="width:30px;" ng-class="{'active':join}" ng-click="selectAll('unAssignedStudents','join','selected','crmStudentId')" class="">&nbsp;</span>
+                    </div></th>
+                    <th>
+                        <input st-search="unAssignedStudentsFilter.studentName" placeholder="姓名查询"
+                               ng-model="unAssignedStudentsFilter.studentName" class="input-sm form-control"
+                               type="search" style="background: #fff !important;"/>
+                    </th>
+                    <th>剩余课时</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="row in unAssignedStudents">
+                    <td style="padding-left: 10px"><div class="time-show br0 pl-0">
+                        <span style="width:30px;" ng-class="{'active':row.selected}" ng-click="selectOne($index,'unAssignedStudents','joinList','selected','crmStudentId')" class="">&nbsp;</span>
+                    </div></td>
+                    <td>{{row.studentName}}</td>
+                    <td>{{row.courseCount}}</td>
+                    <td><a ng-click="showJoinOrExitModal(row, 0)" class="c6">入班</a></td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="13" class="text-center" st-pagination="" st-items-by-page="10"
+                        st-template="partials/util/pagination.custom.html">
+                    </td>
+                </tr>
+                </tfoot>
+            </table></div>
+        </div>
+    </div>
+</div>

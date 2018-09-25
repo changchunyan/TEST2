@@ -1,0 +1,71 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="addTransferForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle"></h4>
+                </div>
+                <div class="modal-body mt-modal-order pb-20 ">
+                    <div class="br-gray modal-input pl-0">
+                        <table class="table table-bordered table-striped table-condensed mt-table1" st-pipe="getLeadsList" st-table="CrmLeadsStudentList">
+                            <thead>
+                            <tr>
+                                <th>选择</th>
+                               <!-- <th>ID</th>-->
+                                <th>姓名</th>
+                                <th>电话</th>
+                                <th>年级</th>
+                                <th>客户状态</th>
+                                <th>创建人</th>
+                                <th>所属人</th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th>
+                                    <input st-search="schoolCrmLeadsStudentFilter.name" placeholder="姓名查询"
+                                           ng-model="schoolCrmLeadsStudentFilter.name" class="input-sm form-control" type="search"/>
+                                </th>
+                                <th>
+                                    <input st-search="schoolCrmLeadsStudentFilter.phone" placeholder="电话查询"
+                                           ng-model="schoolCrmLeadsStudentFilter.phone" class="input-sm form-control" type="search"/>
+                                </th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody ng-show="!isLoading">
+                            <tr ng-repeat="row in CrmLeadsStudentList" style="border: none !important;;">
+                                <td><input type="checkbox"  ng-click="selectRechargeTransferLeads(row)" ></td>
+                                <!--<td>{{row.leads_studetn_id}}</td>-->
+                                <td ng-show = "false">{{row.gradeId}}</td>
+                                <td>{{row.name}}</td>
+                                <td>{{row.phone}}</td>
+                                <td>{{row.grade_name}}</td>
+                                <td>{{row.state1Name}}</td>
+                                <td>{{row.create_by}}</td>
+                                <td>{{row.belong_user_name}}</td>
+                            </tr>
+                            
+                            </tbody>
+                            <tbody ng-show="isLoading">
+                            <tr>
+                                <td colspan="12" class="text-center"><div class="loading-indicator"></div></td>
+                            </tr>
+                            </tbody>
+                            <tfoot style="border-top: 1px solid #ccc">
+                            <tr>
+                                <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="12">
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer"></div>
+            </form>
+        </div>
+    </div>
+</div>

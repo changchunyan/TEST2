@@ -1,0 +1,135 @@
+<!-- 筛选条件 -->
+<search on-department-clicked="showSelectDepartment()"
+        department="selectdDepartment"
+        search-model="searchModel"
+        is-school-user="isSchoolUser"
+        provinces="provinces"
+        on-province-changed="getCitysByProvinceCode(searchModel.schoolProvince)"
+        cities="cities"
+        on-reset="reset(isQ)"
+        on-search="argJudgement(getSchoolPerfermence)"/>
+<!-- 表格 -->
+<div class="default-box">
+    <h4>校区业绩<button class="btn btn-success bi-list-head" ng-click="exportSchoolPerfermence()">导出列表</button></h4>
+    <br/>
+    <div class="table-responsive">
+        <table st-pipe="getStatisticsForST" st-table="tableModel" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th style="font-weight: bold;" rowspan="2" width="200">区域/校区</th>
+                <th class="bi-th1" style="font-weight: bold;" colspan="4" ><span data-content="订单类型为“新签”的订单数据" data-placement="right"  webui-popover>营销数据</span></th>
+                <th class="bi-th2" style="font-weight: bold;" colspan="4"><span data-content="订单类型为“续费”和“推荐”的订单数据" data-placement="right"  webui-popover></span>学管数据</th>
+                <th class="bi-th3" style="font-weight: bold;" colspan="2">教务数据</th>
+                <th class="bi-th4" style="font-weight: bold;">转平台数据</th>
+                <th class="bi-th5" style="font-weight: bold;">总实收数据</th>
+            </tr>
+            <tr>
+                <td class="bi-th1" data-content="订单类型为“新签”的订单数总和"
+                	data-placement="top" webui-popover>签单数</td>
+                <td class="bi-th1" data-content="订单类型为“新签”的订单金额总和"
+                	data-placement="top" webui-popover>签单金额</td>
+                <td class="bi-th1" data-content="订单类型为“新签”的已退费订单金额总和"
+                	data-placement="top" webui-popover>退费金额</td>
+                <td class="bi-th1" data-content="实收金额=交费金额总数-退费金额"
+                	data-placement="top" webui-popover>实收金额</td>
+                <td class="bi-th2" data-content="订单类型为“续费”和“推荐”的订单数总和"
+                	data-placement="top" webui-popover>签单数</td>
+                <td class="bi-th2" data-content="订单类型为“续费”和“推荐”的订单金额总和"
+                	data-placement="top" webui-popover>签单金额</td>
+                <td class="bi-th2" data-content="订单类型为“续费”和“推荐”的已退费订单的金额总和"
+                	data-placement="top" webui-popover>退费金额</td>
+                <td class="bi-th2" data-content="实收金额=交费总金额-退费金额"
+                	data-placement="top" webui-popover>实收金额</td>
+                <td class="bi-th3" data-content="成功消课的排课记录对应的课时"
+                	data-placement="left" webui-popover>消课课时</td>
+                <td class="bi-th3" data-content="成功消课的排课记录对应的课时小时数"
+                	data-placement="left" webui-popover>时长</td>
+                <td class="bi-th4" data-content="状态为“审核通过”的转平台订单金额总和"
+                    data-placement="left" webui-popover>转平台金额</td>
+                <td class="bi-th5">总实收金额</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="statisticsModel in statisticsModels">
+                <td>{{statisticsModel.schoolName}}</td>
+                <td>{{statisticsModel.marketOrderCount}}</td>
+                <td>{{statisticsModel.marketOrderAmount}}</td>
+                <td>{{statisticsModel.marketRefundAmount}}</td>
+                <td>{{statisticsModel.marketRealAmount}}</td>
+                <td>{{statisticsModel.managementOrderCount}}</td>
+                <td>{{statisticsModel.managementOrderAmount}}</td>
+                <td>{{statisticsModel.managementRefundAmount}}</td>
+                <td>{{statisticsModel.managementRealAmount}}</td>
+                <td>{{statisticsModel.courseNum | number : 1}}</td>
+                <td>{{statisticsModel.courseHours | number : 1}}小时</td>
+                <td>{{statisticsModel.changePlatformAmount}}</td>
+                <td>{{statisticsModel.totalRealAmount}}</td>
+            </tr>
+            </tbody>
+
+            <tfoot>
+            <tr>
+                <td colspan="30" class="text-center" st-pagination="" st-items-by-page="10"
+                    st-template="partials/util/pagination.custom.html">
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+
+        <br/>
+        <table class="table table-bordered table-striped" ng-if="!isSchoolUser">
+            <thead>
+            <tr>
+                <th style="font-weight: bold;" rowspan="2" width="200">区域/校区</th>
+                <th class="bi-th1" style="font-weight: bold;" colspan="4" ><span data-content="订单类型为“新签”的订单数据" data-placement="right"  webui-popover>营销数据</span></th>
+                <th class="bi-th2" style="font-weight: bold;" colspan="4"><span data-content="订单类型为“续费”和“推荐”的订单数据" data-placement="right"  webui-popover></span>学管数据</th>
+                <th class="bi-th3" style="font-weight: bold;" colspan="2">教务数据</th>
+                <th class="bi-th4" style="font-weight: bold;">转平台数据</th>
+                <th class="bi-th5" style="font-weight: bold;">总实收数据</th>
+            </tr>
+            <tr>
+                <td class="bi-th1" data-content="订单类型为“新签”的订单数总和"
+                	data-placement="top" webui-popover>签单数</td>
+                <td class="bi-th1" data-content="订单类型为“新签”的订单金额总和"
+                	data-placement="top" webui-popover>签单金额</td>
+                <td class="bi-th1" data-content="订单类型为“新签”的已退费订单金额总和"
+                	data-placement="top" webui-popover>退费金额</td>
+                <td class="bi-th1" data-content="实收金额=交费金额总数-退费金额"
+                	data-placement="top" webui-popover>实收金额</td>
+                <td class="bi-th2" data-content="订单类型为“续费”和“推荐”的订单数总和"
+                	data-placement="top" webui-popover>签单数</td>
+                <td class="bi-th2" data-content="订单类型为“续费”和“推荐”的订单金额总和"
+                	data-placement="top" webui-popover>签单金额</td>
+                <td class="bi-th2" data-content="订单类型为“续费”和“推荐”的已退费订单的金额总和"
+                	data-placement="top" webui-popover>退费金额</td>
+                <td class="bi-th2" data-content="实收金额=交费总金额-退费金额"
+                	data-placement="top" webui-popover>实收金额</td>
+                <td class="bi-th3" data-content="成功消课的排课记录对应的课时"
+                	data-placement="left" webui-popover>消课课时</td>
+                <td class="bi-th3" data-content="成功消课的排课记录对应的课时小时数"
+                	data-placement="left" webui-popover>时长</td>
+                <td class="bi-th4" data-content="状态为“审核通过”的转平台订单金额总和"
+                    data-placement="left" webui-popover>转平台金额</td>
+                <td class="bi-th5">总实收金额</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>数据总计</td>
+                <td>{{listTotal.marketOrderCount}}</td>
+                <td>{{listTotal.marketOrderAmount}}</td>
+                <td>{{listTotal.marketRefundAmount}}</td>
+                <td>{{listTotal.marketRealAmount}}</td>
+                <td>{{listTotal.managementOrderCount}}</td>
+                <td>{{listTotal.managementOrderAmount}}</td>
+                <td>{{listTotal.managementRefundAmount}}</td>
+                <td>{{listTotal.managementRealAmount}}</td>
+                <td>{{listTotal.courseNum | number : 1}}</td>
+                <td>{{listTotal.courseHours | number : 1}}小时</td>
+                <td>{{listTotal.changePlatformAmount}}</td>
+                <td>{{listTotal.totalRealAmount}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,27 @@
+<style>
+    audio{
+        width: 100%;
+    }
+</style>
+<div class="modal orderModal"  tabindex="-1" role="dialog" aria-hidden="true" >
+    <div class="modal-dialog">
+        <div class="modal-content" >
+            <form name="updateOrderForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle"></h4>
+                </div>
+                <div class="modal-body" >
+                    <!--<object style="margin-top: 48px;" height="250" width="800" class="c_center" data="{{recordingPath}}"></object>-->
+                    <!--<video ng-src="{{recordingPath | trustUrl}} audioplayer  controls></video>-->
+                    <div style="text-align: center">
+                        <audio  src="{{recordingPath | trustUrl}}" audioplayer controls></audio>
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+

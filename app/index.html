@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="en" ng-app="ywsApp" id="html">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta http-equiv="Expires" CONTENT="0">
+    <meta http-equiv="Cache-Control" CONTENT="no-cache">
+    <meta http-equiv="Pragma" CONTENT="no-cache">
+    <title>YWS 2.0</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+    <!-- <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css?v=2.0.2"> -->
+    <link rel="stylesheet" href="css/bootstrap.css?v=2.0.2">
+    <link rel="stylesheet" href="css/sweetalert.css?v=2.0.2">
+    <link rel="stylesheet" href="bower_components/angular-tree-control/css/tree-control.css">
+    <link rel="stylesheet" href="bower_components/angular-tree-control/css/tree-control-attribute.css">
+    <link rel="stylesheet" href="css/bootstrap-select.css?v=2.0.2">
+    <link rel="stylesheet" href="css/app.css?v=2.4.4">
+    <link rel="stylesheet" href="css/animations.css?v=2.0.2">
+    <link rel="stylesheet" href="css/style.css?v=2.0.2">
+    <link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css?v=2.0.2">
+    <link rel="stylesheet" type="text/css" href="css/yws.css?v=2.3.2">
+    <link rel="stylesheet" type="text/css" href="css/mobile.css?v=2.0.2">
+    <!--帮助中心富文本编辑器样式-->
+    <link rel="stylesheet" type="text/css" href="css/helpModal.css?v=2.0.2">
+    <link href="css/summernote.css?v=2.0.2" rel="stylesheet">
+    <link href="css/page/index.css?v=2.0.2" rel="stylesheet">
+    <script>
+        /*  function _getBrowserInfo(){
+         var Sys = {};
+         var ua = navigator.userAgent.toLowerCase();
+         var s;
+         (s = ua.match(/rv:([\d.]+)\) like gecko/)) ? Sys.ie = s[1] :
+         (s = ua.match(/msie ([\d.]+)/)) ? Sys.ie = s[1] :
+         (s = ua.match(/firefox\/([\d.]+)/)) ? Sys.firefox = s[1] :
+         (s = ua.match(/chrome\/([\d.]+)/)) ? Sys.chrome = s[1] :
+         (s = ua.match(/opera.([\d.]+)/)) ? Sys.opera = s[1] :
+         (s = ua.match(/version\/([\d.]+).*safari/)) ? Sys.safari = s[1] : 0;
+
+         /!*  if (Sys.ie) document.write('IE: ' + Sys.ie);
+         if (Sys.firefox) document.write('Firefox: ' + Sys.firefox);
+         if (Sys.chrome) document.write('Chrome: ' + Sys.chrome);
+         if (Sys.opera) document.write('Opera: ' + Sys.opera);
+         if (Sys.safari) document.write('Safari: ' + Sys.safari);*!/
+
+
+         /!*  var Sys = {};
+         var ua = navigator.userAgent.toLowerCase();
+         var re =/(msie|firefox|chrome|opera|version).*?([\d.]+)/;
+         var m = ua.match(re);
+         /!* Sys.browser =String.replace.call()(m[1],/version/, "'safari");*!/
+         Sys.browser = m[1].replace(/version/, "'safari");
+         Sys.ver = m[2];*!/
+         if (Sys.chrome) {
+         return true;
+         };
+         return false;
+         }
+         if(!_getBrowserInfo()){
+         window.location.href="partials/unChromeTest.html";
+         }*/
+    </script>
+</head>
+<!-- the menu -->
+
+<body onload="T_InitCPhoneC()" id="body">
+
+
+<SCRIPT LANGUAGE="JavaScript" FOR="cphonecobjid" EVENT="onEvent(chID,type,handle,result,param,szdata,szdataex)">
+    T_GetEvent(chID, type, handle, result, param, szdata, szdataex);
+    var start = setInterval("onGetReadyState()", 500);
+</SCRIPT>
+
+<!-------------------------------------------loading---------------------------------------------------------->
+<div ng-show="ywsLoading">
+    <div class="flyover ng-scope">
+        <div class="mask"></div>
+        <div class="alert alert-info">
+            <strong class="ng-binding">正在加载，请稍侯...</strong>
+        </div>
+    </div>
+</div>
+<div ng-if="sb">
+    <div class="flyover ng-scope">
+        <div class="mask"></div>
+        <div class="alert alert-info">
+            <strong class="ng-binding">正在加载，请稍侯...</strong>
+        </div>
+    </div>
+</div>
+
+<!-------------------------------------------首页框架---------------------------------------------------------->
+<div class="container-fluid s_container">
+    <div class="header" ng-if="authenticated && !isMobile">
+        <div class="header-user">
+            <div class="dropdown borderless">
+                <span class="glyphicon glyphicon-user" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
+                      aria-expanded="true"></span>
+                <!--  mt-has-open=""TODO：这个暂时不要删 -->
+                <span class="caret" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true"
+                      aria-expanded="true"></span>
+                <ul class="dropdown-menu" style="left: -28px;" aria-labelledby="dropdownMenu-1">
+                    <li>
+                        <a ng-click="logout()">退出</a>
+                    </li>
+                    <li>
+                        <a ng-click="changePassword()">修改密码</a>
+                    </li>
+                    <!-- <li ng-if="currentUser.position_id == 35"> -->
+                    <li>
+                        <a ng-click="changePersonalInfo()">修改个人信息</a>
+                    </li>
+                    <li>
+                        <a ng-click="changeLandline()">修改座机号</a>
+                    </li>
+                    <li ng-if="currentUser.position_id == 35 || currentUser.position_id == 38">
+                        <a href="#/personal-admin">个人资料库</a>
+                    </li>
+                    <li>
+                        <a href="#/hr-admin/payroll/me">工资条</a>
+                    </li>
+                    <li ng-if="hasRightToSwitchSchool == true" ng-click="switchToSchool(currentUser.position_id)">
+                        <a href="javascript:; ">切换指定校区</a>
+                    </li>
+                </ul>
+            </div>
+            <span class="header-user-welcome" id="dropdownMenu-1" data-toggle="dropdown" aria-haspopup="true"
+                  aria-expanded="true">
+              {{currentUser.name
+                +(currentUser.department.name != null?" | "+currentUser.department.name:" ")
+                +(currentUser.position_name != null?" | "+currentUser.position_name:" ")+(currentUser.account != null?" | "+currentUser.account:" ")}}
+            </span><!--+(currentUser.account != null?" | "+currentUser.account:" ")-->
+
+            <a href="#/help " style="float: right;color: #ffffff;margin-right: 10px;height: 20px ">
+                <i class="i-br " style="opacity: 1 ">?</i>
+                帮助中心
+            </a>
+            <!-- 物料商城 -->
+            <div class="wul-shop" ng-if="viewsCopy.background||(!indexUrlCopy)" style="display: inline">
+                <!--
+
+                         物料商城链接地址说明
+                         岗位类型：校长、校区财务、业务 对应字段：position_id
+                         项目类型：个性学（优胜一对一）对应字段：projectSettingId
+                         校区性质：直盟或者合作 对应字段：schoolNature 2 || 3
+                         友情链接：http://wl.youwinedu.com/
+                     -->
+                <!-- 个性学-- 优胜一对一 直盟或者合作-->
+                <a ng-if="currentUser.projectSettingId == 24 && (currentUser.schoolNature==2||currentUser.schoolNature==3) && (currentUser.position_id == 228 || currentUser.position_id == 229 ||currentUser.position_id == 220 || currentUser.position_id == 250 || currentUser.position_id == 252 ||currentUser.position_id == 220 || currentUser.position_id == 79 || currentUser.position_id == 6 ||currentUser.position_id == 66  )"
+                   href="http://wl.youwinedu.com/" target="_blank">
+                    <img src="./img/header/shop.png">
+                    物料商城
+                </a>
+                <!--
+
+                    物料商城链接地址说明
+                    岗位类型：校长、校区财务、业务 对应字段：position_id
+                    项目类型->校区性质：
+                        优胜派(对应字段：projectSettingId=25)->合作或直盟 对应字段：schoolNature 2 || 3
+                        科学派(对应字段：projectSettingId=29)->合作 对应字段：schoolNature 2 || 3
+                    友情链接：http://wl.youwinpai.cn/
+                -->
+                <a ng-if="((currentUser.projectSettingId == 29||currentUser.projectSettingId == 25) &&(currentUser.schoolNature==2||currentUser.schoolNature==3||currentUser.schoolNature==1)) && (currentUser.position_id == 228 || currentUser.position_id == 229 ||currentUser.position_id == 220 || currentUser.position_id == 250 || currentUser.position_id == 252 ||currentUser.position_id == 220 || currentUser.position_id == 79 || currentUser.position_id == 6 ||currentUser.position_id == 66  )"
+                   href="http://wl.youwinpai.cn/ " target="_blank">
+                    <img src="./img/header/shop.png">
+                    物料商城
+                </a>
+                <!--
+
+                    物料商城链接地址说明
+                    岗位类型：校长、校区财务、业务 对应字段：position_id
+                    项目类型：个性学（优胜一对一）对应字段：projectSettingId:24
+                    校区性质：直营 对应字段：schoolNature 1
+                    友情链接：http://wl.youwinedu.com/
+                -->
+                <a ng-if="currentUser.projectSettingId == 24 && currentUser.schoolNature==1 && (currentUser.position_id == 228 || currentUser.position_id == 229 ||currentUser.position_id == 220 || currentUser.position_id == 250 || currentUser.position_id == 252 ||currentUser.position_id == 220 || currentUser.position_id == 79 || currentUser.position_id == 6 ||currentUser.position_id == 66  )"
+                   href="http://wl.youwinedu.com:180/" target="_blank">
+                    <img src="./img/header/shop.png">
+                    物料商城
+                </a>
+            </div>
+            <!-- ng-click="jumpELearning()"  -->
+            <!--&& (viewsCopy.background||(!indexUrlCopy))-->
+            <a target="_blank" ng-if="jumpELearningUrl"
+               ng-href="{{jumpELearningUrl}}"
+               style="float: right;color: #ffffff;margin-right: 10px;height: 20px ">
+                <img src="img/header/test.png?v=2.0" style="width: 20px;margin-top: -4px;">
+                培训考试
+            </a>
+            <a ng-if="!jumpELearningUrl"><img src="img/header/load-min.gif?v=3.0" style="width: 20px;margin-top: -4px;">正在获取培训链接</a>
+        </div>
+        <div class="menu-wrapper ">
+            <nav-menu menu-data="menu ">
+            </nav-menu>
+        </div>
+        <nav class="msg-nav" ng-hover data-hover="" data-class="msg-list" ng-controller="RemindsController as reminds">
+            <nav class="msg-nav" ng-if="!tars && isShowReminds" ng-hover data-hover="" data-class="msg-list"
+                 ng-controller="RemindsController as reminds">
+                <h2 class="h2-i">
+                    <i class="msg-bg-nav"></i>
+                    <span ng-bind="MSGALLTOTAL" ng-class="{'visibility':MSGALLTOTAL}"></span>
+                    <p>提醒中心</p>
+                </h2>
+                <ul class="msg-list">
+                    <!--<h2 class="h2-close">
+        <i class="msg-close"></i></h2>-->
+                    <li class="msg-icon" data-lsm="1" ng-click="showRemindingListModal(1)" ng-if="isShowWitchReminds">
+                        <!-- ng-if="isShowWitchReminds"-->
+                        <i class="msg-bg-shoufei"></i>
+                        <span title="{{titleNum.chargeRemindCount}}" ng-class="{'visibility':chargeRemindCount}">{{chargeRemindCount}}</span>
+                        <p>收费</p>
+                        <!-- ng-class="{'notData':!chargeRemindCount}"-->
+                    </li>
+                    <li class="msg-icon last-icon" data-lsm="2" ng-click="showRemindingListModal(2)"
+                        ng-if="isShenHeRemindsShow && currentUser.position_id!=79&&currentUser.position_id!=228&&currentUser.position_id!=226&&currentUser.position_id!=235&&currentUser.position_id!=250&&currentUser.position_id!=267&&currentUser.position_id!=355">
+                        <!--ng-click="showRemindingListModal(2)"-->
+                        <!--ng-if="isShenHeRemindsShow" -->
+                        <i class="msg-bg-shenhe"></i>
+                        <span title="{{titleNum.checkRemindCount}}" ng-class="{'visibility':checkRemindCount}">{{checkRemindCount}}</span>
+                        <p>审核</p>
+                        <!-- ng-class="{'notData':!checkRemindCount}"-->
+                    </li>
+                    <li class="msg-icon" data-lsm="3" ng-click="showRemindingListModal(3)"
+                        ng-if="isAllotRemindsShow&&canViewAllot()">
+                        <!-- ng-click="showRemindingListModal(3)" ng-if="canViewAllot()" -->
+                        <i class="msg-bg-fenpei"></i>
+                        <span title="{{titleNum.allotRemindCount}}" ng-class="{'visibility':allotRemindCount}">{{allotRemindCount}}</span>
+                        <p>分配</p>
+                    </li>
+                    <li class="msg-icon hide">
+                        <i class="msg-bg-paike"></i>
+                        <span>10</span>
+                        <p>排课</p>
+                    </li>
+                    <li class="msg-icon" data-lsm="4" ng-click="showRemindingListModal(4)" ng-if="isPastRemindsShow">
+                        <i class="msg-bg-xiaoke"></i>
+                        <span title="{{titleNum.pastRemindCount}}" ng-class="{'visibility':pastRemindCount}">{{pastRemindCount}}</span>
+                        <p>消课</p>
+                    </li>
+                    <li class="msg-icon hide">
+                        <i class="msg-bg-xufei"></i>
+                        <span>10</span>
+                        <p>学员续费</p>
+                    </li>
+                </ul>
+            </nav>
+        </nav>
+    </div>
+    <div ng-view class="view-main ">
+
+    </div>
+</div>
+
+<div class="upload-loading " upload-loading=" " ng-if="uploadLoading ">
+    <img src="img/loading.gif ">
+</div>
+
+<div class="upload-loading" upload-loading="" ng-if="uploadLoading">
+    <img src="img/loading.gif">
+</div>
+
+<!-- 3rd party dependencies -->
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<!--新分页-->
+<script src="js/lib/jquery.pagebar.js?v=2.0.2" defer></script>
+<script src="js/lib/FileSaver.min.js?v=2.0.2"></script>
+<script src="js/lib/jquery-migrate-1.2.1.min.js" defer></script>
+<script src="js/lib/jquery.jqprint-0.3.js" defer></script>
+<script src="bower_components/angular/angular.min.js" defer></script>
+<script src="bower_components/angular-animate/angular-animate.min.js" defer></script>
+<script src="bower_components/angular-route/angular-route.min.js" defer></script>
+<script src="bower_components/angular-resource/angular-resource.min.js" defer></script>
+<script src="bower_components/angular-cookies/angular-cookies.min.js" defer></script>
+<script src="bower_components/angular-base64/angular-base64.min.js" defer></script>
+<script src="bower_components/angular-local-storage/dist/angular-local-storage.min.js" defer></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js" defer></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap.min.js" defer></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js" defer></script>
+<script src="js/lib/smart-table.js" defer></script>
+<script src="js/lib/angular-strap.js?v=2.0.2" defer></script>
+<script src="js/lib/angular-popups.js" defer></script>
+<!--<script src="bower_components/angular-strap/dist/angular-strap.min.js?v=2.0.2"  defer></script>-->
+<script src="bower_components/angular-strap/dist/angular-strap.tpl.min.js" defer></script>
+<script src="bower_components/sweetalert/dist/sweetalert-dev.js" defer></script>
+<script src="bower_components/angular-sweetalert/SweetAlert.min.js" defer></script>
+<script src="bower_components/angular-tree-control/angular-tree-control.js" defer></script>
+<script src="bower_components/echarts/build/dist/echarts-all.js" defer></script>
+<script src="bower_components/angular-echarts/dist/angular-echarts.js" defer></script>
+<script src="bower_components/angular-file-upload/dist/angular-file-upload.min.js" defer></script>
+<script src="bower_components/My97DatePicker/WdatePicker.js" defer></script>
+<script src="bower_components/mobile-angular-ui/dist/js/mobile-angular-ui.min.js" defer></script>
+
+<!-- angular chart, angular-echarts encapsulation sucks -->
+<script src="bower_components/chart.js/dist/Chart.min.js" defer></script>
+<script src="bower_components/angular-chart.js/dist/angular-chart.min.js" defer></script>
+
+<link rel="stylesheet" href="css/jquery.webui-popover.min.css" type="text/css">
+<script src="js/lib/jquery.webui-popover.min.js" defer></script>
+
+<!-- application framework -->
+<script src="js/util.js?v=2.0.2" defer></script>
+<script src="js/app.js?v=3.4.7" defer></script>
+<script src="js/serverInit.js" defer></script>
+<script src="js/config.js?v=2.1.2" defer></script>
+<script src="js/directives.js?v=2.1.2" defer></script>
+<script src="js/filters.js?v=2.0.2" defer></script>
+<script src="js/lib/bootstrap-select.js?v=2.0.2" defer></script>
+<script src="js/lib/bootstrap-datetimepicker.min.js?v=2.0.2" defer></script>
+
+<!-- authentication -->
+<script src="js/services/utilServices.js?v=2.1.2" defer></script>
+<script src="js/services/showcaseFactory.js?v=2.0.2" defer></script>
+<!--20180423修改-->
+<script src="js/services/authentication.js?v=3.2.2" defer></script>
+<script src="js/controllers/login-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/root-controller.js?v=2.0.2" defer></script>
+<!--20180426-->
+<script src="partials/v3.index/js/indexController.js?v=2.4.5" defer></script>
+<script src="partials/v3.index/js/server.js?v=2.0.0" defer></script>
+<script src="js/services/fileReader.js?v=2.0.2" defer></script>
+
+<!--base-->
+<script src="js/services/base/base-o2o-service.js?v=2.0.2" defer></script>
+<script src="js/services/base/userPrize-service.js?v=2.0.2" defer></script>
+
+<!--workbench-->
+<script src="js/controllers/workbench/workbench-controller.js" defer></script>
+<script src="js/services/workbench/workbench-service.js" defer></script>
+
+<!-- admin -->
+<script src="js/services/admin/permission-service.js?v=2.0.2" defer></script>
+<script src="js/services/admin/role-service.js?v=2.0.2" defer></script>
+<script src="js/services/admin/user-service.js?v=2.0.2" defer></script>
+<script src="js/services/admin/helpmanage-service.js?v=2.0.2" defer></script>
+<script src="js/controllers/admin/role-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/admin/permission-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/admin/HelpManagementController.js?v=2.0.2" defer></script>
+<script src="js/services/admin/projectSetting-service.js?v=2.0.2" defer></script>
+<script src="js/controllers/admin/projectSetting-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/admin/userPrize-controller.js?v=2.0.2" defer></script>
+<!-- admin/版本管理 -->
+<script src="js/services/admin/versionManagement-service.js?v=2.0.2" defer></script>
+<script src="js/controllers/admin/VersionManagementController.js?v=2.0.2" defer></script>
+<script src="js/controllers/admin/VersionShowController.js?v=2.0.2" defer></script>
+
+<!-- hr -->
+<script src="js/services/hr/department-service.js?v=2.1.2" defer></script>
+<script src="js/services/hr/position-service.js?v=2.0.2" defer></script>
+<script src="js/services/hr/employee-service.js?v=2.0.2" defer></script>
+<script src="js/services/hr/positionMaintenance-service.js?v=2.0.2" defer></script>
+<script src="js/services/hr/employeeRole-service.js?v=2.0.2" defer></script>
+<script src="js/services/hr/positionManagement-service.js?v=2.0.2" defer></script>
+<script src="js/services/hr/positionRole-service.js?v=2.0.2" defer></script>
+<script src="js/services/hr/dictionary-service.js?v=2.0.2" defer></script>
+<script src="js/services/hr/training-service.js?v=2.0.2" defer></script>
+<script src="js/services/hr/recruitment-service.js?v=2.0.2" defer></script>
+<script src="js/services/hr/talent-service.js?v=2.0.2" defer></script>
+<script src="js/services/hr/wagBasicData-service.js?v=2.0.2" defer></script>
+<script src="js/services/hr/wagClassTimeDetail-service.js?v=2.0.2" defer></script>
+<script src="js/controllers/hr/department-controller.js?v=2.0.3" defer></script>
+<script src="js/controllers/hr/employee-controller.js?v=2.0.2" defer></script>
+<!-- 工资条 -->
+<script src="js/controllers/hr/payroll/indexContoller.js?v=1.1.4" defer></script>
+<script src="js/controllers/hr/payroll/indexService.js?v=1.0.1" defer></script>
+<script src="js/controllers/hr/positionMaintenance-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/hr/positionManagement-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/hr/employeeRole-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/hr/positionRole-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/hr/dictionary-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/hr/training-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/hr/recruitment-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/hr/talent-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/hr/wagBasicData-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/hr/wagClassTimeDetail-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/hr/recruitmentTalent-controlller.js?v=2.0.2" defer></script>
+<script src="js/controllers/hr/jquery.raty.js?v=2.0.2" defer></script>
+<script src="js/controllers/hr/change-controller.js?v=2.0.2" defer></script>
+
+<!-- sos -->
+<script src="js/services/sos/common-service.js?v=2.0.2" defer></script>
+<script src="js/services/sos/order-service.js?v=3.2.2" defer></script>
+<script src="js/services/sos/order-transfer-service.js?v=2.0.2" defer></script>
+<script src="js/services/sos/teacher-service.js?v=2.0.2" defer></script>
+<script src="js/services/sos/leads-student-service.js?v=2.0.2" defer></script>
+<script src="js/services/sos/school-goal-service.js?v=2.0.2" defer></script>
+<script src="js/services/sos/invitationRemind-service.js?v=2.0.2" defer></script>
+<script src="js/services/sos/customer-student-service.js?v=2.0.2" defer></script>
+<script src="js/services/sos/customer-student-group-service.js?v=2.0.2" defer></script>
+<script src="js/services/sos/customer-student-course-service.js?v=2.0.2" defer></script>
+<script src="js/services/sos/invitationDetail-service.js?v=2.0.2" defer></script>
+<script src="js/services/sos/invitationCommunication-service.js?v=2.0.2" defer></script>
+<script src="js/services/sos/oms-index-service.js?v=2.0.2" defer></script>
+<script src="js/services/sos/product-service.js?v=2.0.2" defer></script>
+<script src="js/services/sos/course-plan-service.js?v=2.0.3" defer></script>
+<script src="js/services/sos/create-plan-service.js?v=2.0.2" defer></script>
+<script src="js/services/sos/oms-course-service.js?v=2.0.2" defer></script>
+<script src="js/services/sos/reminds-service.js?v=2.0.2" defer></script>
+<script src="js/services/sos/class-management-service.js?v=2.0.2" defer></script>
+<script src="js/services/sos/supplementCourse-management-service.js?v=2.0.2" defer></script>
+<script src="js/services/sos/class-student-attendence-service.js?v=2.0.2" defer></script>
+<script src="js/services/sos/class-student-record-service.js?v=2.0.2" defer></script>
+<script src="js/services/sos/crmChargingScheme-service.js?v=2.0.2" defer></script>
+<script src="js/services/sos/crmStudentCourseAttendenceSupplement-service.js?v=2.0.2" defer></script>
+<script src="js/services/sos/crmChangePlatform-service.js" defer></script>
+
+<script src="js/controllers/sos/order-controller.js?v=3.3.5" defer></script>
+<script src="js/controllers/sos/teacher-times-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/sos/customer-times-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/sos/teacher-unavailable-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/sos/school-goal-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/sos/sos-guide-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/sos/leads-student-controller.js?v=2.1.2" defer></script>
+<script src="js/controllers/sos/leads-student-callPhone-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/sos/customer-student-controller.js?v=2.1.2" defer></script>
+<script src="js/controllers/sos/crmStudentCourseAttendenceSupplement-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/sos/crmChangePlatform-controller.js?v=2.0.2" defer></script>
+<!--活动消课-->
+<script src="partials/active/js/activeMTContoller.js?v=1.4" defer></script>
+<!--活动消课服务-->
+<script src="partials/active/js/activeMTServer.js?v=1.0" defer></script>
+<!--升班-->
+<script src="partials/promotion/js/promotionMTContoller.js?v=1.0" defer></script>
+<!--升班-->
+<script src="partials/promotion/js/promotionMTServer.js?v=1.0" defer></script>
+<script src="js/controllers/sos/customer-student-callPhone-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/sos/invitationCommunication-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/sos/invitationDetail-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/sos/customer-student-course-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/sos/refund-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/sos/teacher-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/sos/oms-index-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/sos/product-controller.js?v=2.2.2" defer></script>
+<script src="js/controllers/sos/course-plan-controller.js?v=3.2.3" defer></script>
+<script src="js/controllers/sos/course-plan-multiple-controller.js?v=3.1.4" defer></script>
+<script src="js/controllers/sos/snp-course-plan-controller.js?v=3.0.3" defer></script>
+<script src="js/controllers/sos/snp-course-record-controller.js?v=3.0.3" defer></script>
+<script src="js/controllers/sos/snp-course-record-score-controller.js?v=3.0.3" defer></script>
+<script src="js/controllers/sos/create-plan-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/sos/reminds-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/sos/order-data-controller.js?v=2.0.2" defer></script>
+<!-- TODO:充值订单排课选择20180705 -->
+<script src="js/controllers/sos/course-plan-operate-controller.js?v=3.3.8" defer></script>
+<script src="js/controllers/sos/select-course-controller.js?v=2.1.3" defer></script>
+<script src="js/controllers/sos/leads-student-smart-import-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/sos/class-management-controller.js?v=3.2.3" defer></script>
+<script src="js/controllers/sos/snp-class-management-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/sos/supplementCourse-management-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/sos/crmChargingScheme-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/sos/smarty-config.js?v=2.0.2" defer></script>
+<script src="js/controllers/sos/smarty.js?v=2.0.2" defer></script>
+<!--@lishiming 2016-11-02 公共弹框模块，包含多级弹出层-->
+<script src="optimize/modal/factory/common.js" defer></script>
+<script src="partials/stu.detail/main/js/factory.js" defer></script>
+<!--@lishiming 2016-11-02 优化订单模块 解决之后移除以往的订单模块功能控制器-->
+<script src="optimize/modal/order/modal.js?v=3.7.6" defer></script>
+<script src="optimize/modal/order/AddOrderProtocolController.js" defer></script>
+<!--招商下拉数据-->
+<script src="optimize/option/factory.js?v=2.0.2" defer></script>
+<!--公共编辑列-->
+<script src="optimize/col/edit.js?v=2.0.2" defer></script>
+<!--教研系统-->
+<script src="partials/tars/pre.notes/js/pre.notes.js?v=2.0.3" defer></script>
+<script src="partials/tars/pre.notes/js/server.js?v=2.0.2" defer></script>
+<!--新分页-->
+<!--<script src="optimize/modal/factory/newPage.js?v=3.0.2" defer async></script>-->
+<!--o2o-->
+<script src="js/services/o2o/o2o-order-service.js?v=3.0.2" defer></script>
+<script src="js/services/o2o/membershipCard-order-service.js?v=2.0.2" defer></script>
+<script src="js/services/o2o/o2ocourse-plan-service.js?v=2.1.2" defer></script>
+<script src="js/services/o2o/o2o-coupon-service.js?v=2.0.2" defer></script>
+<script src="js/services/o2o/o2o-info-service.js?v=2.0.2" defer></script>
+<script src="js/controllers/o2o/o2o-order-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/o2o/o2ocourse-plan-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/o2o/o2o-membershipCard-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/o2o/o2o-coupon-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/o2o/o2o-info-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/o2o/o2o-couponV2-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/o2o/o2o-couponV2-add-controller.js?v=2.0.2" defer></script>
+<!--bd-->
+<script src="js/services/bd/leads-service.js?v=2.0.2" defer></script>
+<script src="js/services/bd/remind-service.js?v=2.0.2" defer></script>
+<script src="js/services/bd/communication-service.js?v=2.0.2" defer></script>
+<script src="js/services/bd/invitation-service.js?v=2.0.2" defer></script>
+<script src="js/services/bd/franchisers-service.js?v=2.0.2" defer></script>
+<script src="js/services/bd/application-service.js?v=2.0.2" defer></script>
+<script src="js/controllers/bd/leads-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bd/lead-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bd/lead-edit-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bd/invitation-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bd/franchisers-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bd/franchiser-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bd/franchiser-edit-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bd/application-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/application-edit-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/o2o/integralController.js" defer></script>
+<script src="js/services/o2o/integralServer.js" defer></script>
+
+<!-- ckfinder -->
+
+<script src="finder/ckfinder.js?v=2.0.2" defer async></script>
+
+<!-- bi -->
+<script src="js/services/bi/biBase-service.js?v=2.0.2" defer></script>
+<script src="js/services/bi/biChannelOrder-service.js?v=2.0.2" defer></script>
+<script src="js/services/bi/biContinuousConsumeCourse-service.js?v=2.0.2" defer></script>
+<script src="js/services/bi/biEducationColligateCourse-service.js?v=2.0.2" defer></script>
+<script src="js/services/bi/biGradeOrder-service.js?v=2.0.2" defer></script>
+<script src="js/services/bi/biGradeSubjectConsume-service.js?v=2.0.2" defer></script>
+<script src="js/services/bi/biRetentionRecommendation-service.js?v=2.0.2" defer></script>
+<script src="js/services/bi/biCommunication-service.js?v=2.0.2" defer></script>
+<script src="js/services/bi/biCourseAdvisorProcess-service.js?v=2.0.2" defer></script>
+<script src="js/services/bi/biMarketerAchievement-service.js?v=2.0.2" defer></script>
+<script src="js/services/bi/studentTeacherCommunication-service.js?v=2.0.2" defer></script>
+<script src="js/services/bi/biProductOrder-service.js?v=2.0.2" defer></script>
+<script src="js/services/bi/biLearningComment-service.js?v=2.0.2" defer></script>
+<script src="js/services/bi/biO2oNum-service.js?v=2.0.2" defer></script>
+<script src="js/services/bi/biO2oOrder-service.js?v=2.0.2" defer></script>
+<script src="js/services/bi/biOutboundPhone-service.js?v=2.0.2" defer></script>
+<script src="js/services/bi/biSchoolManagementPerformence-service.js?v=2.0.2" defer></script>
+<script src="js/services/bi/biSchoolPerformence-service.js?v=2.0.2" defer></script>
+<script src="js/services/bi/biSchoolPerformenceProgress-service.js?v=2.0.2" defer></script>
+<script src="js/services/bi/biClassHour-service.js?v=2.0.2" defer></script>
+<script src="js/services/bi/biSchoolLeads-service.js?v=2.0.2" defer></script>
+<script src="js/services/bi/biConsumeAnalysis-service.js?v=2.0.2" defer></script>
+<script src="js/services/bi/biTeacherConsumeAnalysis-service.js?v=2.0.2" defer></script>
+<script src="js/services/bi/biClassCourse-service.js?v=2.0.2" defer></script>
+<script src="js/services/bi/biCustomerSource-service.js?v=2.0.2" defer></script>
+<script src="js/services/bi/biConfirmIncome-service.js?v=2.0.2" defer></script>
+<script src="js/services/bi/biTeacherReport-service.js?v=2.0.2" defer></script>
+<script src="js/services/bi/biClassTeachingManagement-service.js?v=2.0.2" defer></script>
+
+
+<script src="js/controllers/bi/biBase-controller.js?v=2.0.7" defer></script>
+<script src="js/controllers/bi/bi.html.template/index.js" defer></script>
+<script src="js/controllers/bi/biChannelOrder-controller.js?v=2.0.6" defer></script>
+<script src="js/controllers/bi/biRetentionRecommendation-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bi/biChannelGrade-controller.js?v=2.0.5" defer></script>
+<script src="js/controllers/bi/biContinuousConsumeCourse-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bi/biEducationColligateCourse-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bi/biGradeOrder-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bi/biCommunication-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bi/biCourseAdvisorProcess-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bi/biMarketerAchievement-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bi/studentTeacherCommunication-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bi/biProductOrder-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bi/biLearningComment-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bi/biO2oNum-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bi/biO2oOrder-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bi/biOutboundPhone-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bi/biSchoolManagementPerformence-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bi/biSchoolPerformence-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bi/biSchoolPerformenceProgress-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bi/biClassHour-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bi/biSchoolLeads-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bi/biConsumeAnalysis-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bi/biTeacherConsumeAnalysis-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bi/biClassCourse-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bi/biCustomerSource-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bi/biConfirmIncome-controller.js?v=2.1.2" defer></script>
+<script src="js/controllers/bi/biTeacherReport-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bi/biTeacherMonthlyReport-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bi/biSubjectGroup-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bi/biClassTeachingManagement-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/bi/biGradeSubjectConsume-controller.js?v=2.0.2" defer></script>
+
+<!--help-->
+<script src="js/controllers/help/help-controller.js?v=2.0.2" defer></script>
+<script src="js/services/help/help-service.js?v=2.0.2" defer></script>
+
+<script src="js/controllers/event/event-controller.js?v=2.0.2" defer></script>
+<script src="js/services/event/event-service.js?v=2.0.2" defer></script>
+
+
+<!--workFlow 工作流-->
+<script src="js/services/workFlow/workFlow-service.js?v=2.0.2" defer></script>
+
+<script src="js/controllers/workFlow/all-workFlow-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/workFlow/detail-workFlow-controller.js?v=2.0.2" defer></script>
+<script src="js/controllers/workFlow/add-workFlow-controller.js?v=2.0.2" defer></script>
+<script src="js/lib/jquery.wordexport.js?v=2.0.2" defer></script>
+<!-- pc -->
+<script src="js/controllers/pc/personalCenter-controller.js?v=2.0.2" defer></script>
+<script src="js/services/pc/personalCenter-service.js?v=2.0.2" defer></script>
+
+<!-- export Excel -->
+<script src="exportUsed/alasql.min.js?v=2.0.2" defer async></script>
+<script src="exportUsed/xlsx.core.min.js?v=2.0.2" defer async></script>
+
+<!-- callcenter -->
+<script src="js/lib/callcenter/cpcfunc.js?v=2.0.2" defer async></script>
+<script src="js/lib/callcenter/cpcosip.js?v=2.0.2" defer async></script>
+<script src="js/lib/callcenter/cpcparam.js?v=2.0.2" defer async></script>
+
+<!--帮助中心模态框和富文本编辑器js文件-->
+<script src="js/summernote.min.js?v=2.0.2" defer></script>
+<script src="js/summernote-zh-CN.min.js?v=2.0.2" defer></script>
+
+<!--统计代码-->
+<script src="bower_components/angulartics/dist/angulartics.min.js" defer></script>
+<script src="bower_components/angulartics/dist/angulartics-baidu.min.js" defer></script>
+
+<script src="bower_components/moment/moment.js" defer></script>
+<script src="bower_components/moment/locale/zh-cn.js" defer></script>
+<link href="bower_components/angular-bootstrap-calendar/dist/css/angular-bootstrap-calendar.min.css" rel="stylesheet">
+<script src="bower_components/angular-bootstrap-calendar/dist/js/angular-bootstrap-calendar.js" defer></script>
+<script src="bower_components/angular-bootstrap-calendar/dist/js/angular-bootstrap-calendar-tpls.js" defer></script>
+
+<!--
+<script>
+var _hmt = _hmt || [];
+(function () {
+var hm = document.createElement("script ");
+hm.src = "//hm.baidu.com/hm.js?e948c54afd6b23a7a238fcf2c823e990 ";
+var s = document.getElementsByTagName("script ")[0];
+s.parentNode.insertBefore(hm, s);
+})();
+</script>-->
+</body>
+
+</html>

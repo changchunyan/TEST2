@@ -1,0 +1,196 @@
+<div class="view-frame" ng-controller="TeacherTimesController as ttc">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content" ng-controller="TimesController as tcl">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="#">首页</a> <span class="divider"></span></li>
+                <li><a href="#/sos-admin">学员教务</a> <span class="divider"></span></li>
+                <li class="active">校区时间表</li>
+            </ul>
+        </div>
+        <div class="tabs-title br-gray-t c3">
+            校区时间表<i>?</i>
+            <ul class="time-show of pl-0 bold-200" style="border-left: none;line-height: 50px;">
+                <li class="inline-block mt-abtn f14">
+                    <a class="pre" ng-click="getSchoolsTimes(-1)">往前</a>
+                    <a class="next" ng-click="getSchoolsTimes(1)">往后</a>
+                    <a ng-class="{'active':timeNow}" ng-click="getSchoolsTimes(0)">当前</a>
+                </li>
+                <li class="nb vertical">|</li>
+                <li class="inline-block">
+                    <span ng-class="{'active':selected.isShowAm}" ng-click="timeIsShow('am')">上午</span>
+                    <span ng-class="{'active':selected.isShowPm}" ng-click="timeIsShow('pm')">下午</span>
+                    <span ng-class="{'active':selected.isShowNight}" ng-click="timeIsShow('nt')">晚上</span>
+                </li>
+                <li class="inline-block fr span-auto">
+                    <span ng-class="{'active':selected.isShowAPlanTimes}" ng-click="timeIsShow(2,'isShowAPlanTimes')">显示已消课时间</span>
+                    <span ng-class="{'active':selected.isShowNoPlanTimes}" ng-click="timeIsShow(1,'isShowNoPlanTimes')">显示未消课时间</span>
+                </li>
+
+            </ul>
+        </div>
+        <div class="br-gray mt-list">
+            <h2 class="bg-none pl-20 time-color-item">{{tcl.showWeek(thisTime)}}（{{thisTime|date:'MM-dd'}}）
+                <!--<span class="time-color-title time-bg-3"><icon></icon>可排课</span>
+                <span class="time-color-title time-bg-4"><icon></icon>不可排课</span>-->
+                <span class="time-color-title time-bg-1"><icon></icon>未消课<!--（其他人）--></span>
+                <!--<span class="time-color-title time-bg-5"><icon></icon>未消课（本人）</span>
+                <span class="time-color-title time-bg-7"><icon></icon>未消课（其他校区）</span>-->
+                <span class="time-color-title time-bg-2"><icon></icon>已消课<!--（其他人）--></span>
+                <!--<span class="time-color-title time-bg-6"><icon></icon>已消课（本人）</span>
+                <span class="time-color-title time-bg-8"><icon></icon>已消课（其他校区）</span>-->
+            </h2>
+            <table class="table table-bordered table-striped table-condensed mt-table2" ng-controller="CoursePlanController as cpc">
+                <tbody>
+                <tr ng-if="selected.isShowAm">
+                    <th rowspan="3" class="th-1">
+                        <div>上午</div>
+                    </th>
+                    <td class="frist">06:00</td>
+                    <td>
+                        <ul class="mt-ul-time of" style="margin-top: -2px;margin-bottom: -1px;">
+                            <li ng-repeat="tm in SchoolTimes.forenoon.t6oclock" class="time-item-{{tm.pasttype}}"
+                                 ng-mouseenter="tm.isShow=1" ng-mouseleave="tm.isShow=0" mt-time-tool-tip="">
+                                <!--<span>
+                                    {{tm.start_time|date:'HH:mm'}}-{{tm.end_time|date:'HH:mm'}}
+                                    <p class="c3">{{tm.teacher_name}}</p>
+                                </span>-->
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr ng-if="selected.isShowAm">
+                    <td class="frist">08:00</td>
+                    <td>
+                        <ul class="mt-ul-time of">
+                            <li ng-repeat="tm in SchoolTimes.forenoon.t8oclock" class="time-item-{{tm.pasttype}}"  ng-mouseenter="tm.isShow=1" ng-mouseleave="tm.isShow=0" mt-time-tool-tip=""></li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr ng-if="selected.isShowAm">
+                    <td class="frist">10:00</td>
+                    <td>
+                        <ul class="mt-ul-time of">
+                            <li ng-repeat="tm in SchoolTimes.forenoon.t10oclock"
+                                class="time-item-{{tm.pasttype}}"  ng-mouseenter="tm.isShow=1" ng-mouseleave="tm.isShow=0" mt-time-tool-tip="">
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr ng-if="selected.isShowPm">
+                    <th rowspan="3" class="th-2">
+                        <div>下午</div>
+                    </th>
+                    <td class="frist">12:00</td>
+                    <td>
+                        <ul class="mt-ul-time of">
+                            <li ng-repeat="tm in SchoolTimes.afternoon.t12oclock"
+                                class="time-item-{{tm.pasttype}}"  ng-mouseenter="tm.isShow=1" ng-mouseleave="tm.isShow=0" mt-time-tool-tip=""></li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr ng-if="selected.isShowPm">
+                    <td class="frist">14:00</td>
+                    <td>
+                        <ul class="mt-ul-time of">
+                            <li ng-repeat="tm in SchoolTimes.afternoon.t14oclock"
+                                class="time-item-{{tm.pasttype}}"  ng-mouseenter="tm.isShow=1" ng-mouseleave="tm.isShow=0" mt-time-tool-tip=""></li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr ng-if="selected.isShowPm">
+                    <td class="frist">16:00</td>
+                    <td>
+                        <ul class="mt-ul-time of">
+                            <li ng-repeat="tm in SchoolTimes.afternoon.t16oclock"
+                                class="time-item-{{tm.pasttype}}"  ng-mouseenter="tm.isShow=1" ng-mouseleave="tm.isShow=0"  ng-mouseenter="tm.isShow=1" ng-mouseleave="tm.isShow=0" mt-time-tool-tip=""></li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr ng-if="selected.isShowNight">
+                    <th rowspan="3" class="th-3">
+                        <div>晚上</div>
+                    </th>
+                    <td class="frist">18:00</td>
+                    <td>
+                        <ul class="mt-ul-time of">
+                            <li ng-repeat="tm in SchoolTimes.night.t18oclock" class="time-item-{{tm.pasttype}}"  ng-mouseenter="tm.isShow=1" ng-mouseleave="tm.isShow=0"  ng-mouseenter="tm.isShow=1" ng-mouseleave="tm.isShow=0" mt-time-tool-tip=""></li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr ng-if="selected.isShowNight">
+                    <td class="frist">20:00</td>
+                    <td>
+                        <ul class="mt-ul-time of">
+                            <li ng-repeat="tm in SchoolTimes.night.t20oclock" class="time-item-{{tm.pasttype}}"  ng-mouseenter="tm.isShow=1" ng-mouseleave="tm.isShow=0"  ng-mouseenter="tm.isShow=1" ng-mouseleave="tm.isShow=0" mt-time-tool-tip=""></li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr ng-if="selected.isShowNight">
+                    <td class="frist">22:00</td>
+                    <td>
+                        <ul class="mt-ul-time of" style="margin-bottom: -1px;">
+                            <li ng-repeat="tm in SchoolTimes.night.t22oclock" class="time-item-{{tm.pasttype}}"  ng-mouseenter="tm.isShow=1" ng-mouseleave="tm.isShow=0"  ng-mouseenter="tm.isShow=1" ng-mouseleave="tm.isShow=0" mt-time-tool-tip=""></li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var ary1 = [];
+    $(document).on('mouseenter', '.mt-tool-tip', function () {//document.getElementsByTagName('popup')[0].remove();
+        $(this).click();
+        mtReseat(this)
+    })
+    $(document).on('click', '.mt-tool-tip', function () {//document.getElementsByTagName('popup')[0].remove();
+        mtReseat(this)
+    })
+    var mtReseat = function (obj) {
+        var _this = $(obj),
+                _$parent = _this.parent('span')
+        $(document).find('.mt-toolTip').hide()
+        setTimeout(function () {
+            $(document).find('.mt-toolTip').css({
+                top: _$parent.offset().top,
+                left: (_$parent.offset().left + _$parent.width() + 3)
+            }).show()
+        }, 50)
+    }
+</script>
+<style type="text/css">
+    .ui-popup-right-bottom .ui-bubble, .ui-popup-right-top .ui-bubble, .ui-popup-right .ui-bubble {
+        left: 0;
+    }
+
+    .ui-popup-right .ui-bubble:after, .ui-popup-right .ui-bubble:before {
+        margin-top: 0;
+        top: 0;
+    }
+
+    .ui-popup-right-bottom .ui-bubble:before, .ui-popup-right-top .ui-bubble:before, .ui-popup-right .ui-bubble:before {
+        left: 0;
+        border-right: none;
+    }
+
+    .ui-bubble:after, .ui-bubble:before {
+        content: '';
+        position: absolute;
+        display: none;
+        width: 0;
+        height: 0;
+        overflow: hidden;
+        border: none;
+    }
+
+    popup ul li {
+        padding: 0;
+    }
+
+    .mt-toolTip ul {
+        padding-bottom: 5px;
+    }
+</style>

@@ -1,0 +1,42 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <form class="modal-dialog" style="width: 40%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()">
+                	<span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">进/出班记录</h4>
+            </div>
+            <div class="modal-body of">
+            	<div class="col-sm-12 form-group m0 pl-0 pr-0">
+            		<table class="table table-bordered table-striped mt-table1" st-pipe="getJoinOrExitRecords" st-table="joinOrExitRecordsTable">
+            			<thead>
+				            <tr>
+				                <th>进/出班日期</th>
+				                <th>动作</th>
+				            </tr>
+			            </thead>
+			            <tbody>
+				            <tr ng-repeat="row in joinOrExitRecords">
+				                <td>{{row.operationTime | date : 'yyyy-MM-dd'}}</td>
+				                <td>{{row.type | joinOrExitAction : row.type}}</td>
+				            </tr>
+			            </tbody>
+			            <tfoot>
+				            <tr>
+				                <td colspan="13" class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" >
+				                </td>
+				            </tr>
+				        </tfoot>
+            		</table>
+            	</div>
+            </div>
+            <div class="modal-footer">
+            	<button style="float:right" type="button" class="btn btn-default" ng-click="$hide()">关闭</button>
+            	<button style="float:right" type="button" class="btn btn-default" ng-click="deleteLastRecord(joinOrExitRecordModel)">撤销最后一次记录</button>
+            </div>
+        </div>
+	</form>
+</div>
+
+

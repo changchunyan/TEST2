@@ -1,0 +1,130 @@
+<!-- 筛选条件 -->
+<div ng-include="baseHtmlUrl" style="padding: 0px 15px"></div>
+<!-- 统计图表展示 -->
+<div class="container-full mt-tongji pb-20" ng-if="resultAllList.length&&position_idFun()">
+    <div class="row">
+        <div class="col-lg-12">
+            <div style="float: left;" ng-repeat="el in iframeList">
+                <h3>{{el.title}}</h3>
+                <div style="height: {{el.height||'630px'}};overflow: hidden;">
+                    <iframe id="f1" src="{{el.url}}" width="550" height="3000" seamless='seamless'
+                            scrolling='no' style="position: relative;top: {{el.top||'-1500px'}};left: -20px; background: url('./img/Loading_icon.gif') no-repeat center;background-position-y: {{el.bgpy||'1500px !important'}}"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 表格 -->
+<div class="default-box">
+    <h4 data-content="该报表统计的为时间周期内，所有新签订单的数据，其中包含“学习顾问推荐”渠道的数据" data-placement="top" webui-popover>
+                        数据明细表
+    	<span ng-if="!isDay">（从 {{modelStartTime | date : 'yyyy-MM-dd'}} 至 {{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+        <span ng-if="isDay">（{{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+        <span ng-if="presentTime">最新统计时间：{{presentTime}}</span>
+        <button class="btn btn-success bi-list-head" ng-click="exportToExcel(1)" >导出列表 </button>
+        <button class="btn btn-success bi-list-head" ng-click="showTab(1)" >数据汇总</button> <!--  ng-if="!isSchoolUser" -->
+    </h4>
+    <div id="exportable" class="table-responsive" style="margin-top:20px;width:100%">
+        <table  st-pipe="getStatistics"  st-table="tableState1"  class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th rowspan="2" class="bi-th0">序号</th>
+                <th rowspan="2" class="bi-th0">校区</th>
+                <th colspan="2" class="bi-th1">总计</th>
+                <th colspan="2" class="bi-th2">小一-小三</th>
+                <th colspan="2" class="bi-th3">小四-小六</th>
+                <th colspan="2" class="bi-th4">初一</th>
+                <th colspan="2" class="bi-th5">初二</th>
+                <th colspan="2" class="bi-th6">初三</th>
+                <th colspan="2" class="bi-th1">高一</th>
+                <th colspan="2" class="bi-th2">高二</th>
+                <th colspan="2" class="bi-th3">高三</th>
+                <th colspan="2" class="bi-th4">小学</th>
+                <th colspan="2" class="bi-th5">初中</th>
+                <th colspan="2" class="bi-th6">高中</th>
+            </tr>
+            <tr>
+                <td class="bi-th1">签单数</td>
+                <td class="bi-th1">签单金额</td>
+                <td class="bi-th2">签单数</td>
+              <td class="bi-th2">签单金额</td>
+                <td class="bi-th3">签单数</td>
+              <td class="bi-th3">签单金额</td>
+                <td class="bi-th4">签单数</td>
+              <td class="bi-th4">签单金额</td>
+              <td class="bi-th5">签单数</td>
+              <td class="bi-th5">签单金额</td>
+              <td class="bi-th6">签单数</td>
+              <td class="bi-th6">签单金额</td>
+                <td class="bi-th1">签单数</td>
+              <td class="bi-th1">签单金额</td>
+                <td class="bi-th2">签单数</td>
+              <td class="bi-th2">签单金额</td>
+                <td class="bi-th3">签单数</td>
+              <td class="bi-th3">签单金额</td>
+                <td class="bi-th4">签单数</td>
+              <td class="bi-th4">签单金额</td>
+                <td class="bi-th5">签单数</td>
+              <td class="bi-th5">签单金额</td>
+                <td class="bi-th6">签单数</td>
+              <td class="bi-th6">签单金额</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="entity in resultAllList">
+                <td>{{$index + 1}}</td>
+                <td>{{entity.schoolName}}</td>
+                <td>{{entity.totalOrderCount}}</td>
+                <td>{{entity.totalOrderPaymentAmount}}</td>
+                <!-- 各类产品统计 -->
+                <td>{{entity.primarySchoolFrom1To3OrderCount}}</td>
+                <td>{{entity.primarySchoolFrom1To3OrderPaymentAmount}}</td>
+
+                <td>{{entity.primarySchoolFrom4To6OrderCount}}</td>
+                <td>{{entity.primarySchoolFrom4To6OrderPaymentAmount}}</td>
+
+                <td>{{entity.middleSchoolOneOrderCount}}</td>
+                <td>{{entity.middleSchoolOneOrderPaymentAmount}}</td>
+
+                <td>{{entity.middleSchoolTwoOrderCount}}</td>
+                <td>{{entity.middleSchoolTwoOrderPaymentAmount}}</td>
+
+                <td>{{entity.middleSchoolThreeOrderCount}}</td>
+                <td>{{entity.middleSchoolThreeOrderPaymentAmount}}</td>
+
+                <td>{{entity.highSchoolOneOrderCount}}</td>
+                <td>{{entity.highSchoolOneOrderPaymentAmount}}</td>
+
+                <td>{{entity.highSchoolTwoOrderCount}}</td>
+                <td>{{entity.highSchoolTwoOrderPaymentAmount}}</td>
+
+                <td>{{entity.highSchoolThreeOrderCount}}</td>
+                <td>{{entity.highSchoolThreeOrderPaymentAmount}}</td>
+
+                <td>{{entity.smallSchoolOrderCount}}</td>
+                <td>{{entity.smallSchoolOrderPrice}}</td>
+
+                <td>{{entity.middleSchoolOrderCount}}</td>
+                <td>{{entity.middleSchoolOrderPrice}}</td>
+
+                <td>{{entity.highSchoolOrderCount}}</td>
+                <td>{{entity.highchoolOrderPrice}}</td>
+            </tr>
+            </tbody>
+            <tbody ng-show="isLoading">
+            <tr>
+                <td colspan="26" class="text-center">
+                    <div class="loading-indicator"></div>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="26" class="text-center" st-pagination="" st-items-by-page="10"
+                    st-template="partials/util/pagination.custom.html">
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

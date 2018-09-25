@@ -1,0 +1,240 @@
+<div class="modal orderModal"  tabindex="-1" role="dialog" aria-hidden="true" ng-controller="O2ODetailCouponController as dcc">
+    <div class="modal-dialog">
+        <div class="modal-content" >
+            <form name="updateOrderForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="title"></h4>
+                </div>
+
+                <div class="modal-body"  set-no-edit="" is-edit="dcc.isEdit">
+                  <!--   <div class="col-sm-12"  set-no-edit="" is-edit="dcc.isEdit">
+                        基本信息
+                         -->
+                        <div>
+                            <h3 class="row ">基本信息:</h3>
+                            <div class="row ">
+                                <div class="col-sm-5 " >
+                                    <label for="currentCoupon.couponName" class="col-sm-4 control-label"> 优惠券名称</label>
+                                    <div class="col-sm-8">
+                                        <input type="text"    name="currentCoupon.couponName" id="currentCoupon.couponName"  ng-model="currentCoupon.couponName" class="input-sm form-control" maxlength="18" minlength="2" required   />
+                                        <!-- <select    ng-model="order.orderStatus" name="orderStatus" id="orderStatus" class="input-sm form-control"
+                                                  ng-options="o.id as o.name for o in orderStatusSELECT">
+                                             <option  value="">-- 请选择 --</option>
+                                         </select>-->
+                                    </div>
+                                </div>
+                                <div class="col-sm-5 " >
+                                    <label for="currentCoupon.couponName" class="col-sm-4 control-label"> 优惠券状态</label>
+                                    <div class="col-sm-8">
+                                       <!-- <input type="text"    name="currentCoupon.isShelve" id="currentCoupon.isShelve"  ng-model="currentCoupon.isShelve" class="input-sm form-control" />-->
+                                        <select    ng-model="currentCoupon.isShelve" name="isShelve" id="isShelve" class="input-sm form-control "    required
+                                                ng-options="item.id as item.name for item in dcc.view.upDownState">
+                                            <option  value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5 " >
+                                    <label for="currentCoupon.couponName" class="col-sm-4 control-label"> 金额优惠：</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" ng-pattern="/^[1-9][0-9]*$/"  name="currentCoupon.couponReduction" id="currentCoupon.couponReduction"
+                                               ng-model="currentCoupon.couponReduction" class="input-sm form-control" required   />
+                                    </div>
+                                </div>
+                      <!-- <div class="col-sm-4 " >
+>>>>>>> dev
+                                    <label for="currentCoupon.couponName" class="col-sm-4 control-label"> 打折优惠：</label>
+                                    <div class="col-sm-8">
+                                        <input type="text"   name="currentCoupon.couponDiscount" id="currentCoupon.couponDiscount"
+                                               ng-model="currentCoupon.couponDiscount" class="input-sm form-control"   required />
+                                    </div>
+<<<<<<< HEAD
+                                </div>
+                                <div class="col-sm-5 " >
+                                    <label for="currentCoupon.couponName" class="col-sm-4 control-label"> 可用课程：</label>
+=======
+                                </div>-->
+                                <div class="col-sm-5" >
+                                    <label for="currentCoupon.couponName" class="col-sm-4 control-label">可使用课程</label>
+
+                                    <div class="col-sm-8">
+                                        <input type="text" name="name" id="dcc.view.showCourses" ng-model="dcc.view.showCourses"  ng-disabled="true"
+                                               class="input-sm ng-pristine ng-untouched "  required>
+                                        <a  ng-style="isShowSubmit" ng-click="dcc.searchCoursesView(1)"><span class="glyphicon glyphicon-pencil"></span></a>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-5 " >
+                                    <label for="validitystarttime" class="col-sm-4 control-label"> 开始时间：</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange=""  name="currentCoupon.validityStartTime" id="validitystarttime"
+                                               ng-model="currentCoupon.validitystarttime "  class="input-sm form-control"   />
+                                    </div>
+                                </div>
+                                <div class="col-sm-5 " >
+                                    <label for="currentCoupon.couponName" class="col-sm-4 control-label"> 结束时间：</label>
+                                    <div class="col-sm-8">
+                                      <!--  <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd', minDate:'2013-01-01',maxDate:'2099-12-31'})"  placeholder="yyyy-MM-dd"  name="validityendtime"
+                                               ng-model="currentCoupon.validityendtime" id="validityEndTime"   class="input-sm form-control"    />-->
+                                        <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange=""  name="currentCoupon.validityendtime" id="validitystarttime"
+                                               ng-model="currentCoupon.validityendtime "  class="input-sm form-control"   />
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <hr>
+                        <!--地区选择-->
+                        <div>
+                            <h3 class="row ">地区选择:</h3>
+                            <div>
+                                <div class="row " >
+                                    <div class="col-sm-3 ">
+                                        <div class="col-sm-1 ">
+                                            <input type="checkbox" ng-click="selectAll($event)" ng-checked="isSelectedAll($event)"/>
+                                        </div>
+                                        <div class="col-sm-9" >
+                                            全选
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div ng-repeat="e in dcc.provinceList" class="col-sm-3 " >
+                                        <div class="col-sm-1">
+                                            <input type="checkbox" name="selected" ng-checked="isSelected(e.provinceCode)" ng-click="updateSelection($event, e.provinceCode)"/>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            {{e.provinceName}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <!--使用条件-->
+                        <div>
+                            <h3 class="row ">使用条件:</h3>
+                            <div>
+
+                                <div>
+                                    <div class="col-sm-5 " >
+                                        <select   name="activeConditionType" id="activeConditionType" class="input-sm form-control" ng-model="currentCoupon.activeConditionType"
+                                                  ng-options="o.id as o.name for o in dcc.view.selectedTotalType"   disabled="disabled" >
+                                            <option  value="">-- 请选累计类型 --</option>
+
+                                        </select>
+
+                                    </div>
+                                    <div>
+                                        <div class="row">
+                                            <div class="col-sm-5 " ng-show="currentCoupon.activeConditionType === 1">
+                                                <label for="currentCoupon.couponName" class="col-sm-4 control-label">  单笔消费：</label>
+                                                <div class="col-sm-8">
+                                                    <input type="number" name="singlePayment" id="singlePayment" ng-model="currentCoupon.singlePayment" min="0" class="input-sm form-control" maxlength="10" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-5 " ng-show="currentCoupon.activeConditionType === 2">
+                                                <label for="currentCoupon.couponName" class="col-sm-4 control-label">  累计总价：</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" name="totalPayment" id="totalPayment" ng-model="currentCoupon.totalPayment "  class="input-sm form-control" >
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-5 " ng-show="currentCoupon.activeConditionType === 3">
+                                                <label for="currentCoupon.couponName" class="col-sm-4 control-label">  累计课时：</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" name="totalCourseNum" id="totalCourseNum" ng-model="currentCoupon.totalCourseNum"  class="input-sm form-control" >
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                      <!--  <div class="row">
+
+                                        </div>-->
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <!--一期不上-->
+                            <div class="row " style="display: none">
+                                <div class="col-sm-5 " >
+                                    <label for="currentCoupon.couponName" class="col-sm-4 control-label">  课程类型：</label>
+                                    <div class="col-sm-8">
+                                        <select  ng-model="dcc.view.courseType" name="orderStatus" id="orderStatus" class="input-sm form-control"  
+                                                 ng-options="o as o.name for o in dcc.view.courseTree"   >
+                                            <option  value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5 " >
+                                    <label for="currentCoupon.couponName" class="col-sm-4 control-label">  所选课程：</label>
+                                    <div class="col-sm-8">
+                                        <select   ng-model="currentCoupon.courseActiveId" name="orderStatus" id="orderStatusdd" class="input-sm form-control"  
+                                                  ng-options="item.id as item.name for item in dcc.view.courseType.items" >
+                                            <option  value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <!--获取条件-->
+                        <div>
+                            <h3 class="row ">获取条件:</h3>
+
+                            <div class="row ">
+                                <div class="col-sm-5 " >
+                                    <select   name="dcc.condition" id="dcc.condition" class="input-sm form-control" ng-model="currentCoupon.gainConditionType" ng-options="o.id as o.name for o in dcc.view.selectedCondition" >
+                                        <option  value="">-- 请选择获取条件 --</option>
+                                    </select>
+
+                                </div>
+                                <div class="col-sm-5 " ng-if="currentCoupon.gainConditionType == 3" >
+                                    <!--<input type="radio" ng-model="dcc.view.selectedCondition" ng-checked="" value="red">-->
+                                    <label for="currentCoupon.couponName" class="col-sm-4 control-label">  分享注册：</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" name="shareRegisterNum" id="shareRegisterNum" ng-model="currentCoupon.shareRegisterNum"  class="input-sm form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--优惠券文字说明-->
+                        <div class="col-sm-12 ">
+                            <h3 class="row ">优惠券文字说明:</h3>
+                            <div >
+                                <textarea class="form-control" rows="3" ng-model="currentCoupon.content" maxlength="200" ></textarea>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <!--优惠券样式-->
+                        <div>
+                            <h3 class="row ">优惠券样式:</h3>
+                            <div class="row ">
+                                <div class="col-sm-12" >
+                                    <label for="file">图片（必填）</label>
+                                    <div class="col-md-12">
+                                        <img  ng-src="{{dcc.view.imageMax}}" style="max-width:300px;max-height:300px;margin:0 auto;display:block;" />
+                                    </div>
+                                    <input id="file" type="file" img-model="currentCoupon.imageMax"/>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"  ng-click="$hide()">取消</button>
+                    <button ng-if="dcc.view.isShowSubmit" type="button" class="btn btn-success js-edit-bottom" ng-disabled="updateOrderForm.$invalid || dcc.view.isLoading"  ng-click="dcc.submitController()">保存</button><!--    -->
+                    <!--<button ng-if="showPermissions('OrderEditSave')" type="button" class="btn btn-success" ng-disabled="updateOrderForm.$invalid"  ng-click="updateOrder()">保存</button>&lt;!&ndash;    &ndash;&gt;-->
+                    <!--<img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />-->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

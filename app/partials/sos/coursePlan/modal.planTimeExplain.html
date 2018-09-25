@@ -1,0 +1,108 @@
+
+<div class="modal oms-record-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" style="width: 500px">
+        <div class="modal-content">
+        <form name="form">
+        <div class="modal-header">
+          <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" ng-bind="explainTitle"></h4>
+        </div>
+        <div class="modal-body yws-container pb-20">
+            <!--<div class="row">
+                <div class="col-sm-4">
+                    <span  class="td-time time-xiao">
+                        <a class="color0 time-box" >
+                            09:00-11:00
+                        </a>
+                    </span>
+                </div>
+                <div class="col-sm-8 margin-top5">空闲时段，可排课</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <span  class="td-time time-gray">
+                        <a  class="color0 time-box" >
+                            09:00-11:00
+                        </a>
+                    </span>
+                </div>
+                <div class="col-sm-8 margin-top5">老师设置的不可排课时间段</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <span  class="td-time time-no">
+                        <a class="color0 time-box" >
+                            09:00-11:00
+                        </a>
+                    </span>
+                </div>
+                <div class="col-sm-8 margin-top5">其他人学员/客户的未消课的排课，可查看</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <span  class="td-time time-kong">
+                        <a class=" time-box" >
+                            09:00-11:00
+                        </a>
+                    </span>
+                </div>
+                <div class="col-sm-8 margin-top5">其他人学员/客户的已消课的排课，可查看</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <span  class="td-time  time-green-blue">
+                        <a class="color0 time-box" >
+                            09:00-11:00
+                        </a>
+                    </span>
+                </div>
+                <div class="col-sm-8 margin-top5">本人学员/客户的未消课的排课，可查看、消课、 编辑、删除</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <span  class="td-time  time-black-blue">
+                        <a class="time-box" >
+                            09:00-11:00
+                        </a>
+                    </span>
+                </div>
+                <div class="col-sm-8 margin-top5">本人学员/客户的已消课的排课，可查看、取消</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <span  class="td-time  time-green-yellow">
+                        <a class="time-box" >
+                            09:00-11:00
+                        </a>
+                    </span>
+                </div>
+                <div class="col-sm-8 margin-top5">老师在其他校区上课的未消课的排课</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <span  class="td-time  time-black-yellow">
+                        <a class="time-box" >
+                            09:00-11:00
+                        </a>
+                    </span>
+                </div>
+                <div class="col-sm-8 margin-top5">老师在其他校区上课的已消课的排课</div>
+            </div>-->
+            <span class="time-color-title time-bg-3"><icon></icon>可排课</span>
+                <span class="time-color-title time-bg-4"><icon></icon>不可排课</span>
+            <span class="time-color-title time-bg-1"><icon></icon>未消课（其他人）</span>
+            <span class="time-color-title time-bg-5"><icon></icon>未消课（本人）</span>
+            <span class="time-color-title time-bg-7"><icon></icon>未消课（其他校区）</span>
+            <span class="time-color-title time-bg-2"><icon></icon>已消课（其他人）</span>
+            <span class="time-color-title time-bg-6"><icon></icon>已消课（本人）</span>
+            <span class="time-color-title time-bg-8"><icon></icon>已消课（其他校区）</span>
+        </div>
+      	<div class="modal-footer">
+            <div class="text-center">
+                <button class="btn" ng-click="$hide()">关闭</button>
+            </div>
+        </div>
+        </form>
+        </div>
+    </div>
+</div>

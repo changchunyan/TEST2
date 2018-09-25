@@ -1,0 +1,198 @@
+<div class="table-responsive" style=" overflow-y:hidden">
+	<!-- 汇总表  -->
+    <table st-pipe="getSummary" st-table="channelOrders" class="table table-bordered table-striped"
+    	ng-if="currentTable === '1' && channelTab === '2'">
+        <thead>
+        <tr>
+        	<td style="font-weight: bold;">序号</td>
+        	<td style="font-weight: bold;">渠道</td>
+        	<td style="font-weight: bold;" data-content="指定周期内的到访人数，NOT人次" data-placement="top" webui-popover>到访数</td>
+        	<td style="font-weight: bold;" data-content="指定周期内的体验人数，NOT人次" data-placement="top" webui-popover>体验数</td>
+        	<td style="font-weight: bold;" data-content="指定周期内新签且无退单记录的订单数总和" data-placement="top" webui-popover>签单数</td>
+        	<td style="font-weight: bold;" data-content="指定周期内新签且无退单记录的订单金额总和(订单金额是已优惠后的金额)" data-placement="top" webui-popover>签单金额</td>
+        	<td style="font-weight: bold;" data-content="指定周期内新签且无退单记录的订单实收金额总和(订单金额是已优惠后的金额)" data-placement="top" webui-popover>实收金额</td>
+        	<td style="font-weight: bold;" data-content="签单金额/签单数" data-placement="top" webui-popover>平均单底</td>
+        	<td style="font-weight: bold;" data-content="到访且体验数/到访数" data-placement="top" webui-popover>到访体验率</td>
+        	<td style="font-weight: bold;" data-content="体验且签单数/体验数" data-placement="top" webui-popover>体验签单率</td>
+        	<td style="font-weight: bold;" data-content="到访且签单数/到访数" data-placement="left" webui-popover>到访签单率</td>
+        </tr>
+        </thead>
+        <tbody>
+	        <tr ng-repeat="model in summaryModels">
+	         	<td>{{$index+1}}</td>
+	         	<td>{{model.channelType}}</td>
+	         	<td>{{model.visitCount}}</td>
+	         	<td>{{model.experienceCount}}</td>
+	         	<td>{{model.orderCount}}</td>
+	         	<td>{{model.orderAmount}}</td>
+	         	<td>{{model.realPaymentAmount}}</td>
+	         	<td>{{model.averageAmount}}</td>
+	         	<td>{{model.visitExperienceRatio}}</td>
+	         	<td>{{model.experienceOrderRatio}}</td>
+	         	<td>{{model.visitOrderRatio}}</td>
+	        </tr>
+        </tbody>
+        <tbody ng-show="isLoading">
+        <tr>
+            <td colspan="8" class="text-center">
+            	<div class="loading-indicator"></div>
+            </td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+        	<td colspan="2" style="height: 40px" align="center">总计</td>
+        	<td>{{summaryModelForTotal.visitCount}}</td>
+        	<td>{{summaryModelForTotal.experienceCount}}</td>
+        	<td>{{summaryModelForTotal.orderCount}}</td>
+        	<td>{{summaryModelForTotal.orderAmount}}</td>
+        	<td>{{summaryModelForTotal.realPaymentAmount}}</td>
+        	<td>{{summaryModelForTotal.averageAmount}}</td>
+        	<td>{{summaryModelForTotal.visitExperienceRatio}}</td>
+	        <td>{{summaryModelForTotal.experienceOrderRatio}}</td>
+        	<td>{{summaryModelForTotal.visitOrderRatio}}</td>
+        </tr>
+        </tfoot>
+    </table>
+    <!-- 明细表  -->
+    <table st-pipe="getStatistics" st-table="channelOrders" class="table table-bordered table-striped"
+    	ng-if="currentTable === '2' && channelTab === '2'">
+        <thead>
+        <tr>
+        	<th rowspan="2"  class="bi-th0">序号</th>
+        	<th ng-if="!isSchoolUser" rowspan="2"  class="bi-th0">校区</th>
+        	<th colspan="5"  class="bi-th1">总计</th>
+        	<th colspan="5"  class="bi-th2">400电话</th>
+        	<th colspan="5"  class="bi-th3">自动语音</th>
+        	<th colspan="5"  class="bi-th4">短信</th>
+        	<th colspan="5"  class="bi-th5">BD</th>
+        	<th colspan="5"  class="bi-th6">网络推广</th>
+        	<th colspan="5"  class="bi-th1">广告</th>
+        	<th colspan="5"  class="bi-th2">TMK</th>
+        	<th colspan="5"  class="bi-th3">数据采购</th>
+        </tr>
+        <tr>
+        	<!-- 总计   -->
+        	<td class="bi-th1">到访数</td>
+        	<td class="bi-th1">体验数</td>
+        	<td class="bi-th1">签单数</td>
+        	<td class="bi-th1">签单金额</td>
+        	<td class="bi-th1">实收金额</td>
+        	<!-- 400电话   -->
+        	<td class="bi-th2">到访数</td>
+        	<td class="bi-th2">体验数</td>
+        	<td class="bi-th2">签单数</td>
+        	<td class="bi-th2">签单金额</td>
+        	<td class="bi-th2">实收金额</td>
+        	<!-- 自动语音  -->
+        	<td class="bi-th3">到访数</td>
+        	<td class="bi-th3">体验数</td>
+        	<td class="bi-th3">签单数</td>
+        	<td class="bi-th3">签单金额</td>
+        	<td class="bi-th3">实收金额</td>
+        	<!-- 短信  -->
+        	<td class="bi-th4">到访数</td>
+        	<td class="bi-th4">体验数</td>
+        	<td class="bi-th4">签单数</td>
+        	<td class="bi-th4">签单金额</td>
+        	<td class="bi-th4">实收金额</td>
+        	<!-- BD  -->
+        	<td class="bi-th5">到访数</td>
+        	<td class="bi-th5">体验数</td>
+        	<td class="bi-th5">签单数</td>
+        	<td class="bi-th5">签单金额</td>
+        	<td class="bi-th5">实收金额</td>
+        	<!-- 网络推广  -->
+        	<td class="bi-th6">到访数</td>
+        	<td class="bi-th6">体验数</td>
+        	<td class="bi-th6">签单数</td>
+        	<td class="bi-th6">签单金额</td>
+        	<td class="bi-th6">实收金额</td>
+        	<!-- 广告  -->
+        	<td class="bi-th1">到访数</td>
+        	<td class="bi-th1">体验数</td>
+        	<td class="bi-th1">签单数</td>
+        	<td class="bi-th1">签单金额</td>
+        	<td class="bi-th1">实收金额</td>
+        	<!-- TMK  -->
+        	<td class="bi-th2">到访数</td>
+        	<td class="bi-th2">体验数</td>
+        	<td class="bi-th2">签单数</td>
+        	<td class="bi-th2">签单金额</td>
+        	<td class="bi-th2">实收金额</td>
+        	<!-- 数据采购  -->
+        	<td class="bi-th3">到访数</td>
+        	<td class="bi-th3">体验数</td>
+        	<td class="bi-th3">签单数</td>
+        	<td class="bi-th3">签单金额</td>
+        	<td class="bi-th3">实收金额</td>
+        </tr>
+        </thead>
+        <tbody>
+         <tr ng-repeat="channelOrder in channelOrders">
+         	<td>{{$index+1+statisticsTableState.pagination.start}}</td>
+         	<td ng-if="!isSchoolUser">{{channelOrder.schoolName}}</td>
+         	<!-- 总计  -->
+         	<td>{{channelOrder.totalVisitCount}}</td>
+         	<td>{{channelOrder.totalExperienceCount}}</td>
+         	<td>{{channelOrder.totalOrderCount}}</td>
+         	<td>{{channelOrder.totalOrderAmount}}</td>
+         	<td>{{channelOrder.totalRealPaymentAmount}}</td>
+         	<!-- 400电话  -->
+         	<td>{{channelOrder.p400VisitCount}}</td>
+         	<td>{{channelOrder.p400ExperienceCount}}</td>
+         	<td>{{channelOrder.p400OrderCount}}</td>
+         	<td>{{channelOrder.p400OrderAmount}}</td>
+         	<td>{{channelOrder.p400RealPaymentAmount}}</td>
+         	<!-- 自动语音  -->
+         	<td>{{channelOrder.zdyyVisitCount}}</td>
+         	<td>{{channelOrder.zdyyExperienceCount}}</td>
+         	<td>{{channelOrder.zdyyOrderCount}}</td>
+         	<td>{{channelOrder.zdyyOrderAmount}}</td>
+         	<td>{{channelOrder.zdyyRealPaymentAmount}}</td>
+         	<!-- 短信  -->
+         	<td>{{channelOrder.dxVisitCount}}</td>
+         	<td>{{channelOrder.dxExperienceCount}}</td>
+         	<td>{{channelOrder.dxOrderCount}}</td>
+         	<td>{{channelOrder.dxOrderAmount}}</td>
+         	<td>{{channelOrder.dxRealPaymentAmount}}</td>
+         	<!-- BD  -->
+         	<td>{{channelOrder.bdVisitCount}}</td>
+         	<td>{{channelOrder.bdExperienceCount}}</td>
+         	<td>{{channelOrder.bdOrderCount}}</td>
+         	<td>{{channelOrder.bdOrderAmount}}</td>
+         	<td>{{channelOrder.bdRealPaymentAmount}}</td>
+         	<!-- 网络推广  -->
+         	<td>{{channelOrder.wltgVisitCount}}</td>
+         	<td>{{channelOrder.wltgExperienceCount}}</td>
+         	<td>{{channelOrder.wltgOrderCount}}</td>
+         	<td>{{channelOrder.wltgOrderAmount}}</td>
+         	<td>{{channelOrder.wltgRealPaymentAmount}}</td>
+         	<!-- 广告  -->
+         	<td>{{channelOrder.ggVisitCount}}</td>
+         	<td>{{channelOrder.ggExperienceCount}}</td>
+         	<td>{{channelOrder.ggOrderCount}}</td>
+         	<td>{{channelOrder.ggOrderAmount}}</td>
+         	<td>{{channelOrder.ggRealPaymentAmount}}</td>
+         	<!-- TMK -->
+         	<td>{{channelOrder.tmkVisitCount}}</td>
+         	<td>{{channelOrder.tmkExperienceCount}}</td>
+         	<td>{{channelOrder.tmkOrderCount}}</td>
+         	<td>{{channelOrder.tmkOrderAmount}}</td>
+         	<td>{{channelOrder.tmkRealPaymentAmount}}</td>
+         	<!-- 数据采购 -->
+         	<td>{{channelOrder.sjcgVisitCount}}</td>
+         	<td>{{channelOrder.sjcgExperienceCount}}</td>
+         	<td>{{channelOrder.sjcgOrderCount}}</td>
+         	<td>{{channelOrder.sjcgOrderAmount}}</td>
+         	<td>{{channelOrder.sjcgRealPaymentAmount}}</td>
+         </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="13" class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" >
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

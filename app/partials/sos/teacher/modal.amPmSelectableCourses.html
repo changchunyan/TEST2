@@ -1,0 +1,58 @@
+<link  href='js/lib/fullcalendar/fullcalendar.css' rel='stylesheet' />
+<link  href='js/lib/fullcalendar/fullcalendar.print.css' rel='stylesheet' media='print' />
+<style>
+    .modal-content{
+        height: 800px;
+    }
+    .fc-agendaWeek-button{
+        display: none;
+    }
+    #calendar .fc-widget-content{
+        height: 150px;
+    }
+
+</style>
+<script src='js/lib/fullcalendar/moment.min.js'></script>
+<script src='js/lib/fullcalendar/jquery.base64.js'></script>
+<script src='js/lib/fullcalendar/fullcalendar.min.js'></script>
+<script src="js/lib/fullcalendar/AmPmSelectableCourses.js"></script>
+
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="addTransferForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="col-sm-12">
+                        <div  class="fc fc-ltr fc-unthemed foot-show">
+                            <div class="fc-toolbar">
+                                <div class="fc-left ">
+                                    <div class="fc-button-group ">
+                                        <label for="setWeek">批量排几周:</label>
+                                        <input type="number" class="" id="setWeek"  value="4">
+                                        <button id="batch" class="btn btn-success  isEditShow">批量选择</button>
+                                        <button id="clearBatch" class="isEditShow btn btn-danger ">取消批量选择</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id='calendar'></div>
+                        <div  class="fc fc-ltr fc-unthemed foot-show">
+                            <div class="fc-toolbar">
+                                <div class="fc-right">
+                                    <div class="fc-button-group">
+                                        <button type="button" class="btn btn-success " id="js-submit">提交选择</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

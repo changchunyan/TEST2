@@ -1,0 +1,307 @@
+<script src="js/controllers/hr/InitDomElement.js"></script>
+<div class="modal-tab-panel">
+    <div class="tab-content-block margin-top-20">
+        <div class="tab-block-contents">
+            <div class=" ">
+                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.department.$dirty && form.department.$error.required }">
+                    <label for="department" class="col-sm-6 col-md-6 col-lg-4 control-label teacher-info-required">所属机构</label>
+                    <div class="col-sm-6 col-md-6 col-lg-8">
+                        <input name="department" id="department" class="form-control" ng-model="employee.department.name" ng-click="showSelectDepartment()"
+                            required />
+                    </div>
+                </div>
+                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.position.$dirty && form.position.$error.required }">
+                    <label for="position" class="col-sm-6 col-md-6 col-lg-4 control-label">所属岗位</label>
+                    <div class="col-sm-6">
+                        <select ng-options=" position.name for position in positions track by position.id" ng-model="employee.position" name="position"
+                            id="position" class="form-control" style="width: 100px;padding: 0;margin: 0;float: left;" required>
+                        </select>
+                        <div class="col-sm-8" ng-show="employee.position && (employee.position.id==35 || employee.position.id==38)" style="float: left;display: inline-block;width:100px;margin-left: 4px;
+    padding-right: 0;
+    margin-right: 0;">
+                            <input ng-model=employee.isSubjectLeader type="checkbox" />
+                            <label>学科负责人</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class=" " ng-show="employee.isSubjectLeader">
+                <div class="col-sm-6 form-group"></div>
+                <div class="col-sm-6 form-group">
+                    <label for="subjectGroup" class="col-sm-6 col-md-6 col-lg-4 control-label">科目组</label>
+                    <div class="col-sm-6 col-md-6 col-lg-8">
+                        <select ng-model="employee.subjectGroupId" name="subjectGroup" id="subjectGroup" class="form-control" ng-options="tl.id as tl.name for tl in subjectGroups">
+                            <option value="">------请选择------</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class=" ">
+                <div class="col-sm-6 form-group">
+                    <label for="hiringDate" class="col-sm-6 col-md-6 col-lg-4 control-label">入职日期</label>
+                    <div class="col-sm-6 col-md-6 col-lg-8">
+                        <input type="text" name="hiringDate" id="hiringDate" datePicker ng-model="employee.hiringDate" class="form-control" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"
+                            onchange="" required readonly/>
+                    </div>
+                </div>
+                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.trialEndDate.$dirty && form.trialEndDate.$error.required }">
+                    <label for="trialEndDate" class="col-sm-6 col-md-6 col-lg-4 control-label">转正日期</label>
+                    <div class="col-sm-6 col-md-6 col-lg-8">
+                        <input type="text" name="trialEndDate" id="trialEndDate" datePicker ng-model="employee.trialEndDate" class="form-control"
+                            onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="" readonly/>
+                    </div>
+                </div>
+            </div>
+            <div class=" ">
+                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.employmentType.$dirty && form.employmentType.$error.required }">
+                    <label for="employmentType" class="col-sm-6 col-md-6 col-lg-4 control-label teacher-info-required">在职状态</label>
+                    <div class="col-sm-6 col-md-6 col-lg-8">
+                        <select ng-model="employee.employmentType" name="employmentType" id="employmentType" class="form-control" ng-options="tl.id as tl.name for tl in dictData.employmentType"
+                            required>
+                            <option value="">------请选择------</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.employmentLevel.$dirty && form.employmentLevel.$error.required }">
+                    <label for="employmentLevel" class="col-sm-6 col-md-6 col-lg-4 control-label">职级</label>
+                    <div class="col-sm-6 col-md-6 col-lg-8">
+                        <select ng-model="employee.employmentLevel" name="employmentLevel" id="employmentLevel" ng-blur="getEmploymentLevel()" class="form-control"
+                            ng-options="tl.id as tl.name for tl in dictData.employmentLevel" required>
+                            <option value="">------请选择------</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class=" ">
+                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.recruitmentSources.$dirty && form.recruitmentSources.$error.required }">
+                    <label for="recruitmentSources" class="col-sm-6 col-md-6 col-lg-4 control-label">招聘来源</label>
+                    <div class="col-sm-6 col-md-6 col-lg-8">
+                        <select ng-model="employee.recruitmentSources" name="recruitmentSources" id="recruitmentSources" class="form-control" ng-options="tl.id as tl.name for tl in dictData.recruitmentSource">
+                          <option value="">------请选择------</option>
+                      </select>
+                    </div>
+                </div>
+                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.referenceName.$dirty && form.referenceName.$error.required }">
+                    <label for="supervisor" class="col-sm-6 col-md-6 col-lg-4 control-label">推荐人</label>
+                    <div class="col-sm-6 col-md-6 col-lg-8">
+                        <input type="text" name="referenceName" id="referenceName" class="form-control" ng-model="employee.referenceName" />
+                    </div>
+                </div>
+            </div>
+            <div class=" ">
+                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.starLevel.$dirty && form.starLevel.$error.required }">
+                    <label for="starLevel" class="col-sm-6 col-md-6 col-lg-4 control-label">星级</label>
+                    <div class="col-sm-6 col-md-6 col-lg-8">
+                        <select ng-model="employee.starLevel" name="starLevel" id="starLevel" class="form-control" ng-options="tl.id as tl.name for tl in dictData.starLevel">
+                            <option value="">------请选择------</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div ng-if="(employee.partFull == 2 && employee.position && (employee.position.id == 35 || employee.position.id == 38))" class="col-sm-6 form-group" ng-class="{ 'has-error': form.courseLevel.$dirty && form.courseLevel.$error.required }">
+                    <label for="courseType" class="col-sm-6 col-md-6 col-lg-4 control-label">课补级别</label>
+                    <div class="col-sm-6 col-md-6 col-lg-8">
+                        <select ng-model="employee.courseType" name="courseType" id="courseType"
+                                class="form-control" ng-options="tl.id as tl.name for tl in dictData.courseType" required>
+                            <option value="">------请选择------</option>
+                        </select>
+                    </div>
+                </div>
+                <div ng-if="(employee.partFull == 2 && !employee.position || (employee.position.id != 35 && employee.position.id != 38))||(employee.partFull == 1 && employee.position.id != 35)"
+                    class="col-sm-6 form-group">
+                    <label for="courseType" class="col-sm-6 col-md-6 col-lg-4 control-label">课补级别</label>
+                    <div class="col-sm-6 col-md-6 col-lg-8">
+                        <select ng-model="employee.courseType" name="courseType" id="courseType" class="form-control" ng-options="tl.id as tl.name for tl in dictData.courseType">
+                        	<option value="">------请选择------</option>
+                    	</select>
+                    </div>
+                </div>
+
+            </div>
+            <div class=" ">
+                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.teacherLevel.$dirty && form.teacherLevel.$error.required }">
+                    <label for="teacherLevel" class="col-sm-6 col-md-6 col-lg-4 control-label teacher-info-required">教师级别</label>
+                    <div class="col-sm-6 col-md-6 col-lg-8">
+                        <select ng-model="employee.teacherLevel" name="teacherLevel" id="teacherLevel" class="form-control" ng-options="tl.id as tl.name for tl in dictData.teacherLevel">
+                            <option value="">------请选择------</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.teacherLevel.$dirty && form.teacherLevel.$error.required }">
+                    <label for="teacherGrade" class="col-sm-6 col-md-6 col-lg-4 control-label teacher-info-required">年级段</label>
+                    <div class="col-sm-6 col-md-6 col-lg-8">
+                        <select ng-model="employee.teacherGrade" name="teacherGrade" id="teacherGrade" class="form-control selectpicker show-tick"
+                            multiple ng-options="option.name for option in grades track by option.id">
+                            <option value="">------请选择------</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class=" ">
+                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.teachingYears.$dirty && form.teachingYears.$error.required }">
+                    <label for="teachingYears" class="col-sm-6 col-md-6 col-lg-4 control-label teacher-info-required">教龄</label>
+                    <div class="col-sm-6 col-md-6 col-lg-8">
+                        <input type="text" ng-model="employee.teachingYears" name="teachingYears" id="teachingYears" class="form-control">
+                    </div>
+                </div>
+                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.appSubject.$dirty && form.appSubject.$error.required }">
+                    <label for="appSubject" class="col-sm-6 col-md-6 col-lg-4 control-label teacher-info-required">App端显示科目</label>
+                    <div class="col-sm-6 col-md-6 col-lg-8">
+                        <select ng-model="employee.appSubject" name="appSubject" id="appSubject" class="form-control" ng-options="tl.id as tl.name for tl in dictData.appSubject">
+                            <option value="">------请选择------</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class=" " ng-if="employee.partFull == 2">
+                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.salary.$dirty && form.salary.$error.required }">
+                    <label for="salary" class="col-sm-6 col-md-6 col-lg-4 control-label teacher-info-required">转正后薪资</label>
+                    <div class="col-sm-6 col-md-6 col-lg-8">
+                        <input type="text" name="salary" id="salary" class="form-control" ng-model="employee.salary" required/>
+                    </div>
+                </div>
+            </div>
+
+            <div class=" ">
+                <div class="m-left col-sm-12">
+                    <div ng-show="employee.position && employee.position.id==35 && !employee.subject" class="col-sm-11 form-group red-border"
+                        style="margin-left:2px;padding-left:10px;float: right;margin-right: 59px;width:90%;">
+                        <label class="col-sm-1 pd-right0 control-label">科目</label>
+                        <div style="width:80%;float:left;padding-left: 10px">
+                            <span ng-repeat="subject in subjects track by $index" class="subject-checkbox">
+                                <label>
+                                    <input type="checkbox" ng-click="toggleSubject(subject)" ng-checked="containsSubjectOnload(subject)" />
+                                    {{subject.name}}
+                                </label>
+                            </span>
+                        </div>
+                    </div>
+                    <div ng-show="!employee.position || employee.position.id!=35 || (employee.position.id==35 && employee.subject)" class="col-sm-11 form-group"
+                        style="margin-left:2px;padding-left:10px;">
+                        <label class="col-sm-1 pd-right0 control-label">科目</label>
+                        <div style="width:80%;float:left;padding-left: 10px">
+                            <span ng-repeat="subject in subjects track by $index" class="subject-checkbox">
+                                <label>
+                                    <input type="checkbox" ng-click="toggleSubject(subject)" ng-checked="containsSubjectOnload(subject)" />
+                                    {{subject.name}}
+                                </label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class=" " ng-if="employee.partFull == 1 && employee.position.id==35">
+                <div class="col-sm-12 form-group" ng-class="{ 'has-error': form.teacherLevel.$dirty && form.teacherLevel.$error.required }">
+                    <div class="col-sm-12 row">
+                        <label for="teacherLevel" class="col-sm-2 col-md-2 col-lg-2 control-label teacher-info-required">薪资标准</label>
+                        <div class="col-sm-5 col-md-5 col-lg-5" style="padding-top:10px;">
+                            <select class="col-sm-6 col-md-6 col-lg-6" ng-model="salaryStandard.gradeId" name="" id="teacherLevel" class="form-control"
+                                ng-options="tl.id as tl.name for tl in gradeList" style="margin-right:20px;">
+                                <option value="">------选择年级------</option>
+                            </select>
+                            <div class="col-sm-5" style="margin-top:0;">
+                                <input min="1" max="1000" type="number" ng-model="salaryStandard.unitPrice" style="border:none;border-bottom:1px solid #dfdfdf;" class="col-sm-6 col-md-6 col-lg-6">                                元/小时
+                            </div>
+                        </div>
+                        <span class="btn btn-success" ng-click="addSalaryStandard()" style="background:#3e70c5; color:#fff;">添加薪资标准</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class=" " ng-if="employee.partFull == 1">
+                <div class="col-sm-12 form-group" ng-class="{ 'has-error': form.teacherLevel.$dirty && form.teacherLevel.$error.required }">
+
+
+                    <div ng-repeat="i in employee.salaryStandardList track by $index" class="col-sm-12 row">
+                        <label class="col-sm-2 col-md-2 col-lg-2 control-label teacher-info-required"></label>
+                        <div class="col-sm-5 col-md-5 col-lg-5">
+                            <select class="col-sm-6 col-md-6 col-lg-6" ng-model="employee.salaryStandardList[$index].gradeId" name="" id="teacherLevel"
+                                class="form-control" ng-options="tl.id as tl.name for tl in gradeList" style="margin-right:20px;"
+                                require>
+                                <option value="">------选择年级------</option>
+                            </select>
+                            <div class="col-sm-4 col-md-4 col-lg-4" style="margin-top:0;">
+                                <input min="0" max="1000" require type="number" ng-model="employee.salaryStandardList[$index].unitPrice" style="border:none;border-bottom:1px solid #dfdfdf;"
+                                    class="col-sm-6 col-md-6 col-lg-6"> 元/小时
+                            </div>
+                            <sapn class="">
+                                <img src="img/hr/deleteimg5.png" ng-click="deleteSalaryStandard($index)" style="width:25px; height:25px;" alt="">
+                            </sapn>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-show="employee.isSubjectLeader" style="clear:left">
+                <div class="of">
+                    <label class="col-sm-1 pd-right0 control-label">组内教师</label>
+                    <div class="col-sm-6 col-md-6 col-lg-8">
+                        <input name="groupTeacher" id="department" placeholder="选择组内教师" class="form-control" ng-click="showTeacherSelectModal()"
+                        />
+                    </div>
+                </div>
+                <div class="of">
+                    <a ng-repeat="teacher in groupTeacher track by $index" class="btn btn-success" style="margin:10px">{{teacher.username}}</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="tab-content-block margin-bottom-21">
+        <div class="tab-block-title">合同相关</div>
+        <div class="tab-block-contents">
+            <div class=" ">
+                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.contractStartDate.$dirty && form.contractStartDate.$error.required }">
+                    <label for="contractStartDate" class="col-sm-6 col-md-6 col-lg-4 control-label">合同起始时间</label>
+                    <div class="col-sm-6 col-md-6 col-lg-8">
+                        <input type="text" name="contractStartDate" id="contractStartDate" datePicker ng-model="employee.contractStartDate" class="form-control"
+                            onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="" readonly/>
+                    </div>
+                </div>
+                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.contractEndDate.$dirty && form.contractEndDate.$error.required }">
+                    <label for="contractEndDate" class="col-sm-6 col-md-6 col-lg-4 control-label">合同终止时间</label>
+                    <div class="col-sm-6 col-md-6 col-lg-8">
+                        <input type="text" name="contractEndDate" id="contractEndDate" datePicker ng-model="employee.contractEndDate" class="form-control"
+                            onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="" readonly/>
+                    </div>
+                </div>
+            </div>
+            <div class=" ">
+                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.contractType.$dirty && form.contractType.$error.required }">
+                    <label for="contractType" class="col-sm-6 col-md-6 col-lg-4 control-label">合同类型</label>
+                    <div class="col-sm-6 col-md-6 col-lg-8">
+                        <select ng-model="employee.contractType" name="contractType" id="contractType" class="form-control" ng-options="tl.id as tl.name for tl in dictData.contractType">
+                            <option value="">------请选择------</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.employer.$dirty && form.employer.$error.required }">
+                    <label for="employer" class="col-sm-6 col-md-6 col-lg-4 control-label">合同签署单位</label>
+                    <div class="col-sm-6 col-md-6 col-lg-8">
+                        <!-- <select ng-model="employee.employer" name="employer" id="employer"
+                              class="form-control" ng-options="tl.id as tl.name for tl in dictData.employer" >
+                          <option value="">------请选择------</option>
+                      </select> -->
+                        <input type="text" name="employer" id="employer" class="form-control" ng-model="employee.department.contractCompany" disabled/>
+                    </div>
+                </div>
+            </div>
+            <div class=" ">
+                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.workingYears.$dirty && form.workingYears.$error.required }">
+                    <label for="workingYears" class="col-sm-6 col-md-6 col-lg-4 control-label">司龄</label>
+                    <div class="col-sm-6 col-md-6 col-lg-8">
+                        <input type="text" name="workingYears" id="workingYears" class="form-control" ng-model="employee.workingYears" />
+                    </div>
+                </div>
+                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.contractType.$dirty && form.contractType.$error.required }">
+                    <label for="contractPeriod" class="col-sm-6 col-md-6 col-lg-4 control-label">合同期限</label>
+                    <div class="col-sm-6 col-md-6 col-lg-8">
+                        <input type="text" name="contractPeriod" id="contractPeriod" class="form-control" ng-model="employee.contractPeriod" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

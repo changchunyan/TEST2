@@ -1,0 +1,378 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true" ng-controller="TimesController as tcl">
+    <form class="modal-dialog form-horizontal" id="dateTimeModal" style="min-width: 750px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" ng-bind="dateTimeTitle"></h4>
+            </div>
+            <div class="modal-body pb-20">
+                <!--查询条件模块-->
+                <div class="select-time" style="padding:0">
+                    <div class="inline-block width49" style="width:192px;overflow: hidden;">
+                        <div class="yes-radio " ng-class="{true:'radio-checked',false:''}[selected.isWeekShow]"
+                             ng-click="tcl.checkedShowCycle('week')">
+                            <input type="radio">
+                        </div>
+                        按周查看
+                        <div class="yes-radio " ng-class="{true:'radio-checked',false:''}[selected.isDayShow]"
+                             ng-click="tcl.checkedShowCycle('day')">
+                            <input type="radio">
+                        </div>
+                        按天查看
+                    </div>
+                    <div class="inline-block width49 time-show">
+                        <span ng-class="{'active':selected.isShowAm}" ng-click="timeIsShow('am')">上午</span>
+                        <span ng-class="{'active':selected.isShowPm}" ng-click="timeIsShow('pm')">下午</span>
+                        <span ng-class="{'active':selected.isShowNight}" ng-click="timeIsShow('nt')">晚上</span>
+                        <!--<input type="checkbox" ng-model="selected.isShowAm">上午
+                        <input type="checkbox" ng-model="selected.isShowPm">下午
+                        <input type="checkbox" ng-model="selected.isShowNight">晚上-->
+                    </div>
+                    <div class="times-selected inline-block " style="padding: 0;    margin-top: -10px;
+    position: absolute;">
+                        <div class="br-f-m" style="border: none;padding: 0">
+                            <div class="text-center">
+                                <button class="btn btn-success ng-scope" ng-click="tcl.selectPersons(1)" style="width: 60px;
+    height: 30px;
+    font-size: 14px">查询
+                                </button>
+                                <!--<button class="btn btn-default" ng-click="tcl.resetSelectPersons()" style="width: 60px;
+    height: 30px;
+    font-size: 14px">重置
+                                </button>-->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div ng-if="selected.isDayShow">
+                        <input type="radio" value="1" ng-model="selected.dayShowOfWeek">星期一
+                        <input type="radio" value="2" ng-model="selected.dayShowOfWeek">星期二
+                        <input type="radio" value="3" ng-model="selected.dayShowOfWeek">星期三
+                        <input type="radio" value="4" ng-model="selected.dayShowOfWeek">星期四
+                        <input type="radio" value="5" ng-model="selected.dayShowOfWeek">星期五
+                        <input type="radio" value="6" ng-model="selected.dayShowOfWeek">星期六
+                        <input type="radio" value="7" ng-model="selected.dayShowOfWeek">星期日
+                    </div>
+                </div>
+
+                <!--显示时间模块-->
+                <div class="br-gray pl-0">
+                    <div class="times-contents" ng-if="selected.isSelectedData">
+                        <!--头部-->
+                        <div class="text-center font-size-20">
+                            <span>{{tcl.requestDate.timeLists[0] |date :'yyyy-MM-dd'}}</span>到<span>{{tcl.requestDate.timeLists[6] |date :'yyyy-MM-dd'}}</span>
+                        </div>
+                        <div class="yws-container time-select-tag">
+                            <div class="yws-left mt-abtn">
+                                <a class="btn-success" ng-click="getForwardTime()">往前</a>
+                                <a class="btn-success" ng-click="getBackTime()">往后</a>
+                                <!--&nbsp;&nbsp;-->
+                                <a class="btn-success" ng-click="getCurrentTimes()">当前</a>
+                                <a class="btn-success bg-img-none ti-0 tc" ng-click="showExplainModal()">图形说明</a>
+                            </div>
+                            <div class="yws-right time-show" style="border: none">
+                                <label class="label-span width-auto ti-14" for="input-1"
+                                       ng-class="{'active':selected.isShowPlanTimes}">显示已排课时间</label>
+                                <input type="checkbox" id="input-1" class="hide" ng-model="selected.isShowPlanTimes">
+                                <label class="label-span width-auto ti-14" for="input-2"
+                                       ng-class="{'active':selected.isShowNotPlanTimes}">显示未排课时间</label>
+                                <input type="checkbox" id="input-2" class="hide" ng-model="selected.isShowNotPlanTimes">
+                            </div>
+                            <!--<div class="yws-right">
+                                <input type="checkbox" ng-model="selected.isShowPlanTimes">显示已排课时间
+                                &nbsp;&nbsp;
+                                <input type="checkbox" ng-model="selected.isShowNotPlanTimes">显示未排课时间
+                            </div>-->
+                        </div>
+                        <!--<div class="yws-container">
+                            <div class="yws-right font-color-blue" ng-click="showExplainModal()">图形说明</div>
+                        </div>-->
+                        <!--表格部分-->
+                        <table class="table table-bordered table-striped table-condensed mt-10" id="tableTime"
+                               ng-controller="CoursePlanController as cpc">
+                            <thead>
+                            <tr>
+                                <th colspan="2"><span ng-if="st&&s_id">学生</span><span ng-if="!(st&&s_id)">老师</span></th>
+                                <th ng-repeat="row in tcl.requestDate.timeLists">{{tcl.showWeek(row)}}({{row |
+                                    date:'MM-dd'}})
+                                </th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!--第一-->
+                            <tr ng-if="personsData[0].persons">
+                                <td rowspan="3" class="vam">
+                                    <div style="text-align:left">
+                                        <div style="font-size:20px;font-weight: 400;">
+                                            {{personsData[0].teachername}}<br/>
+                                        </div>
+                                        <br/>
+                                        <div ng-if="personsData[0].teacherInfo.subjects">
+                                            {{personsData[0].teacherInfo.subjects}}<br/></div>
+                                        <div ng-if="personsData[0].teacherInfo.grade">
+                                            {{personsData[0].teacherInfo.grade}}<br/></div>
+                                        <div ng-if="personsData[0].teacherInfo.mobile">
+                                            {{personsData[0].teacherInfo.mobile}}<br/>
+                                        </div>
+                                        <div ng-if="personsData[0].teacherInfo.schoolName">
+                                            {{personsData[0].teacherInfo.schoolName}}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td ng-if="selected.isShowAm" class="td-1 vam">上午</td>
+                                <td ng-if="selected.isShowAm" ng-repeat="noots in personsData[0].persons">
+                                    <ul class="mt-ul-time of t-s" ng-init="p_index = $index">
+                                        <li ng-if="isShowPlan(tm)" ng-repeat="tm in noots.noon[0].forenoon"
+                                            class="show-select date-li time-item-{{tm.pasttype}}"
+                                            ng-mouseenter="tm.isShow=1" ng-mouseleave="tm.isShow=0" mt-time-tool-tip="">
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr ng-if="personsData[0].persons">
+                                <td ng-if="selected.isShowPm" class="td-2 vam">下午</td>
+                                <td ng-if="selected.isShowPm" ng-repeat="noots in personsData[0].persons">
+                                    <!-- ng-init="sectionIndex = $index"-->
+                                    <ul class="mt-ul-time of t-s" ng-init="p_index = $index">
+                                        <li ng-if="isShowPlan(tm)" ng-repeat="tm in noots.noon[0].afternoon"
+                                            class="show-select date-li time-item-{{tm.pasttype}}"
+                                            ng-mouseenter="tm.isShow=1" ng-mouseleave="tm.isShow=0"
+                                            mt-time-tool-tip=""></li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr ng-if="personsData[0].persons">
+                                <td ng-if="selected.isShowNight" class="td-3 vam">晚上</td>
+                                <td ng-if="selected.isShowNight" ng-repeat="noots in personsData[0].persons">
+                                    <ul class="mt-ul-time of t-s" ng-init="p_index = $index">
+                                        <li ng-if="isShowPlan(tm)" ng-repeat="tm in noots.noon[0].night"
+                                            class="show-select date-li time-item-{{tm.pasttype}}"
+                                            ng-mouseenter="tm.isShow=1" ng-mouseleave="tm.isShow=0" mt-time-tool-tip="">
+
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <!--第二-->
+                            <tr ng-if="personsData[1].persons">
+                                <td rowspan="3" class="vam">
+                                    <div style="text-align:left">
+                                        <div style="font-size:20px;font-weight: 400;">
+                                            {{personsData[1].teachername}}<br/>
+                                        </div>
+                                        <br/>
+                                        <div ng-if="personsData[1].teacherInfo.subjects">
+                                            {{personsData[1].teacherInfo.subjects}}<br/></div>
+                                        <div ng-if="personsData[1].teacherInfo.grade">
+                                            {{personsData[1].teacherInfo.grade}}<br/></div>
+                                        <div ng-if="personsData[1].teacherInfo.mobile">
+                                            {{personsData[1].teacherInfo.mobile}}<br/>
+                                        </div>
+                                        <div ng-if="personsData[1].teacherInfo.schoolName">
+                                            {{personsData[1].teacherInfo.schoolName}}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td ng-if="selected.isShowAm" class="vam td-1">上午</td>
+                                <td ng-if="selected.isShowAm" ng-repeat="noots in personsData[1].persons">
+                                    <ul class="mt-ul-time of t-s">
+                                        <li ng-if="isShowPlan(tm)" ng-repeat="tm in noots.noon[0].forenoon"
+                                            class="show-select date-li time-item-{{tm.pasttype}}"
+                                            ng-mouseenter="tm.isShow=1" ng-mouseleave="tm.isShow=0" mt-time-tool-tip="">
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr ng-if="personsData[1].persons">
+                                <td ng-if="selected.isShowPm" class="vam td-1">下午</td>
+                                <td ng-if="selected.isShowPm" ng-repeat="noots in personsData[1].persons">
+                                    <ul class="mt-ul-time of t-s">
+                                        <li ng-if="isShowPlan(tm)" ng-repeat="tm in noots.noon[0].afternoon"
+                                            class="show-select date-li time-item-{{tm.pasttype}}"
+                                            ng-mouseenter="tm.isShow=1" ng-mouseleave="tm.isShow=0" mt-time-tool-tip="">
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr ng-if="personsData[1].persons">
+                                <td ng-if="selected.isShowNight" class="vam td-1">晚上</td>
+                                <td ng-if="selected.isShowNight" ng-repeat="noots in personsData[1].persons">
+                                    <!-- ng-init="sectionIndex = $index"-->
+                                    <ul class="mt-ul-time of t-s">
+                                        <li ng-if="isShowPlan(tm)" ng-repeat="tm in noots.noon[0].night"
+                                            class="show-select date-li time-item-{{tm.pasttype}}"
+                                            ng-mouseenter="tm.isShow=1" ng-mouseleave="tm.isShow=0" mt-time-tool-tip="">
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <!--第三-->
+                            <tr ng-if="personsData[2].persons">
+                                <td rowspan="3">
+                                    <div style="text-align:left">
+                                        <div style="font-size:20px;font-weight: 400;">
+                                            {{personsData[2].teachername}}<br/>
+                                        </div>
+                                        <br/>
+                                        <div ng-if="personsData[2].teacherInfo.subjects">
+                                            {{personsData[2].teacherInfo.subjects}}<br/></div>
+                                        <div ng-if="personsData[2].teacherInfo.grade">
+                                            {{personsData[2].teacherInfo.grade}}<br/></div>
+                                        <div ng-if="personsData[2].teacherInfo.mobile">
+                                            {{personsData[2].teacherInfo.mobile}}<br/>
+                                        </div>
+                                        <div ng-if="personsData[2].teacherInfo.schoolName">
+                                            {{personsData[2].teacherInfo.schoolName}}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td ng-if="selected.isShowAm" class="vam td-1">上午{{$index}}</td>
+                                <td ng-if="selected.isShowAm" ng-repeat="noots in personsData[2].persons">
+                                    <ul class="mt-ul-time of t-s">
+                                        <li ng-if="isShowPlan(tm)" ng-repeat="tm in noots.noon[0].forenoon"
+                                            class="show-select date-li time-item-{{tm.pasttype}}"
+                                            ng-mouseenter="tm.isShow=1" ng-mouseleave="tm.isShow=0" mt-time-tool-tip="">
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr ng-if="personsData[2].persons">
+                                <td ng-if="selected.isShowPm" class="vam td-1">下午</td>
+                                <td ng-if="selected.isShowPm" ng-repeat="noots in personsData[2].persons">
+                                    <ul class="mt-ul-time of t-s">
+                                        <li ng-if="isShowPlan(tm)" ng-repeat="tm in noots.noon[0].afternoon"
+                                            class="show-select date-li time-item-{{tm.pasttype}}"
+                                            ng-mouseenter="tm.isShow=1" ng-mouseleave="tm.isShow=0"
+                                            mt-time-tool-tip=""></li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr ng-if="personsData[2].persons">
+                                <td ng-if="selected.isShowNight" class="vam td-1">晚上</td>
+                                <td ng-if="selected.isShowNight" ng-repeat="noots in personsData[2].persons">
+                                    <ul class="mt-ul-time of t-s">
+                                        <li ng-if="isShowPlan(tm)" ng-repeat="tm in noots.noon[0].night"
+                                            class="show-select date-li time-item-{{tm.pasttype}}"
+                                            ng-mouseenter="tm.isShow=1" ng-mouseleave="tm.isShow=0" mt-time-tool-tip="">
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <!--第四-->
+                            <tr ng-if="personsData[3].persons">
+                                <td rowspan="3">
+                                    <div style="text-align:left">
+                                        <div style="font-size:20px;font-weight: 400;">
+                                            {{personsData[3].teachername}}<br/>
+                                        </div>
+                                        <br/>
+                                        <div ng-if="personsData[3].teacherInfo.subjects">
+                                            {{personsData[3].teacherInfo.subjects}}<br/></div>
+                                        <div ng-if="personsData[3].teacherInfo.grade">
+                                            {{personsData[3].teacherInfo.grade}}<br/></div>
+                                        <div ng-if="personsData[3].teacherInfo.mobile">
+                                            {{personsData[3].teacherInfo.mobile}}<br/>
+                                        </div>
+                                        <div ng-if="personsData[3].teacherInfo.schoolName">
+                                            {{personsData[3].teacherInfo.schoolName}}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td ng-if="selected.isShowAm" class="vam td-1">上午{{$index}}</td>
+                                <td ng-if="selected.isShowAm" ng-repeat="noots in personsData[3].persons">
+                                    <ul class="mt-ul-time of t-s">
+                                        <li ng-if="isShowPlan(tm)" ng-repeat="tm in noots.noon[0].forenoon"
+                                            class="show-select date-li time-item-{{tm.pasttype}}"
+                                            ng-mouseenter="tm.isShow=1" ng-mouseleave="tm.isShow=0" mt-time-tool-tip="">
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr ng-if="personsData[3].persons">
+                                <td ng-if="selected.isShowPm" class="vam td-1">下午</td>
+                                <td ng-if="selected.isShowPm" ng-repeat="noots in personsData[3].persons">
+                                    <ul class="mt-ul-time of t-s">
+                                        <li ng-if="isShowPlan(tm)" ng-repeat="tm in noots.noon[0].afternoon"
+                                            class="show-select date-li time-item-{{tm.pasttype}}"
+                                            ng-mouseenter="tm.isShow=1" ng-mouseleave="tm.isShow=0"
+                                            mt-time-tool-tip=""></li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr ng-if="personsData[3].persons">
+                                <td ng-if="selected.isShowNight" class="vam td-1">晚上</td>
+                                <td ng-if="selected.isShowNight" ng-repeat="noots in personsData[3].persons">
+                                    <ul class="mt-ul-time of t-s">
+                                        <li ng-if="isShowPlan(tm)" ng-repeat="tm in noots.noon[0].night"
+                                            class="show-select date-li time-item-{{tm.pasttype}}"
+                                            ng-mouseenter="tm.isShow=1" ng-mouseleave="tm.isShow=0"
+                                            mt-time-tool-tip=""></li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <!--第五-->
+                            <tr ng-if="personsData[4].persons">
+                                <td rowspan="3">
+                                    <div style="text-align:left">
+                                        <div style="font-size:20px;font-weight: 400;">
+                                            {{personsData[4].teachername}}<br/>
+                                        </div>
+                                        <br/>
+                                        <div ng-if="personsData[4].teacherInfo.subjects">
+                                            {{personsData[4].teacherInfo.subjects}}<br/></div>
+                                        <div ng-if="personsData[4].teacherInfo.grade">
+                                            {{personsData[4].teacherInfo.grade}}<br/></div>
+                                        <div ng-if="personsData[4].teacherInfo.mobile">
+                                            {{personsData[4].teacherInfo.mobile}}<br/>
+                                        </div>
+                                        <div ng-if="personsData[4].teacherInfo.schoolName">
+                                            {{personsData[4].teacherInfo.schoolName}}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td ng-if="selected.isShowAm" class="vam td-1">上午{{$index}}</td>
+                                <td ng-if="selected.isShowAm" ng-repeat="noots in personsData[4].persons">
+                                    <ul class="mt-ul-time of t-s">
+                                        <li ng-if="isShowPlan(tm)" ng-repeat="tm in noots.noon[0].forenoon"
+                                            class="show-select date-li time-item-{{tm.pasttype}}"
+                                            ng-mouseenter="tm.isShow=1" ng-mouseleave="tm.isShow=0"
+                                            mt-time-tool-tip=""></li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr ng-if="personsData[4].persons">
+                                <td ng-if="selected.isShowPm" class="vam td-1">下午</td>
+                                <td ng-if="selected.isShowPm" ng-repeat="noots in personsData[4].persons">
+                                    <ul class="mt-ul-time of t-s">
+                                        <li ng-if="isShowPlan(tm)" ng-repeat="tm in noots.noon[0].afternoon"
+                                            class="show-select date-li time-item-{{tm.pasttype}}"
+                                            ng-mouseenter="tm.isShow=1" ng-mouseleave="tm.isShow=0"
+                                            mt-time-tool-tip=""></li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr ng-if="personsData[4].persons">
+                                <td ng-if="selected.isShowNight" class="vam td-1">晚上</td>
+                                <td ng-if="selected.isShowNight" ng-repeat="noots in personsData[4].persons">
+                                    <ul class="mt-ul-time of t-s">
+                                        <li ng-if="isShowPlan(tm)" ng-repeat="tm in noots.noon[0].night"
+                                            class="show-select date-li time-item-{{tm.pasttype}}"
+                                            ng-mouseenter="tm.isShow=1" ng-mouseleave="tm.isShow=0"
+                                            mt-time-tool-tip=""></li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" ng-click="$hide()">关闭</button>
+            </div>
+        </div>
+    </form>
+</div>
+

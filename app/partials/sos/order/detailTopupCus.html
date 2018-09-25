@@ -1,0 +1,300 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true" style="overflow-y:auto" ng-controller="OrderDetailTopupController">
+    <div class="modal-dialog" style="width:80%;min-width: 800px;">
+        <div class="modal-content  form-horizontal" >
+            <form>
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitleDetail"></h4>
+                </div>
+                <div class="modal-body mt-modal-order">
+                    <div class="">
+                        <div class="row ">
+                            <div class="col-sm-4 form-group" >
+                                <label for="orderNo" class="control-label"> 合同编号</label>
+                                <div ng-if="orderDetailTopUp.orderNo != orderDetailTopUp.originalOrderNo"  class="col-sm-4">
+                                    <input type="text" readonly  name="orderNo" id="orderNo"  ng-model="orderDetailTopUp.orderNo" class="input-sm form-control" readonly/>
+                                </div>
+                                <div ng-if="orderDetailTopUp.orderNo == orderDetailTopUp.originalOrderNo"  class="col-sm-4">
+                                    <input type="text" readonly  name="orderNoNew" id="orderNoNew"  ng-model="orderDetailTopUp.orderNoNew" class="input-sm form-control" readonly/>
+                                </div>
+                                <div class="col-sm-4" id="nakedContractTitle">
+                                    <label for="nakedContract" class="radio-vr" ng-class="{'active':orderDetailTopUp.nakedContract==1}">无合同订单</label>
+                                    <input type="checkbox" style="display: none" disabled ng-checked="orderDetailTopUp.nakedContract==1" id="nakedContract"  name="nakedContract" ng-model="orderDetailTopUp.nakedContract">
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group" >
+                                <label for="name" class="control-label">*学员姓名</label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="name" id="name" readonly ng-model="orderDetailTopUp.name" placeholder="1到20个字符" ng-maxlength="20" ng-minlength="1"  class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group" >
+                                <label for="orderType" class="control-label">* 订单类型</label>
+                                <div class="col-sm-6">
+                                    <select ng-model="orderDetailTopUp.orderType" name="orderType" id="orderType" readonly class="form-control"
+                                            ng-options="option.id as option.name for option in orderTypeSelect">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 form-group">
+                                <label for="contractStartDate" class="control-label">* 签约时间</label>
+                                <div class="col-sm-6">
+                                    <input type="date" value="{{orderDetailTopUp.contractStartDate | date:'yyyy-MM-dd' }}" readonly name="contractStartDate" id="contractStartDate"  ng-model="orderDetailTopUp.contractStartDate" class="form-control"/>
+                                </div>
+                            </div>
+                            <!--<div class="col-sm-4 form-group">-->
+                                <!--<label for="contractEndDate" class="control-label">* 到期时间</label>-->
+                                <!--<div class="col-sm-6">-->
+                                    <!--<input type="date" value="{{orderDetailTopUp.contractEndDate | date:'yyyy-MM-dd' }}" readonly name="contractEndDate" id="contractEndDate"  ng-model="orderDetailTopUp.contractEndDate" class="form-control" />-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <div class="col-sm-4  form-group">
+                                <label for="orderType" class=" control-label">* 主从关系</label>
+                                <div class="col-sm-6"  data-toggle="tooltip" data-placement="right" >
+                                    <select name="masterSlaveRelation" id="masterSlaveRelation" readonly="true" disabled="true"
+                                            class="form-control" >
+                                        <option value="" ng-if="!order.masterSlaveRelation">未标记</option>
+                                        <option value="" ng-if="order.masterSlaveRelation==1">主合同</option>
+                                        <option value="" ng-if="order.masterSlaveRelation==2">附加协议</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4  form-group">
+	                            <label for="orderType" class="control-label">* 课时规则</label>
+                                <div class="col-sm-6">
+                                    <select ng-model="orderDetailTopUp.orderRule" name="orderRule" id="orderRule" disabled class="form-control"
+                                            ng-options="option.id as option.name for option in orderRuleSelect">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+                        	</div>
+                        </div>
+                    </div>
+                    <div class="mt-dashed"></div>
+                     <!-- 选择计费方案 -->
+	                    <div class="row">
+	                        <div class="col-sm-12  form-group">
+	                            <label for="selectInput" class=" control-label">计费方案</label>
+	                            <div class="col-sm-6" style="padding-top: 0" >
+	                                <input type="hidden" ng-model="orderDetailTopUp.orderChargingId" require/>
+	                                <input type="text" style="padding-top: 0" class="input-sm form-control"
+	                                 ng-model="orderDetailTopUp.orderChargingName" placeholder="请输入"/>
+	                            </div>
+	                            <button class="btn guide-btn c1-lable br0 br-4 ti-0" >选择方案
+	                            </button>
+	                        </div>
+	                    </div>
+	                    <div class="row">
+	                    	<div class="col-sm-6  form-group" >
+		                    	<label class="tool-bg tl control-label" title="" data-toggle="tooltip" data-placement="top" data-original-title="默认每年9月1日，学员的年级会自动升级" style="/* width:85px; */background-position: right 3px;">*当前年级</label>
+		                        <div class="col-sm-4">
+		                            <!-- 当前年级 
+		                            <select ng-model="orderDetailTopUp.gradeId" name="gradeId" id="gradeId" ng-options="option.id as option.name for option in gradeIds" class="input-sm form-control"  style="line-height: 23px">
+		                                <option value="">-- 请选择 --</option>
+		                            </select>-->
+		                            <input type="text" ng-value="orderDetailTopUp.gradeName" class="input-sm form-control" readonly/>
+		                        </div>
+	                        </div>
+	                        <div class="col-sm-6  form-group">
+		                         <label for="teacherLevel" class="control-label">* 师资档位</label>
+		                         <div class="col-sm-4">
+		                              <select ng-model="orderDetailTopUp.orderTeacherLevel" ng-options="option.id as option.title for option in orderTeacherLevelList" name="orderTeacherLevel"  class="form-control" disabled>
+		                                 <option value="">-- 请选择 --</option>
+		                             </select>
+		                         </div>
+	                    	</div>
+	                    </div>
+	                    <div class="row">
+	                    	<div class="col-sm-6  form-group" >
+	                    		<label for="gradeId" class=" control-label">* 课时单价</label>
+	                    		<div class="col-sm-4">
+	                              	<input type="text" ng-model="orderDetailTopUp.orderChargingPrice" id="orderChargingPrice" name="orderChargingPrice" ng-maxlength="10" class="input-sm form-control" readonly>
+	                            </div>
+	                    	</div>
+	                    </div>
+                    <div class="mt-dashed"></div>
+                    <div class="label-85 label-140"><!-- 订单课程汇总信息-->
+                        <div class="row">
+                            
+                            <div class="col-sm-4 form-group" >
+                                <label for="totalPrice" class="control-label">* 增加账户金额</label>
+                                <div class="col-sm-4">
+                                    <input type="text" readonly name="totalPrice" id="totalPrice" ng-pattern="/^[1-9]\d*\b|0$/"  ng-model="orderDetailTopUp.totalPrice" ng-maxlength="10" class="input-sm form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group mb-0 pr-0">
+                                <label for="privilegeAmount" class="control-label">折扣%</label>
+                                <div class="col-sm-4" style="60%">
+                                	 <input type="number" ng-change="getDiscount()"
+                                           ng-pattern="/(?!^0\.0?0$)^[0-9][0-9]?(\.[0-9]{0,1})?$|^100$/" 
+                                           ng-model="orderDetailTopUp.privilegeRatio" ng-maxlength="10" required
+                                           class="input-sm form-control pr-0" />
+                                </div>
+                                <label style="width:10px;">%</label>
+                            </div>
+                            <div class="col-sm-4 form-group" >
+                                <label for="privilegeAmount" class="control-label">* 直减优惠</label>
+                                <div class="col-sm-4">
+                                    <input type="text" name="privilegeAmount" id="privilegeAmount" readonly ng-model="orderDetailTopUp.privilegeAmount" ng-pattern="/^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/" ng-maxlength="10"  class="form-control"/>
+                                </div>
+                            </div>
+                         
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 form-group" >
+                                <label for="realTotalAmount" class="control-label">* 充值订单实际金额</label>
+                                <div class="col-sm-4">
+                                    <input type="text" readonly name="realTotalAmount" id="realTotalAmount" readonly ng-model="orderDetailTopUp.realTotalAmount" ng-pattern="/^[1-9]\d*\b|0$/" ng-maxlength="10"  class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group" >
+                                <label for="realPayAmount" class="control-label">* 已支付金额</label>
+                                <div class="col-sm-4">
+                                    <input type="text" name="realPayAmount" id="realPayAmount" readonly ng-model="orderDetailTopUp.realPayAmount" ng-pattern="/^[1-9]\d*\b|0$/" ng-maxlength="10" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group" >
+                                <label for="payDueAmount" class="control-label">* 尾款金额</label>
+                                <div class="col-sm-4">
+                                    <input type="text" readonly name="payDueAmount" id="payDueAmount" readonly ng-model="orderDetailTopUp.payDueAmount" ng-pattern="/^[1-9]\d*\b|0$/" ng-maxlength="10" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="row">
+                            <div class="col-sm-4  form-group">
+                                <label for="customerBelonger" class="control-label">*所属学习顾问</label>
+                                <div class="col-sm-4">
+                                    <select ng-model="orderDetailTopUp.customerBelonger" disabled name="customerBelonger" id="customerBelonger" class="input-sm form-control"
+                                            ng-options="option.user.id as option.user.name for option in customerBelongers">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 " >
+                                <label for="remark" class="control-label">备注</label>
+                                <div class="col-sm-4">
+                                    <input type="text" readonly name="remark" ng-model="orderDetailTopUp.remark" id="remark" ng-maxlength="50" class="input-sm form-control" />
+                                </div>
+                            </div>
+                        </div> -->
+                        <div class="br-gray pl-0"><!-- 交费列表 -->
+                            <table class="table table-bordered table-striped mt-table1" st-table="orderPayments">
+                                <thead>
+                                <tr>
+                                    <th>合同编号</th>
+                                    <th>交费日期</th>
+                                    <th>交费金额</th>
+                                    <th>尾款金额</th>
+                                    <th>经办人</th>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="row in orderPayments">
+                                    <td>{{row.orderNo}}</td>
+                                    <td>{{row.payDate | date:'yyyy-MM-dd'}}</td>
+                                    <td>{{row.payAmount}}</td>
+                                    <td>{{row.payDueAmount}}</td>
+                                    <td>{{row.name}}</td>
+                                </tr>
+                            </table>
+                        </div>
+	                    <!-- 业绩所属人 -->
+	                    <div class="mt-dashed mt-0"></div>
+	                    <h5 class="pl-20">业绩所属人</h5>
+	                    <div class="br-gray pl-0">               	  
+	                   	  <table class="table table-bordered table-striped mt-table1" st-table="orderDetailTopUp.orderAchievementRatios">
+	                           <thead>
+	                           <tr>
+	                               <th>姓名</th>
+	                               <th>岗位</th>
+	                               <th>校区</th>
+	                               <th>业绩计算比例</th>
+	                           </tr>
+	                           </thead>                    
+	                           <tr ng-repeat="row in orderDetailTopUp.achievementRatios">
+	                           	<th>{{row.userName}}</th>
+	                           	<th>{{row.position.name}}{{row.positionName}}</th>
+	                           	<th>{{row.departName}}</th>
+	                           	<th>
+	                           		<select class="input-sm form-control" ng-model="row.achievementRatio"  >
+	                           			<!--<option value=1 ng-selected="row.achievementRatio == 1">100%</option>-->
+		                            	<!--<option value=0.5 ng-selected="row.achievementRatio == 0.5">50%</option>-->
+                                        <option value=1 ng-selected="row.achievementRatio == 1">100%</option>
+                                        <option value=0.9 ng-selected="row.achievementRatio == 0.9">90%</option>
+                                        <option value=0.8 ng-selected="row.achievementRatio == 0.8">80%</option>
+                                        <option value=0.7 ng-selected="row.achievementRatio == 0.7">70%</option>
+                                        <option value=0.6 ng-selected="row.achievementRatio == 0.6">60%</option>
+                                        <option value=0.5 ng-selected="row.achievementRatio == 0.5">50%</option>
+                                        <option value=0.4 ng-selected="row.achievementRatio == 0.4">40%</option>
+                                        <option value=0.3 ng-selected="row.achievementRatio == 0.3">30%</option>
+                                        <option value=0.2 ng-selected="row.achievementRatio == 0.2">20%</option>
+                                        <option value=0.1 ng-selected="row.achievementRatio == 0.1">10%</option>
+	                           		</select>
+	                           	</th>
+	                           </tr>
+	                         </table>
+	                    </div>
+	                    <div class="mt-dashed mt-10"></div>
+                     	<h5 class="pl-20">试听课教师/授课教师</h5>
+                     	<div class="br-gray pl-0">
+                         <table class="table table-bordered table-striped mt-table1">
+                             <thead>
+                             <tr>
+                                 <th>姓名</th>
+                                 <th>岗位</th>
+                                 <th>校区</th>
+                                 <th>类型</th>
+                                 <th>科目</th>
+                             </tr>
+                             </thead>
+                             <tr ng-repeat="row in order.orderRelationTeachers">
+                                 <th>{{row.userName}}</th>
+                                 <th>{{row.position.name}}{{row.positionName}}</th>
+                                 <th>{{row.departName}}</th>
+                                 <th>
+                                     <select class="input-sm form-control" ng-model="row.relationType" disabled>
+                                         <option value=1 ng-selected="row.relationType == 1">试听课教师</option>
+                                         <option value=2 ng-selected="row.relationType == 2">授课教师</option>
+                                     </select>
+                                 </th>
+                                 <th>{{row.subjectName}}</th>
+                             </tr>
+                         </table>
+                     	</div>
+	                    <div class="mt-dashed mt-10"></div>
+	                    <div class="row">
+	                       <div class="col-sm-6 form-group" >
+	                           <label for="privilegeAmount" class="col-sm-6 col-md-6 col-lg-5 control-label"><strong>当前电子账户余额</strong></label>
+	                           <div class="col-sm-6 col-md-5 col-lg-6">
+	                               <input type="number" readonly name="accountBalance" id="accountBalance" ng-model="orderDetailTopUp.accountBalance" ng-maxlength="10" required class="input-sm form-control" />
+	                           </div>
+	                       </div>
+	                       <div class="col-sm-6  form-group" ng-if="orderDetailTopUp.orderStatus == 1 || orderDetailTopUp.orderStatus == 2">
+	                           <label for="accountBalanceNew" class=" col-sm-6 col-md-6 col-lg-5 control-label"><strong>充值后电子账户余额</strong></label>
+	                           <div class="col-sm-6 col-md-5 col-lg-6">
+	                               <input type="number" readonly name="accountBalanceNew" id="accountBalanceNew" ng-pattern="/^[1-9]\d*\b|0$/" ng-value="orderDetailTopUp.accountBalance+orderDetailTopUp.totalPrice " ng-model="orderDetailTopUp.accountBalanceNew" ng-maxlength="10" class="input-sm form-control"/>
+	                           </div>
+	                       </div>
+	                   </div>
+                    
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success hk-co-shoufei" ng-show="(orderDetailTopUp.orderStatus == 1 || orderDetailTopUp.orderStatus == 2) && orderDetailTopUp.orderType != 4" ng-if="showPermissions('OrderEdit')" ng-click="chargeOrderTopup(order)">收费</button>
+                    <button type="button" class="btn btn-success hk-co-xiugai" ng-show="(orderDetailTopUp.orderStatus == 1 || orderDetailTopUp.orderStatus == 2) && orderDetailTopUp.orderType != 4" ng-if="showPermissions('OrderEdit')" ng-click="editOrderTopup(order)">修改</button>
+                    <button type="button" class="btn btn-success hk-co-shenhe" ng-show="(orderDetailTopUp.orderStatus == 1 || orderDetailTopUp.orderStatus == 2) && orderDetailTopUp.orderType != 4" ng-if="showPermissions('OrderAudit')" ng-click="auditOrderTopup(order)">审核</button>
+                    <button type="button" class="btn btn-success hk-co-tuidan" ng-show="(orderDetailTopUp.orderStatus == 1 || orderDetailTopUp.orderStatus == 2) && orderDetailTopUp.orderType != 4" ng-if="showPermissions('OrderAudit')" ng-click="chargeBackOrderTopup(order)">退单</button>
+                    <button type="button" class="btn btn-default " ng-click="$hide()">取消</button>
+                    <img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<style>
+lable{
+    padding-top: 7px;
+}
+</style>

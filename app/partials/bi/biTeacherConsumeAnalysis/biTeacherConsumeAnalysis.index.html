@@ -1,0 +1,140 @@
+<div class="row" ng-controller="BiBaseController as biBase">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content" ng-controller="BiTeacherConsumeAnalysisController as biConsumeAnalysis">
+	    <div>
+		    <ul class="breadcrumb">
+          <li><img ng-src="img/icon/bi/jiaowu.png" src="img/icon/bi/jiaowu.png"> 教务报表<span class="divider"></span></li>
+		        <li class="active">消课分析 - 教师</li>
+		    </ul>
+		  </div>
+        <!-- 筛选条件 -->
+  		<div class="default-box form-horizontal yws-container">
+  		    <div class="col-sm-4">
+  		        <label for="startDate" class="col-sm-4 control-label">开始时间：</label>
+  		        <div class="col-sm-8 form-group">
+  		            <input ng-model="startDate" type="text" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,readOnly:true})"
+  		            	onchange="" name="startDate" id="startDate" class="form-control"/>
+  		        </div>
+  		    </div>
+          <div class="col-sm-4">
+  		        <label for="endDate" class="col-sm-4 control-label">结束时间：</label>
+  		        <div class="col-sm-8 form-group">
+  		            <input ng-model="endDate" type="text" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,readOnly:true})"
+  		            	onchange="" name="endDate" id="endDate" class="form-control"/>
+  		        </div>
+  		    </div>
+  		    <div class="col-sm-4">
+  		        <label for="period" class="col-sm-4 control-label">视图单位：</label>
+  		        <div class="col-sm-8 form-group">
+  		            <select ng-model="viewType" name="period" id="period" class="form-control" ng-change="setViewType(viewType)">
+                      <option value="D" ng-selected="isViewType('D')">日</option>
+  		                <option value="W" ng-selected="isViewType('W')">周</option>
+  		                <option value="M" ng-selected="isViewType('M')">月</option>
+  		            </select>
+  		        </div>
+  		    </div>
+          <div class="col-sm-4">
+  		        <label for="period" class="col-sm-4 control-label">细分：</label>
+  		        <div class="col-sm-8 form-group">
+  		            <select ng-model="drillDownType" name="drillDownType" id="drillDownType" class="form-control" ng-change="setDrillDownType(drillDownType)">
+                      <option value="A" ng-selected="isDrillDownBy('A')">全部</option>
+  		                <option value="S" ng-selected="isDrillDownBy('S')">按学科拆分</option>
+  		            </select>
+  		        </div>
+  		    </div>
+  		    <div class="row">
+  		        <div class="c_center yws-container">
+  		            <button id="keydown-query" class="btn btn-success" ng-click="getTeacherClassHour()">查询</button>
+  		            <button class="btn" ng-click="reset()">重置</button>
+  		        </div>
+  		    </div>
+  		</div>
+  		<div class="default-box yws-container">
+          <div class="row">
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="height:450px;">
+              <h4>
+                总消课课时
+              </h4>
+              <br/>
+              <div style="color:red;margin-left:20px;">
+                <ul>
+                  <li ng-repeat="text in analysis" style="font-size:9px">{{text}}</li>
+                </ul>
+              </div>
+              <div style="color:red;margin-left:20px;">
+                <ul>
+                  <li ng-repeat="text in suggestions" style="font-size:9px">{{text}}</li>
+                </ul>
+              </div>
+              <canvas class="chart chart-line" chart-data="dataSummary" chart-labels="labelsSummary"
+                  chart-series="seriesSummary" chart-click="" legend="true" chart-options="options" chart-legend="true"></canvas>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="height:450px;">
+              <h4>
+                上课教师数
+              </h4>
+              <br/>
+              <div style="color:red;margin-left:20px;">
+                <ul>
+                  <li ng-repeat="text in analysisStudent">{{text}}</li>
+                </ul>
+              </div>
+              <div style="color:red;margin-left:20px;">
+                <ul>
+                  <li ng-repeat="text in suggestionsStudent">{{text}}</li>
+                </ul>
+              </div>
+              <canvas class="chart chart-line" chart-data="numberOfStudentsData" chart-labels="numberOfStudentsDataLabels"
+                  chart-series="numberOfStudentsDataSeries" chart-click="" legend="true" chart-options="options" chart-legend="true"></canvas>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="height:450px;">
+              <h4>
+                师均消课课时
+              </h4>
+              <br/>
+              <div style="color:red;margin-left:20px;">
+                <ul>
+                  <li ng-repeat="text in analysisAverage">{{text}}</li>
+                </ul>
+              </div>
+              <div style="color:red;margin-left:20px;">
+                <ul>
+                  <li ng-repeat="text in suggestionsAverage">{{text}}</li>
+                </ul>
+              </div>
+              <canvas class="chart chart-line" chart-data="dataAverage" chart-labels="labelsAverage"
+                  chart-series="seriesAverage" chart-click="" legend="true"  chart-options="options" chart-legend="true"></canvas>
+            </div>
+          </div>
+          <div class="row" style="height:100px">&nbsp;</div>
+      </div>
+      <!-- 表格 -->
+  		<div class="default-box" ng-if="isSchoolUser">
+  		    <h4>
+  		       	教师课时明细 （从 {{startDate | date : 'yyyy-MM-dd'}} 到 {{endDate | date : 'yyyy-MM-dd'}}）
+  		    </h4>
+  		    <br/>
+          <div class="table-responsive" style=" overflow-y:hidden">
+              <table class="table table-bordered table-striped">
+                  <thead>
+          	        <tr>
+          	        	<th rowspan="1" style="font-weight: bold;">教师姓名</th>
+          	        	<th rowspan="1" style="font-weight: bold;">学科</th>
+          	        	<th rowspan="1" style="font-weight: bold;">消课小时数</th>
+          	        </tr>
+                  </thead>
+                  <tbody>
+          	        <tr ng-repeat="row in orderedTeacherConsumeList">
+          	        	<td>{{row.teacherName}}</td>
+          	        	<td>{{row.subjectName}}</td>
+          	        	<td>{{row.totalConsumeHour}}</td>
+          	        </tr>
+                  </tbody>
+              </table>
+          </div>
+  		</div>
+    </div>
+  </div>
+</div>

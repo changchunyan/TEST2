@@ -1,0 +1,65 @@
+<div>
+ <div class="default-box form-horizontal yws-container">
+    <div class="col-sm-4">
+    	<label for="schoolType" class="col-sm-4 control-label">区域/校区：</label>
+    	<div class="col-sm-8 form-group">
+	        <input id="department" class="form-control" type="text" ng-click="departmentClicked()" ng-model="department.name" ng-disabled="isSchoolUser"/>
+	    </div>
+    </div>
+    <div class="col-sm-4" ng-if="!hideSchoolType">
+        <label for="schoolType" class="col-sm-4 control-label">校区类型：</label>
+        <div class="col-sm-8 form-group">
+            <select ng-model="searchModel.schoolType" name="schoolType" id="schoolType" class="form-control" ng-disabled="isSchoolUser">
+                <option value="">------全部------</option>
+                <option value="1">直营校区</option>
+                <option value="2">合作校区</option>
+                <option value="3">直盟校区</option>
+                <option value="4">直管校区</option>
+                <option value="5">代管校区</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-sm-4" ng-if="!hideProvinceAndCity">
+        <label for="schoolProvince" class="col-sm-4 control-label">省：</label>
+        <div class="col-sm-8 form-group">
+            <select ng-model="searchModel.schoolProvince" name="schoolProvince" id="schoolProvince" class="form-control"
+                    ng-options="province.provinceCode as province.provinceName for province in provinces"
+                    ng-change="provinceChanged()"
+                    ng-disabled="isSchoolUser">
+                <option value="">------全部------</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-sm-4" ng-if="!hideProvinceAndCity">
+        <label for="schoolCity" class="col-sm-4 control-label">城市：</label>
+        <div class="col-sm-8 form-group">
+            <select ng-model="searchModel.schoolCity" name="schoolCity" id="schoolCity" class="form-control"
+                    ng-options="city.cityCode as city.cityName for city in cities"
+                    ng-disabled="isSchoolUser">
+                <option value="">------全部------</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <label for="statTime" class="col-sm-4 control-label">开始时间：</label>
+        <div class="col-sm-8 form-group">
+            <input ng-model="searchModel.startTime" type="date" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,readOnly:true})"
+            	 name="startTime" id="startTime" class="form-control"/>
+        </div>
+    </div>
+    <div class="col-sm-4" ng-hide="hideEndDate">
+        <label for="period" class="col-sm-4 control-label">结束时间：</label>
+
+        <div class="col-sm-8 form-group">
+            <input ng-model="searchModel.endTime" type="date" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false,readOnly:true})"
+            	 name="endTime" id="endTime" class="form-control"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="c_center  yws-container">
+            <button id="keydown-query" class="btn btn-success" ng-click="searchClicked()">查询</button>
+            <button class="btn" ng-click="resetClicked()">重置</button>
+        </div>
+    </div>
+</div>
+ </div>

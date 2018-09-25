@@ -1,0 +1,47 @@
+<div class="modal crm-invitationDetail-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-small">
+        <div class="modal-content">
+        <form name="form">
+        <div class="modal-header">
+          <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" ng-bind="modalTitle"></h4>
+        </div>
+        <div class="modal-body">
+        	<div class="form-group" ng-class="{ 'has-error': form.invitateTime.$dirty && form.invitateTime.$error.required }">
+        		<label for="invitateTime" >* 邀约时间</label>
+                <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="" name="invitateTime" id="invitateTime" class="form-control" ng-model="CrmInvitationDetailVoForCreate.invitateTime"  value="{{ CrmInvitationDetailVoForCreate.invitateTime | date:'yyyy-MM-dd' }}"  required/>
+                <span ng-show="form.invitateTime.$dirty && form.invitateTime.$error.required" class="help-block">请输入邀约时间</span>
+            </div>
+            <div class="form-group" ng-class="{ 'has-error': form.receiveTime.$dirty && form.receiveTime.$error.required }">
+        		<label  >* 预到访时间</label>
+                <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="" readonly  name="remindTime" id="remindTime" class="form-control" ng-model="CrmInvitationDetailVoForCreate.receiveTime" readonly  required  value="{{ CrmInvitationDetailVoForCreate.receiveTime | date:'yyyy-MM-dd' }}"/>
+               <!-- <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd H:mm'})" onchange=""  readonly  name="receiveTime" id="receiveTime" class="form-control" onfocus="(this.type='date')" ng-model="CrmInvitationDetailVoForCreate.receiveTime"  value="{{ CrmInvitationDetailVoForCreate.receiveTime }}" readonly="readonly" required/>
+                --><span ng-show="form.receiveTime.$dirty && form.receiveTime.$error.required" class="help-block">请输入预到访时间</span>
+            </div>
+            <div class="form-group of row" >
+                <label for="invitationContent2" class="col-sm-2" style="margin-left:28px;">* 邀约内容</label>
+                <!--<textarea name="invitationContent" id="invitationContent" placeholder="邀约内容..."-->
+                <!--class="form-control col-sm-12" ng-maxlength="100"-->
+                <!--ng-model="CrmInvitationDetailVoForCreate.invitationContent" required/>-->
+                <!--<span ng-show="form.invitationContent.$dirty && form.invitationContent.$error.required"-->
+                <!--class="help-block">请输入邀约内容</span>-->
+                <select id="invitationContent2" ng-model="CrmInvitationDetailVoForCreate.invitationContentType" class="col-sm-6" required
+                 ng-value="CrmInvitationDetailVoForCreate.invitationContentType">
+                    <option value="1">物料领取</option>
+                    <option value="2">活动</option>
+                    <option value="3">测评</option>
+                    <option value="4">讲座</option>
+                    <option value="5">托管自习</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+            <button type="submit" class="btn btn-success" ng-if="CrmInvitationDetailVoForCreate.isinside==1" ng-click="updatezhifanig(CrmInvitationDetailVoForCreate,3)" ng-disabled="form.$invalid">保存</button>
+            <button type="submit" class="btn btn-success" ng-if="CrmInvitationDetailVoForCreate.isinside==0" ng-click="save()" ng-disabled="form.$invalid">保存</button>
+            <button type="submit" class="btn btn-success" ng-if="CrmInvitationDetailVoForCreate.isinside==3" ng-click="saveBrand()" ng-disabled="form.$invalid">保存</button>
+        </div>
+        </form>
+        </div>
+    </div>
+</div>

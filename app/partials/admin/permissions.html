@@ -1,0 +1,77 @@
+<div class="view-frame">
+	<div class="view-left">
+		<nav-side menu-data="menu.subMenu"></nav-side>
+	</div>
+	<div class="view-content">
+		<div>
+			<ul class="breadcrumb">
+				<li><a href="">系统管理</a> <span class="divider"></span></li>
+				<li class="active">权限管理</li>
+			</ul>
+		</div>
+		<div class="yws-container" >
+			<div class="yws-left" style="width: 550px">
+				<treecontrol class="tree-classic"
+							 tree-model="permissionTree"
+							 options="treeOptions"
+							 selected-node="node1">
+					{{node.displayName}}
+				</treecontrol>
+			</div>
+			<div class="yws-content">
+				<div>
+					<label for="name" class="col-sm-14 control-label">权限名称</label>
+					<input type="text" name="name" id="name" ng-model="sf_permission.name"/>
+					<label for="id" class="col-sm-14 control-label">权限描述</label>
+					<input type="text" name="id" id="id" ng-model="sf_permission.displayName"/>
+					&nbsp;&nbsp;<button class="btn" ng-click="getPermissionsByFilter()">查询</button>
+					&nbsp;&nbsp;<button class="btn" ng-click="reset()">重置</button>
+				</div>
+				&nbsp;
+				<div>
+					<button class="btn btn-default" ng-click="add()" style="position: relative;
+    right:2px;">
+						新增权限</button>
+				</div>
+				&nbsp;
+				<div class="table-responsive" style="overflow:scroll;overflow-y:hidden">
+					<table st-pipe="list" st-table="permissions" class="table table-bordered table-striped">
+						<thead>
+						<tr>
+							<th width="10%">权限编号</th>
+							<th width="20%">权限名称</th>
+							<th width="50%">权限描述</th>
+							<th width="10%">父级权限编号</th>
+							<th width="10%">操作</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr ng-repeat="permission in permissions">
+							<td>{{permission.id}}</td>
+							<td>{{permission.name}}</td>
+							<td>{{permission.displayName}}</td>
+							<td>{{permission.parentId}}</td>
+							<td>
+								<a ng-click="edit(permission)"><span class="glyphicon glyphicon-pencil" title="修改"></span></a> &nbsp;
+								<a ng-click="remove(permission)"><span class="glyphicon glyphicon-delete" title="删除"></span></a>
+							</td>
+						</tr>
+						</tbody>
+						<tbody ng-show="isLoading">
+						<tr>
+							<td colspan="13" class="text-center"><div class="loading-indicator"></div>
+							</td>
+						</tr>
+						</tbody>
+						<tfoot>
+						<tr>
+							<td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="5" />
+						</tr>
+						</tfoot>
+					</table>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>

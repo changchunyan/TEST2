@@ -1,0 +1,23 @@
+<div class="form-option div-lh40">
+    <div class="mt-input-group">
+        <label>名称：</label><input required ng-model="$paperLib.paperParam.paper_name" ng-maxlength="500">
+    </div>
+    <div class="mt-input-group">
+        <label>学段：</label><select required ng-model="$paperLib.paperParam.paper_stage" ng-change="$paperLib.findSubjectsByStage()">
+        <option value="">请选择</option>
+        <option value="3">小学</option>
+        <option value="1">初中</option>
+        <option value="2">高中</option>
+    </select>
+    </div>
+    <div class="mt-input-group">
+        <label>学科：</label><select required ng-model="$paperLib.paperParam.paper_subject" ng-options="option.id as option.name for option in $paperLib.subjectList">
+        <option value="">请选择</option>
+    </select>
+    </div>
+    <div class="mt-input-group">
+        <label>年级：</label><select required ng-model="$paperLib.paperParam.paper_grade" ng-options="option.id as option.name for option in $paperLib.gradeList">
+        <option value="">请选择</option>
+    </select>
+    </div>
+</div>

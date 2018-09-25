@@ -1,0 +1,34 @@
+<div class="view-frame" ng-controller="BiBaseController">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    
+    <div class="view-content" ng-controller="BiO2oOrderController">
+	    <div>
+		    <ul class="breadcrumb">
+		        <li><a href="">营销报表</a><span class="divider"></span></li>
+		        <li class="active">O2O订单统计</li>
+		    </ul>
+		</div>
+        <!-- 筛选条件 -->
+		<div ng-include="baseHtmlUrl"></div>
+		
+		<!-- 表格 -->
+		<div class="default-box">
+		    <h4>
+		       	O2O订单统计
+		        <span ng-if="!isDay">（从 {{modelStartTime | date : 'yyyy-MM-dd'}} 至 {{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+		        <span ng-if="isDay">（{{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+		        <span ng-if="presentTime">最新统计时间：{{presentTime}}</span>
+		        <button class="btn btn-success bi-list-head" ng-click="exportToExcel()">导出列表</button>
+		    </h4>
+		    <br/>
+		    <div ng-include="'partials/bi/biO2oOrder/biO2oOrder.table.html'"></div>
+		</div>
+		<style>
+		    .col-sm-4 control-label {
+		        margin-left: 0px;
+		    }
+		</style>
+    </div>
+</div>

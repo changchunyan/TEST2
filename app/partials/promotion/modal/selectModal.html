@@ -1,0 +1,109 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <form class="modal-dialog form-horizontal" name="coursePlan">
+        <div class="modal-content mt-label-h2">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" ng-bind="selectModalTitle"></h4>
+            </div>
+            <div class="modal-body" st-pipe="getSelectList" st-table="selectList">
+                <div class="row overflow-x">
+                    <table class="table table-bordered table-striped table-condensed mt-table1" ng-if="_setType()===0">
+				        <thead>
+					        <tr>
+					            <th>选择</th>
+					            <th>班级名称</th>
+					            <th>科目</th>
+					            <th>招生人数</th>
+					            <th>开班日期</th>
+					            <th>上课教师</th>
+					        </tr>
+				        </thead>
+				        <tbody>
+				        <tr ng-repeat="row in selectList" style="border: none !important;">
+				            <td class="vr">
+				            	<label for="nakedContract{{$index}}" class="radio-vr" ng-class="{'active':row.select}" ng-click="selectClass($index)">&nbsp;</label>
+				            	<input id="nakedContract{{$index}}" required class="hide" type="radio" name="crmClassRadio" value="{{$index}}">
+			            	</td>
+				            <td>{{row.name}}</td>
+				            <td>{{row.subjectName}}</td>
+				            <td style="white-space: nowrap;">
+				                 <span class="yws-tiao" style="border: none;border-radius: 0">
+				                     <div class="text" style="width:100%;text-align: left;position:inherit;">{{row.appliedCount}} / {{row.planCount}}</div>
+				                     <div style="width:100%;height:6px;background-color: #ccc;overflow:hidden;border-radius: 3px;">
+				                         <i class="bg" ng-if="row.planCount==0" style="height: 6px;position: relative;top: -6px;"></i>
+				                         <i class="bg" ng-if="row.planCount!=0" style="height: 6px;position: relative;top: -6px;" 
+				                         	ng-style="{  'width': ((row.appliedCount)/(row.planCount))*100 + '%'}" 
+				                         	ng-class="{'c1-i':((row.appliedCount)/(row.planCount))<0.5,'c2-i': 0.5<=((row.appliedCount)/(row.planCount))&&((row.appliedCount)/(row.planCount))<0.8,'c3-i':0.8<=((row.appliedCount)/(row.planCount))}"></i>
+				                     </div>
+				                 </span>
+				            </td>
+				            <td>{{row.startTime|date:"yyyy-MM-dd"}}</td>
+				            <td>{{row.teacherName}}</td>
+				        </tr>
+				        </tbody>
+				        <tfoot style="border-top: 1px solid #ccc">
+				        <tr>
+				            <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="12">
+				            </td>
+				        </tr>
+				        </tfoot>
+				    </table>
+                    <table class="table table-bordered table-striped table-condensed mt-table1" ng-if="_setType()===1">
+				        <thead>
+					        <tr>
+					            <th>选择</th>
+					            <th>课程名称</th>
+					            <th>产品类型</th>
+					            <th>课程类型</th>
+					            <th>年级</th>
+					            <th>方式</th>
+					            <th>全科</th>
+					            <th>科目</th>
+					            <th>课程价格</th>
+					            <th>课程收费</th>
+					        </tr>
+				        </thead>
+				        <tbody>
+				        <tr ng-repeat="row in selectList" style="border: none !important;">
+							<td class="vr">
+								<label for="nakedContract-{{$index}}" class="radio-vr" ng-class="{'active':row.select}" ng-click="selectClass($index)">&nbsp;</label>
+								<input id="nakedContract-{{$index}}" required class="hide" type="radio" name="crmClassRadio" value="{{$index}}">
+							</td>
+                            <td>{{row.name}}</td>
+                            <td>{{row.productTypeName}}</td>
+                            <td>{{row.courseTypeName}}</td>
+                            <td>{{row.gradeName}}</td>
+                            <td>{{row.teachingStyle|teachingStyleShow:row.teachingStyle}}</td>
+                            <td>{{row.is_fullsubject|trueOrFalseText:row.is_fullsubject}}</td>
+                            <td>{{row.subject_name}}</td>
+                            <td>
+	                          	{{row.standardPrice}}
+	                          	<span ng-if="row.isRegularCharge">元/期</span>
+	                          	<span ng-if="!row.isRegularCharge && row.courseUnit == 1">元/课时</span>
+	                          	<span ng-if="!row.isRegularCharge && row.courseUnit == 2">元/次</span>
+                          	</td>
+	                        <td>
+		                        <span ng-if="row.isRegularCharge">
+		                            {{row.regularTimes}}<span ng-if="row.courseUnit == 1">课时</span>
+		                            <span ng-if="row.courseUnit == 2">次</span>/期
+		                        </span>
+	                        </td>
+				        </tr>
+				        </tbody>
+				        <tfoot style="border-top: 1px solid #ccc">
+				        <tr>
+				            <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="12">
+				            </td>
+				        </tr>
+				        </tfoot>
+				    </table>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 20px">
+                <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                <button type="button" class="btn btn-success c5-lable" ng-click="determine()">确定</button>
+            </div>
+        </div>
+    </form>
+</div>

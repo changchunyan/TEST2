@@ -1,0 +1,17 @@
+<!-- 筛选条件 -->
+<div ng-include="baseHtmlUrl"></div>
+
+<!-- 表格 -->
+<div class="default-box">
+    <h4>
+                        沟通统计   - 数据明细表
+        <span ng-if="!isDay">（从 {{modelStartTime | date : 'yyyy-MM-dd'}} 至 {{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+                <span ng-if="isDay">（{{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+        <span ng-if="presentTime">最新统计时间：{{presentTime}}</span>
+        <button class="btn btn-success bi-list-head" ng-click="getStatisticsAll()">导出列表</button>
+    </h4>
+    <br/>
+    <div ng-model="statisticsTabs.activeTab" ng-change="getStatisticsTabIndex(statisticsTabs.activeTab)" bs-tabs>
+        <div ng-repeat="tab in showStatisticsTabs | orderBy : 'id' : true " name="{{tab.id}}" data-title="{{tab.title}}" ng-include="tab.template" bs-pane></div>
+    </div>
+</div>

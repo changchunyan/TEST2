@@ -1,0 +1,797 @@
+<link href="css/smarty.css" rel="stylesheet">
+
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true" style="overflow-y:auto">
+    <div class="modal-dialog" style="width:80%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" ng-bind="modalTitle"></h4>
+            </div>
+            <div class="modal-body mt-modal-order" ng-controller="OrderOperatingController as modal">
+                <form name="addOrderRenewalForm" role="form" class="form-inline"
+                      novalidate="">
+                    <!--V2-->
+                    <!-- 第三行：业绩类型、签约时间、课时规则 -->
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 col-lg-4   form-group">
+                            <label for="signingForm" class="control-label">* 签约形式</label>
+                            <select ng-model="order.masterSlaveRelation" name="orderType" id="signingForm"
+                                    class="form-control" required>
+                                <option value="">-- 请选择 --</option>
+                                <option value="1">合同</option>
+                                <option value="2">协议</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-4 form-group">
+                            <label for="orderRule" class="control-label" data-toggle="tooltip" data-placement="right"
+                                   data-original-title="规则不同则消课统计的时长不同">* 课时规则</label>
+                            <select ng-model="order.orderRule" name="orderRule"
+                                    ng-change="changeOrderRule()" id="orderRule" class="form-control"
+                                    required>
+                                <option value="">-- 请选择 --</option>
+                                <option value="1">1小时</option>
+                                <option value="2">40分钟</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-dashed"></div>
+                    <!-- 第二行：监护人姓名、身份证号、联系电话 -->
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 col-lg-4  form-group">
+                            <label for="parentName" class="control-label">* 监护人姓名</label>
+                            <input type="text" placeholder="1到20个字符" ng-maxlength="40" ng-minlength="1"
+                                   name="parentName"
+                                   id="parentName" ng-model="order.parentName" required
+                                   class="input-sm form-control"/>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-4  form-group">
+                            <label for="parentID" class="control-label">* 身份证号</label>
+                            <input type="text" ng-pattern="/^[0-9]{17}[0-9-aA-zZ]{1}/" placeholder="请输入18个字符"
+                                   ng-maxlength="18" ng-minlength="18"
+                                   name="parentID"
+                                   id="parentID" ng-model="order.parentID" required
+                                   class="input-sm form-control"/>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-4  form-group">
+                            <label class="control-label">* 联系电话</label>
+                            <input type="number" placeholder="1到20个字符" ng-maxlength="40" ng-minlength="1"
+                                   name="parentPhone"
+                                   id="parentPhone" ng-model="order.parentPhone" required
+                                   class="input-sm form-control"/>
+                        </div>
+                    </div>
+                    <!-- 这是一条华丽丽份分割线 -->
+                    <div class="mt-dashed"></div>
+                    <h4>课程信息</h4>
+                    <div class="lsm-tabs">
+                        <!--点击新增附加课或赠课时显示-->
+                        <div class="order-list mb-10" ng-if="freeLessons">
+                            <table class="table table-condensed">
+                                <thead>
+                                <tr>
+                                    <th class="active">合同号</th>
+                                    <th class="success">订单类型</th>
+                                    <th class="warning">优惠前总价</th>
+                                    <th class="danger">优惠后总价</th>
+                                    <th class="info">折扣率</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="row in orders">
+                                    <td class="active">{{row.orderNo}}</td>
+                                    <td class="success">{{row.orderCategory == 1 ? '课时订单' : '充值订单'}}</td>
+                                    <td class="warning">{{row.orderCategory == 1 ? row.totalPrice :
+                                        row.recharge.totalPrice}}
+                                    </td>
+                                    <td class="danger">{{row.orderCategory == 1 ? row.privilegeAmountTemp :
+                                        (row.recharge.totalPrice - row.recharge.privilegeAmount)}}
+                                    </td>
+                                    <td class="info">{{(row.orderCategory == 1 ? row.privilegeAmountTemp/
+                                        row.totalPrice * 100 : ((row.recharge.totalPrice -
+                                        row.recharge.privilegeAmount) / row.recharge.totalPrice * 100))
+                                        | number:2}}%
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>合计</td>
+                                    <td>&nbsp;</td>
+                                    <td>{{ batchTotalPrice() }}</td>
+                                    <td>{{ batchRealAmount() }}</td>
+                                    <td>{{ batchRealAmountV2() / batchTotalPriceV2() * 100 | number: 2}}%</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div ng-if="!endMoreOrder">
+                            <div class="tab-items ">
+                                <a ng-click="tabOrderFlag(1,1)" ng-class="{'active':order.orderCategory==1}">课时订单</a>
+                                <!--优胜派的，不能录充值订单-->
+                                <a ng-click="tabOrderFlag(3,1)" ng-class="{'active':order.orderCategory==3}"
+                                   ng-if="!IsYSP">充值订单</a>
+                            </div>
+                            <div class="tab-content">
+                                <!--附加课程-->
+                                <div class="free-less mb-10" ng-if="freeLessons">
+                                    <div class="form-group">
+                                        <label class="control-label">* 正/促销/赠课</label>
+                                        <select ng-model="order.slaveType" name="slaveType"
+                                                id="slaveType" class="form-control" required>
+                                            <option value="">-- 请选择 --</option>
+                                            <option value="正课">正课</option>
+                                            <option value="促销课程">促销课程</option>
+                                            <option value="赠课">赠课</option>
+                                        </select>
+                                    </div>
+                                    <div class="row" ng-if="order.slaveType=='促销课程'">
+                                        <div class="col-sm-12 col-md-6 col-lg-4   form-group">
+                                            <label for="specialOrderClassType" class="control-label">
+                                                *授课类型
+                                            </label>
+                                            <select ng-model="order.specialOrderClassType"
+                                                    name="specialOrderClassType" id="specialOrderClassType"
+                                                    class="form-control" required>
+                                                <option value="">-- 请选择 --</option>
+                                                <option value="一对一">一对一</option>
+                                                <option value="一对二">一对二</option>
+                                                <option value="一对三">一对三</option>
+                                                <option value="一对多">一对多</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row" ng-if="order.slaveType=='赠课'">
+                                        <div class="col-sm-12 col-md-6 col-lg-4   form-group">
+                                            <label for="specialOrderType" class="control-label">*
+                                                赠课类型</label>
+                                            <select ng-model="order.specialOrderType"
+                                                    name="specialOrderType" id="specialOrderType"
+                                                    class="form-control" required>
+                                                <option value="">-- 请选择 --</option>
+                                                <option value="签约赠课">签约赠课</option>
+                                                <option value="介绍赠课">介绍赠课</option>
+                                                <option value="推荐赠课">推荐赠课</option>
+                                                <option value="特殊产品赠课">特殊产品赠课</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-12 col-md-6 col-lg-4   form-group">
+                                            <label for="specialOrderClassType" class="control-label">*
+                                                授课类型</label>
+                                            <select ng-model="order.specialOrderClassType"
+                                                    name="specialOrderClassType" id="specialOrderClassType"
+                                                    class="form-control" required>
+                                                <option value="">-- 请选择 --</option>
+                                                <option value="一对一">一对一</option>
+                                                <option value="一对二">一对二</option>
+                                                <option value="一对三">一对三</option>
+                                                <option value="一对多">一对多</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-12 col-md-6 col-lg-4   form-group">
+                                            <label for="specialOrderRequirements" class="control-label">*
+                                                赠课条件</label>
+                                            <input type="text" name="specialOrderRequirements"
+                                                   id="specialOrderRequirements" class="input-sm form-control"
+                                                   ng-model="order.specialOrderRequirements" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div ng-if="order.orderCategory==1" class="order-hours">
+                                    <!--快捷查询-->
+                                    <div class="row" ng-controller="selectCourseController">
+                                        <div class="col-sm-12  form-group">
+                                            <label for="selectInput" class=" control-label c3">快速查询课程</label>
+                                            <div ng-controller="SmartyController" class="col-sm-6">
+                                                <input autocomplete="off" id="selectInput" type="text" smarty-input
+                                                       select="setSelected(x)"
+                                                       ng-focus="inputfocused()"
+                                                       index="selected" list-items="suggestions"
+                                                       close="suggestionPicked()" class="input-sm form-control"
+                                                       selection-made="selectionMade"
+                                                       ng-model="prefix" style="width: 100%;"
+                                                       placeholder="输入课程名称快速查找或点击右侧按钮查询"/>
+                                                <div smarty-suggestions-box class="mt-smarty-box"></div>
+                                            </div>
+                                            <button class="btn guide-btn c1-lable br0 br-4 ti-0" ng-if="!showSingle"
+                                                    ng-click="selectCourse()"
+                                                    style="margin-left:10px">
+                                                选择课程
+                                            </button>
+                                        </div>
+
+                                        <div class="modal-content col-sm-5 subject-body" ng-if="showSingle">
+                                            <span class="sj sj-base"></span>
+                                            <form name="addOrderForm" role="form" class="form-horizontal showcase-form"
+                                                  novalidate="">
+                                                <ul class="subject-item of">
+                                                    <li ng-repeat="subject in subjectIdsModal"
+                                                        ng-click="setOneCourseSubject(chooseOne,subject)"
+                                                        ng-class="{true: 'c5-lable', false: ''}[isCheckedSubject(chooseOne,subject)]"
+                                                        w72="" index="$index">
+                                                        {{subject.name}}
+                                                    </li>
+                                                </ul>
+                                                <ul class="text-center of mt-layer-footer">
+                                                    <li class="fl width50"><a ng-click="doSelectOneCourse()">确定</a><span
+                                                            class="fr">&nbsp;</span></li>
+                                                    <li class="fl width50"><a ng-click="cancelSingle()">取消</a></li>
+                                                </ul>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <!-- 课程列表 -->
+                                    <div class="br-gray pl-0">
+                                        <table class="table table-bordered table-striped mt-table1"
+                                               st-table="order.orderCourses">
+                                            <thead>
+                                            <tr>
+                                                <th>课程ID</th>
+                                                <th>课程名称</th>
+                                                <th>课程类型</th>
+                                                <th>年级</th>
+                                                <th>科目</th>
+                                                <th>性质</th>
+                                                <th>报价单单价</th>
+                                                <th>数量</th>
+                                                <th>单位</th>
+                                                <th>总价</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tr ng-repeat="row in order.orderCourses">
+                                                <td>{{row.courseId}}</td>
+                                                <td>{{row.courseName}}</td>
+                                                <td>
+                                                    {{row.courseTypeName}} <br/>
+                                                    <a id="crmClassName_{{$index}}" ng-if="row.teachingStyle!=1"
+                                                       ng-click="row.clickNow=!row.clickNow">
+                                                        选班
+                                                    </a>
+                                                    <crm-class courseId="row.courseId" index="$index"
+                                                               selectCourseId="selectCourseId" selectIndex="selectIndex"
+                                                               ng-if="row.clickNow" order="order">
+                                                    </crm-class>
+                                                </td>
+                                                <td>{{row.gradeName}}</td>
+                                                <td style="width:100px;">
+                                                    <div style="width:100px;white-space:normal">{{row.subjectName}}
+                                                    </div>
+                                                </td>
+                                                <td ng-show="row.courseProperty == 1">正课</td>
+                                                <td ng-show="row.courseProperty == 2">赠课</td>
+                                                <td ng-show="row.courseProperty == 3">返课</td>
+                                                <td ng-show="row.courseProperty == 4">试听课</td>
+                                                <td ng-show="row.courseProperty == null || row.courseProperty == 0 ">
+                                                    其他
+                                                </td>
+                                                <td>
+                                                    <input type="hidden" ng-model="row.studentClassId"
+                                                           id="studentClassId_{{$index}}">
+                                                    <input type="text" ng-pattern="doubleNumReg"
+                                                           ng-change="changeStandardPrice()" ng-value="row.actualPrice"
+                                                           ng-model="row.actualPrice" placeholder="数字" ng-maxlength="6"
+                                                           ng-minlength="1"
+                                                           required class="input-sm form-control inline-input"
+                                                           ng-focus="isFocus($index,'actualPrice');"
+                                                           ng-blur="isBlur($index,'actualPrice');"
+                                                    />
+                                                </td>
+                                                <td>
+                                                    <input type="text" ng-change="changeStandardPrice()"
+                                                           ng-pattern="intNumReg" ng-value="row.originalNum"
+                                                           ng-model="row.originalNum" placeholder="数字" ng-maxlength="4"
+                                                           ng-minlength="1" required
+                                                           class="input-sm form-control inline-input"
+                                                           ng-focus="isFocus($index,'originalNum');"
+                                                           ng-blur="isBlur($index,'originalNum');"
+                                                    />
+                                                </td>
+                                                <td>
+                                                    <select class="input-sm form-control inline-input"
+                                                            ng-change="changeStandardPrice()"
+                                                            ng-model="row.courseBuyUnit"
+                                                            ng-if="!row.isRegularCharge && row.courseUnit == 1">
+                                                        <option value="1" ng-selected="row.courseBuyUnit == 1">课时
+                                                        </option>
+                                                    </select>
+                                                    <select class="input-sm form-control inline-input"
+                                                            ng-change="changeStandardPrice()"
+                                                            ng-model="row.courseBuyUnit"
+                                                            ng-if="!row.isRegularCharge && row.courseUnit == 2">
+                                                        <option value="2" ng-selected="row.courseBuyUnit == 2">次
+                                                        </option>
+                                                    </select>
+                                                    <select class="input-sm form-control inline-input"
+                                                            ng-change="changeStandardPrice()"
+                                                            ng-model="row.courseBuyUnit"
+                                                            ng-if="row.isRegularCharge && row.courseUnit == 2">
+                                                        <option value="2" ng-selected="row.courseBuyUnit == 2">次
+                                                        </option>
+                                                        <option value="3" ng-selected="row.courseBuyUnit == 3">期
+                                                        </option>
+                                                    </select>
+                                                    <select class="input-sm form-control inline-input"
+                                                            ng-change="changeStandardPrice()"
+                                                            ng-model="row.courseBuyUnit"
+                                                            ng-if="row.isRegularCharge && row.courseUnit == 1">
+                                                        <option value="1" ng-selected="row.courseBuyUnit == 1">课时
+                                                        </option>
+                                                        <option value="3" ng-selected="row.courseBuyUnit == 3">期
+                                                        </option>
+                                                    </select>
+                                                </td>
+                                                <td>{{(row.actualPrice*row.originalNum||0.00) | number:2}}</td>
+                                                <td>
+                                                    <a ng-click="delOrderCourse(row)" title="删除">
+                                                        <span class="glyphicon glyphicon-delete"></span>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="6"></td>
+                                                <td>总计：{{order.hours}} 小时 {{order.minite}} 分钟 ／
+                                                    {{order.totalOriginalTimes}}
+                                                    次
+                                                </td>
+                                                <td></td>
+                                                <td></td>
+                                                <td colspan="2">{{(order.totalPrice||0.00) | number : 2}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="11" style="overflow: hidden">
+                                                    <div class="col-sm-6 form-group mb-0 pr-0"
+                                                         style="float: right;width: 300px">
+                                                        <label for="realTotalAmount"
+                                                               class=" control-label">应交金额：</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" readonly name="realTotalAmount"
+                                                                   id="realTotalAmount"
+                                                                   ng-pattern="/^[1-9]\d*\b|0$/"
+                                                                   ng-value="order.totalPrice-order.privilegeAmount | number:2"
+                                                                   ng-model="order.realTotalAmount" ng-maxlength="10"
+                                                                   class="input-sm form-control"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 form-group mb-0 pr-0"
+                                                         style="float: right;width: 300px">
+                                                        <label for="privilegeAmount"
+                                                               class=" control-label font-color-red">直减优惠</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" ng-change="resetPayCondition();"
+                                                                   name="privilegeAmount"
+                                                                   ng-pattern="/^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/"
+                                                                   id="privilegeAmount" ng-model="order.privilegeAmount"
+                                                                   ng-maxlength="10"
+                                                                   required class="input-sm form-control pr-0"
+                                                                   style="width: 100%"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2 form-group mb-0 pr-0"
+                                                         style="float: right;width: 234px">
+                                                        <label for="privilegeAmount"
+                                                               class=" control-label font-color-red">折扣%</label>
+                                                        <div class="col-sm-2">
+                                                            <input type="number" min="0" max="100"
+                                                                   ng-change="getDiscount()"
+                                                                   ng-pattern="/(?!^0\.0?0$)^[0-9][0-9]?(\.[0-9]{0,1})?$|^100$/"
+                                                                   ng-model="order.privilegeRatio" ng-maxlength="10"
+                                                                   required class="input-sm form-control pr-0"
+                                                                   style="width: 50px"/>
+                                                        </div>
+                                                        <label class=" control-label font-color-red">%</label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <!-- <span class="exception">上海、苏州地区在课程单价处请按报价单的1.5倍录入</span> -->
+                                    <div class="mt-dashed mt-10"></div>
+
+                                    <!-- 结算收费-->
+                                    <h5 class="pl-20">结算收费</h5>
+                                    <div class="br-gray pl-0">
+                                        <table class="table table-bordered table-striped mt-table1" st-table="">
+                                            <thead>
+                                            <tr>
+                                                <!-- <th>合同编号</th> -->
+                                                <th>交费日期</th>
+                                                <th>交费金额</th>
+                                                <th>尾款金额</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr ng-repeat="row in order.crmorderPayments">
+                                                <td>
+                                                    <input type="text" datepicker
+                                                           onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange=""
+                                                           ng-value="row.payDate | date:'yyyy-MM-dd' "
+                                                           ng-model="row.payDate" required class="form-control"
+                                                           ng-disabled="true"/>
+                                                </td>
+                                                <td>
+                                                    <input type="text" ng-model="row.payAmount"
+                                                           ng-pattern="/^[1-9]\d*\b|0$/"
+                                                           ng-maxlength="10"
+                                                           ng-class="{'font-color-red':row.payAmount<=0}"
+                                                           ng-readonly="row.paymentEdit"
+                                                           class="form-control" ng-change="conductPayments(0)">
+                                                </td>
+                                                <td ng-class="{'font-color-red':row.payDueAmount<0}">{{row.payDueAmount
+                                                    |
+                                                    number:2}}
+                                                </td>
+                                                <td>
+                                                    <a ng-if="row.payType != 2" ng-click="showEditPayment(row)">
+                                                        <span class="glyphicon glyphicon-pencil" title="编辑"></span>
+                                                    </a>
+                                                    <span ng-if="row.payType == 2">结转</span>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                            <!--<tfoot>
+                                            <tr>
+                                                <td style="padding: 8px;padding-left: 30px">
+                                                    <a href="javascript:void (0);" ng-click="addShouFei(1)">添加收费</a>
+                                                </td>
+                                            </tr>
+                                            </tfoot>-->
+                                        </table>
+                                    </div>
+                                </div>
+                                <div ng-if="order.orderCategory==3" class="order-recharge"
+                                     ng-controller="OrderAddTopupController" ng-init="initCrmorderPayments()">
+                                    <!-- 选择计费方案 -->
+                                    <div class="row">
+                                        <div class="col-sm-12  form-group">
+                                            <label for="selectInput" class=" control-label c3">计费方案</label>
+                                            <div class="col-sm-6">
+                                                <input type="hidden" ng-model="order.orderChargingId" require/>
+                                                <input type="text" style="padding-top: 0;width: 95%"
+                                                       class="form-control"
+                                                       ng-model="order.recharge.orderChargingName" placeholder="请输入"
+                                                       readonly/>
+                                            </div>
+                                            <button class="btn guide-btn c1-lable br0 br-4 ti-0"
+                                                    ng-click="selectChargingScheme()">选择方案
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <!-- 当前年级、师资档位 -->
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-6 col-lg-4  form-group">
+                                            <label for="teacherLevel" class="control-label">* 师资档位</label>
+                                            <select id="teacherLevel" ng-model="order.recharge.orderTeacherLevel"
+                                                    ng-options="option.id as option.title for option in orderTeacherLevelList"
+                                                    name="orderTeacherLevel" ng-change="changeCharging(2)"
+                                                    class="form-control"
+                                                    required>
+                                                <option value="">-- 请选择 --</option>
+                                            </select>
+                                        </div>
+                                        <!-- 课时单价、增加账户金额、折扣、直减优惠、充值订单实际金额 -->
+
+                                        <div class="col-sm-12 col-md-6 col-lg-4  form-group">
+                                            <label for="gradeId" class=" control-label">* 课时单价</label>
+                                            <input type="text" ng-model="order.recharge.orderChargingPrice"
+                                                   id="orderChargingPrice"
+                                                   name="orderChargingPrice" ng-maxlength="10"
+                                                   class="input-sm form-control" readonly required>
+                                        </div>
+                                        <div class="col-sm-12 col-md-6 col-lg-4  form-group">
+                                            <label for="totalPrice" class="control-label">* 账户充值金额</label>
+                                            <input type="number" name="totalPrice" id="totalPrice"
+                                                   ng-change="conductPayments()" ng-pattern="/^[1-9]\d*\b|0$/"
+                                                   ng-value="order.recharge.totalPrice"
+                                                   ng-model="order.recharge.totalPrice" ng-maxlength="10"
+                                                   class="input-sm form-control"
+                                            />
+                                        </div>
+                                        <div class="col-sm-12 col-md-6 col-lg-4  form-group">
+                                            <label for="privilegeAmount" class="control-label">* 折扣%</label>
+                                            <!--                                               id="privilegeAmount"
+    -->
+                                            <input type="number" min="0" max="100" name="privilegeAmount"
+                                                   ng-change="getDiscount()"
+                                                   ng-pattern="/(?!^0\.0?0$)^[0-9][0-9]?(\.[0-9]{0,1})?$|^100$/"
+                                                   ng-model="order.recharge.privilegeRatio" required
+                                                   class="input-sm form-control"
+                                            />
+                                        </div>
+                                        <div class="col-sm-12 col-md-6 col-lg-4  form-group">
+                                            <label for="privilegeAmount" class="control-label">* 直减优惠</label>
+                                            <input type="number" name="privilegeAmount" id="privilegeAmount"
+                                                   ng-change="conductPayments()"
+                                                   ng-pattern="/^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/"
+                                                   ng-model="order.recharge.privilegeAmount" ng-maxlength="10"
+                                                   required
+                                                   class="input-sm form-control"/>
+                                        </div>
+                                        <div class="col-sm-12 col-md-6 col-lg-4  form-group">
+                                            <label for="realTotalAmount" class="control-label">* 充值订单实际金额</label>
+                                            <input type="text" readonly name="realTotalAmount"
+                                                   id="realTotalAmount"
+                                                   ng-pattern="/^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/"
+                                                   ng-value="(order.recharge.totalPrice-order.recharge.privilegeAmount)  | number:2 "
+                                                   ng-model="order.recharge.realTotalAmount" ng-maxlength="10"
+                                                   class="input-sm form-control"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-6 col-lg-4  form-group">
+                                            <label for="privilegeAmount"
+                                                   class="control-label"><strong>当前电子账户余额</strong></label>
+                                            <input type="number" readonly name="accountBalance" id="accountBalance"
+                                                   ng-model="order.accountBalance"
+                                                   ng-maxlength="10" required class="input-sm form-control"/>
+                                        </div>
+                                        <div class="col-sm-12 col-md-6 col-lg-4  form-group">
+                                            <label for="accountBalanceNew"
+                                                   class="control-label"><strong>充值后电子账户余额</strong></label>
+                                            <input type="number" readonly name="accountBalanceNew"
+                                                   id="accountBalanceNew" ng-pattern="/^[1-9]\d*\b|0$/"
+                                                   ng-value="order.accountBalance+order.recharge.totalPrice "
+                                                   ng-model="order.recharge.accountBalanceNew" ng-maxlength="10"
+                                                   class="input-sm form-control"/>
+                                        </div>
+                                    </div>
+                                    <div class="mt-dashed mt-10"></div>
+                                    <!-- 结算收费-->
+                                    <h5 class="pl-20">结算收费</h5>
+                                    <div class="br-gray pl-0">
+                                        <table class="table table-bordered table-striped mt-table1" st-table="">
+                                            <thead>
+                                            <tr>
+                                                <!-- <th>合同编号</th> -->
+                                                <th>交费日期</th>
+                                                <th>交费金额</th>
+                                                <th>尾款金额</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr ng-repeat="row in order.crmorderPayments">
+                                                <td>
+                                                    <input type="text" datepicker
+                                                           onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange=""
+                                                           ng-value="row.payDate | date:'yyyy-MM-dd' "
+                                                           ng-model="row.payDate" required class="form-control"
+                                                           ng-disabled="true"
+                                                    />
+                                                </td>
+                                                <td><input type="text" ng-model="row.payAmount"
+                                                           ng-pattern="/^[1-9]\d*\b|0$/"
+                                                           ng-maxlength="10"
+                                                           ng-class="{'font-color-red':row.payAmount<=0}"
+                                                           ng-readonly="row.paymentEdit"
+                                                           class="form-control" ng-change="conductPayments(0)">
+                                                </td>
+                                                <td ng-class="{'font-color-red':row.payDueAmount<0}">{{row.payDueAmount
+                                                    |
+                                                    number:2}}
+                                                </td>
+                                                <td>
+                                                    <a ng-if="row.payType != 2" ng-click="showEditPayment(row)"><span
+                                                            class="glyphicon glyphicon-pencil" title="编辑"></span></a>
+                                                    <span ng-if="row.payType == 2">结转</span>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                            <!--<tfoot>
+                                            <tr>
+                                                <td style="padding: 8px;padding-left: 30px"><a
+                                                        href="javascript:void (0);"
+                                                        ng-click="addShouFei(1)">添加收费</a>
+                                                </td>
+                                            </tr>
+                                            </tfoot>-->
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!--<div class="row" ng-if="order.orderType != 8">
+                                &lt;!&ndash;附加课程按钮&ndash;&gt;
+                                &lt;!&ndash; ng-show="order.totalPrice"&ndash;&gt;
+                                <div class="free-btn text-right mt-20 pr-20">
+                                    <button type="button" class="btn guide-btn c1-lable br0 br-4 ti-0"
+                                            ng-click="tabFreeLessons(1)">
+                                        新增附加课或赠课
+                                    </button>
+                                    <button type="button" class="btn guide-btn c1-lable br0 br-4 ti-0"
+                                            ng-click="tabFreeLessons(1,1)">
+                                        完成
+                                    </button>
+                                    &lt;!&ndash; ng-show="freeLessons"&ndash;&gt;
+                                    <button type="button" ng&#45;&#45;show="orders.length>1" class="btn btn-danger br-4 ti-0"
+                                            ng-click="cancelFreeLessons(0)">取消
+                                    </button>
+                                </div>
+                                <div class="mt-dashed mt-10"></div>
+                            </div>-->
+                        </div>
+                        <h5 class="pl-20">业绩所属人</h5>
+                        <div class="br-gray pl-0">
+                            <table class="table table-bordered table-striped mt-table1"
+                                   st-table="order.orderAchievementRatios">
+                                <thead>
+                                <tr>
+                                    <th>姓名</th>
+                                    <th>岗位</th>
+                                    <th>校区</th>
+                                    <th>业绩计算比例</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="row in order.achievementRatios">
+                                    <th>{{row.userName}}</th>
+                                    <th>{{row.position.name}}{{row.positionName}}</th>
+                                    <th>{{row.departName}}</th>
+                                    <th>
+                                        <select class="input-sm form-control" ng-model="row.achievementRatio"
+                                                ng-change="changeRatio(row)">
+                                            <option value=1 ng-selected="row.achievementRatio == 1">100%
+                                            </option>
+                                            <option value=0.9 ng-selected="row.achievementRatio == 0.9">90%
+                                            </option>
+                                            <option value=0.8 ng-selected="row.achievementRatio == 0.8">80%
+                                            </option>
+                                            <option value=0.7 ng-selected="row.achievementRatio == 0.7">70%
+                                            </option>
+                                            <option value=0.6 ng-selected="row.achievementRatio == 0.6">60%
+                                            </option>
+                                            <option value=0.5 ng-selected="row.achievementRatio == 0.5">50%
+                                            </option>
+                                            <option value=0.4 ng-selected="row.achievementRatio == 0.4">40%
+                                            </option>
+                                            <option value=0.3 ng-selected="row.achievementRatio == 0.3">30%
+                                            </option>
+                                            <option value=0.2 ng-selected="row.achievementRatio == 0.2">20%
+                                            </option>
+                                            <option value=0.1 ng-selected="row.achievementRatio == 0.1">10%
+                                            </option>
+                                        </select>
+                                    </th>
+                                    <th>
+                                        <!-- <a ng-click="showEditRatio(row)"><span class="glyphicon glyphicon-pencil" title="编辑"></span></a> -->
+                                        <a ng-click="removeRatio(row,1)"> <span
+                                                class="glyphicon glyphicon-delete" title="删除"></span></a>
+                                    </th>
+                                </tr>
+                                <tfoot>
+                                <tr>
+                                    <td style="padding: 8px;padding-left: 30px"><a
+                                            ng-click="showAddAchievementRatio(1)"
+                                            class="yws-left width20 add-a">添加</a></td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <div class="mt-dashed mt-10"></div>
+                        <h5 class="pl-20">试听课教师/授课教师</h5>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6 col-lg-4  form-group">
+                                <label class=" control-label c3">*是否试听</label>
+                                <select ng-model="order.tryListenFlag"
+                                        name="tryListenFlag"
+                                        class="form-control"
+                                        style="width: 150px;display: inline-block;"
+                                        required>
+                                    <option value="">-- 请选择 --</option>
+                                    <option value="1">是</option>
+                                    <option value="0">否</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="br-gray pl-0">
+                            <table class="table table-bordered table-striped mt-table1"
+                                   st-table="order.achievementRatios">
+                                <thead>
+                                <tr>
+                                    <th>姓名</th>
+                                    <th>岗位</th>
+                                    <th>校区</th>
+                                    <th>类型</th>
+                                    <th>科目</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="row in order.orderRelationTeachers">
+                                    <th>{{row.userName}}</th>
+                                    <th>{{row.position.name}}{{row.positionName}}</th>
+                                    <th>{{row.departName}}</th>
+                                    <th>
+                                        <select class="input-sm form-control" ng-model="row.relationType"
+                                                disabled>
+                                            <option value=1 ng-selected="row.relationType == 1">试听课教师</option>
+                                            <option value=2 ng-selected="row.relationType == 2">授课教师</option>
+                                        </select>
+                                    </th>
+                                    <th>{{row.subjectName}}</th>
+                                    <th>
+                                        <a ng-click="removeRatio(row,2)"> <span
+                                                class="glyphicon glyphicon-delete" title="删除"></span></a>
+                                    </th>
+                                </tr>
+                                <tfoot>
+                                <tr>
+                                    <td style="padding: 8px;padding-left: 30px"><a ng-if="order.orderType != 8"
+                                                                                   ng-click="showAddAchievementRatio(2)"
+                                                                                   class="yws-left width20 add-a">添加</a>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer margin-top20">
+                        <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                        <!--<button type="button" ng-if="order.orderStatus != 14 && order.orderStatus != 15"
+                                class="btn btn-success c5-lable"
+                                ng-click="beforeSaveOrderV2()"
+                                ng-disabled="ishasalreadyDone || addOrderRenewalForm.$invalid || order.ratioInvalid || addOrderRenewalForm.$pending || order.paymentsWrite || !order.tryListenFlag"
+                                data-1="{{order.ratioInvalid}}" data-2="{{addOrderRenewalForm.$pending}}">
+                            保存
+                        </button>-->
+                        <!-- 未签约和结转中 --><!-- || order.ratioInvalid || order.paymentsWrite-->
+                        <button type="button" class="btn btn-success c5-lable"
+                                ng-if="(order.orderStatus == 14 || order.orderStatus == 15) && order.orderCategory == 1"
+                                ng-disabled="ishasalreadyDone || addOrderRenewalForm.$invalid || addOrderRenewalForm.$pending || !order.orderCourses || (order.orderCourses&&!order.orderCourses.length) "
+                                data-1="{{order.ratioInvalid}}" data-2="{{addOrderRenewalForm.$pending}}"
+                                ng-click="saveOrderNoSign()"><!--saveOrderNoSign-->
+                            保存<!--|| order.crmorderPayments[0].payDueAmount !=0-->
+                            <!-- order.payAmount<0 ||-->
+                        </button>
+                        <!-- || order.ratioInvalid  || order.paymentsWrite-->
+                        <button type="button" class="btn btn-success c5-lable"
+                                ng-if="(order.orderStatus == 14 || order.orderStatus == 15) && order.orderCategory == 3"
+                                ng-disabled="ishasalreadyDone || addOrderRenewalForm.$invalid || addOrderRenewalForm.$pending"
+                                data-1="{{order.ratioInvalid}}" data-2="{{addOrderRenewalForm.$pending}}"
+                                ng-click="saveOrderNoSign()"><!--saveOrderNoSign-->
+                            保存<!-- || order.crmorderPayments[0].payDueAmount !=0-->
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        window.load = pause();
+
+        function pause() {
+            var node = $("#privilegeAmount");
+            var content = '订单中要减去的金额，总价 -直减优惠 = 实际订单价格';
+            node.webuiPopover({content: content, trigger: 'hover'});
+            var node2 = $("#realPayAmount");
+            var content2 = '实际订单价格 - 本次支付金额 = 尾款金额';
+            node2.webuiPopover({content: content2, trigger: 'hover'});
+            var node3 = $("#addOrderCourse");
+            var content3 = '可以多次提交课程';
+            node3.webuiPopover({content: content3, trigger: 'hover'});
+            var node4 = $("#customerBelonger");
+            var content4 = '询问校长或运营主管';
+            node4.webuiPopover({content: content4, trigger: 'hover'});
+            var node5 = $("#nakedContractTitle");
+            var content5 = '此选项只可在创建订单时修改选中状态，订单一旦提交则无法修改。';
+            node5.webuiPopover({content: content5, trigger: 'hover'});
+            var node6 = $("#orderType");
+            $("[data-toggle='tooltip']").tooltip();
+            //            var content6 = '学习顾问推荐学员，录入推荐订单时，请选择“新签”类型。系统会以学员信息中的渠道来源--“学习顾问推荐”的来界定业绩。';
+            //            node6.webuiPopover({content:content6,trigger:'hover'});
+        }
+    </script>
+    <style>
+        select {
+            min-width: 130px;
+        }
+
+        .form-control {
+            height: 30px;
+        }
+
+        .mt-modal-order input, .mt-modal-order select {
+            background-color: transparent;
+        }
+    </style>
+</div>

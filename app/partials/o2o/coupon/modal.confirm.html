@@ -1,0 +1,80 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" style="    width: 708px;">
+        <div class="modal-content">
+            <form name="selectCourseForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="confirmTitle"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-2 "></div>
+                        <div class="col-sm-8  ">
+                            <label for="coupon.couponName" class="col-sm-4   ">名称：</label>
+                            <div class="col-sm-8">
+                                <span class="  ">{{coupon.couponName}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2 "></div>
+                        <div class="col-sm-8  ">
+                            <label for="coupon.preferentialPolicy" class="col-sm-4   ">规则：</label>
+                            <div ng-if="coupon.preferentialPolicy == 1" class="col-sm-8">
+                                <span>满<i style="color: red">{{coupon.couponReductionActivation}}</i>元 减<i style="color: red">{{coupon.couponReduction}}</i></span>
+                            </div>
+                            <div ng-if="coupon.preferentialPolicy == 2" class="col-sm-8">
+                                <span>满<i style="color: red">{{coupon.couponDiscountActivation}}</i>元 打<i style="color: red">{{coupon.couponDiscount}}</i>折</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2 "></div>
+                        <div class="col-sm-8  ">
+                            <label for="coupon.isAmountLimit" class="col-sm-4   ">领取限制：</label>
+                            <div ng-if="coupon.isAmountLimit == 1" class="col-sm-8">
+                                {{coupon.amountPerPerson}}张/人
+                            </div>
+                            <div ng-if="coupon.isAmountLimit == 0" class="col-sm-8">
+                                无
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2 "></div>
+                        <div class="col-sm-8  ">
+                            <label for="coupon.isAmountLimit" class="col-sm-4   ">有效期：</label>
+                            <div class="col-sm-8">
+                                {{coupon.validitystarttime | date:'yyyy-MM-dd HH:mm:ss'}} - {{coupon.validityendtime | date:'yyyy-MM-dd HH:mm:ss'}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2 "></div>
+                        <div class="col-sm-8  ">
+                            <label for="coupon.isShelf" class="col-sm-4   ">状态：</label>
+                            <div class="col-sm-8">
+                                <span ng-if="coupon.isShelve == 1">上架</span>
+                                <span ng-if="coupon.isShelve == 0">下架</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer margin-top20">
+                    <button type="button" class="btn btn-success"  ng-click="doAddCouponStep2()">确定</button><!-- -->
+                    <button type="button" class="btn btn-default"  ng-click="$hide()">取消</button>
+                    <img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+<style>
+    .col-sm-6{
+        padding-top: 10px;
+    }
+   .form-horizontal .  {
+    padding-top: 17px;
+   }
+</style>

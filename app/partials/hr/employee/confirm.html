@@ -1,0 +1,67 @@
+<div class="modal-tab-panel">
+    <div class="myDiv">
+       <p class="myTitle">
+           身份认证
+       </p>
+       <div>
+           <img ng-if="!employee.imageIdentity" ng-src="img/hr/default-confirm.png" class="preview">
+           <img ng-if="employee.imageIdentity" ng-src="{{employee.imageIdentitySrc}}" class="preview">
+       </div>
+            <div>
+               证件类型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+               <select id="identityType" name="identityType" style="width:50%;margin-top:5px;" ng-model="employee.identityType"
+                       ng-options="option.id as option.name for option in identityTypes">
+                   <option value="">------请选择证件类型------</option>
+               </select>
+            </div>
+            <div>
+               证件号&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+               <input type="text" style="width:50%;margin-top:5px;" ng-model="employee.identityNumber">
+            </div>
+           <p style="font-size: large;">要求</p>
+           <p>1.保证证件上的各信息清晰可见。</p>
+           <p>2.免冠照片，保持五官清晰可见。</p>
+           <input id="identity" type="file" img-model="employee.imageIdentity" value="上传图片" title="上传图片"/>
+    </div>
+    <div class="myDiv">
+       <p class="myTitle">
+           教师资格认证
+       </p>
+       <div>
+           <img ng-if="!employee.imageTeacher" ng-src="img/hr/default-confirm.png" class="preview">
+           <img ng-if="employee.imageTeacher" ng-src="{{employee.imageTeacherSrc}}" class="preview">
+       </div>
+       <p style="font-size: large;">要求</p>
+       <p>1.请上传能证明您专业能力或教学能力水平的图片，如专业考级证书、职称证书等。</p>
+       <p>2.保证证件上的各信息清晰可见。</p>
+       <p>3.大小不要超过10M。</p>
+       <input id="teacher" type="file" img-model="employee.imageTeacher" />
+    </div>
+    <div class="myDiv">
+        <p class="myTitle">学历认证</p>
+        <div>
+            <img ng-if="!employee.imageEducation" ng-src="img/hr/default-confirm.png" class="preview">
+            <img ng-if="employee.imageEducation" ng-src="{{employee.imageEducationSrc}}" class="preview">
+        </div>
+        <p style="font-size: large;">要求</p>
+        <p>1.请上传能证明您专业能力或教学能力水平的图片，如专业考级证书、职称证书等。</p>
+        <p>2.保证证件上的各信息清晰可见。</p>
+        <p>3.大小不要超过10M。</p>
+        <input id="education" type="file" img-model="employee.imageEducation" />
+    </div>
+    <div class="myDiv">
+        <p class="myTitle">
+            专业认证
+        </p>
+        <div>
+            <img ng-if="!employee.imageProfessional" ng-src="img/hr/default-confirm.png" class="preview">
+            <img ng-if="employee.imageProfessional" ng-src="{{employee.imageProfessionalSrc}}" class="preview">
+        </div>
+        <p style="font-size: large;">要求</p>
+        <p>1.请上传能证明您专业能力或教学能力水平的图片，如专业考级证书、职称证书等。</p>
+        <p>2.保证证件上的各信息清晰可见。</p>
+        <p>3.大小不要超过10M。</p>
+        <input id="professional" type="file" img-model="employee.imageProfessional" />
+    </div>
+
+</div>

@@ -1,0 +1,46 @@
+<div class="table-responsive" style=" overflow-y:hidden">
+    <h2 class="c3 tl">记录列表</h2>
+	<table class="table table-bordered table-striped table-condensed" st-pipe="getCommunicationList" st-table="CrmLeadsStudentCommunicationList">
+		<thead>
+		<tr>
+			<th>沟通时间</th>
+			<th>沟通内容</th>
+			<th>沟通人</th>
+			<th>方式</th>
+			<th>状态</th>
+			<th>录音</th>
+			<th ng-if="false">创建人</th>
+			<th ng-if="false">创建时间</th>
+			<th>沟通操作</th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr ng-repeat="row in CrmLeadsStudentCommunicationList">
+			<td>{{row.communicateTime | date:'yyyy-MM-dd'}}</td>
+			<td>{{row.communicateContent}}</td>
+			<td>{{row.username}}</td>
+			<td>{{row.calltype}}</td>
+			<td ng-if="row.callresult== 0">接通</td>
+			<td ng-if="row.callresult== 1">正忙</td>
+			<td ng-if="row.callresult== 2">无应答</td>
+			<td ng-if="row.callresult!= 1 && row.callresult!= 2 && row.callresult!= 0 && row.callresult!=-1">失败</td>
+			<td ng-if="row.callresult==-1"></td>
+			<td>
+				<button class="btn btn-primary open" ng-if="row.recording_path" ng-click="playAudio(row.recording_path)">播放</button>
+			</td>
+			<td ng-if="false">{{row.createBy}}</td>
+			<td ng-if="false">{{row.createAt | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+			<td>
+				<a ng-if="showPermissions('editCommunication')"  ng-click="editInvitationCommunication(row)"><span class="glyphicon glyphicon-pencil" title="编辑沟通"></span></a>&nbsp;
+				<a ng-if="showPermissions('deleteCommunication')" ng-click="deleteInvitationCommunication(row)"><span class="glyphicon glyphicon-delete" title="删除沟通"></span></a>&nbsp;
+			</td>
+		</tr>
+		</tbody>
+		<tfoot>
+		<tr>
+			<td class="text-center" st-pagination="" st-items-by-page="5" colspan="7" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html">
+			</td>
+		</tr>
+		</tfoot>
+	</table>
+</div>

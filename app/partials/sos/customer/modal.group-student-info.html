@@ -1,0 +1,29 @@
+<div class="yws-container mt-lable-fl mt-mlr-0 f16 look">
+	<table class="table table-bordered table-striped mt-table1" st-pipe="getGroupStudent" st-table="groupDetailStudentList">
+		<thead>
+			<tr>
+            	<td class="info">姓名</td>
+	            <td class="info">性别</td>
+	            <td class="info">年级</td>
+	            <td class="info">公立学校</td>
+	            <td class="info">所属人</td>
+            </tr>
+       	</thead>
+        <tbody>
+        	<tr ng-repeat="row in groupDetailStudentList">
+	            <td>{{row.studentName}}</td>
+	            <td ng-show="row.gender == true">男</td><td ng-show="row.gender == false">女</td><td ng-show="row.gender == null"></td>
+	            <td>{{row.gradeName}}</td>
+	            <td>{{row.schoolName}}</td>
+	            <td>{{row.userName}}</td>
+	        </tr>
+		</tbody>
+		<!-- <tfoot>
+             <tr>
+                 <td colspan="5" class="text-center" st-pagination="" st-items-by-page="10"
+                     st-template="partials/util/pagination.custom.html">
+                 </td>
+             </tr>
+        </tfoot> -->
+	</table>
+</div>

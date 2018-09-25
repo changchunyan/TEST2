@@ -1,0 +1,136 @@
+
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" ng-bind="modalTitle"></h4>
+            </div>
+            <form name="refundForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-body mt-modal-order pb-20 ">
+                    <div class="overflow-x" ng-if="refundOrder.orderRefundCategory != 3" >
+                        <table class="table table-bordered table-striped" st-table="orderTransferAvailableOrders" >
+                            <thead>
+                            <tr>
+                                <th>课程名称</th>
+                                <th>科目</th>
+                                <th>课时性质</th>
+                                <th>购买数量</th>
+                                <th>购买单价</th>
+                                <th>总价</th>
+                                <th>剩余课时/次</th>
+                                <th>待分配课时/次</th>
+                                <th>扣减课时</th>
+                                <th>扣减金额</th>
+                            </tr>
+                            </thead>
+                            <tr ng-repeat="row in refundOrder.orderCourses" name="orderCourse">
+                                <td>{{row.course_name}}</td>
+                                <td>{{row.subject_name}}</td>
+                                <td ng-show="row.course_property == 1">正课</td>
+                                <td ng-show="row.course_property == 2">赠课</td>
+                                <td ng-show="row.course_property == 3">返课</td>
+                                <td ng-show="row.course_property == 4">试听课</td>
+                                <td ng-show="row.course_property == null || row.course_property == 0 ">其他</td>
+                                <td>{{row.original_num}}</td>
+                                <td ng-show="row.courseBuyUnit!=3">{{row.actual_price}}</td>
+                                <td ng-show="row.courseBuyUnit==3">{{row.actual_price/row.original_num}}</td>
+                                <td ng-show="row.courseBuyUnit!=3">{{row.original_num * row.actual_price | number:2}}</td>
+                                <td ng-show="row.courseBuyUnit==3">{{row.original_num * row.actual_price/row.original_num | number:2}}</td>
+                                <td>{{row.course_num}}</td>
+                                <td>{{row.plan_available_num}}</td>
+                                <td><input ng-model="row.refundCourseNum" type="number"
+                                           required class="input-sm" ng-pattern="doubleNumReg"
+                                           ng-change="changeRefundCourseNum(row)" min="0" ng-readonly="okonclick"/>
+                                </td>
+                                <td>{{row.refundCourseAmout*refundOrder.privilegeRatio/100>1?row.refundCourseAmout*refundOrder.privilegeRatio/100:0 | number:2}}</td><!-- 通过退费课时*单价而来 -->
+                            </tr>
+                            <tr>
+                                <td colspan="7"></td>
+                                <td>扣减总课时</td>
+                                <td colspan="2">{{refundOrder.reduceCourseNum}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <hr ng-if="refundOrder.orderRefundCategory != 3">
+                    <div class="row ">
+                        <div class="col-sm-6  form-group">
+                            <label for="orderNo" class="fl control-label ti-14"> 合同编号</label>
+                            <div class="col-sm-6">
+                                <input type="text"  name="orderNo" id="orderNo" ng-model="refundOrder.originOrderNo"
+                                       ng-blur="orderNoExistCheck()" ng-readonly="refundOrder.nakedContract" class="input-sm form-control" />
+                            </div>
+                        </div>
+                        <div class="col-sm-3  form-group">
+                            <div >
+                                <input type="checkbox"   ng-model="refundOrder.allreturncheck" ng-click="allreturncheck()"
+                                />全部退费
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row" >
+                        <div class="col-sm-6  form-group">
+                            <label for="orderNo" class="fl control-label ti-14"> 退费金额</label>
+                            <div class="col-sm-6">
+                                <input type="number" placeholder = "此处减少校区实收" ng-change="islegalRefundAmount()"  ng-model="refundOrder.refundAmount"
+                                       required class="input-sm" style="width:90%;" min="0" ng-readonly="okonclick"/>
+                            </div>
+                        </div>
+                        <div class="col-sm-6  form-group" ng-if="refundOrder.orderRefundCategory == 3">
+                            <label for="orderNo" class="fl control-label ti-14"> 扣减充值</label>
+                            <div class="col-sm-6">
+                                <input type="number" placeholder = "此处减少学生账户余额"  ng-model="refundOrder.reduceAccountAmount"
+                                       required class="input-sm" style="width:90%;" min="0" ng-change="koujianchong()" ng-readonly="okonclick"/>
+                            </div>
+                        </div>
+                        <!--<div class="col-sm-6  form-group">-->
+                            <!--<label for="orderNo" class="fl control-label ti-14"> 全部退费</label>-->
+                            <!--<div class="col-sm-6">-->
+                                <!--<input type="checkbox"   ng-model="refundOrder.allreturncheck" ng-click="allreturncheck()"-->
+                                        <!--/>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    </div>
+                    <div class="row ">
+                        <div class="col-sm-6  form-group">
+                            <label for="orderNo" class="fl control-label ti-14"> 退款日期</label>
+                            <div class="col-sm-6">
+                                <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"
+                                       onchange="" readonly ng-value="refundOrder.refundDate | date:'yyyy-MM-dd' "
+                                       ng-model="refundOrder.refundDate" required class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="col-sm-6  form-group">
+                            <label for="orderNo" class="fl control-label ti-14"> 退款原因</label>
+                            <div class="col-sm-6">
+                                <select ng-model="refundOrder.refundReasonType" ng-change="changing()"  name="refundReasonType" id="refundReasonType" class="input-sm form-control" required>
+                                    <option value="">-- 请选择退费原因 --</option>
+                                    <option value="1">高三毕业</option>
+                                    <option value="2">效果不明显</option>
+                                    <option value="3">回老家</option>
+                                    <option value="4">出国留学</option>
+                                    <option value="5">班主任不满意</option>
+                                    <option value="6">家庭经济原因</option>
+                                    <option value="7">孩子个人原因</option>
+                                    <option value="8">环境不满意</option>
+                                    <option value="9">其他原因</option>
+                                </select>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if=remark>
+                    <textarea name="refundReason" id="refundReason" placeholder="请输入原因(限30字)" class="form-control" ng-maxlength="30"  ng-model="refundrefundOrder.refundReason" onfocus="this.placeholder=''" onblur="this.placeholder='请输入原因(限30字)'" />
+                </div>
+            </form>
+            <div class="modal-footer margin-top20">
+                <button type="button" class="btn btn-default" ng-click="$hide();huifu()">取消</button>
+                <button type="button" ng-disabled="refundForm.$invalid || legalFlag"class="btn btn-success" ng-click="refundConfirm();huifu()">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

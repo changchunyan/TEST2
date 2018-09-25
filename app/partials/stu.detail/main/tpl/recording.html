@@ -1,0 +1,13 @@
+<div class="modal-body mt-modal-recording">
+    <tabs pane-changed="getTabIndex(selectedPane)">
+        <!--<pane title="沟通记录">-->
+        <!--<div ng-include="'partials/sos/leads/tab.call.html?v=2.6'" ng-if="recordTab==='0'"></div>-->
+        <!--</pane>-->
+        <!--<pane title="邀约记录">-->
+        <!--<div ng-include="'partials/sos/leads/tab.invitation.html?v=2.0'" ng-if="recordTab==='1'"></div>-->
+        <!--</pane>-->
+        <pane title="排课记录">
+            <div ng-include="'partials/sos/leads/tab.course.html?v=2.4'" ng-if="recordTab==='2'"></div>
+        </pane>
+    </tabs>
+</div>

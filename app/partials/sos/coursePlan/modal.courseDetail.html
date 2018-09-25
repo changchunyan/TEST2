@@ -1,0 +1,50 @@
+<div class="modal" ng-controller="CoursePlanController as cp" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" ng-bind="coursePlanRecordTitle"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive" >
+                    <table class="table table-bordered table-striped table-condensed" st-pipe="CourseDetailInfoServer" st-table="CourseDetailInfoServer">
+                        <thead>
+                        <tr>
+                            <th>学生姓名</th>
+                            <th>订单类型</th>
+                            <th>课程类型</th>
+                            <th>课时性质</th>
+                            <th>计费金额</th>
+                          
+                        </tr>
+                        </thead>
+                        <tbody ng-show="!isLoading">
+                        <tr>
+                            <td>{{ Coursedetail.student_name }}</td>
+							
+							<td ng-if="Coursedetail.type==8||Coursedetail.type==9">储值订单</td>
+                            <td ng-if="Coursedetail.type!=8&&Coursedetail.type!=9">课时订单</td>
+                            
+							<td ng-if="Coursedetail.type==3 || Coursedetail.type==15 || Coursedetail.type==16">试听课程</td>
+                            <td ng-if="Coursedetail.type!=3 && Coursedetail.type!=15 && Coursedetail.type!=16">{{Coursedetail.coursename}}</td>
+                            
+							<td ng-if="Coursedetail.type==3 || Coursedetail.type==15 || Coursedetail.type==16">试听课程</td>
+                            <td ng-if="Coursedetail.type!=3 && Coursedetail.type!=15 && Coursedetail.type!=16">{{Coursedetail.course_property}}</td>
+                            <td ng-if="Coursedetail.is_past">{{Coursedetail.price | number:2}}</td>
+                            <td ng-if="!Coursedetail.is_past">{{Coursedetail.new_price | number:2}}</td>
+
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

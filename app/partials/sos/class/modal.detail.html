@@ -1,0 +1,32 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <form class="modal-dialog pb-20" style="width: 1000px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="closeDetailModal()">
+                	<span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" ng-bind="detailModalTitle"></h4>
+            </div>
+            <div class="modal-body mt-modal-recording" style="padding-top: 10px">
+            	<tabs pane-changed="getTabIndex(selectedPane)">
+		        	<pane title="基本信息" active="{{selectTab=='0'}}" class="f16">
+		        		<div ng-include="basicInfoUrl"></div>
+		        	</pane>
+		        	<pane title="班级学员" active="{{selectTab=='1'}}" class="f16" ng-show="studentClass.classType!=2">
+		        		<div ng-include="classStudentInfoUrl"></div>
+		        	</pane>
+		        	<pane title="排课记录" active="{{selectTab=='2'}}" class="f16">
+		        		<div ng-include="coursePlanInfo"></div>
+		        	</pane>
+	        	</tabs>
+            </div>
+            
+            <div class="modal-footer">
+            	<button type="button" class="btn btn-default" ng-click="closeDetailModal()">关闭</button>
+            	<button type="button" class="btn btn-success c5-lable" ng-if="studentClass.isEdit" ng-click="update(studentClass)" >确定</button>
+            </div>
+        </div>
+	</form>
+</div>
+
+

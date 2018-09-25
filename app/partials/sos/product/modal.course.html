@@ -1,0 +1,259 @@
+<div class="modal oms-course-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" ng-bind="modalTitleForCourse"></h4>
+            </div>
+            <div class="modal-body">
+                <tabs pane-changed="getTabIndex(selectedPane)">
+                    <pane ng-if="onLineShow" title="线上产品" >
+                        <form name="CourseOnlineform" role="form" class="form-horizontal showcase-form" novalidate="" >
+                            <div class="">
+                                <div class="row ">
+                                    <div class="col-sm-6" ng-class="{ 'has-error': CourseOnlineform.Course.omsProductTypeId.$dirty && CourseOnlineform.Course.omsProductTypeId.$error.required }">
+                                        <label for="Course.omsProductTypeId1">产品类型名称</label>
+                                        <select ng-model="Course.omsProductTypeId" name="Course.omsProductTypeId" id="Course.omsProductTypeId1" class="form-control"
+                                                ng-options="option.id as option.name for option in ProductTypeOnlineList" ng-change="omsProductTypeIdChange(1)" required  >
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6" ng-class="{ 'has-error': CourseOnlineform.Course.courseTypeId.$dirty && CourseOnlineform.Course.courseTypeId.$error.required }">
+                                        <label for="Course.courseTypeId1">课程类型名称</label>
+                                        <select ng-model="Course.courseTypeId" name="Course.courseTypeId" id="Course.courseTypeId1" class="form-control"
+                                                ng-options="option.id as option.name for option in CourseTypeListByFilter"  required>
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div class="col-sm-6" ng-class="{ 'has-error': CourseOnlineform.Course.gradeId.$dirty && CourseOnlineform.Course.gradeId.$error.required }">
+                                        <label for="Course.gradeId1">年级名称</label>
+                                        <select ng-model="Course.gradeId" name="Course.gradeId" id="Course.gradeId1" class="form-control"
+                                                ng-options="option.id as option.name for option in gradeIds" required>
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6" ng-class="{ 'has-error': CourseOnlineform.Course.name.$dirty && CourseOnlineform.Course.name.$error.required }">
+                                        <label for="Course.name1">产品名称</label>
+                                        <input type="text" name="Course.name" id="Course.name1" class="form-control" ng-model="Course.name" ng-maxlength="10" required />
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div class="col-sm-6" ng-class="{ 'has-error': CourseOnlineform.Course.subjectId.$dirty && CourseOnlineform.Course.subjectId.$error.required }">
+                                        <label for="Course.subjectId" > 产品科目</label>
+                                        <select ng-model="Course.subjectId" name="Course.subjectId" id="Course.subjectId" class=" form-control"
+                                                ng-options="option.id as option.name for option in subjectIds" required>
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6" ng-class="{ 'has-error': CourseOnlineform.Course.isShelve.$dirty && CourseOnlineform.Course.isShelve.$error.required }">
+                                        <label for="Course.isShelve" >产品状态</label>
+                                        <select ng-model="Course.isShelve" name=Course.isShelve" id="Course.isShelve" class=" form-control"
+                                                ng-options="option.id as option.name for option in isShelveSelect" required>
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div class="col-sm-6" >
+                                        <label for="Course.minPrice">产品价格(低)</label>
+                                        <input ng-pattern="/^[1-9][0-9]*$/" type="number" name="Course.minPrice" id="Course.minPrice" class="form-control" ng-model="Course.minPrice"
+                                               form-range max="Course.maxPrice" min=""
+                                               ng-maxlength="10" required />
+                                    </div>
+                                    <div class="col-sm-6" >
+                                        <label for="Course.maxPrice">产品价格(高)</label>
+                                        <input ng-pattern="/^[1-9][0-9]*$/" type="number" name="maxPrice" id="Course.maxPrice" class="form-control" ng-model="Course.maxPrice"
+                                               form-range max="" min="Course.minPrice"
+                                               ng-maxlength="10" required />
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div class="col-sm-6" ng-class="{ 'has-error': CourseOnlineform.Course.courseTypeId.$dirty && CourseOnlineform.Course.courseTypeId.$error.required }">
+                                        <label for="Course.expiredDays">有效期</label>
+                                        <select ng-model="Course.expiredDays" name="Course.expiredDays" id="Course.expiredDays" class="form-control"
+                                                ng-options="option.id as option.name for option in expiredDaysSelect" required>
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6" ng-class="{ 'has-error': Courseform.Course.standardNum.$dirty && Courseform.Course.standardNum.$error.required }">
+                                        <label for="Course.name">总课时</label>
+                                        <input ng-pattern="/^(([1-9][0-9]*)|([0-9]+\.[0,5]{1}))$/" type="text" name="Course.standardNum" id="Course.standardNum" class="form-control" ng-model="Course.standardNum" ng-maxlength="20" required />
+                                    </div>
+                                </div>
+
+                                <div class="row ">
+                                    <div class="col-sm-6" ng-class="{ 'has-error': Courseform.Course.whoCanBuy.$dirty && Courseform.Course.whoCanBuy.$error.required }">
+                                        <label for="Course.whoCanBuy">可购买人群</label>
+                                        <select ng-model="Course.whoCanBuy" name="Course.whoCanBuy" id="Course.whoCanBuy" class="form-control"
+                                                ng-options="option.value as option.name for option in whoCanBuy" required>
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6" ng-class="{ 'has-error': Courseform.Course.numLimit.$dirty && Courseform.Course.numLimit.$error.required }">
+                                        <label for="Course.numLimit">限购</label>
+                                        <input type="number" placeholder="请输入1-20的整数" max="20" min="1" name="Course.numLimit" id="Course.numLimit" class="form-control" ng-model="Course.numLimit" required />
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div class="col-sm-6" ng-class="{ 'has-error': Courseform.Course.saleType.$dirty && Courseform.Course.saleType.$error.required }">
+                                        <label ng-init="setCourseSaleType(Course)">售卖类型</label>
+                                        <label class="checkbox-bg" style="color:rgb(66,139,202);width:163px; background:transparent;" ng-click="Course.saleType = 1"><input type="radio" name="saleType" ng-checked="Course.saleType == 1" ng-model="Course.saleType" value="1" />导流</label>
+                                        <label class="checkbox-bg" style="color:rgb(66,139,202);width:163px;background:transparent;" ng-click="Course.saleType = 2"><input type="radio" name="saleType" ng-checked="Course.saleType == 2" ng-model="Course.saleType" value="2"/>常规</label>
+                                    </div>
+
+                                </div>
+                                <div class="row ">
+                                    <div class="col-sm-12" >
+                                        <label for="file">图片（必填）</label>
+                                        <div class="col-md-12">
+                                            <img  ng-src="{{imageSrc}}" style="max-width:300px;max-height:300px;margin:0 auto;display:block;" />
+                                        </div>
+                                        <input id="file" type="file" img-model="Course.courseImage"/>
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div class="col-sm-12" ng-class="{ 'has-error': CourseOnlineform.Course.teachingTarget.$dirty }">
+                                        <label for="Course.teachingTarget">教学目标</label>
+                                        <input type="text" name="Course.teachingTarget" id="Course.teachingTarget" class="form-control" ng-model="Course.teachingTarget" ng-maxlength="150" required />
+                                    </div>
+                                </div>
+                                <hr><label>课程介绍列表如下（至少有一个）:</label><hr>
+                                <div >
+                                    <div class="row " ng-repeat="courIntro in courseIntroList">
+                                        <div class="col-sm-2 pd-right0" >
+                                            <label for="courseNumSeq1">序号</label>
+                                            <input readonly type="text" name="courseNumSeq1" id="courseNumSeq1" class="form-control" ng-model="courIntro.courseNumSeq" ng-maxlength="20"  />
+                                        </div>
+                                        <div class="col-sm-4" >
+                                            <label for="courseContent1">内容</label>
+                                            <textarea  class="form-control" rows="3" name="courseContent1" id="courseContent1" ng-model="courIntro.courseContent"  ng-maxlength="50" placeholder="最多可输入50字"  required>
+                                        </textarea>
+                                        </div>
+                                        <div class="col-sm-4" >
+                                            <label for="courseMaterial1">材料</label>
+                                            <textarea  class="form-control" rows="3" name="courseMaterial1" id="courseMaterial1" ng-model="courIntro.courseMaterial"  ng-maxlength="50" placeholder="最多可输入50字" required>
+                                        </textarea>
+                                        </div>
+                                        <div class="col-sm-2 pd-right0" >
+                                            <button class="btn btn-danger" ng-click="deleteCourIntro(courIntro.courseNumSeq)">删除</button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <hr>
+                                <div>
+                                    <button type="button" class="btn btn-success" ng-click="addCourseIntro()" >添加课程介绍</button>
+                                    <button type="button" class="btn btn-success" ng-click="clearCourseIntro()" >清空课程介绍</button>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                                    <button type="submit" class="btn btn-success c5-lable" ng-click="saveOrUpdateOnlineCourse()" ng-disabled="CourseOnlineform.$invalid">保存</button>
+                                    <img ng-if="dataLoadingForCourse" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                                </div>
+                            </div>
+                        </form>
+                    </pane>
+                    <pane ng-if="offLineShow"  title="线下产品"  >
+                        <form name="Courseform" role="form" class="form-horizontal showcase-form" novalidate="">
+                            <div class="">
+                                <div class="row ">
+                                    <div class="col-sm-6" ng-class="{ 'has-error': Courseform.Course.omsProductTypeId.$dirty && Courseform.Course.omsProductTypeId.$error.required }">
+                                        <label for="Course.omsProductTypeId">产品类型名称</label>
+                                        <select ng-model="Offline.Course.omsProductTypeId" name="Offline.Course.omsProductTypeId" id="Course.omsProductTypeId" class="form-control"
+                                                ng-options="option.id as option.name for option in ProductTypeOfflineList" ng-change="omsProductTypeIdChange(2)" required >
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6" ng-class="{ 'has-error': Courseform.Course.courseTypeId.$dirty && Courseform.Course.courseTypeId.$error.required }">
+                                        <label for="Course.courseTypeId">课程类型名称</label>
+                                        <select ng-model="Offline.Course.courseTypeId" name="Offline.Course.courseTypeId" id="Course.courseTypeId" class="form-control"
+                                                ng-options="option.id as option.name for option in CourseTypeListByFilter" ng-change="courseTypeIdAndGradeIdChange()" required>
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div class="col-sm-6" ng-class="{ 'has-error': Courseform.Course.courseTypeId.$dirty && Courseform.Course.courseTypeId.$error.required }">
+                                        <label for="Course.gradeId">年级名称</label>
+                                        <select ng-model="Offline.Course.gradeId" name="Offline.Course.gradeId" id="Course.gradeId" class="form-control"
+                                                ng-options="option.id as option.name for option in gradeIds" ng-change="courseTypeIdAndGradeIdChange()" required>
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6" ng-class="{ 'has-error': Courseform.Course.name.$dirty && Courseform.Course.name.$error.required }">
+                                        <label for="Course.name">课程单位</label>
+                                        <select ng-model="Offline.Course.courseUnit" name="Course.courseUnit" id="Course.Course.courseUnit" class=" form-control"
+                                                ng-options="option.id as option.name for option in courseUnit" ng-change="changCourseUnit()" ng-disabled="Offline.Course.id != undefined" required>
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6" ng-class="{ 'has-error': CourseOnlineform.Course.subjectId.$dirty && CourseOnlineform.Course.subjectId.$error.required }">
+                                        <!--<a class="checkbox-bg" ng-class="{'active':Offline.Course.is_fullsubject}"  style="width: 160px" ng-click="Offline.Course.is_fullsubject=!Offline.Course.is_fullsubject" >这是全科课程</a>-->
+                                        <!--<a class="checkbox-bg" ng-class="{'active':Offline.Course.is_fullsubject}"  style="width: 160px" ng-click="Offline.Course.is_fullsubject=!Offline.Course.is_fullsubject" >班类多科课程</a>-->
+                                        <label class="checkbox-bg" style="color:rgb(66,139,202);width:163px; background:transparent;" ng-click="Offline.Course.is_fullsubject = true"><input type="radio" name="courseClassChange" ng-checked="subjectType == 2" ng-model="subjectType" value="2" />这是全科课程</label>
+                                        <label class="checkbox-bg" style="color:rgb(66,139,202);width:163px;background:transparent;" ng-click="Offline.Course.is_fullsubject = true"><input type="radio" name="courseClassChange" ng-checked="subjectType == 3" ng-model="subjectType" value="3"/>班类多科课程</label>
+                                        <div ng-if="!Offline.Course.is_fullsubject">
+                                            <label for="Course.subjectId" >科目</label>
+                                            <select ng-model="Offline.Course.subjectId" name="Course.subjectId" id="Course.subjectId" class=" form-control"
+                                                    ng-options="option.id as option.name for option in subjectIds" required>
+                                                <option value="">-- 请选择 --</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6" >
+                                        <a class="checkbox-bg" ng-class="{'active':Offline.Course.isRegularCharge}"  style="width: 160px" ng-click="changeRegular()"  ng-disabled="Offline.Course.id != undefined">按期收费 </a>
+                                        <div ng-if="Offline.Course.isRegularCharge">
+                                            <label for="Course.isRegularCharge">&nbsp;</label>
+                                            <div style="height:60px;">
+                                                <input type="text" ng-pattern="/^([1-9][\d]{0,3})$/" ng-maxlength="4" ng-max style="width:85%" class="form-control fl" ng-model="Offline.Course.regularTimes" required><span>{{regularUnit}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6" ng-class="{ 'has-error': Courseform.Course.name.$dirty && Courseform.Course.name.$error.required }">
+                                        <label for="Course.name">授课方式</label>
+                                        <select ng-model="Offline.Course.teachingStyle" name="Course.teachingStyle" id="Course.teachingStyle" class=" form-control"
+                                                ng-options="option.id as option.name for option in teachingStyles" ng-disabled="Offline.Course.id != undefined" required>
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-6" ng-class="{ 'has-error': Courseform.Course.standardPrice.$dirty && Courseform.Course.standardPrice.$error.required }">
+                                        <label for="Course.standardPrice">产品单价 </label>
+                                        <div style="height:60px;">
+                                            <input type="number" style="width:85%" name="Offline.Course.standardPrice" id="Course.standardPrice" class="form-control fl" ng-model="Offline.Course.standardPrice"
+                                                   ng-maxlength="6" required />
+                                            <span>({{priceUnit}})</span></div>
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div class="col-sm-6" ng-class="{ 'has-error': Courseform.Course.name.$dirty && Courseform.Course.name.$error.required }">
+                                        <label for="Course.name">产品名称</label>
+                                        <input type="text" name="Offline.Course.name" id="Course.name" class="form-control" ng-model="Offline.Course.name" ng-maxlength="20" required />
+                                    </div>
+                                    <div class="col-sm-6" ng-class="{ 'has-error': Courseform.Course.saleType.$dirty && Courseform.Course.saleType.$error.required }">
+                                        <label ng-init="setCourseSaleType(Offline.Course)">售卖类型</label>
+                                        <label class="checkbox-bg" style="color:rgb(66,139,202);width:163px; background:transparent;" ng-click="Offline.Course.saleType = 1"><input type="radio" name="Offline.Course.saleType" ng-checked="Offline.Course.saleType == 1" ng-model="Offline.Course.saleType" value="1" />导流</label>
+                                        <label class="checkbox-bg" style="color:rgb(66,139,202);width:163px;background:transparent;" ng-click="Offline.Course.saleType = 2"><input type="radio" name="Offline.Course.saleType" ng-checked="Offline.Course.saleType == 2" ng-model="Offline.Course.saleType" value="2"/>常规</label>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                                    <button type="submit" class="btn btn-success c5-lable" ng-click="saveCourse(subjectType)" ng-disabled="Courseform.$invalid">保存</button>
+                                    <img ng-if="dataLoadingForCourse" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                                </div>
+                            </div>
+                        </form>
+                    </pane>
+                </tabs>
+            </div>
+            <table class="table table-bordered table-striped table-condensed" st-pipe="getFavorableList" st-table="FavorableList"></table>
+        </div>
+    </div>
+</div>
+

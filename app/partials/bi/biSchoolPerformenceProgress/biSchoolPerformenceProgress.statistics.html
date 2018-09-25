@@ -1,0 +1,59 @@
+<!-- 筛选条件 -->
+<div ng-include="baseHtmlUrl" style="padding: 0px 15px"></div>
+
+<!-- 表格 -->
+<div class="default-box">
+    <h4>
+                        业绩目标进度
+        <span ng-if="!isDay">（从 {{modelStartTime | date : 'yyyy-MM-dd'}} 至 {{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+        <span ng-if="isDay">（{{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+        <span ng-if="presentTime">最新统计时间：{{presentTime}}</span>
+        <button class="btn btn-success bi-list-head" ng-click="getStatisticsAll()">导出列表</button>
+    </h4>
+    <br/>
+    <div class="table-responsive">
+        <table st-pipe="getStatistics" st-table="tableModel" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th style="font-weight: bold;">校区</th>
+                <th class="bi-th1" style="font-weight: bold;" data-content="营销数据的月实收金额/校长目标录入的营销实收目标以所选择时间的月份为单位"
+                	data-placement="top" webui-popover>营销实收完成率（月）</th>
+                <th class="bi-th1" style="font-weight: bold;" data-content="目标实收-实际实收=目标差额"
+                	data-placement="top" webui-popover>目标差额</th>
+                <th class="bi-th2" style="font-weight: bold;" data-content="学管数据的月实收金额/校长目标录入的学管实收目标以所选择时间的月份为单位"
+                	data-placement="top" webui-popover>学管实收完成率（月）</th>
+                <th class="bi-th2" style="font-weight: bold;" data-content="目标实收-实际实收=目标差额"
+                	data-placement="top" webui-popover>目标差额</th>
+                <th class="bi-th4" style="font-weight: bold;" data-content="营销数据的月实收金额+学管数据的月实收金额）/（校长目标录入的营销实收目标+校长目标录入的学管实收目标）以所选择时间的月份为单位"
+                	data-placement="top" webui-popover>总实收完成率（月）</th>
+                <th class="bi-th4" style="font-weight: bold;" data-content="目标实收-实际实收=目标差额"
+                	data-placement="top" webui-popover>目标差额</th>
+                <th class="bi-th3" style="font-weight: bold;" data-content="消课课时（月）/校长目标录入的消课课时目标以所选择时间的月份为单位"
+                	data-placement="top" webui-popover>消课课时完成率（月）</th>
+                <th class="bi-th3" style="font-weight: bold;" data-content="目标实收-实际实收=目标差额"
+                	data-placement="top" webui-popover>目标差额</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="statisticsModel in statisticsModels">
+                <td>{{statisticsModel.schoolName}}</td>
+                <td>{{statisticsModel.marketRatio}}</td>
+                <td ng-class="{'font-red':statisticsModel.marketBalance>0, 'font-green':statisticsModel.marketBalance<0}"><span ng-if="statisticsModel.marketBalance>0">+</span>{{statisticsModel.marketBalance}}</td>
+                <td>{{statisticsModel.managementRatio}}</td>
+                <td ng-class="{'font-red':statisticsModel.managementBalance>0, 'font-green':statisticsModel.managementBalance<0}"><span ng-if="statisticsModel.managementBalance>0">+</span>{{statisticsModel.managementBalance}}</td>
+                <td>{{statisticsModel.totalRatio}}</td>
+                <td ng-class="{'font-red':statisticsModel.totalBalance>0, 'font-green':statisticsModel.totalBalance<0}"><span ng-if="statisticsModel.totalBalance>0">+</span>{{statisticsModel.totalBalance}}</td>
+                <td>{{statisticsModel.consumeRatio}}</td>
+                <td ng-class="{'font-red':statisticsModel.consumeBalance>0, 'font-green':statisticsModel.consumeBalance<0}"><span ng-if="statisticsModel.consumeBalance>0">+</span>{{statisticsModel.consumeBalance}}</td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="30" class="text-center" st-pagination="" st-items-by-page="10"
+                    st-template="partials/util/pagination.custom.html">
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

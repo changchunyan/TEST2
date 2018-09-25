@@ -1,0 +1,73 @@
+<style>
+   /* body {
+        margin: 40px 10px;
+        padding: 0;
+        font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+        font-size: 14px;
+    }*/
+    #calendar {
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    .foot-show{
+        max-width: 100%;
+        margin: 0 auto;
+        overflow: hidden;
+    }
+    .color-green{
+        color: #3e70c5;
+        /* font-size: 14px; */
+        font-weight: bold;
+    }
+   .fc-toolbar .fc-state-active{
+       display: none;
+   }
+
+</style>
+<link  href='js/lib/fullcalendar/fullcalendar.css' rel='stylesheet' />
+<link  href='js/lib/fullcalendar/fullcalendar.print.css' rel='stylesheet' media='print' />
+<script src='js/lib/fullcalendar/moment.min.js'></script>
+<script src='js/lib/fullcalendar/jquery.base64.js'></script>
+<script src='js/lib/fullcalendar/fullcalendar.min.js'></script>
+<script src="js/lib/fullcalendar/selectable.js"></script>
+<div class="view-frame">
+       <!-- <ul class="breadcrumb">
+            <li><a href="#/">首页</a> <span class="divider"></span></li>
+            <li><a href="#/sos-admin">学员教务</a> <span class="divider"></span></li>
+            <li class="active">教师课表</li>
+        </ul>-->
+
+            <div class="plan-contents">
+              <!--  <div class="plan-details-title">课表</div>
+                <div  class="fc fc-ltr fc-unthemed foot-show plan-table-title">
+                    <div class="fc-toolbar">
+                        <div class="fc-left">
+                        <div class="fc-button-group">
+                            <label for="setWeek">批量排几周:</label>
+                            <input type="number" class="" id="setWeek"  value="1">
+                            <button id="batch" class="btn btn-success">批量排课</button>
+                            <button id="clearBatch" class="btn btn-danger">取消批量排课</button>
+                        </div>
+                        </div>
+
+                        <div class="fc-right">
+                            <div class="fc-button-group">
+                                <label >可选课时：<span id="js-residue-hour" class="color-green">10</span>课时</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>-->
+
+                <div id='calendar'></div>
+               <!-- <div  class="fc fc-ltr fc-unthemed foot-show">
+                    <div class="fc-toolbar" style="padding: 10px 0">
+                        <div class="fc-center">
+                            <div class="fc-button-group">
+                                <button type="button" class="btn btn-success " id="js-submit">提交课程</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>-->
+            </div>
+</div>

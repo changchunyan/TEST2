@@ -1,0 +1,81 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true"  >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="form" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">订单列表</h4>
+                </div>
+				<div class="modal-body mt-modal-recording">
+		            <div class="table-responsive">
+		                <table class="table table-bordered table-striped table-condensed mt-table1"
+		                       st-pipe="getCustomerOrders" st-table="customerOrders">
+		                    <thead>
+		                    <tr>
+		                        <th>合同编号</th>
+		                        <th>订单类型</th>
+		                        <th>订单性质</th>
+		                        <th>订单状态</th>
+		                        <th>充值金额</th>
+		                        <th>剩余金额</th>
+		                        <th>总课时</th>
+		                        <th>剩余课时</th>
+		                        <th>总课次</th>
+                                <th>剩余课次</th>
+		                        <th>总价</th>
+		                        <th>实际总价</th>
+		                        <th>优惠金额</th>
+		                        <th>实付金额</th>
+		                        <th>尾款金额</th>
+		                    </tr>
+		                    </thead>
+		                    <tbody>
+		                    <tr ng-repeat="row in customerOrders">
+		                        <td ng-if="row.orderNo==row.originalOrderNo"></td>
+		                        <td ng-if="row.orderNo!=row.originalOrderNo">{{row.orderNo}}</td>
+		                        <td>{{row.orderType|orderType:row.orderType}}</td>
+		                        <td ng-if="row.orderCategory == 1">买课程</td>
+		                        <td ng-if="row.orderCategory == 3">充值</td>
+		                        <!-- 订单状态 -->
+		                        <td ng-show="row.orderStatus == 1">录入订单</td>
+		                        <td ng-show="row.orderStatus == 2">支付定金</td>
+		                        <td ng-show="row.orderStatus == 3">审核通过</td>
+		                        <!--<td ng-show="row.orderStatus == 4">审核未通过 </td>-->
+		                        <td ng-show="row.orderStatus == 5">已退单</td>
+		                        <td ng-show="row.orderStatus == 6">已转课</td>
+		                        <td ng-show="row.orderStatus == 7">已生成合同</td>
+		                        <td ng-show="row.orderStatus == 8">已结课</td>
+		                        <td ng-show="row.orderStatus == 9">已退费</td>
+		                        <td ng-show="row.orderStatus == 10">退费中</td>
+		                        <td ng-show="row.orderStatus == 11">转课中</td>
+		                        <td ng-show="row.orderStatus == 12">已关闭</td>
+		                        <td ng-if = "row.orderCategory == 3">{{row.totalPrice}}</td>
+		                        <td ng-if = "row.orderCategory == 3">{{row.additionalAmount | number:2}}</td>
+		                        <td ng-if = "row.orderCategory != 3"></td>
+		                        <td ng-if = "row.orderCategory != 3"></td>
+		                        <td>{{row.totalOriginalNum}}</td>
+                                <td>{{row.totalCourseNum | number:2}}</td>
+                                <td>{{row.totalOriginalTimes}}</td>
+                                <td>{{row.totalCourseTimes | number:2}}</td>
+		                        <td ng-if = "row.orderCategory == 3">{{row.totalPrice}}</td>
+		                        <td ng-if = "row.orderCategory != 3">{{(row.realTotalAmount+row.privilegeAmount) | number:2}}</td>
+		                        <td>{{row.realTotalAmount}}</td>
+		                        <td>{{row.privilegeAmount}}</td>
+		                        <td>{{row.realPayAmount}}</td>
+		                        <td>{{row.payDueAmount}}</td>
+		                    </tr>
+		                    </tbody>
+		                    <tfoot>
+		                    <tr>
+		                        <td class="text-center" st-pagination="" st-items-by-page="10"
+		                            st-template="partials/util/pagination.custom.html" colspan="12">
+		                        </td>
+		                    </tr>
+		                    </tfoot>
+		                </table>
+		            </div>
+	            </div>
+            </form>
+        </div>
+   </div>
+</div>

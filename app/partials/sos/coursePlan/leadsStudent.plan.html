@@ -1,0 +1,152 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" aria-label="Close" ng-click="$hide();"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" ng-bind="modalTitle"></h4>
+      </div>
+        <div class="modal-table table-nav">
+            <span ng-if="isShowPaikeViewAll() || isShowPaikeViewTrial()" ng-class="{'active':now==3}" ng-click="showPaikeView(3)">试听排课</span>
+            <span ng-if="isShowPaikeViewAll()" ng-class="{'active':now==1}" ng-click="showPaikeView(1)">学员排课</span>
+            <span ng-if="isShowPaikeViewAll()" ng-class="{'active':now==2}" ng-click="showPaikeView(2)">一对多排课</span>
+            <span ng-if="isShowPaikeViewAll() && recording != 1" ng-class="{'active':now==4}" data-lsm="n" ng-click="showPaikeView(4)">班级排课</span>
+            <!-- ng-if="!isTeacher() && !isTeacherMaster()"-->
+            <!-- ng-if="!isTeacher() && !isTeacherMaster()"-->
+            <!-- ng-if="!isTeacher() && !isTeacherMaster()" -->
+        </div>
+      <div class="modal-body pb-20 mt-input-no-bg">
+         <!-- 筛选条件 -->
+		 <div class="br-gray mt-modal-order" ng-if="type!=4">
+			  <div ng-if = "type != 2" class="">学生姓名：<input ng-model="myCrmCustomerStudentFilter.name" ng-keyup="autoGetLeadsStudentInfoByFilter()" type="text" name="myCrmCustomerStudentFilter.name" id="studentName" style="width:120px;"/>
+				   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+				        电话号码：<input ng-model="myCrmCustomerStudentFilter.phone" type="text" ng-keyup="autoGetLeadsStudentInfoByFilter()" name="myCrmCustomerStudentFilter.phone" id="mobile" style="width:120px;"/>
+			   </div>
+			   <div ng-if="type == 2">成员：<input ng-model="myCrmCustomerStudentFilter.crmStudentName" ng-keyup="autoGetLeadsStudentInfoByFilter()" type="text" name="myCrmCustomerStudentFilter.crmStudentName" id="crmStudentName" style="width:120px;"/>
+			   	   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+			                     学生年级：
+			       <select ng-model="myCrmCustomerStudentFilter.grade_id" name="grade_id" ng-change="autoGetLeadsStudentInfoByFilter()" id="grade_id" ng-options="option.id as option.name for option in omsGrade" style="height:25px;">
+                       <option value="">-- 请选择查询班级--</option>
+                   </select>
+			   </div>
+			  <!-- <div class="row">
+			        <div class="c_center  yws-container">
+			            <button class="btn" ng-click="getLeadsStudentInfoByFilter()">查询</button>
+			            <button class="btn" ng-click="resetFilter()">重置</button>
+			        </div>
+			   </div>-->
+		  </div>
+		  <!-- 表格 -->
+          <div id="exportable" class="br-gray pl-0" style="">
+              <table  st-pipe="getLeadsStudentInfo"  st-table="tableState1"  class="table table-bordered table-striped mt-table1">
+                  <thead>
+                  <tr>
+                      <th class="" style="height:50px;">选择</th>
+                      <th class="" ng-if="type == 2">一对多名称</th>
+                      <th class="" ng-if="type == 2 ">成员</th>
+                      <th class="" ng-if="type == 2">年级</th>
+                      <th class="" ng-if="type != 2 && type != 4">姓名</th>
+                      <th class="" ng-if="type != 2 && type != 4">性别</th>
+                      <th class="" ng-if="type != 2 && type != 4">电话</th>
+                      <th class="" ng-if="type != 2 && type != 4">公立学校</th>
+                      <th class="" ng-if="type != 4">所属人</th>
+                      <th class="" ng-if="type == 4">班级名称</th>
+                      <th class="" ng-if="type == 4">课程名称</th>
+                      <th class="" ng-if="type == 4">上课老师</th>
+                      <th class="" ng-if="type == 4">班主任</th>
+                      <th class="" ng-if="type == 4">年级</th>
+                      <th class="" ng-if="type == 4">上课时间</th>
+                      <th class="" ng-if="type == 4">计划课时</th>
+                      <th class="" ng-if="type == 4">已上/已排课时</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr ng-if="type != 2  && type != 4"  ng-repeat="row in resultList">
+                      <td class="vr">
+                          <label for="input{{$index}}" class="radio-vr" ng-class="{'active':row.selectTrue}" style="width:28px;"></label>
+                          <input type="radio" name="studentRadio" class="hide" id="input{{$index}}" ng-click="forwardPlanPage('resultList',$index)" ng-model="studentRadio" value="{{$index}}"/>
+                      </td>
+                      <td>{{row.name}}</td>
+                      <td><span ng-if="row.gender == false">女</span>
+                          <span ng-if="row.gender == true">男</span>
+                      </td>
+                      <td><span>{{row.phone}}</span>
+                          <span ng-if="row.mother_phone"><br>{{row.mother_phone}}</span>
+                          <span ng-if="row.father_phone"><br>{{row.father_phone}}</span>
+                      </td>
+                      <td>{{row.school_name}}</td>
+                      <td>{{row.belong_user_name}}</td>
+                  </tr>
+                  <tr ng-if="type == 2"  ng-repeat="row in resultList">
+                      <td class="vr">
+                          <label for="input-{{$index}}" class="radio-vr" ng-class="{'active':row.selectTrue}" style="width:28px;"></label>
+                          <input type="radio" name="studentRadio" id="input-{{$index}}" class="hide" ng-click="forwardPlanPage('resultList',$index)" ng-model="studentRadio" value="{{$index}}"/>
+                      </td>
+                      <td>{{row.group_no}}</td>
+                      <td style="white-space: normal; max-width:150px;">{{row.studentNames}}</td>
+                      <td>{{row.grade_name}}</td>
+                      <td>{{row.belong_user_name}}</td>
+                  </tr>
+                  <tr ng-if="type == 4"  ng-repeat="row in resultList">
+                      <td class="vr">
+                          <label for="input{{$index}}" class="radio-vr" ng-class="{'active':row.selectTrue}" style="width:28px;"></label>
+                          <input type="radio" name="studentRadio" class="hide" id="input{{$index}}" ng-click="forwardPlanPage('resultList',$index)" ng-model="studentRadio" value="{{$index}}"/>
+                      </td>
+                      <td>{{row.name}}</td>
+                      <td>{{row.courseName}}</td>
+                      <td>{{row.teacherName}}</td>
+                      <td>{{row.userName}}</td>
+                      <td>{{row.gradeName}}</td>
+                      <td>
+                          <div ng-repeat="element in row.classTimeList">
+                              <ul>
+                                  <li class="lh20">{{element.startDate}}<span class="pl-10">{{element.startTime}}-{{element.endTime}}</span></li>
+                              </ul>
+                          </div>
+                      </td>
+                      <td >{{row.planCourseCount}}</td>
+                      <td style="white-space: nowrap;">
+	                                <span class="yws-tiao" style="border: none;border-radius: 0">
+	                                    <div class="text" ng-if="((row.allPastCoursePlanCount)/(row.allCoursePlanCount))!=1" style="width:100%;text-align: left;position:inherit;">
+                                            {{row.allPassCoursePlanCount}} / {{row.allCoursePlanCount}}
+                                            <span ng-if="row.courseUnit===1">课时</span>
+                                            <span ng-if="row.courseUnit===2">次</span>
+                                        </div>
+	                                    <div style="width:100%;height:6px;background-color: #ccc;overflow:hidden;border-radius: 3px;">
+                                            <i class="bg" ng-if="row.allCoursePlanCount==0" style="width: 50%;height: 6px;position: relative;top: -13px;"></i>
+                                            <i class="bg" ng-if="row.allCoursePlanCount!=0" style="width: 50%;height: 6px;position: relative;top: -13px;" ng-style="{  'width': ((row.allPassCoursePlanCount)/(row.allCoursePlanCount))*100 + '%'}" ng-class="{'c1-i':((row.allPassCoursePlanCount)/(row.allCoursePlanCount))<0.5,'c2-i': 0.5<=((row.allPassCoursePlanCount)/(row.allCoursePlanCount))&&((row.allPassCoursePlanCount)/(row.allCoursePlanCount))<0.8,'c3-i':0.8<=((row.allPassCoursePlanCount)/(row.allCoursePlanCount))&&((row.allPassCoursePlanCount)/(row.allCoursePlanCount))<=1}"></i>
+                                        </div>
+	                                </span>
+                      </td>
+                  </tr>
+                  </tbody>
+                  <tfoot>
+                  <tr>
+                      <td colspan="6" class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html"></td>
+                  </tr>
+                  </tfoot>
+              </table>
+          </div>
+      </div>
+
+      <div class="modal-footer">
+		  <div class="text-center yws-container margin-top-10 margin-bottom-10">
+			  <div class="yws-left">
+				  <button ng-if="type == 3"  type="button" class="btn btn-default" ng-click="createLeads()">创建新意向客户</button>
+			  </div>
+			  <div class="yws-right">
+				  <!--<button ng-if="type == 1 || type == 3" type="button" class="btn btn-default" ng-click="forwardPlanPage()">对选中学生进行排课</button>-->
+				  <!--<button ng-if="type == 2" type="button" class="btn btn-default" ng-click="forwardPlanPage()">对选中一对多进行排课</button>-->
+				  <button type="button" class="btn btn-default" ng-click="$hide();">取消</button>
+			  </div>
+
+		  </div>
+      <!--  <button ng-if="type == 3"  type="button" class="btn btn-default" ng-click="createLeads()">创建新意向客户</button>
+        <button ng-if="type == 1 || type == 3" type="button" class="btn btn-default" ng-click="forwardPlanPage()">对选中学生进行排课</button>
+        <button ng-if="type == 2" type="button" class="btn btn-default" ng-click="forwardPlanPage()">对选中一对多进行排课</button>
+        <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>-->
+      </div>
+    </div>
+  </div>
+</div>
+
+

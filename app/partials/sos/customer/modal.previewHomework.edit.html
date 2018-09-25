@@ -1,0 +1,57 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true"  >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="form" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="editPreviewHomeworkTitle"></h4>
+                </div>
+                <div class="modal-body">
+                   	<div>
+                   		<label style="width:100px;">课程标题</label>
+                   		<input ng-if="isEdit" type="text" style="width:400px;" id="previewHomeWork" ng-model="previewHomeworkInfo.title" 
+                   			placeholder="本堂课的标题，1-10个字符" maxlength="10" />
+                   		<input ng-if="isView" type="text" style="width:400px;" id="previewHomeWork" ng-model="previewHomeworkInfo.title" 
+                   			placeholder="本堂课的标题，1-10个字符" maxlength="10" disabled/>
+                   	</div>
+                   	<br/>
+                   	<div ng-if="isEdit" style="height: 100px"">
+                   		<div style="width:100px;float:left;">添加课前作业</div>
+                   		<div ng-if="!previewHomeworkInfo.url" style="float:left;">
+                   			<span style="float:left;" class="glyphicon glyphicon-import" title="上传文件"></span>
+                   			<input style="float:left;" id="previewHomeWorkFile" type="file" file-model="previewHomeWorkFile"/>
+                   			<span style="margin-left:10px;" class="glyphicon glyphicon-import" title="应用已上传作业"></span><a ng-click="usePackExist(1)">应用已上传预习资料</a>
+                   			<br/>
+                   			<br/>
+                   			<label class="control-label" ng-if="previewHomeworkInfo.url">{{previewHomeworkInfo.filename}}</label>
+                        	<label class="control-label" ng-if="previewHomeWorkFile.name!=undefined">{{previewHomeWorkFile.name}}</label>
+                   			<br/>
+                   			上传标准：可上传文件扩展名为.doc、.docx和.pdf的文件
+                   		</div>
+                   		<div ng-if="previewHomeworkInfo.url" style="float:left;">
+                   		    <a href={{previewHomeworkInfo.viewPath}} target="_blank">{{previewHomeworkInfo.filename}}</a>
+                   			<a style="margin-left:30px" ng-click="removePack(1)">删除</a>
+                   		</div>
+                   	</div>
+                   	<div ng-if="isView" style="height: 100px">
+                   		<div style="width:100px;float:left;">课前作业</div>
+                   		<div ng-if="previewHomeworkInfo.url" style="float:left;">
+                   			<a href={{previewHomeworkInfo.viewPath}} target="_blank">{{previewHomeworkInfo.filename}}</a>
+                   		</div>
+                   	</div>
+                   	<div>
+                   		<label style="width:100px;">课前预习视频</label>
+                   		<input ng-if="isEdit" type="text" style="width:400px;" ng-model="previewHomeworkInfo.vedioUrl" maxlength="500"></input>
+                   		<input ng-if="isView" type="text" style="width:400px;" ng-model="previewHomeworkInfo.vedioUrl" maxlength="500" disabled></input>
+                   	</div>
+                </div>
+                <div class="modal-footer" ng-if="isEdit">
+                    <button type="button" class="btn btn-success c5-lable" ng-click="savePreviewHomework(0)" ng-disabled="form.$invalid">发送</button>
+                    <button type="button" class="btn btn-success c5-lable" ng-click="savePreviewHomework(1)" ng-disabled="form.$invalid">保存</button>
+                </div>
+                <div class="modal-footer" ng-if="isView">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

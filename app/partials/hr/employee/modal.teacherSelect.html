@@ -1,0 +1,53 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+  	<div class="modal-dialog" style="min-width: 840px;">
+    	<div class="modal-content">
+      		<div class="modal-header">
+        		<button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+        		<h4 class="modal-title" ng-bind="teacherModelTitle"></h4>
+      		</div>
+      		<div class="modal-body pb-20">
+      			员工姓名：<input type="text" ng-model="teacherFilter.teacherName" />
+		        <button ng-click="getTeachersListByFilter()">查询</button>
+		        <div class="br-gray pl-0"  style="overflow-x: auto">
+					<table class="table table-bordered table-striped table-condensed mt-table1" st-pipe="getTeachersList" st-table="teacherList">
+						<thead class="table table-bordered table-striped table-condensed">
+							<tr>
+								<th>&nbsp;</th>
+								<th>老师姓名</th>
+								<th>岗位</th>
+								<th>手机</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="row in teacherList">
+								<td>
+							    	<input type="checkbox" ng-checked="isSelected(row.userId)" ng-click="selectTeacher(row)" value="{{$index}}" >
+							    </td>
+								<td>{{row.username}}</td>
+								<td>{{row.positionName}}</td>
+								<td>{{row.mobile}}</td>
+							</tr>
+						</tbody>
+						<tbody ng-show="isRemindLoading">
+							  <tr>
+								  <td colspan="3" class="text-center"><div class="loading-indicator"></div></td>
+							  </tr>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td class="text-center" st-pagination="t1" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="3">
+								</td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+      		</div>
+			<div class="modal-footer">
+			  	<button type="button" class="btn btn-default" ng-click="cancleSelect()">取消</button>
+			  	<button type="button" class="btn btn-success c5-lable" ng-click="$hide()">确定</button>
+			</div>
+    	</div>
+  	</div>
+</div>
+
+

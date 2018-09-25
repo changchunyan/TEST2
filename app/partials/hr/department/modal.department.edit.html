@@ -1,0 +1,156 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="form">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group" ng-class="{ 'has-error': form.name.$dirty && form.name.$error.required }">
+                        <label for="name">部门名称</label>
+                        <input type="text" name="name" id="name" class="form-control" ng-model="department.name" required />
+                        <span ng-show="form.name.$dirty && form.name.$error.required" class="help-block" required>请输入岗位名称</span>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': form.contractCompany.$dirty && form.contractCompany.$error.required }">
+                        <label for="contractCompany">合同签署单位</label>
+                        <input type="text" name="contractCompany" id="contractCompany" class="form-control" ng-model="department.contractCompany"
+                        />
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': form.projectSettingId.$dirty && form.projectSettingId.$error.required }">
+                        <label for="contractCompany">所属项目</label>
+                        <select ng-model="department.projectSettingId" ng-change="changeProjectSetting(department)" class="form-control" name="projectSettingId"
+                            id="projectSettingId" ng-options="tl.id as tl.projectName for tl in projectSettings"></select>
+                    </div>
+                    <div class="row radio">
+                        <input type="checkbox" name="isDistrict" ng-model="department.isDistrict" disabled/> &nbsp;&nbsp;是否是大区
+                    </div>
+					<div class="row radio">
+                        <input type="checkbox" name="isBranch" ng-model="department.isBranch" disabled/> &nbsp;&nbsp;是否是分公司
+                    </div>
+                    <div class="row radio">
+                        <input type="checkbox" name="isRegion" ng-model="department.isRegion" disabled/> &nbsp;&nbsp;是否是区域
+                    </div>
+                    <div ng-if="department.isRegion">
+                        <div class="row">
+                            <div class="col-sm-8 form-group">
+                                <label for="district" class="col-sm-4 control-label">所属大区</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="department.district" name="district" id="district" class="form-control" ng-options="tl.departmentId as tl.name for tl in districts"
+                                        disabled required>
+                                        <option value="">------请选择------</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row radio">
+                        <input type="checkbox" name="isSchool" ng-model="department.isSchool" /> &nbsp;&nbsp;是否是校区
+                    </div>
+                    <div class="row radio">
+                        <input type="checkbox" name="isSchoolPermissible" ng-model="department.isSchoolPermissible" /> &nbsp;&nbsp;是否开放时间权限
+                    </div>
+                    <div class="row radio">
+                        <input type="checkbox" name="isUseEContract" ng-model="department.isUseEContract" /> &nbsp;&nbsp;是否使用电子合同
+                    </div>
+                    <div class="row radio">
+                        <input type="checkbox" name="isOutbound" ng-model="department.isOutbound" /> &nbsp;&nbsp;外呼模块
+                    </div>
+                    <div ng-if="department.isSchool">
+                        <div class="row">
+                            <div class="col-sm-8 form-group">
+                                <label for="schoolNature" class="col-sm-4 control-label">校区性质</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="department.schoolNature" name="schoolNature" id="schoolNature" class="form-control" ng-options="tl.id as tl.name for tl in dictData.schoolNature"
+                                        required>
+                                        <option value="">------请选择------</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-8 form-group">
+                                <label for="provinceCode" class="col-sm-4 control-label">所属大区</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="department.district" name="district" id="district" class="form-control" ng-options="tl.departmentId as tl.name for tl in districts"
+                                        disabled required>
+                                        <option value="">------请选择------</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-8 form-group">
+                                <label for="region" class="col-sm-4 control-label">所属区域</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="region" id="region" class="form-control" value="{{department.region.name}}" disabled required />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-8 form-group">
+                                <label for="provinceCode" class="col-sm-4 control-label">所属省</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="department.provinceCode" name="provinceCode" id="provinceCode" class="form-control" ng-options="option.provinceCode as option.provinceName for option in provinces"
+                                        ng-change="getCityByProvince(department.provinceCode)" required>
+                                        <option value="">------请选择------</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-8 form-group">
+                                <label for="cityCode" class="col-sm-4 control-label">所属市</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="department.cityCode" name="cityCode" id="cityCode" class="form-control" ng-options="option.cityCode as option.cityName for option in cities"
+                                        ng-change="getAreaByCity(department.cityCode)" required>
+                                        <option value="">------请选择------</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-8 form-group">
+                                <label for="areaCode" class="col-sm-4 control-label">所属区(县)</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="department.areaCode" name="areaCode" id="areaCode" class="form-control" ng-options="option.areaCode as option.areaName for option in areas">
+                                        <option value="">------请选择------</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-8 form-group">
+                                <label for="areaCode" class="col-sm-4 control-label">公司名称</label>
+                                <div class="col-sm-8">
+                                    <input name="schoolCompanyName" id="schoolCompanyName" class="form-control" ng-model="department.schoolCompanyName" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-8 form-group">
+                                <label for="areaCode" class="col-sm-4 control-label">公司详细地址</label>
+                                <div class="col-sm-8">
+                                    <input name="schoolCompanyAddress" id="schoolCompanyAddress" class="form-control" ng-model="department.schoolCompanyAddress"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-8 form-group">
+                                <label for="areaCode" class="col-sm-4 control-label">公司电话</label>
+                                <div class="col-sm-8">
+                                    <input name="schoolCompanyPhone" id="schoolCompanyPhone" class="form-control" ng-model="department.schoolCompanyPhone" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                    <button type="button" class="btn btn-success c5-lable" ng-click="updateDepartment()" ng-disabled="form.$invalid">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

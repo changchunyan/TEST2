@@ -1,0 +1,37 @@
+<div class="table-responsive">
+	<!--<div class="table-title">兑换余额记录列表</div>-->
+    <table st-pipe="getExchangeBalanceList" st-table="exchangeBalances" class="table table-bordered table-striped table-condensed">
+        <thead>
+        <tr>
+        	<td>合同编号</td>
+        	<td>兑换日期</td>
+        	<td>兑换课时</td>
+        	<td>兑换金额</td>
+        	<td>兑换后剩余课时</td>
+        	<td>兑换后剩余金额</td>
+        	<td>经办人</td>
+        </tr>
+        </thead>
+        <tbody>
+	        <tr ng-repeat="row in exchangeBalances">
+	        	<td>{{row.orderNo}}</td>
+	        	<td>{{row.createdAt | date:'yyyy-MM-dd'}}</td>
+	        	<td>{{row.exchangeNum}}</td>
+	        	<td>{{row.exchangeAmount}}</td>
+	        	<td>{{row.extraNum}}</td>
+	        	<td>{{row.extraAmount}}</td>
+	        	<td>{{row.createName}}</td>
+	        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="12">
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+<script>
+    clearInterval(setLetBegin)
+    setLetBegin = null
+</script>

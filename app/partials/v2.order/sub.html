@@ -1,0 +1,43 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true" style="overflow-y:auto">
+    <div class="modal-dialog" style="width:80%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">关联订单展示</h4>
+            </div>
+            <div class="modal-body mt-modal-order">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>合同号</th>
+                        <th>方式</th>
+                        <th>签约形式</th>
+                        <th>总课时</th>
+                        <th>充值金额</th>
+                        <th>应实付金额</th>
+                        <th>折扣</th>
+                        <th>尾款金额</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="item in suborders">
+                        <td>{{item.orderNo}}</td>
+                        <td>{{item.orderCategory|categoryF:item.orderCategory}}</td>
+                        <td>{{item.masterSlaveRelation==1?'主合同':''}}{{item.masterSlaveRelation==2?'附加协议':''}}</td>
+                        <td>{{item.totalOriginalNum}}</td>
+                        <td>{{item.orderCategory == 3?item.totalPrice:''}}</td>
+                        <td>{{item.realTotalAmount}}</td>
+                        <td>{{((item.realTotalAmount / item.totalPrice)*100).toFixed(1)}}%</td>
+                        <!--<td>{{((item.realTotalAmount / (item.privilegeAmount+item.payDueAmount))*100).toFixed(1)}}%</td>-->
+                        <td>{{item.payDueAmount}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success c5-lable" ng-click="$hide()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>

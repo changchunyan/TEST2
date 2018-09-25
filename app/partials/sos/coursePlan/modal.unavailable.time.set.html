@@ -1,0 +1,95 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+	<form class="modal-dialog hk-set-this-week form-horizontal">
+    	<div class="modal-content">
+      		<div class="modal-header">
+        		<button type="button" class="close" aria-label="Close" ng-click="hideUTSModal()"><span aria-hidden="true">&times;</span></button>
+        		<h4 class="modal-title" ng-bind="utsmodalTitle"></h4>
+      		</div>
+      		<div class="modal-body">
+				<div class="row">
+					<div class="col-sm-6 form-group" >
+						<label  class="col-sm-4 control-label">老师姓名</label>
+						<div class="col-sm-8 m0">
+							<input type="text" class="form-control ng-pristine " style="display: inline-block;width: 50%" name="username" id="username" ng-model="selectedTeacher.username" disabled>
+							<button type="button" class="btn btn-default bg-color-blue" ng-click="showTeacherList()">选择教师</button>
+						</div>
+					</div>
+					<div class="col-sm-6 form-group" >
+						<label  class="col-sm-4 control-label">所属校区</label>
+						<div class="col-sm-8">
+							<label class="form-control">{{selectedTeacher.deptname}}</label>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6 form-group" >
+						<label  class="col-sm-4 control-label">科目</label>
+						<div class="col-sm-8">
+							<label class="form-control">{{selectedTeacher.subject_name}}</label>
+						</div>
+					</div>
+					<div class="col-sm-6 form-group" >
+						<label  class="col-sm-4 control-label">年级段</label>
+						<div class="col-sm-8">
+							<label class="form-control">{{selectedTeacher.teacher_grade}}</label>
+						</div>
+					</div>
+				</div>
+				<hr/>
+				<div class="row" style="margin-bottom: 5px;">
+					<div class="col-sm-12 form-group m0 br-gray pl-0 pr-0">
+						 <h2  class="pl-20">不可排课时间</h2>
+						<table st-pipe="getTeacherUnavailableTime()" st-table="employees" class="table table-bordered table-striped mt-table1">
+							<thead>
+								<tr>
+									<td>星期</td>
+									<td>不可排开始时间</td>
+									<td>不可排结束时间</td>
+									<td>操作</td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="unavailableTime in selectedTeacher.unavailableTimeList track by $index">
+									<td>{{unavailableTime.dayOfWeek}}</td>
+									<td>{{unavailableTime.startTime}}</td>
+									<td>{{unavailableTime.endTime}}</td>
+									<td>
+										<a ng-click="remove($index)" title="删除">
+											<span class="glyphicon glyphicon-delete"></span>
+										</a>
+									</td>
+								</tr>
+							</tbody>
+							<tbody ng-show="isLoading">
+					            <tr>
+					                <td colspan="4" class="text-center"><div class="loading-indicator"></div>
+					                </td>
+					            </tr>
+					        </tbody>
+				            <tfoot>
+				                <tr>
+				                    <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="4">
+				                    </td>
+				                </tr>
+				            </tfoot>
+						</table>
+						<h3 class="h3-o2o f14 pl-20 of" style="margin-top: 10px">
+							<a ng-click="showAddUnavaliableTimeView()" class="yws-left width10 add-a">添加</a>
+							<p style="width:80%;" class="yws-right text-right pr-20">
+								<label ng-class="{'active':hkThisweek}" for="hk-input-1"  ng-click="hchooseThisWeek()">设置本周</label>
+								<input style="display: none" name="thisweek" id="hk-input-1" type="checkbox" value="1">
+								<label ng-class="{'active':hkNextweek}" for="hk-input-2" ng-click="hchooseNextWeek()">设置下周</label>
+								<input style="display: none"  name="nextweek" id="hk-input-2" type="checkbox" value="1"></p>
+						</h3>
+					</div>
+				</div>
+			</div>
+	        <div class="modal-footer">
+	            <div style="float:right;">
+	                <button class="btn btn-default" ng-click="hideUTSModal()">取消</button>
+	                <button class="btn btn-success c5-lable" ng-click="doAddUnavaliableTime()">提交设置</button>
+	            </div>
+	        </div>
+        </div>
+	</form>
+</div>

@@ -1,0 +1,129 @@
+<style>
+    .active {
+        border-bottom: 2px solid peru;
+    }
+
+    .activeTxt {
+        color: blueviolet;
+    }
+
+    .mt-tree li {
+        display: block;
+    }
+
+    .mt-tree li + li {
+        margin-left: 0;
+    }
+
+    *::-webkit-scrollbar-corner {
+        background: none;
+    }
+
+    .mt-tree {
+        width: 500px;
+        margin: 0 auto;
+    }
+
+    .mt-tree .box-with-right-border {
+        padding: 20px;
+        box-sizing: border-box;
+        min-height: 400px;
+        max-height: 60vh;
+        overflow-y: auto;
+    }
+</style>
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true"
+     ng-controller="ClassManagementController as cmc">
+    <div class="modal-dialog form-horizontal hk-call-name-course">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">切换到指定校区</h4>
+            </div>
+            <div class="modal-body mt-modal-order">
+                <div class="mt-20">
+                    <!-- 修改开始 -->
+                    <div class="mt-tree" ng-init="getAllDepartments()">
+                        <div style="display:flex; width:80%;margin:0 auto;">
+                            <input ng-change="searchSpecifyLocal(changeSchoolName)" ng-model="changeSchoolName"
+                                   type="text" style="width:50%; margin:0 auto; display:block; flex:1;"
+                                   placeholder="搜索校区...">
+                            <a href="javascript:;" class="btn btn-small btn-default" ng-click="chooseStep4()">返回原有岗位</a>
+                        </div>
+                        <div class="box-with-right-border">
+                            <treecontrol class="tree-classic"
+                                         tree-model="departments"
+                                         options="treeOptions"
+                                         on-selection="selectNode(node,index)"
+                                         selected-node="node1">
+                                {{node.name}}
+                            </treecontrol>
+                        </div>
+                    </div>
+                    <!-- 修改结束 -->
+                    <!--<div style="margin:0 auto; width:50%; border:1px solid #dfdfdf; margin-bottom:20px;">
+                        <div style="text-align:center; display:flex;">
+                            <div ng-init="schoolNature = 1" style="height:36px; flex:1;">
+                                <a href="javascript:;" ng-click="changeSchoolNature(1);schoolNature = 1;" style="line-height:34px; display:inline-block; width:100%;"
+                                    ng-class="{'active':schoolNature == 1}">一对一直营职业部</a>
+                            </div>
+                            <div style="flex:1;height:36px;">
+                                <a href="javascript:;" ng-click="changeSchoolNature(3);schoolNature = 3;" style="line-height:34px; display:inline-block; width:100%;"
+                                    ng-class="{'active':schoolNature == 3}" ng-disabled="isBUCluster">一对一直盟事业部</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="width:50%; margin:0 auto;">
+                        <div class="col-sm-3" style="max-height:200px;overflow:scroll;">
+                            <ul style="cursor:pointer;">
+                                <li style="display:flex;" ng-repeat="row in step1 track by $index">
+                                    <span style="flex:1;" href="javascript:;" ng-click="chooseStep1(row,$index)" ng-class="{'activeTxt':$index == step1Index}">{{row.name}}</span>
+                                    <span ng-if="$index == step1Index">
+                                        —
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-3" style="max-height:200px;overflow:scroll">
+                            <ul style="cursor:pointer;">
+                                <li style="display:flex;" ng-repeat="row in step2 track by $index">
+                                    <span style="flex:1;" href="javascript:;" ng-click="chooseStep2(row,$index)" ng-class="{'activeTxt':$index == step2Index}">{{row.name}}</span>
+                                    <span ng-if="$index == step2Index">
+                                        —
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-3" style="max-height:200px;overflow:scroll">
+                            <ul style="cursor:pointer;">
+                                <li style="display:flex;" ng-repeat="row in step3 track by $index">
+                                    <span style="flex:1;" href="javascript:;" ng-click="chooseStep3(row,$index)" ng-class="{'activeTxt':$index == step3Index}">{{row.name}}</span>
+                                    <span ng-if="$index == step3Index">
+                                        —
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-3" style="max-height:200px;overflow:scroll">
+                            <ul style="cursor:pointer;" ng-if="step4">
+                                <li style="display:flex;" ng-repeat="row in step4 track by $index">
+                                    <span style="flex:1;" href="javascript:;" ng-click="chooseStep4(row,$index)">{{row.name}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>-->
+                </div>
+            </div>
+            <!-- <div class="modal-footer">
+                <button type="button" class="btn btn-default" ng-click="$hide()">关闭</button>
+                        <button type="button" class="btn btn-success hk-co-shenhe" ng-click="$hide()">确认</button>
+                    </div> -->
+        </div>
+    </div>
+</div>
+<style>
+    ul li a {
+        color: #000;
+    }
+</style>

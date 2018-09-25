@@ -1,0 +1,117 @@
+<div class="table-responsive" style=" overflow-y:hidden;">
+	<!-- 汇总表格  -->
+    <table st-pipe="getSummary" st-table="classHourSummary" class="table table-bordered table-striped"
+    	ng-if="currentTable==='1'">
+        <thead>
+	        <tr>
+	        	<th rowspan="2" style="font-weight: bold;" ng-if="viewTeacher">姓名</th>
+	        	<th rowspan="2" style="font-weight: bold;" ng-if="viewTeacher">岗位</th>
+	        	<th rowspan="2" style="font-weight: bold;" ng-if="!viewTeacher">校区名称</th>
+	        	<th rowspan="2" style="font-weight: bold;" class="bi-th1">一对一课时数</th>
+	        	<th rowspan="2" style="font-weight: bold;" class="bi-th1">一对一时长</th>
+	        	<th rowspan="2" style="font-weight: bold;" class="bi-th5">体验课时数</th>
+	        	<th rowspan="2" style="font-weight: bold;" class="bi-th5">体验时长</th>
+	        	<th rowspan="2" style="font-weight: bold;" class="bi-th2">一对多课时数</th>
+	        	<th rowspan="2" style="font-weight: bold;" class="bi-th2">一对多时长</th>
+	        	<th rowspan="2" style="font-weight: bold;" class="bi-th3">班课课时数</th>
+	        	<th rowspan="2" style="font-weight: bold;" class="bi-th3">班课时长</th>
+	        	<th colspan="2" style="font-weight: bold;" class="bi-th4">课前预习</th>
+	        	<th colspan="2" style="font-weight: bold;" class="bi-th4">备课笔记</th>
+	        	<th colspan="2" style="font-weight: bold;" class="bi-th4">课后作业</th>
+	        </tr>
+	        <tr>
+	        	<td style="font-weight: bold;">已发送</td>
+	        	<td style="font-weight: bold;">未发送</td>
+	        	<td style="font-weight: bold;">已发送</td>
+	        	<td style="font-weight: bold;">未发送</td>
+	        	<td style="font-weight: bold;">已发送</td>
+	        	<td style="font-weight: bold;">未发送</td>
+	        </tr>
+        </thead>
+        <tbody>
+	        <tr ng-repeat="row in summaryModels">
+	        	<td ng-if="viewTeacher">{{row.teacherName}}</td>
+	        	<td ng-if="viewTeacher">{{row.positionName}}</td>
+	        	<td ng-if="!viewTeacher">{{row.schoolName}}</td>
+	        	<td class="bi-th1">{{row.oneToOneClassHours}}</td>
+	        	<td class="bi-th1">{{row.oneToOneTimeLong}}</td>
+	        	<td class="bi-th5">{{row.experienceClassHours}}</td>
+	        	<td class="bi-th5">{{row.experienceTimeLong}}</td>
+	        	<td class="bi-th2">{{row.oneToMoreClassHours}}</td>
+	        	<td class="bi-th2">{{row.oneToMoreTimeLong}}</td>
+	        	<td class="bi-th3">{{row.classesClassHours}}</td>
+	        	<td class="bi-th3">{{row.classesTimeLong}}</td>
+	        	<td class="bi-th4">{{row.previewAlreadyTransmission}}</td>
+	        	<td class="bi-th4">{{row.previewNoTransmission}}</td>
+	        	<td class="bi-th4">{{row.handoutsAlreadyTransmission}}</td>
+	        	<td class="bi-th4">{{row.handoutsNoTransmission}}</td>
+	        	<td class="bi-th4">{{row.reviewAlreadyTransmission}}</td>
+	        	<td class="bi-th4">{{row.reviewNoTransmission}}</td>
+	        </tr>
+        </tbody>
+        <tfoot>
+        	<tr ng-if="isViewSummary" class="classAllCount">
+	        	<td colspan="2">总计</td>
+	        	<td class="bi-th1">{{summaryModelForTotal.oneToOneClassHours | number:1}}</td>
+	        	<td class="bi-th1">{{summaryModelForTotal.oneToOneTimeLong | number:1}}</td>
+	        	<td class="bi-th5">{{summaryModelForTotal.experienceClassHours | number:1}}</td>
+	        	<td class="bi-th5">{{summaryModelForTotal.experienceTimeLong | number:1}}</td>
+	        	<td class="bi-th2">{{summaryModelForTotal.oneToMoreClassHours | number:1}}</td>
+	        	<td class="bi-th2">{{summaryModelForTotal.oneToMoreTimeLong | number:1}}</td>
+	        	<td class="bi-th3">{{summaryModelForTotal.classesClassHours | number:1}}</td>
+	        	<td class="bi-th3">{{summaryModelForTotal.classesTimeLong | number:1}}</td>
+	        	<td class="bi-th4">{{summaryModelForTotal.previewAlreadyTransmission | number:1}}</td>
+	        	<td class="bi-th4">{{summaryModelForTotal.previewNoTransmission | number:1}}</td>
+	        	<td class="bi-th4">{{summaryModelForTotal.handoutsAlreadyTransmission | number:1}}</td>
+	        	<td class="bi-th4">{{summaryModelForTotal.handoutsNoTransmission | number:1}}</td>
+	        	<td class="bi-th4">{{summaryModelForTotal.reviewAlreadyTransmission | number:1}}</td>
+	        	<td class="bi-th4">{{summaryModelForTotal.reviewNoTransmission | number:1}}</td>
+	        </tr>
+            <tr>
+                <td colspan="13" class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" >
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    <!-- 明细列表 -->
+    <table st-pipe="getStatistics" st-table="classHourStatistics" class="table table-bordered table-striped"
+    	ng-if="currentTable==='2'">
+        <thead>
+	        <tr>
+	        	<td style="font-weight: bold;">序号</td>
+	        	<td style="font-weight: bold;">上课类型</td>
+	        	<td style="font-weight: bold;">上课对象</td>
+	        	<td style="font-weight: bold;">上课时间</td>
+	        	<td style="font-weight: bold;">所属校区</td>
+	        	<td style="font-weight: bold;">消课状态</td>
+	        	<td style="font-weight: bold;">课前预习</td>
+	        	<td style="font-weight: bold;">备课笔记</td>
+	        	<td style="font-weight: bold;">课后作业</td>
+	        </tr>
+        </thead>
+        <tbody>
+	        <tr ng-repeat="row in statisticsModels">
+	        	<td>{{$index+1+statisticsTableState.pagination.start}}</td>
+	        	<td>{{row.type|coursePlanType:row.type}}</td>
+	        	<td ng-if="row.type===7">{{row.className}}</td>
+	        	<td ng-if="row.type!=7&&row.type!=2&&row.type!=9">{{row.student_name}}</td>
+	        	<td ng-if="row.type==2||row.type==9">{{row.groupName}}</td>
+	        	<td>{{row.start_time|date:'yyyy-MM-dd HH:mm:ss'}}</td>
+	        	<td ng-if="row.type===7">{{row.name1}}</td>
+	        	<td ng-if="row.type!=7&&row.type!=2&&row.type!=9">{{row.name}}</td>
+	        	<td ng-if="row.type==2||row.type==9">{{row.name1}}</td>
+	        	<td ng-if="row.type===7">---</td>
+	        	<td ng-if="row.type!=7">{{row.is_past|coursePlanPastStatus:row.is_past}}</td>
+	        	<td>{{row.previewHomework|coursePlanWorkStatus:row.previewHomework}}</td>
+	        	<td>{{row.teacherHandouts|coursePlanWorkStatus:row.teacherHandouts}}</td>
+	        	<td>{{row.reviewHomework|coursePlanWorkStatus:row.reviewHomework}}</td>
+	        </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="13" class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" >
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

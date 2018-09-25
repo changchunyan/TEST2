@@ -1,0 +1,172 @@
+<div class="table-responsive" style=" overflow-y:hidden">
+	<!-- 汇总表  -->
+    <table st-pipe="getChannelSummary" st-table="channelOrders" class="table table-bordered table-striped"
+    	ng-if="currentTable === '1' && channelTab === '0'">
+        <thead>
+        <tr>
+        	<td style="font-weight: bold;">序号</td>
+        	<td style="font-weight: bold;">渠道</td>
+        	<td style="font-weight: bold;" data-content="指定周期内的到访人数，NOT人次" data-placement="top" webui-popover>到访量</td>
+        	<td style="font-weight: bold;" data-content="指定周期内的体验人数，NOT人次" data-placement="top" webui-popover>体验量</td>
+        	<td style="font-weight: bold;" data-content="指定周期内新签且无退单记录的订单数总和" data-placement="top" webui-popover>签单量</td>
+        	<td style="font-weight: bold;" data-content="指定周期内新签且无退单记录的订单金额总和(订单金额是已优惠后的金额)" data-placement="top" webui-popover>签单金额</td>
+        	<td style="font-weight: bold;" data-content="指定周期内新签且无退单记录的订单实收金额总和(订单金额是已优惠后的金额)" data-placement="top" webui-popover>实收金额</td>
+        	<td style="font-weight: bold;" data-content="签单金额/签单数" data-placement="top" webui-popover>平均单底</td>
+        	<td style="font-weight: bold;" data-content="到访且体验数/到访数" data-placement="top" webui-popover>到访体验率</td>
+        	<td style="font-weight: bold;" data-content="体验且签单数/体验数" data-placement="top" webui-popover>体验签单率</td>
+        	<td style="font-weight: bold;" data-content="到访且签单数/到访数" data-placement="left" webui-popover>到访签单率</td>
+        </tr>
+        </thead>
+        <tbody>
+	        <tr ng-if="!$last" ng-repeat="model in summaryModels">
+	         	<td>{{$index+1}}</td>
+	         	<td>{{model.channelName}}</td>
+	         	<td>{{model.arrivalNum}}</td>
+	         	<td>{{model.experienceNum}}</td>
+	         	<td>{{model.orderNum}}</td>
+	         	<td>{{model.orderAmount|number:2}}</td>
+	         	<td>{{model.payAmount|number:2}}</td>
+	         	<td>{{model.orderAmount/model.orderNum | number:2}}</td>
+	         	<td>{{(model.experienceNum/model.arrivalNum)*100 | number:2}}%</td>
+	         	<td>{{(model.orderNum/model.experienceNum)*100 | number:2}}%</td>
+	         	<td>{{(model.orderNum/model.arrivalNum)*100 | number:2}}%</td>
+	        </tr>
+        </tbody>
+        <tbody ng-show="isLoading">
+        <tr>
+            <td colspan="8" class="text-center">
+            	<div class="loading-indicator"></div>
+            </td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+        	<td colspan="2" style="height: 40px" align="center">总计</td>
+			<td>{{summaryModels[summaryModels.length-1].arrivalSum}}</td>
+			<td>{{summaryModels[summaryModels.length-1].experienceSum}}</td>
+			<td>{{summaryModels[summaryModels.length-1].orderSum}}</td>
+			<td>{{summaryModels[summaryModels.length-1].orderAmountSum|number:2}}</td>
+			<td>{{summaryModels[summaryModels.length-1].payAmountSum|number:2}}</td>
+			<td>{{summaryModels[summaryModels.length-1].averageSingleBottom|number:2}}</td>
+			<td>{{summaryModels[summaryModels.length-1].experienceRateSum*100|number:2}}%</td>
+			<td>{{summaryModels[summaryModels.length-1].orderExperienceRateSum*100| number:2}}%</td>
+			<td>{{summaryModels[summaryModels.length-1].orderRateSum*100| number:2}}%</td>
+        </tr>
+        </tfoot>
+    </table>
+    <!-- 明细表  -->
+    <table st-pipe="getStatistics" st-table="channelOrders" class="table table-bordered table-striped"
+    	ng-if="currentTable === '2' && channelTab === '0'">
+        <thead>
+        <tr>
+        	<th rowspan="2" class="bi-th0" >序号</th>
+        	<th ng-if="!isSchoolUser" class="bi-th0" rowspan="2" >校区</th>
+        	<th colspan="5" class="bi-th1" >总计</th>
+        	<th colspan="5" class="bi-th2" >原始数据</th>
+        	<th colspan="5" class="bi-th3">市场</th>
+        	<th colspan="5" class="bi-th4">媒体</th>
+        	<th colspan="5" class="bi-th5">课程顾问介绍 </th>
+        	<th colspan="5" class="bi-th6">学习顾问推荐</th>
+        	<th colspan="5" class="bi-th1">线上O2O</th>
+        </tr>
+        <tr>
+        	<!-- 总计   -->
+        	<td class="bi-th1">到访数</td>
+        	<td class="bi-th1">体验数</td>
+        	<td class="bi-th1">签单数</td>
+        	<td class="bi-th1">签单金额</td>
+        	<td class="bi-th1">实收金额</td>
+        	<!-- 原始数据 -->
+        	<td class="bi-th2">到访数</td>
+        	<td class="bi-th2">体验数</td>
+        	<td class="bi-th2">签单数</td>
+        	<td class="bi-th2">签单金额</td>
+        	<td class="bi-th2">实收金额</td>
+        	<!-- 市场   -->
+        	<td class="bi-th3">到访数</td>
+        	<td class="bi-th3">体验数</td>
+        	<td class="bi-th3">签单数</td>
+        	<td class="bi-th3">签单金额</td>
+        	<td class="bi-th3">实收金额</td>
+        	<!-- 媒体  -->
+        	<td class="bi-th4">到访数</td>
+        	<td class="bi-th4">体验数</td>
+        	<td class="bi-th4">签单数</td>
+        	<td class="bi-th4">签单金额</td>
+        	<td class="bi-th4">实收金额</td>
+        	<!-- 课程顾问介绍   -->
+        	<td class="bi-th5">到访数</td>
+        	<td class="bi-th5">体验数</td>
+        	<td class="bi-th5">签单数</td>
+        	<td class="bi-th5">签单金额</td>
+        	<td class="bi-th5">实收金额</td>
+        	<!-- 学习顾问推荐  -->
+        	<td class="bi-th6">到访数</td>
+        	<td class="bi-th6">体验数</td>
+        	<td class="bi-th6">签单数</td>
+        	<td class="bi-th6">签单金额</td>
+        	<td class="bi-th6">实收金额</td>
+        	<!-- 线上O2O  -->
+        	<td class="bi-th1">到访数</td>
+        	<td class="bi-th1">体验数</td>
+        	<td class="bi-th1">签单数</td>
+        	<td class="bi-th1">签单金额</td>
+        	<td class="bi-th1">实收金额</td>
+        </tr>
+        </thead>
+        <tbody>
+         <tr ng-repeat="channelOrder in channelOrders">
+         	<td>{{$index+1+statisticsTableState.pagination.start}}</td>
+         	<td ng-if="!isSchoolUser">{{channelOrder.schoolName}}</td>
+         	<!-- 总计  -->
+         	<td>{{channelOrder.totalVisitCount}}</td>
+         	<td>{{channelOrder.totalExperienceCount}}</td>
+         	<td>{{channelOrder.totalOrderCount}}</td>
+         	<td>{{channelOrder.totalOrderAmount}}</td>
+         	<td>{{channelOrder.totalRealPaymentAmount}}</td>
+         	<!-- 原始数据 -->
+         	<td>{{channelOrder.originalVisitCount}}</td>
+         	<td>{{channelOrder.originalExperienceCount}}</td>
+         	<td>{{channelOrder.originalOrderCount}}</td>
+         	<td>{{channelOrder.originalOrderAmount}}</td>
+         	<td>{{channelOrder.originalRealPaymentAmount}}</td>
+         	<!-- 市场  -->
+         	<td>{{channelOrder.marketVisitCount}}</td>
+         	<td>{{channelOrder.marketExperienceCount}}</td>
+         	<td>{{channelOrder.marketOrderCount}}</td>
+         	<td>{{channelOrder.marketOrderAmount}}</td>
+         	<td>{{channelOrder.marketRealPaymentAmount}}</td>
+         	<!-- 媒体  -->
+         	<td>{{channelOrder.mediaVisitCount}}</td>
+         	<td>{{channelOrder.mediaExperienceCount}}</td>
+         	<td>{{channelOrder.mediaOrderCount}}</td>
+         	<td>{{channelOrder.mediaOrderAmount}}</td>
+         	<td>{{channelOrder.mediaRealPaymentAmount}}</td>
+         	<!-- 课程顾问介绍  -->
+         	<td>{{channelOrder.introduceVisitCount}}</td>
+         	<td>{{channelOrder.introduceExperienceCount}}</td>
+         	<td>{{channelOrder.introduceOrderCount}}</td>
+         	<td>{{channelOrder.introduceOrderAmount}}</td>
+         	<td>{{channelOrder.introduceRealPaymentAmount}}</td>
+         	<!-- 学习顾问推荐 -->
+         	<td>{{channelOrder.recommendVisitCount}}</td>
+         	<td>{{channelOrder.recommendExperienceCount}}</td>
+         	<td>{{channelOrder.recommendOrderCount}}</td>
+         	<td>{{channelOrder.recommendOrderAmount}}</td>
+         	<td>{{channelOrder.recommendRealPaymentAmount}}</td>
+         	<!-- 线上O2O -->
+         	<td>{{channelOrder.onlineVisitCount}}</td>
+         	<td>{{channelOrder.onlineExperienceCount}}</td>
+         	<td>{{channelOrder.onlineOrderCount}}</td>
+         	<td>{{channelOrder.onlineOrderAmount}}</td>
+         	<td>{{channelOrder.onlineRealPaymentAmount}}</td>
+         </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="13" class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" >
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

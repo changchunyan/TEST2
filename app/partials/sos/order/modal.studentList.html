@@ -1,0 +1,93 @@
+<div class="modal crm-importOrders-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" ng-bind="modalTitleForStudentList"></h4>
+        </div>
+        <div class="modal-body mt-modal-order">
+            <form name="queryStudentsForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="row">
+                    <div class="col-sm-4 form-group">
+                        <label for="name" class=" control-label">学生姓名</label>
+                        <div class="col-sm-6">
+                            <input autocomplete="off" type="text" name="name" id="name" class="form-control" ng-model="studentFilter.name" ng-maxlength="20" />
+                        </div>
+                    </div>
+                    <div class="col-sm-4 form-group">
+                        <label for="phone" class=" control-label">电话号码</label>
+                        <div class="col-sm-6">
+                            <input type="text" name="phone" id="phone" class="form-control" ng-model=" studentFilter.phone" ng-maxlength="11"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 mt-select" style="    min-height: auto;
+    line-height: 50px">
+                        <a class="mt-btn cf bg-color-blue br mt-0" ng-disabled="queryStudentsForm.$invalid" ng-click="queryStudent()">查询</a>
+                        <a class="mt-btn ml15 brc3 mt-0" ng-disabled="queryStudentsForm.$invalid" ng-click="reset()">重置</a>
+                    </div>
+                </div>
+            </form>
+
+            <div class="table-responsive br-gray pl-0" >
+                <table class="table table-bordered table-striped mt-table1" st-pipe="getCrmStudentList" st-table="crmStudentList" style="background-color: #fff;">
+                    <thead>
+                    <tr>
+                        <th>选择</th>
+                        <th>姓名</th>
+                        <th>性别</th>
+                        <th>电话</th>
+                        <th>年级</th>
+                        <th>公立学校</th>
+                        <th>所属人</th>
+                    </tr>
+                    </thead>
+                    <tbody ng-show="!isLoading" ng-controller="callPhoneCtrl">
+                    <tr ng-repeat="row in studentList">
+                        <td><input type="radio" ng-checked="isSelected(row)" ng-click="selectIt(row)" name="crm_student_id" value="{{row.crm_student_id}}"/></td>
+                        <td>{{row.name}}</td>
+                        <td ng-if="row.gender == 1">男</td>
+                        <td ng-if="row.gender == 0">女</td>
+                        <td ng-if="row.gender == undefined"></td>
+                        <td><span>{{row.phone}}</span><span ng-if="row.mother_phone"><br>{{row.mother_phone}}</span><span ng-if="row.father_phone"><br>{{row.father_phone}}</span></td>
+                        <td>{{row.grade_name}}</td>
+                        <td ng-if="row.school_name == undefined"></td>
+                        <td ng-if="row.school_name != undefined">{{row.school_name}}</td>
+                        <td>{{row.belong_user_name}}</td>
+                    </tr>
+                    </tbody>
+                    <tbody ng-show="isLoading">
+                    <tr>
+                        <td colspan="15" class="text-center"><div class="loading-indicator"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="15">
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+
+        <!--    <div class="text-center">
+                <button class="btn btn-success"  ng-click="newCustomerAndOrder()">创建新意向客户并签约</button>
+                <button class="btn btn-success"  ng-click="selectedOrder()">对选中学生签约</button>
+                <button class="btn btn-success"  ng-click="$hide()">取消</button>
+            </div>-->
+
+        </div>
+        <div class="modal-footer text-center ">
+            <div class="yws-left pl-20">
+                <button class="btn btn-success c2-lable"  ng-click="newCustomerAndOrder()">创建新意向客户并签约</button>
+            </div>
+            <div class="yws-right">
+                <button class="btn btn-default"  ng-click="$hide()">取消</button>
+                <button class="btn btn-success c5-lable"  ng-click="selectedOrder()">对选中学生签约</button>
+            </div>
+
+        </div>
+    </div>
+  </div>
+</div>

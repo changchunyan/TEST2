@@ -1,0 +1,154 @@
+<div class="view-frame" ng-controller="InfoController as cmc">
+    <div class="view-left">
+        <nav-side menu-data="menu.subMenu"></nav-side>
+    </div>
+
+    <div class="view-content">
+        <!-- 面包屑 -->
+        <div>
+            <div>
+                <ul class="breadcrumb">
+                    <li><a href="#/">首页</a> <span class="divider"></span></li>
+                    <li><a href="#/o2o-admin">O2O管理系统</a> <span class="divider"></span></li>
+                    <li><a ng-click="showListView()">课程推荐管理</a> <span class="divider"></span></li>
+                    <li class="active">列表</li>
+                </ul>
+            </div>
+        </div>
+        <div ng-if="showPermissions('RecommendManagement')" class="mt-o2o margin-top-10">
+            <div class="tabs-title br-gray-t c3">
+                课程推荐管理<i>?</i>
+            </div>
+            <div>
+                <div class="br-gray">
+                    <h2 class="br0">地区</h2>
+                    <ul class="row m0">
+                        <li class="col-sm-5 col-md-5 col-lg-3">
+                            <lable>省/直辖市</lable>
+                            <select ng-model="course.provinceCode"
+                                    name="course.provinceCode" id="course.provinceCode"
+                                    ng-options="option.provinceCode as option.provinceName for option in provinceList"
+                                    ng-change="changeProvince()">
+                                <option value="">&#45;&#45; 请选择省 &#45;&#45;</option>
+                            </select></li>
+                        <li class="col-sm-5 col-md-5 col-lg-3">
+                            <lable>城市</lable>
+                            <select ng-model="course.cityCode" name="course.cityCode"
+                                    id="course.cityCode"
+                                    ng-options="option.cityCode as option.cityName for option in cityList"
+                                    ng-change="cityChange()">
+                                <option value="">&#45;&#45; 请选择市 &#45;&#45;</option>
+                            </select></li>
+                    </ul>
+                    <h2 class="br0">设置方式<span><i class="i-br">?</i>最多可推荐10条课程</span></h2>
+                    <h3 class="h3-o2o f14">
+                        <span ng-class="{'active':type==2}" ng-click="changeType(2)">自动推荐订单成交量最高课程</span>
+                        <span ng-class="{'active':type==1}" ng-click="changeType(1)">自动推荐最新上架课程</span>
+                        <span ng-class="{'active':type==4}" ng-click="changeType(4)">手动推荐</span>
+                    </h3>
+                </div>
+            </div>
+            <div class="br-gray pl-0">
+                <div class="hl-40 pl-20"><a ng-if="type==4" class="mt-purple add-a br-4 f14" ng-click="showAddCourseView()">新增课程推荐</a></div>
+                <table class="table table-bordered table-striped table-condensed mt-table1 br0"
+                       st-pipe="autoRecommend" st-table="displayed" ng-if="type!=4">
+                    <thead>
+                    <tr>
+                        <th>校区</th>
+                        <th>产品名称</th>
+                        <th>教师姓名</th>
+                        <th ng-if="type!=2&&type!=3&&type!=4">上架时间</th>
+                        <th ng-if="type==2">订单量</th>
+                        <th ng-if="type==3">综合评分</th>
+                        <th ng-if="type==4">开始时间</th>
+                        <th ng-if="type==4">排序</th>
+                        <th ng-if="type==4">状态</th>
+                        <th ng-if="type==4">操作</th>
+                    </tr>
+
+                    </thead>
+                    <tbody ng-show="!isLoading">
+                    <tr ng-repeat="row in displayed">
+                        <td>{{ row.schoolname }}</td>
+                        <td>{{row.coursename}}</td>
+                        <td>{{row.username}}</td>
+                        <td ng-if="row.type==1">{{row.updated_at | date:'yyyy-MM-dd'}}</td>
+                        <td ng-if="row.type==2">{{row.sumorder}}</td>
+                        <td ng-if="row.type==3">{{row.pingFen}}</td>
+
+                    </tr>
+                    </tbody>
+                    <tbody ng-show="isLoading">
+                    <tr>
+                        <td colspan="4" class="text-center">
+                            <div class="loading-indicator"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+
+                </table>
+                <table class="table table-bordered table-striped table-condensed mt-table1 br0"
+                       st-pipe="getCourseList" st-table="courseList" ng-if="type==4">
+                    <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>校区名称</th>
+                        <th>产品名称</th>
+                        <th>教师姓名</th>
+                        <th>开始时间</th>
+                        <th>排序</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody ng-show="!isCourseLoading">
+                    <tr ng-repeat="row in courseList track by $index">
+                        <td>{{$index+1}}</td>
+                        <td>{{row.schoolName}}</td>
+                        <td>{{row.courseName}}</td>
+                        <td>{{row.teacherName}}</td>
+                        <td>{{row.created_at | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                        <td><input ng-model="row.sort" class="mt-sort-input"  ng-blur="changeCourseSort(row,$index)"/></td>
+                        <td><span ng-if="row.state == true">打开</span>
+                            <span ng-if="row.state == false">关闭</span></td>
+                        <td>
+                            <a class="showUI" id="nw+{{$index}}"  ng-click="nw[$index]=true"><span class="glyphicon glyphicon-caozuo" title="操作"></span></a>
+                            <bubble  ng-if="nw[$index]" for="nw+{{$index}}" align="bottom" close="nw[$index]=false" close-action="outerchick " ng-mouseleave="nw[$index]=false;"><!--ng-mouseleave="nw[$index]=false;"-->
+                                <ul>
+                                    <li>
+                                        <a ng-click="changeCourseState(row)"
+                                           ng-if="showPermissions('RecommendManagement')">
+                                            <span ng-if="row.state == true">关闭</span>
+                                            <span ng-if="row.state == false">打开</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a ng-click="deleteCourse(row)"
+                                           ng-if="showPermissions('RecommendManagement')">
+                                            删除
+                                        </a>
+                                    </li>
+                                </ul>
+                            </bubble>
+                        </td>
+
+                    </tr>
+                    </tbody>
+                    <tbody ng-show="isCourseLoading">
+                    <tr>
+                        <td colspan="8" class="text-center">
+                            <div class="loading-indicator"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td class="text-center" st-pagination="" st-items-by-page="20" colspan="8">
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

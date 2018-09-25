@@ -1,0 +1,42 @@
+<!-- 筛选条件 -->
+<div ng-include="baseHtmlUrl" style="padding: 0px 15px"></div>
+<!-- 表格 -->
+<div class="default-box">
+    <h4>
+                        课程类型   - 明细
+        <span ng-if="!isDay">（从 {{modelStartTime | date : 'yyyy-MM-dd'}} 至 {{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+        <span ng-if="isDay">（{{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+        <span ng-if="presentTime">最新统计时间：{{presentTime}}</span>
+        <button class="btn btn-success bi-list-head" ng-click="getStatisticsAll()">导出列表</button>
+    </h4>
+    <br/>
+    <div class="table-responsive">
+        <table st-pipe="getStatistics" st-table="tableModel" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th style="font-weight: bold;" rowspan="1">排名</th>
+                <th style="font-weight: bold;" rowspan="1"><span>课程类型名称</span></th>
+                <th style="font-weight: bold;" rowspan="1"><span>课程销售量      <img ng-click="orderBy('ext','0')"  ng-src="img/icon/bi/paixu.png"/></span></th>
+                <th style="font-weight: bold;" rowspan="1"><span>签单金额（元）<img ng-click="orderBy('ext','6')" ng-src="img/icon/bi/paixu.png"/></span></th>
+                <th style="font-weight: bold;" rowspan="1"><span>新签金额（元）<img ng-click="orderBy('ext','1')" ng-src="img/icon/bi/paixu.png"/></span></th>
+                <th style="font-weight: bold;" rowspan="1"><span>续费金额（元）<img ng-click="orderBy('ext','2')" ng-src="img/icon/bi/paixu.png"/></span></th>
+                <th style="font-weight: bold;" rowspan="1"><span>推荐金额（元）<img ng-click="orderBy('ext','3')" ng-src="img/icon/bi/paixu.png"/></span></th>
+                <th style="font-weight: bold;" rowspan="1"><span data-content="课程单底=签单金额/课程销售量" data-placement="left"  webui-popover>课程单底（元）<img ng-click="orderBy('ext','4')" ng-src="img/icon/bi/paixu.png"/></span></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="statisticsModel in statisticsModels">
+                <td>{{$index + 1}}</td>
+                <td>{{statisticsModel.className}}</td>
+                <td>{{statisticsModel.courseNum}}</td>
+                <td>{{statisticsModel.realTotalAmountSum}}</td>
+                <td>{{statisticsModel.realTotalAmountNew}}</td>
+                <td>{{statisticsModel.realTotalAmountRenew}}</td>
+                <td>{{statisticsModel.realTotalAmountRecommend}}</td>
+                <td>{{statisticsModel.averageAmount}}</td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>

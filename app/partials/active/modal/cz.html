@@ -1,0 +1,65 @@
+<div class="form-option" style="padding: 20px;">
+    <div class="mt-input-group"><label>总消课金额</label><input  ng-pattern="/^[0-9]+(\.[0-9]{1})?$/" ng-model="setParam.totalConsumers" name="totalConsumers" ng-blur="validatePrice()" class="tc"><span style="color: #2fb0ee;" class="fr ml-20">总可排金额:{{totalHours}}</span><span style="color: #2fb0ee;" class="fr">电子账户金额:{{zhHours}}</span></div>
+    <div>
+                <span class="glyphicon glyphicon-yichang ml15 caveat"
+                      style="background-position: center 4px"></span>
+        <span style="color:#f8d398;">若可排金额不足请清除未消课的排课记录，即可用于活动消课</span>
+    </div>
+    <div st-pipe="getOrderCourseListCZ" st-table="orderCourse" class="br-gray pl-0" id="active_mt">
+        <table class="table mt-table1">
+            <thead>
+            <tr>
+                <th>合同编号</th>
+                <th>订单类型</th>
+                <th>签约时间</th>
+                <th>增加账户金额</th>
+                <th>账户余额</th>
+                <th>可排余额</th>
+                <th>计费方案</th>
+                <th>师资档位</th>
+                <th>本年级单价</th>
+                <th>消课金额</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr  ng-repeat="row in CustomerStudentCourseList">
+                <td >{{row.order_no}}</td>
+                <td>{{row.order_type | orderType:row.order_type}}</td>
+                <td >{{row.contract_start_date | date:'yyyy-MM-dd'}}</td>
+                <td >{{row.total_price}}</td>
+                <td>{{row.additional_amount}}</td>
+                <td>{{row.avaliable_amount}}</td>
+                <td>{{row.scheme_name}}</td><!--row.scheme_name-->
+                <td>{{row.order_teacher_level_name}}</td><!--row.order_teacher_level_name-->
+                <td>{{row.order_charge}}</td><!--row.order_charge-->
+                <td><div class="mt-input-group">
+                    <input ng-model="row.consumersNum" ng-blur="validatePrice($index,'avaliable_amount')"  ng-value="row.consumersNum|number:1">
+                    <div style="    position: relative;
+    height: 22px;
+    width: 173px;
+    margin-left: 0;
+    margin-top: -22px;
+    opacity: 0;"></div>
+                </div></td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr style="height:40px;">
+                <td class="tr" colspan="8">消课课时：{{(classHours||0)|number:1}}</td>
+                <td class="tc" >总计：{{_total_||0}}</td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="mt-20">
+        <div  class="mt-input-group col-33 mt-date" style="position: relative;">
+            <label style="margin-top: 0">消课日期</label>
+            <input ng-model="setParam.consumersTime" type="date" required  name="consumersTime" onchange=""><!-- readonly  onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'1990-01-01',maxDate:'2030-12-31'})"-->
+        </div>
+        <div class="mt-input-group col-50">
+            <label style="width:30%;margin-top: 0">消课原因</label>
+            <input style="width:60%;" ng-model="setParam.consumerRseason" ng-maxlength="20">
+        </div>
+    </div>
+
+</div>

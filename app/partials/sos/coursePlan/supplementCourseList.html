@@ -1,0 +1,185 @@
+<div class="view-frame" ng-controller="SupplementCourseManagementController">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div ng-show="!isAdding" class="view-content user-love">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="#">首页</a> <span class="divider"></span></li>
+                <li><a href="#/sos-admin">学员教务</a> <span class="divider"></span></li>
+                <li class="active">补课管理</li>
+            </ul>
+        </div>
+        <div class="lh21" st-pipe="getSupplementList" st-table="MySupplementList">
+            <!--TODO:查询条件-->
+            <div class="mt-student-m br-gray h-auto no-media ml-0">
+                <div class="rbg mt-select" ng-show="true" >
+                    <ul class="h-auto">
+                        <div class="rbg mt-0" style="border: none;">
+                            <div class="of">
+                                <ul class="h-auto" style="padding-right: 0">
+                                    <ul class="one mt-10 h-auto pr-0 input-180">
+                                        <li class="no-mar ml-0 mr-0">
+                                            <label style="text-align: left">学生姓名</label>
+                                            <br>
+                                            <input placeholder="请输入" id="noMar" ng-model="mySupplementListFilter.studentName" type="search" style="min-width: 116px;margin-right: 15px;" >
+                                        </li>
+                                        <li class="mr-0">
+                                            <label class="belongTo" style="text-align: left">班级名称</label>
+                                            <br>
+                                            <input placeholder="请输入" ng-model="mySupplementListFilter.className" type="search" style="min-width: 116px;margin-right: 15px">
+                                        </li>
+                                        <li style="line-height: 28px" class="mr-0">
+                                            <label style="text-align: left;margin-bottom: 8px">补课状态</label>
+                                            <br>
+                                            <select  ng-model="mySupplementListFilter.state">
+                                                <option value="">请选择</option>
+                                                <option value="1">已安排</option>
+                                                <option value="3" >未安排</option>
+                                                <option value="2">已补课</option>
+                                            </select>
+                                        </li>
+                                        <li class="inline-block time-show lh-auto span-54" style="margin-right:116px;margin-top: 37px">
+                                            <a id="keydown-query" class="mt-btn cf bg-color-blue br ti-0 li-btn-1 pr-0 mt-0" href="javascript:void (0);" ng-click="getSupplementList(mySupplementListTableState)">查询</a>
+                                            <a class="mt-btn ml15 brc3 li-btn-1 pr-0 mt-0 ti-0"  id="resetInputAll" ng-click="resetSelect()">重置</a>
+                                            <a class="more mr-14" style="color:#428bca;" ng-click="changeSelectMore(1,1)">{{selectMoreText}}</a>
+                                        </li>
+                                        <li class="mt-three option no-mar" vr-select changeFun="callServerrecordFilterChange" data-mt="{{nextCourseDatas}}" style="margin-right: 20px"><label class="fl bg-none" style="width:auto;">上课时间</label>
+                                            <input class="three-1">
+                                            <br>
+                                            <div class="three-1">不限</div>
+                                            <input class="three-2 mr-0" readonly type="search" placeholder="" name="bkStartTime" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})" ng-model="mtSeach.start_time">
+                                            <div class="three-2"></div><span class="dao">到</span>
+                                            <input class="three-2 mr-0" readonly type="search" name="bkENdTime" placeholder="" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})" ng-model="mtSeach.end_time">
+                                            <div class="three-2"></div>
+                                        </li>
+                                    </ul>
+                                    <!--更多选项-->
+                                    <li class="w1" ng-if="!selectMore" style="height: 50px;">
+                                        <a ng-click="changeSelectMore(1)" href="javascript:void(0);" class="mt-more" style="margin-top: 35px;">&nbsp;</a>
+                                    </li>
+                                    <ul class="one h-auto pr-0" ng-show="selectMore">
+                                        <ul class="h-auto" style="width: 100%;padding-right: 0;border-top: 1px dashed #ccc;margin-top: 20px;padding-top: 20px;">
+                                            <li class=" ml-0" style="line-height: 28px;margin-right: 15px;">
+                                                <label style="text-align: left">年级</label>
+                                                <br>
+                                                <select ng-model="mySupplementListFilter.gradeId" name="grade_id" id="grade_id" class="form-control ng-pristine ml-0 mr-0 pl-0" ng-options="option.id as option.name for option in gradeIds" required>
+                                                    <option value="">请选择</option>
+                                                </select>
+                                            </li>
+                                            <li style="margin-right: 15px">
+                                                <label style="text-align: left" class="belongTo">科目</label>
+                                                <br>
+                                                <input placeholder="请输入" ng-model="mySupplementListFilter.subjectName" type="search" style="min-width: 116px;">
+                                            </li>
+                                            <li style="margin-right: 15px">
+                                                <label style="text-align: left">课程名称</label>
+                                                <br>
+                                                <input placeholder="请输入" ng-model="mySupplementListFilter.courseName" type="search" style="min-width: 116px;">
+                                            </li>
+                                            <li style="margin-right: 15px">
+                                                <label style="text-align: left" class="belongTo">任课老师</label>
+                                                <br>
+                                                <input placeholder="请输入" ng-model="mySupplementListFilter.teacherName" type="search" style="min-width: 116px;">
+                                            </li>
+                                            <li style="line-height: 33px;">
+                                                <label style="text-align:left" >计费状态</label>
+                                                <br>
+                                                <select  ng-model="mySupplementListFilter.isCharging">
+                                                    <option value="">请选择</option>
+                                                    <option value="1">已计费</option>
+                                                    <option value="0">未计费</option>
+                                                </select>
+                                            </li>
+                                            <!--隐藏更多-->
+                                            <li class="w1 down" style="min-width: 100%;height: 50px;margin-left: 2%">
+                                                <a ng-click="changeSelectMore(0)" style="margin-top: 33px" class="mt-more">&nbsp;</a>
+                                            </li>
+                                        </ul>
+                                    </ul>
+                                </ul>
+                            </div>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+            <div class="br-gray mt-list">
+                <h2 class="pl-20 c3">补课管理列表</h2>
+                <div class="overflow-x">
+                    <table class="table table-bordered table-striped table-condensed mt-table1">
+                        <thead>
+                        <tr class="br-gray-t">
+                            <th>姓名</th>
+                            <th>班级名称</th>
+
+                            <!--   <th>一对多编号</th> -->
+                            <th>课程名称</th>
+                            <th>年级</th>
+                            <th>科目</th>
+                            <th>上课时间</th>
+                            <th>上课课时</th>
+                            <th>任课老师</th>
+                            <th>计费状态</th>
+                            <th>缺勤原因</th>
+                            <th>补课状态</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="row in MySupplementList">
+
+                            <td>{{ row.studentName }}</td>
+                            <td>{{ row.className }}</td>
+                            <td>{{row.courseName}}</td>
+                            <td>{{row.grade}}</td>
+                            <td>{{row.subjectName}}</td>
+                            <td>{{row.startTime| date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                            <td>{{row.endTime|number:1}}</td>
+                            <td>{{row.teacherName}}</td>
+                            <td>{{row.isCharging|chargingState:row.isCharging}}</td>
+                            <td>{{row.reason|absenceReason:row.reason}}</td>
+                            <td ng-class="{true:'red-font'}[row.state===3]">{{row.state|supplementState:row.state}}</td>
+
+                            <td><a class="showUI" id="nw+{{$index}}"  ng-click="nw[$index]=true"><span class="glyphicon glyphicon-caozuo" title="操作"></span></a>
+                                <bubble  ng-if="nw[$index]" for="nw+{{$index}}" align="bottom" close="nw[$index]=false" close-action="outerchick " ng-mouseleave="nw[$index]=false;"><!--ng-mouseleave="nw[$index]=false;"-->
+                                    <ul>
+                                        <li  ng-if="row.state == 3" ng-click="showDetial(row,0)">
+                                            <a   >跟班补课</a>
+                                        </li>
+                                        <li ng-if="row.state == 3" ng-click="showDetial(row,1)">
+                                            <a  >单独补课</a>
+                                        </li>
+                                        <li ng-if="row.state != 3" ng-click="showDetial(row,2)">
+                                            <a  >查看</a>
+                                        </li>
+
+                                        <li ng-if="row.state == 1" ng-click="showDetial(row,3)">
+                                            <a  >编辑</a>
+                                        </li>
+                                    </ul>
+                                </bubble></td>
+                        </tr>
+                        </tbody>
+                        <tbody ng-show="isrendLoading">
+                        <tr>
+                            <td colspan="15" class="text-center">
+                                <div class="loading-indicator"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-items-by-page="10"
+                                st-template="partials/util/pagination.custom.html" colspan="15">
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="js/jqDom.js"></script>
+</div>
+

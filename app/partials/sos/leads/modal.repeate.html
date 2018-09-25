@@ -1,0 +1,67 @@
+<style>
+    .warn{
+        display: inline-block;
+        color: #428bca;
+        position: absolute;
+        /*right: 80px;*/
+    }
+    .warn a{
+        width: 400px;
+        display: inline-block;
+    }
+</style>
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+	        <div class="modal-header">
+	            <button type="button" class="close" aria-label="Close" ng-click="modalForRepeatHide()"><span aria-hidden="true">&times;</span></button>
+	            <h4 class="modal-title" ng-bind="modalForRepeatTitle"></h4>
+	        </div>
+            <div class="modal-body" >
+	            <div class="text-center">
+	                <div style="font-size: 20px">
+	                	{{repeateData.repeateMsg}}
+	                	<br/>
+	                </div>
+	                <div class="table-responsive">
+	                	<table class="table table-bordered table-striped table-condensed" st-table="repeatStudentList">
+	                		<thead>
+								<tr>
+									<th>姓名</th>
+									<th>性别</th>
+									<th>电话</th>
+									<th>公立学校</th>
+									<th>所属人</th>
+								</tr>
+							</thead>
+							<tr ng-repeat="row in repeateData.list">
+								<td>{{row.name}}</td>
+								<td>{{row.gender}}</td>
+								<td>
+									{{row.phone}}
+									<br ng-if="row.mother_phone">
+									{{row.mother_phone}}
+									<br ng-if="row.father_phone">
+									{{row.father_phone}}
+								</td>
+								<td>{{row.school_name}}</td>
+								<td>{{row.userName}}</td>
+							</tr>
+	                	</table>
+	                </div>
+	                <!-- <div class="warn">
+	                    <span ng-if="repeateData.state == 1"><a id="repeateData" title="所属人可以在学员管理菜单下看到属于自己的在读学员，校长和运营主管可以在学员管理菜单下看到校区全部的在读学员"  data-toggle="tooltip" data-placement="bottom" href="javascript:void(0);">如何查找？</a></span>
+	                    <span ng-if="repeateData.state == 2"><a id="repeateData" title="所属人可以在我的意向客户菜单下看到属于自己的意向客户，校长可以在校区意向客户菜单下看到校区所有的意向客户"  data-toggle="tooltip" data-placement="bottom" href="javascript:void(0);">如何查找？</a></span>
+	                </div> -->
+	            </div>
+            </div>
+            <div class="modal-footer">
+                <div class="yws-right">
+                    <button class="btn btn-success" ng-click="modalForRepeatHide() || $hide()">是，重复信息</button>
+                    <button class="btn btn-default" ng-click="$hide()">否，不是同一人</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

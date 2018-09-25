@@ -1,0 +1,87 @@
+<div class=" ">
+	<div>
+		<label>上课时间</label>
+        <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange=""  name="startTime"" id="startTime"" 
+                   		ng-model="groupCoursePlanFilter.startTime"/>  	
+       	<!-- <label>消课状态</label>
+        <select placeholder="消课状态" ng-model="groupCoursePlanFilter.isPast">
+            <option value=""></option>
+            <option value="0">未消课</option>
+            <option value="1">已消课</option>
+        </select> -->
+      	<label>教师</label>
+   		<input type="text"   ng-model="groupCoursePlanFilter.teacherName"/>  	
+        &nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-success" ng-click="getGroupCoursePlanListByFilter()">查询</button>
+   	</div>
+	<div>
+		<table class="table table-bordered table-striped mt-table1" st-pipe="getGroupCoursePlanList" st-table="groupCoursePlanList">
+		<thead>
+			<tr>
+            	<th class="info">上课时间</th>
+	            <th class="info">上课课时</th>
+	            <th class="info">课程名称</th>
+	            <th class="info">教师</th>
+	            <!-- <th class="info">消课状态</th> -->
+	            <th class="info">课前预习</th>
+	            <th class="info">备课笔记</th>
+	            <th class="info">课后作业</th>
+				<th class="info">消课状态</th>
+				<th class="info">消课时间</th>
+				<th class="info">消课人</th>
+				<th class="info">取消原因</th>
+				<th class="info">操作</th>
+            </tr>
+       	</thead>
+        <tbody>
+        	<tr ng-repeat="row in groupCoursePlanList">
+	            <td>{{row.startTime | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+	            <td>{{row.courseNum}}</td>
+	            <td>{{row.courseName}}</td>
+	            <td>{{row.teacherName}}</td>
+	            <!-- <td ng-if="row.isPast==0">未消课</td>
+                <td ng-if="row.isPast==1">已消课</td> -->
+	            <td>
+					<span ng-if="isTeacherOrTeacherMaster && row.lackPreviewHomework">未上传</span><!-- 过了上课时间还没有资料的 -->
+                    <span ng-if="isTeacherOrTeacherMaster && row.isBefore48Hours"></span><!-- 课前48小时没有任何操作 -->
+                    <span ng-if="isTeacherOrTeacherMaster && row.previewHomework && row.previewHomework.packState == 3">未发送</span><!-- 资料未发送 -->
+                    <a ng-if="isTeacherOrTeacherMaster && row.editablePreviewHomework" ng-click="editPreviewHomework(row, 1)">编辑</a><!-- 课前48小时内是可以编辑的 -->
+                    <a ng-if="isTeacherOrTeacherMaster && row.previewHomework && row.previewHomework.packState == 1" ng-click="editPreviewHomework(row, 1)">编辑</a>
+					<a ng-if="isTeacherOrTeacherMaster && row.previewHomework && row.previewHomework.packState == 2" ng-click="editPreviewHomework(row, 2)">查看</a>
+					<a ng-if="!isTeacherOrTeacherMaster && !row.lackPreviewHomework && row.previewHomework" ng-click="editPreviewHomework(row, 2)">查看</a>
+				</td>
+	            <td>
+					<span ng-if="isTeacherOrTeacherMaster && row.lackTeacherHandouts"></span>
+                    <a ng-if="isTeacherOrTeacherMaster && row.editableTeacherHandouts && !row.teacherHandouts" ng-click="editTeacherHandouts(row, 1)">编辑</a>
+					<a ng-if="isTeacherOrTeacherMaster && row.teacherHandouts && row.teacherHandouts.packState == 1" ng-click="editTeacherHandouts(row, 1)">编辑</a>
+					<a ng-if="isTeacherOrTeacherMaster && row.teacherHandouts && row.teacherHandouts.packState == 2" ng-click="editTeacherHandouts(row, 2)">查看</a>
+					<a ng-if="!isTeacherOrTeacherMaster && !row.lackTeacherHandouts && row.teacherHandouts" ng-click="editTeacherHandouts(row, 2)">查看</a>
+				</td>
+	            <td>
+					<span ng-if="isTeacherOrTeacherMaster && row.lackReviewHomework"></span>
+                    <a ng-if="isTeacherOrTeacherMaster && row.editableReviewHomework" ng-click="editReviewHomework(row, 1)">编辑</a>
+					<a ng-if="isTeacherOrTeacherMaster && row.reviewHomework && row.reviewHomework.packState == 1" ng-click="editReviewHomework(row, 1)">编辑</a>
+					<a ng-if="isTeacherOrTeacherMaster && row.reviewHomework && row.reviewHomework.packState == 2" ng-click="editReviewHomework(row, 2)">查看</a>
+					<a ng-if="!isTeacherOrTeacherMaster && !row.lackReviewHomework && row.reviewHomework" ng-click="editReviewHomework(row, 2)">查看</a>
+				</td>
+				<td ng-if="row.isPast==0">未消课</td>
+                <td ng-if="row.isPast==1">已消课</td>
+				<td>{{row.passDate | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+				<td>{{row.passOperatorName}}</td>
+				<td>{{row.remark}}</td>
+				<td>
+                                        <a ng-if="row.isPast==0 && showPermissions('pastCoursePlan')" ng-click="yesconsume2(row,7)" ng-controller="CoursePlanController as cp"><span class="glyphicon glyphicon-shenhe"
+                                                                        title="消课"></span></a>
+                                    </td>
+
+	        </tr>
+		</tbody>
+		<tfoot>
+             <tr>
+                 <td colspan="8" class="text-center" st-pagination="" st-items-by-page="10"
+                     st-template="partials/util/pagination.custom.html">
+                 </td>
+             </tr>
+        </tfoot>
+		</table>
+	</div>
+</div>

@@ -1,0 +1,132 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true"
+     ng-controller="SearchProductController as pcc">
+    <div class="modal-dialog">
+        <div class="modal-content of">
+            <form name="updateOrderForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle"></h4>
+                </div>
+                <div class="modal-body pb-20">
+                    <div class="br-gray pl-0">
+                        <table class="table table-bordered table-striped table-condensed mt-table1"
+                               st-pipe="callSearchProductListController" st-table="CourseList">
+                            <thead>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>
+                                    <input st-search="CourseListFilter.id" placeholder="编号查询"
+                                           ng-model="CourseListFilter.id" class="input-sm form-control" type="search"/>
+                                </th>
+                                <th>
+                                    <input st-search="CourseListFilter.courseName" placeholder="名称查询"
+                                           ng-model="CourseListFilter.courseName" class="input-sm form-control"
+                                           type="search"/>
+                                </th>
+                                <th>
+                                    <select st-search="CourseListFilter.productTypeId"
+                                            ng-model="CourseListFilter.productTypeId"
+                                            name="CourseListFilter.productTypeId" id="CourseListFilter.productTypeId"
+                                            class="input-sm form-control"
+                                            ng-options="option.id as option.name for option in ProductTypeList"
+                                            type="search" ng-change="onProductIdSelect()" disabled="disabled">
+                                        <option value="">优胜教育线上产品</option>
+                                    </select>
+                                </th>
+                                <th>
+                                    <select st-search="CourseListFilter.course_type_id"
+                                            ng-model="CourseListFilter.course_type_id"
+                                            name="CourseListFilter.course_type_id" id="CourseListFilter.course_type_id"
+                                            class="input-sm form-control"
+                                            ng-options="option.id as option.name for option in courseTypeIds"
+                                            type="search" >
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </th>
+                                <th>
+                                    <select st-search="CourseListFilter.grade_id" ng-model="CourseListFilter.grade_id"
+                                            name="CourseListFilter.grade_id" id="CourseListFilter.grade_id"
+                                            class="input-sm form-control"
+                                            ng-options="option.id as option.name for option in gradeIdSelectes"
+                                            type="search">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </th>
+                                <th colspan="3">&nbsp;</th>
+                                <th><input st-search="CourseListFilter.schoolName" placeholder="部门查询"
+                                       ng-model="CourseListFilter.schoolName" class="input-sm form-control"
+                                       type="search"/></th>
+                                <th colspan="4">&nbsp;</th>
+                            </tr>
+
+                            <tr>
+                                <th>选择</th>
+                                <th>产品编号</th>
+                                <th>产品名称</th>
+                                <th>产品类型名称</th>
+
+                                <th>课程类型名称</th>
+                                <th>课程年级</th>
+                                <th>标准课时</th>
+                                <!--<th>课程单价</th>-->
+                                <th>课程最小单价</th>
+                                <th>课程最大单价</th>
+                                <th>部门名称</th>
+                                <th>优惠方式</th>
+                                <th>订单量</th>
+                                <th>教师数量</th>
+                                <th>状态</th>
+
+                            </tr>
+
+                            </thead>
+                            <tbody ng-show="!pcc.isproductListLoading">
+                            <tr ng-repeat="row in CourseList">
+                                <td><input type="checkbox" ng-checked="isSelected(row)"
+                                           ng-click="pcc.checkedProduct(row)"></td>
+                                <td>{{row.id}}</td>
+                                <td>{{row.name}}</td>
+                                <td>{{row.productTypeName}}</td>
+
+                                <td>{{row.courseTypeName}}</td>
+                                <td>{{row.gradeName}}</td>
+                                <td>{{row.standardNum}}</td>
+                                <!--<td>{{row.standardPrice}}</td>-->
+                                <td>{{row.minPrice}}</td>
+                                <td>{{row.maxPrice}}</td>
+                                <td>{{row.schoolName}}</td>
+                                <td>{{row.favorable}}</td>
+                                <td>{{row.orderNum}}</td>
+                                <td>{{row.teacherNum}}</td>
+                                <td ng-show="row.isShelve == 1">上架</td>
+                                <td ng-show="row.isShelve != 1">下架</td>
+                            </tr>
+                            </tbody>
+                            <tbody ng-show="pcc.isproductListLoading">
+                            <tr>
+                                <td colspan="14" class="text-center">
+                                    <div class="loading-indicator"></div>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="text-center" st-pagination="" st-items-by-page="10"
+                                    st-template="partials/util/pagination.custom.html"
+                                    st-template="partials/util/pagination.custom.html" colspan="14"></td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                    <button type="button" class="btn btn-success c5-lable"
+                            ng-click="pcc.submitTeacherProductsController()">保存
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

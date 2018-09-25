@@ -1,0 +1,242 @@
+<div class="modal-tab-panel">
+
+    <!--<div class="tab-content-block">
+        <div class="left">
+            <span style="float: left;margin-top:10px;" class="teacher-info-required">教学特点：(请从标签库中选择3-5个)</span>
+            <div style="width:85%;float:left">
+                <span ng-repeat="characteristic in characteristics track by $index">
+                    <button class="btn btn-default"
+                            ng-class="{selected:characteristic.selected, unselected:!characteristic.selected}">
+                        {{characteristic.name}}
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>-->
+    <div class="tab-content-block">
+        <div class="tab-block-title">教学特点：(请从标签库中选择3-5个)</div>
+        <div class="tab-block-contents">
+            <div ng-repeat="characteristic in characteristics track by $index" class="btn btn-success"
+                 ng-class="{selected:characteristic.selected, unselected:!characteristic.selected}">
+                {{characteristic.name}}
+            </div>
+        </div>
+    </div>
+    <div class="tab-content-block">
+        <div class="tab-block-title">个性签名：</div>
+        <div class="tab-block-contents">
+            <textarea id="signature" rows="3"  placeholder="请输入个性签名"  ng-model="hrTalent.signature" class="width100" disabled>
+            </textarea>
+        </div>
+    </div>
+    <div class="tab-content-block">
+        <div class="tab-block-title">教师头像（130px * 130px内 ）：</div>
+        <div class="tab-block-contents">
+            <div style="float:left;width:25%;margin-right:10px;">
+                <img ng-if="!hrTalent.profile" ng-src="img/hr/default-confirm.png">
+                <img ng-if="hrTalent.profile" ng-src="{{hrTalent.imageProfileSrc}}">
+            </div>
+            <!--  <input id="profile" style="width: 66px;margin-top:10px;" type="file" img-model="hrTalent.profile" />-->
+        </div>
+    </div>
+    <div class="tab-content-block" >
+        <div class="tab-block-title">教学成果：</div>
+        <div class="tab-block-contents ">
+            <div ng-repeat="achievement in hrTalent.teachingAchievementList track by $index" class="contents-block50 clear-right-border">
+                <div class="contents-block40">
+                    <div class="img-left40">
+                        <img class="width100" ng-if="achievement.achievementImg1"  ng-src="{{achievement.img1Src}}" >
+                        <img class="width100" ng-if="!achievement.achievementImg1" ng-src="img/hr/default-confirm.png" >
+                        <!--  <input id="img1" ng-if="!achievement.achievementImg1" type="file" img-model="achievement.img1" />
+                          <div class="img-clear" ng-if="achievement.achievementImg1" ng-click="deleteAchievementImg($index,1)" title="删除图片">&times;</div>-->
+                    </div>
+                    <div class="img-left40">
+                        <img class="width100" ng-if="achievement.achievementImg2"  ng-src="{{achievement.img2Src}}" >
+                        <img class="width100" ng-if="!achievement.achievementImg2" ng-src="img/hr/default-confirm.png" >
+                        <!--  <input id="img2" ng-if="!achievement.achievementImg2" type="file" img-model="achievement.img2" />
+                          <div class="img-clear" ng-if="achievement.achievementImg2" ng-click="deleteAchievementImg($index,2)" title="删除图片">&times;</div>-->
+                        <!-- <img class="width100" ng-if="!achievement.achievementImg2" ng-src="img/hr/default-confirm.png" >
+                         <img class="width100" ng-if="achievement.achievementImg2" ng-src="{{achievement.img2Src}}" >
+                         <input id="img2"  type="file" img-model="achievement.img2" />
+                         <input type="button" ng-click="deleteAchievementImg($index,2)" value="删除图片">-->
+                    </div>
+                    <div class="img-left40">
+                        <img class="width100" ng-if="achievement.achievementImg3"  ng-src="{{achievement.img3Src}}" >
+                        <img class="width100" ng-if="!achievement.achievementImg3" ng-src="img/hr/default-confirm.png" >
+                        <!--     <input id="img3" ng-if="!achievement.achievementImg3" type="file" img-model="achievement.img3" />
+                             <div class="img-clear" ng-if="achievement.achievementImg3" ng-click="deleteAchievementImg($index,3)" title="删除图片">&times;</div>-->
+                        <!--<img class="width100" ng-if="!achievement.achievementImg3" ng-src="img/hr/default-confirm.png" >
+                        <img class="width100" ng-if="achievement.achievementImg3" ng-src="{{achievement.img3Src}}" >
+                        <input id="img3"  type="file" img-model="achievement.img3" />
+                        <input type="button" ng-click="deleteAchievementImg($index,3)" value="删除图片">-->
+                    </div>
+                </div>
+                <div class="contents-block60 ">
+                    <div class="col-sm-12 form-group" >
+                        <label  class="col-sm-3 control-label">成果:</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="achievement" class="form-control" ng-model="achievement.name" placeholder="不超过10个字符" disabled>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 form-group" >
+                        <label  class="col-sm-3 control-label">描述:</label>
+                    </div>
+                    <div class="col-sm-12 form-group" >
+                        <textarea id="description" rows="15"  class="form-control"  placeholder="如您的职务，工作职责等,不超过140个字符" ng-model="achievement.description" disabled></textarea>
+                    </div>
+                    <!--  <div>
+                          <span>工作描述：</span>
+                      </div>
+                      <div>
+                          <textarea id="description" rows="5"  placeholder="如您的职务，工作职责等,不超过140个字符" ng-model="achievement.description"></textarea>
+                      </div>-->
+                    <div>
+                        <!--<div  class="btn btn-danger" ng-click="deleteAchievement($index)">删除</div>-->
+                    </div>
+
+                </div>
+            </div>
+        </div>
+   
+    </div>
+    <!--<div class="tab-content-block" style="margin-top:10px;">
+        <div ng-repeat="achievement in hrTalent.teachingAchievementList track by $index">
+            <div class="left achieve">
+                <hr style="width:100%;height:1px;border:none;border-top:1px dashed grey;" />
+                <span for="achievement" class="teacher-info-required">教学成果：</span>
+                <input type="text" id="achievement" style="width:70%" ng-model="achievement.name" placeholder="不超过10个字符" disabled>
+                <br/><br/>
+                <span style="vertical-align: top;">工作描述：</span>
+                <textarea id="description" rows="5" style="width:70%" placeholder="如您的职务，工作职责等,不超过140个字符"
+                          ng-model="achievement.description" disabled></textarea>
+                <br/><br/>
+                &lt;!&ndash;教学成果图片展示区&ndash;&gt;
+                <span style="float:left;">展示图片(1&#45;&#45;3张图片)：</span>
+                <ul>
+                    <li style="float:left;margin-right: 15px;">
+                        <img ng-if="!achievement.achievementImg1" ng-src="img/hr/default-confirm.png"  style="width:66px;height: 50px;margin-bottom: 5px;">
+                        <img ng-if="achievement.achievementImg1" ng-src="{{achievement.img1Src}}"  style="width:66px;height: 50px;margin-bottom: 5px;">
+                    </li>
+                    <li style="float:left;margin-right: 15px;">
+                        <img ng-if="!achievement.achievementImg2" ng-src="img/hr/default-confirm.png"  style="width:66px;height: 50px;margin-bottom: 5px;">
+                        <img ng-if="achievement.achievementImg2" ng-src="{{achievement.img2Src}}"  style="width:66px;height: 50px;margin-bottom: 5px;">
+                    </li>
+                    <li style="float:left;margin-right: 15px;">
+                        <img ng-if="!achievement.achievementImg3" ng-src="img/hr/default-confirm.png"  style="width:66px;height: 50px;margin-bottom: 5px;">
+                        <img ng-if="achievement.achievementImg3" ng-src="{{achievement.img3Src}}"  style="width:66px;height: 50px;margin-bottom: 5px;">
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>-->
+</div>
+
+<!--<style>
+    .left{
+        margin-left:50px;
+        margin-top:5px;
+        float:left;
+        width:45%;
+        height:315px;
+        border-bottom:1px dashed grey;
+    }
+    .right{
+        margin-right:20px;
+        margin-top:5px;
+        float:right;
+        width:45%;
+        height:315px;
+        border-bottom:1px dashed grey;
+    }
+    img.preview2{
+        max-width: 10%;
+        max-height: 50px;
+        text-align: center;
+        float:left;
+        margin-right:5px;
+        margin-left:10px;
+    }
+    .selected
+    {
+        background-color:#999999;
+        margin:2px 2px 2px 2px;
+    }
+    .unselected
+    {
+        background-color: #FFFFFF;
+        margin:2px 2px 2px 2px;
+    }
+</style>-->
+<!--<div class="modal-tab-panel">
+    <div class="row">
+        <div class="left">
+            <span style="float: left;margin-top:10px;">教学特点：</span>
+            <div style="width:80%;float:left">
+                <span ng-repeat="characteristic in characteristics track by $index">
+                    <button class="btn btn-default"
+                            ng-class="{selected:characteristic.selected, unselected:!characteristic.selected}">
+                        {{characteristic.name}}
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="right">
+            <span style="vertical-align: top;">个性签名：</span>
+            <textarea id="signature" rows="10" style="width:80%" placeholder="请输入个性签名"
+                      ng-model="hrTalent.signature" disabled></textarea>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="right">
+            <span style="float:left;">教师头像：</span>
+            <div style="float:left;width:25%;margin-right:10px;">
+                <img ng-if="!hrTalent.profile" ng-src="img/hr/default-confirm.png">
+                <img ng-if="hrTalent.profile" ng-src="{{hrTalent.imageProfileSrc}}">
+            </div>
+            <div style="clear:both;">
+                <br/><p style="font-size: 18px;">此为教师头像,请保持在50K以内。</p>
+            </div>
+        </div>
+
+        <div ng-repeat="achievement in hrTalent.teaching_achievement track by $index">
+            <div class="left">
+                <span for="achievement">教学成果：</span>
+                <input type="text" id="achievement" style="width:60%" ng-model="achievement.name" disabled>
+                <br/><br/>
+                <span style="vertical-align: top;">工作描述：</span>
+                <textarea id="description" rows="5" style="width:60%" placeholder="如您的职务，工作职责等"
+                          ng-model="achievement.description" disabled></textarea>
+                <br/><br/>
+                &lt;!&ndash;教学成果图片展示区&ndash;&gt;
+                <span style="float:left;">展示图片(1&#45;&#45;3张图片)：</span>
+                <ul>
+                    <li style="float:left;margin-right: 15px;">
+                        <img ng-if="!achievement.img1Src" ng-src="img/hr/default-confirm.png"  style="width:66px;height: 50px;margin-bottom: 5px;">
+                        <img ng-if="achievement.img1Src" ng-src="{{achievement.img1Src}}"  style="width:66px;height: 50px;margin-bottom: 5px;">
+                    </li>
+                    <li style="float:left;margin-right: 15px;">
+                        <img ng-if="!achievement.img2Src" ng-src="img/hr/default-confirm.png"  style="width:66px;height: 50px;margin-bottom: 5px;">
+                        <img ng-if="achievement.img2Src" ng-src="{{achievement.img2Src}}"  style="width:66px;height: 50px;margin-bottom: 5px;">
+                    </li>
+                    <li style="float:left;margin-right: 15px;">
+                        <img ng-if="!achievement.img3Src" ng-src="img/hr/default-confirm.png"  style="width:66px;height: 50px;margin-bottom: 5px;">
+                        <img ng-if="achievement.img3Src" ng-src="{{achievement.img3Src}}"  style="width:66px;height: 50px;margin-bottom: 5px;">
+                    </li>
+                </ul>
+                &lt;!&ndash;<span style="float:left;">展示图片：</span>&ndash;&gt;
+                &lt;!&ndash;<span ng-repeat="img in achievement.achievementImages track by $index" style="margin-left: 60px;">&ndash;&gt;
+                &lt;!&ndash;<img ng-src="{{img}}" class="preview2">&ndash;&gt;
+                &lt;!&ndash;</span>&ndash;&gt;
+                &lt;!&ndash;<input id="picture" style="width: 66px;margin-top:10px;" type="file" img-model="achievement.img" />&ndash;&gt;
+            </div>
+            <br/>
+        </div>
+        &lt;!&ndash; 添加教学成果 &ndash;&gt;
+        <a class="row">
+            <span class="glyphicon glyphicon-plus-sign" ng-click="addTeachingAchievement()"
+                  style="margin-left:20px;font-size: 50px;color:#999" title="添加教学成果">
+            </span>
+        </a>
+    </div>
+</div>-->

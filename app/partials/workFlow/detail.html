@@ -1,0 +1,366 @@
+<!--ng-class="{true: '', false: 'border-none'}[type==1]" 隐藏显示时的必填class-->
+<div class="view-frame" ng-controller="DetailWorkFlowCtl">
+    <div class="view-left">
+        <nav-side menu-data="menu.subMenu"></nav-side>
+    </div>
+    <div  class="view-content" >
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="#/">首页</a> <span class="divider"></span></li>
+                <li><a href="#/workflowManager-admin">工作流管理</a> <span class="divider"></span></li>
+               <!-- <li><a href="#/workflowManager-admin/all_workflow">全部列表</a> <span class="divider"></span></li>-->
+                <li class="active" ng-if="type==0">工作流详情</li>
+                <li class="active" ng-if="type==1">工作流编辑</li>
+            </ul>
+        </div>
+        <div class="details-title" ng-if="type==0">工作流详情 </div>
+        <div class="details-title" ng-if="type==1">工作流编辑 </div>
+        <div>
+            <div class="tabs-wrap" set-no-edit="" is-edit="isEditView">
+                <div class="border-default">
+                    <div class="table-title yws-container">
+                        <div class="yws-left" ng-if="type==0">工作流详情</div>
+                        <div class="yws-left" ng-if="type==1">工作流编辑</div>
+                        <div class="yws-right">当前状态:
+                            <span class="font-color-active" ng-if="detailData.status == flowStatusSELECT[0].id">{{flowStatusSELECT[0].name}}</span>
+                            <span class="font-color-active" ng-if="detailData.status == flowStatusSELECT[1].id">{{flowStatusSELECT[1].name}}</span>
+                            <span class="font-color-active" ng-if="detailData.status == flowStatusSELECT[2].id">{{flowStatusSELECT[2].name}}</span>
+                            <span class="font-color-active" ng-if="detailData.status == flowStatusSELECT[3].id">{{flowStatusSELECT[3].name}}</span>
+                            <span class="font-color-active" ng-if="detailData.status == flowStatusSELECT[4].id">{{flowStatusSELECT[4].name}}</span>
+                            <span class="font-color-active" ng-if="detailData.status == flowStatusSELECT[5].id">{{flowStatusSELECT[5].name}}</span>
+                            <span class="font-color-active" ng-if="detailData.status == flowStatusSELECT[6].id">{{flowStatusSELECT[6].name}}</span>
+                        </div>
+                    </div>
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="td-default background-color-eee width33">步骤</td>
+                                <td class="td-default background-color-eee width33">会签人</td>
+                                <td class="td-default background-color-eee width33">主办人</td>
+                            </tr>
+                            <tr ng-repeat="row in data.steps">
+                                <td class="td-default width33 text-left"><span class="span-default">{{row.desc}}</span></td>
+                                <td class="td-default width33 text-left"></td>
+                                <td class="td-default width33 text-left">
+                                    {{row.name}}
+                                    <span ng-if="row.startTime" class="span-default">
+                                        <br/><span  ng-if="$index == 0">发起时间：{{row.startTime | date:'yyyy-MM-dd HH:mm' }}</span>
+                                        <span  ng-if="$index != 0">开始时间：{{row.startTime | date:'yyyy-MM-dd HH:mm' }}</span>
+                                        <span ng-if="!row.completeTime && $index!=0"><br/>结束时间：</span>
+                                    </span>
+
+                                    <span ng-if="row.completeTime" class="span-default"><br/>结束时间：{{row.completeTime | date:'yyyy-MM-dd HH:mm' }}</span>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="border-default margin-top-add-20">
+                    <div class="table-title">表单</div>
+                    <form name="workFlowDetailFrom" novalidate="" role="form">
+                        <table class="table table-bordered" style="table-layout:fixed;">
+                            <tbody >
+                                <tr >
+                                    <td class="td-default background-color-eee" >*费用类型</td>
+                                    <td class="td-default text-left" colspan="8">
+                                        <!--<input type="radio" name="paymentType" value="cash" ng-model="requestData.paymentType.cash" ng-disabled="!isFirse" >现金
+                                        <input type="radio" name="paymentType" value="bankTransfer" ng-model="requestData.paymentType.bankTransfer"  ng-disabled="!isFirse">银行汇款-->
+                                       <!-- <span ng-repeat="row in data.costTypeLists">
+                                            <input type="radio" name="fees" ng-checked="row.checked" ng-model="row.md" ng-disabled="row.checked">{{row.name}}
+                                        </span>-->
+                                     <!--   <input type="radio" name="fees" value="materialPurchasing" ng-model="requestData.fees.materialPurchasing" ng-disabled="!isFirse">物料采购费
+                                        <input type="radio" name="fees" value="maintain" ng-model="requestData.fees.maintain" ng-disabled="!isFirse">维修维护费-->
+                                        <span >
+                                            <input type="radio" name="fees" value="materialPurchasing" ng-model="requestData.fees.materialPurchasing" ng-disabled="!isFirse">物料采购费
+                                             <!--<input type="radio" name="paymentType" value="cash" ng-model="requestData.paymentType.cash" ng-disabled="!isFirse" >现金-->
+                                        </span>
+                                         <span >
+                                            <input type="radio" name="fees" value="maintain" ng-model="requestData.fees.maintain" ng-disabled="!isFirse">维修维护费
+                                        </span>
+                                         <span >
+                                            <input type="radio" name="fees" value="checked"  ng-model="requestData.fees.businessTrip" ng-disabled="!isFirse">差旅费
+                                        </span>
+                                         <span >
+                                            <input type="radio" name="fees" value="checked"  ng-model="requestData.fees.localTransportation" ng-disabled="!isFirse">市内交通费
+                                        </span>
+                                         <span >
+                                            <input type="radio" name="fees" value="checked"  ng-model="requestData.fees.recruitment" ng-disabled="!isFirse">招聘费
+                                        </span>
+                                         <span >
+                                            <input type="radio" name="fees" value="checked"  ng-model="requestData.fees.advertisement" ng-disabled="!isFirse">广告推广费
+                                        </span>
+                                         <span >
+                                            <input type="radio" name="fees" value="checked" ng-model="requestData.fees.networkCommunication" ng-disabled="!isFirse">网络通讯费
+                                        </span>
+                                         <span >
+                                            <input type="radio" name="fees" value="checked"  ng-model="requestData.fees.transportation" ng-disabled="!isFirse">交通费
+                                        </span>
+                                         <span >
+                                            <input type="radio" name="fees" value="checked" ng-model="requestData.fees.welfare" ng-disabled="!isFirse">福利费
+                                        </span>
+                                        <span >
+                                            <input type="radio" name="fees" value="checked" ng-model="requestData.fees.returnPremium" ng-disabled="!isFirse">返还/退费
+                                        </span>
+                                        <span >
+                                            <input type="radio" name="fees" value="checked"  ng-model="requestData.fees.rentWaterElectricity" ng-disabled="!isFirse">房租、水电费
+                                        </span>
+                                        <span >
+                                            <input type="radio" name="fees" value="checked"  ng-model="requestData.fees.officeExpenses" ng-disabled="!isFirse">办公费
+                                        </span>
+                                        <span >
+                                            <input type="radio" name="fees"  value="checked"  ng-model="requestData.fees.other" ng-disabled="!isFirse">其他
+                                        </span>
+                                        <span >
+                                            <input type="text"  ng-model="requestData.fees.otherDetail" ng-disabled="!isFirse" ng-maxlength="20">
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="td-default background-color-eee">*费用目的（用途）</td>
+                                    <td class="td-default" colspan="8">
+                                        <input type="text" name="workFlowDetailFrom.usageOfFees" class="form-control input-border-none" ng-class="{true: '', false: 'border-none'}[type==1]" ng-model="requestData.usageOfFees" ng-maxlength="30" ng-disabled="!isFirse" ng-required="true">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="td-default background-color-eee" colspan="1">采购时间</td><td><input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange=""   class="form-control input-border-none" ng-model="requestData.purchaseTime" ng-disabled="!isFirse"></td>
+                                    <td class="td-default background-color-eee" colspan="1">使用时间</td><td><input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange=""   class="form-control input-border-none" ng-model="requestData.useTime" ng-disabled="!isFirse"></td>
+                                    <td class="td-default background-color-eee" colspan="1">*期望到款时间</td><td><input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange=""  name="workFlowDetailFrom.expectingCreditTime" class="form-control input-border-none" ng-class="{true: '', false: 'border-none'}[type==1]" ng-model="requestData.expectingCreditTime" ng-disabled="!isFirse" ng-required="true"></td>
+                                    <td class="td-default background-color-eee" colspan="1">其他说明</td><td colspan="2"><input type="text"  ng-maxlength="10" class="width50 input-border-none" ng-model="requestData.userRemark" ng-disabled="!isFirse"><input type="checkbox" name="specialUrgent" ng-model="requestData.specialUrgent" ng-disabled="!isFirse"><span class="font-color-red">特批加急</span></td>
+                                </tr>
+                                <tr >
+                                    <td class="td-default background-color-eee" >*付款方式</td>
+                                    <td class="td-default text-left" colspan="8">
+                                        <input type="radio" name="paymentType" value="cash" ng-model="requestData.paymentType.cash" ng-disabled="!isFirse" >现金
+                                        <input type="radio" name="paymentType" value="bankTransfer" ng-model="requestData.paymentType.bankTransfer"  ng-disabled="!isFirse">银行汇款
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="td-default background-color-eee" colspan="1">*收款人姓名</td>
+                                    <td class="td-default background-color-eee" colspan="2">*汇款金额</td>
+                                    <td class="td-default background-color-eee" colspan="2">*收款账号</td>
+                                    <td class="td-default background-color-eee" colspan="2">*开户银行</td>
+                                    <td class="td-default background-color-eee" colspan="2">*支行</td>
+                                </tr>
+                                <tr ng-repeat="row in requestData.beneficiaries">
+                                    <td class="td-default" colspan="1"><input type="text" class="form-control input-border-none" ng-class="{true: '', false: 'border-none'}[type==1]" ng-model="row.name" ng-maxlength="5" ng-disabled="!isFirse" ng-required="true"></td>
+                                    <td class="td-default" colspan="2"><input type="number" class="form-control input-border-none" ng-class="{true: '', false: 'border-none'}[type==1]" ng-model="row.amount" ng-maxlength="20" ng-disabled="!isFirse" ng-required="true"></td>
+                                    <td class="td-default" colspan="2"><input type="text" class="form-control input-border-none" ng-class="{true: '', false: 'border-none'}[type==1]" ng-model="row.bankAcount" ng-maxlength="30"  ng-disabled="!isFirse" ng-required="true"></td>
+                                    <td class="td-default" colspan="2"><input type="text" class="form-control input-border-none" ng-class="{true: '', false: 'border-none'}[type==1]" ng-model="row.openingBank" ng-maxlength="20" ng-disabled="!isFirse" ng-required="true"></td>
+                                    <td class="td-default" colspan="2">
+                                        <input type="text" class="width80 yws-left form-control input-border-none " ng-class="{true: '', false: 'border-none'}[type==1]" ng-model="row.subbranchBank" ng-disabled="!isFirse" ng-maxlength="30" ng-required="true">
+                                        <a ng-click="deleteBeneficiaries($index)" class="col-sm-2"><span class="glyphicon glyphicon-delete-yuan" title="删除" ng-if="isFirse"></span></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="td-default" colspan="1"></td>
+                                    <td class="td-default" colspan="2"></td>
+                                    <td class="td-default" colspan="2"></td>
+                                    <td class="td-default" colspan="2"></td>
+                                    <td class="td-default" colspan="2"  ng-if="isFirse">
+                                        <a ng-click="addBeneficiaries()"><span class="glyphicon glyphicon-add-yuan" title="添加" ></span></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td  class="td-default background-color-eee" colspan="1">*合计金额</td>
+                                    <td class="td-default text-left" colspan="8">
+                                        <span >￥<input type="number" name="workFlowDetailFrom.totalAmount" class="width20 " ng-class="{true: '', false: 'border-none'}[type==1]" ng-model="requestData.totalAmount" ng-change="setDaXie(requestData.totalAmount)" ng-maxlength="10" min="0"  ng-disabled="!isFirse" ng-required="true">  </span>
+                                        <span >*大写<input type="text" class="width40" ng-class="{true: '', false: 'border-none'}[type==1]" ng-model="requestData.totalAmountUppercase" ng-maxlength="30" ng-disabled="true" ng-required="true"></span>
+                                    </td>
+                                </tr>
+                               <!-- <tr ng-repeat="row in data.approvalInfo">
+                                    <td class="td-default background-color-eee">{{row.name}}{{row.writable}}{{row.required}}</td>
+                                    <td class="td-default" colspan="8">
+                                        <input type="text" class="form-control input-border-none" ng-model="row.md" ng-disabled="" ng-required="row.required">
+                                    </td>
+                                </tr>-->
+
+                                <!--<activiti:formProperty id="regionManagerApprovalInfo" name="区域经理审批意见" type="textArea" writable="false"></activiti:formProperty>
+                                <activiti:formProperty id="cityManagerApprovalInfo" name="城市总监审批意见" type="textArea" writable="false"></activiti:formProperty>
+                                <activiti:formProperty id="buManagerApprovalInfo" name="事业部总经理审批意见" type="textArea" writable="false"></activiti:formProperty>
+                                <activiti:formProperty id="departmentManagerApprovalInfo" name="部门总监审批意见" type="textArea" writable="false"></activiti:formProperty>
+                                <activiti:formProperty id="accountantApprovalInfo" name="费用会计审批意见" type="textArea" writable="false"></activiti:formProperty>
+                                <activiti:formProperty id="departmentManagerApprovalInfo2" name="部门总监审批意见" type="textArea" writable="false"></activiti:formProperty>
+                                <activiti:formProperty id="buManagerApprovalInfo2" name="事业部总经理审批" type="textArea" writable="false"></activiti:formProperty>
+                                <activiti:formProperty id="financeDirectorApprovalInfo" name="财务总监审批意见" type="textArea" writable="false"></activiti:formProperty>
+                                <activiti:formProperty id="executiveDirectorApprovalInfo" name="执行董事审批意见" type="textArea" writable="false"></activiti:formProperty>
+                                <activiti:formProperty id="chairmanApprovalInfo" name="董事长审批意见" type="textArea" writable="false"></activiti:formProperty>-->
+                                <tr ng-if="data.approvalInfo.regionManagerApprovalInfo">
+                                    <td class="td-default background-color-eee">区域经理审批意见</td>
+                                    <td class="td-default" colspan="8">
+                                        <input type="text" ng-maxlength="30" class="form-control input-border-none" ng-class="{true: '', false: 'border-none'}[type==1]" ng-model="requestData.regionManagerApprovalInfo" ng-disabled="!data.approvalInfo.regionManagerApprovalInfo.writable" ng-required="data.approvalInfo.regionManagerApprovalInfo.required">
+                                    </td>
+                                </tr>
+                                <tr ng-if="data.approvalInfo.cityManagerApprovalInfo">
+                                    <td class="td-default background-color-eee">城市总监审批意见</td>
+                                    <td class="td-default" colspan="8">
+                                        <input type="text" ng-maxlength="30" class="form-control input-border-none" ng-class="{true: '', false: 'border-none'}[type==1]" ng-model="requestData.cityManagerApprovalInfo" ng-disabled="!data.approvalInfo.cityManagerApprovalInfo.writable" ng-required="data.approvalInfo.cityManagerApprovalInfo.required">
+                                    </td>
+                                  <!--  <td class="td-default background-color-eee" colspan="1">付款账户</td>
+                                    <td class="td-default" colspan="3">
+                                        <input type="text" class="form-control input-border-none" ng-model="requestData.financeApprovalAccount" ng-disabled="" ng-required="">
+                                    </td>-->
+                                </tr>
+                                <tr ng-if="data.approvalInfo.buManagerApprovalInfo">
+                                    <td class="td-default background-color-eee">事业部总经理审批意见</td>
+                                    <td class="td-default" colspan="8">
+                                        <input type="text" ng-maxlength="30" class="form-control input-border-none" ng-class="{true: '', false: 'border-none'}[type==1]" ng-model="requestData.buManagerApprovalInfo" ng-disabled="!data.approvalInfo.buManagerApprovalInfo.writable" ng-required="data.approvalInfo.buManagerApprovalInfo.required">
+                                    </td>
+                                </tr>
+                                <tr ng-if="data.approvalInfo.departmentManagerApprovalInfo">
+                                    <td class="td-default background-color-eee">部门总监审批意见</td>
+                                    <td class="td-default" colspan="8">
+                                        <input type="text" ng-maxlength="30" class="form-control input-border-none" ng-class="{true: '', false: 'border-none'}[type==1]" ng-model="requestData.departmentManagerApprovalInfo" ng-disabled="!data.approvalInfo.departmentManagerApprovalInfo.writable" ng-required="data.approvalInfo.departmentManagerApprovalInfo.required">
+                                    </td>
+                                </tr>
+                                <tr ng-if="data.approvalInfo.accountantApprovalInfo">
+                                    <td class="td-default background-color-eee">费用会计审批意见</td>
+                                    <td class="td-default" colspan="4">
+                                        <input type="text" ng-maxlength="30" class="form-control input-border-none" ng-class="{true: '', false: 'border-none'}[type==1]" ng-model="requestData.accountantApprovalInfo" ng-disabled="!data.approvalInfo.accountantApprovalInfo.writable" ng-required="data.approvalInfo.accountantApprovalInfo.required">
+                                    </td>
+                                    <td class="td-default background-color-eee" colspan="1">付款账户</td>
+                                    <td class="td-default" colspan="3">
+                                        <input type="text" ng-maxlength="30" class="form-control input-border-none" ng-class="{true: '', false: 'border-none'}[type==1]" ng-model="requestData.financeApprovalAccount" ng-disabled="!data.approvalInfo.accountantApprovalInfo.writable" ng-required="data.approvalInfo.accountantApprovalInfo.required">
+                                    </td>
+                                </tr>
+                                <tr ng-if="data.approvalInfo.departmentManagerApprovalInfo2">
+                                    <td class="td-default background-color-eee">部门总监审批意见</td>
+                                    <td class="td-default" colspan="8">
+                                        <input type="text" ng-maxlength="30" class="form-control input-border-none" ng-class="{true: '', false: 'border-none'}[type==1]" ng-model="requestData.departmentManagerApprovalInfo2" ng-disabled="!data.approvalInfo.departmentManagerApprovalInfo2.writable" ng-required="data.approvalInfo.departmentManagerApprovalInfo2.required">
+                                    </td>
+                                </tr>
+                                <tr ng-if="data.approvalInfo.buManagerApprovalInfo2">
+                                    <td class="td-default background-color-eee">事业部总经理审批</td>
+                                    <td class="td-default" colspan="8">
+                                        <input type="text" ng-maxlength="30" class="form-control input-border-none" ng-class="{true: '', false: 'border-none'}[type==1]" ng-model="requestData.buManagerApprovalInfo2" ng-disabled="!data.approvalInfo.buManagerApprovalInfo2.writable" ng-required="data.approvalInfo.buManagerApprovalInfo2.required">
+                                    </td>
+                                </tr>
+                                <tr ng-if="data.approvalInfo.financeDirectorApprovalInfo">
+                                    <td class="td-default background-color-eee">财务总监审批意见</td>
+                                    <td class="td-default" colspan="8">
+                                        <input type="text" ng-maxlength="30" class="form-control input-border-none" ng-class="{true: '', false: 'border-none'}[type==1]" ng-model="requestData.financeDirectorApprovalInfo" ng-disabled="!data.approvalInfo.financeDirectorApprovalInfo.writable" ng-required="data.approvalInfo.financeDirectorApprovalInfo.required">
+                                    </td>
+                                </tr>
+                                <tr ng-if="data.approvalInfo.executiveDirectorApprovalInfo">
+                                    <td class="td-default background-color-eee">执行董事审批意见</td>
+                                    <td class="td-default" colspan="8">
+                                        <input type="text" ng-maxlength="30" class="form-control input-border-none" ng-class="{true: '', false: 'border-none'}[type==1]" ng-model="requestData.executiveDirectorApprovalInfo" ng-disabled="!data.approvalInfo.executiveDirectorApprovalInfo.writable" ng-required="data.approvalInfo.executiveDirectorApprovalInfo.required">
+                                    </td>
+                                </tr>
+                                <tr ng-if="data.approvalInfo.chairmanApprovalInfo">
+                                    <td class="td-default background-color-eee">董事长审批意见</td>
+                                    <td class="td-default" colspan="8">
+                                        <input type="text" ng-maxlength="30" class="form-control input-border-none" ng-class="{true: '', false: 'border-none'}[type==1]" ng-model="requestData.chairmanApprovalInfo" ng-disabled="!data.approvalInfo.chairmanApprovalInfo.writable" ng-required="data.approvalInfo.chairmanApprovalInfo.required">
+                                    </td>
+                                </tr>
+                                <tr ng-if="isFirse">
+                                    <td class="td-default" colspan="9">
+                                        <div nv-file-drop="" uploader="uploader" filters="queueLimit, customFilter">
+                                            <div>
+                                                <h3>请选择附件</h3>
+                                                <!-- Example: nv-file-select="" uploader="{Object}" options="{Object}" filters="{String}" -->
+                                                <!-- <label>多文件上传</label>
+                                                <input type="file" nv-file-select="" uploader="uploader" multiple  /><br/> -->
+                                                <!-- <label>单文件上传</label> -->
+                                                <input type="file" nv-file-select="" uploader="uploader" multiple/>
+                                            </div>
+                                            <div style="margin-bottom: 40px">
+
+                                                <!-- <h3>上传队列</h3>
+                                                <p>队列长度: {{ uploader.queue.length }}</p> -->
+
+                                                <table class="table">
+                                                    <thead>
+                                                    <tr>
+                                                        <th width="30%">名称</th>
+                                                        <th ng-show="uploader.isHTML5">大小</th>
+                                                        <th width="30%" ng-show="uploader.isHTML5">进度</th>
+                                                        <th>状态</th>
+                                                        <th>操作</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr ng-repeat="item in uploader.queue">
+                                                        <td><strong>{{ item.file.name }}</strong></td>
+                                                        <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+                                                        <td ng-show="uploader.isHTML5">
+                                                            <div class="progress" style="margin-bottom: 0;">
+                                                                <div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                                                            <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                                                            <span ng-show="item.isError"><i class="glyphicon glyphicon-delete"></i></span>
+                                                        </td>
+                                                        <td nowrap>
+                                                            <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+                                                                <span class="glyphicon glyphicon-upload"></span> 上传文件
+                                                            </button>
+                                                            <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
+                                                                <span class="glyphicon glyphicon-ban-circle"></span> 取消上传
+                                                            </button>
+                                                            <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
+                                                                <span class="glyphicon glyphicon-trash"></span> 删除文件
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+                                                <div >
+                                                    <div>
+                                                        总上传进度:
+                                                        <div class="progress" style="">
+                                                            <div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- <button type="button" class="btn btn-success btn-s" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length">
+                                                        <span class="glyphicon glyphicon-upload"></span> Upload all
+                                                    </button>
+                                                    <button type="button" class="btn btn-warning btn-s" ng-click="uploader.cancelAll()" ng-disabled="!uploader.isUploading">
+                                                        <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
+                                                    </button>
+                                                    <button type="button" class="btn btn-danger btn-s" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length">
+                                                        <span class="glyphicon glyphicon-trash"></span> Remove all
+                                                    </button> -->
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <!-- <td class="text-right" colspan="9">添加附件</td>-->
+                                </tr>
+                                <tr ng-repeat="row in fileLists">
+                                    <td colspan="8"><a ng-href=""  ng-click="openUrl(row.url)">{{row.url}}</a></td>
+                                    <td colspan="1"><button class="btn" ng-click="deleteFile($index)" ng-if="isFirse">删除</button></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                        <table style="table-layout:fixed;" ng-if="type==1">
+                            <tbody >
+
+                                <tr>
+                                    <td class="text-center" colspan="9">
+                                        <div class="btn btn-success" ng-disabled="workFlowDetailFrom.$invalid" ng-click="submitNextStep()"  >提交下一步</div>
+                                        <div class="btn btn-success" ng-disabled="workFlowDetailFrom.$invalid" ng-click="callBackStep()" ng-if="!isFirse">打回发起者</div>
+                                        <div class="btn btn-success" ng-click="deleteProcess()"  ng-if="isFirse">撤销</div>
+                                        <div class="btn btn-success" ng-click="saveDraft()" ng-if="isFirse">保存</div>
+                                        <div class="btn btn-success" ng-disabled="workFlowDetailFrom.$invalid" ng-click="proceedAndSaveDraft()" ng-if="isFirse">提交下一步并保存</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+

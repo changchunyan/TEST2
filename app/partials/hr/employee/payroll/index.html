@@ -1,0 +1,83 @@
+<style>
+    li {
+        display: inline;
+    }
+
+    li + li {
+        margin-left: 15px;
+    }
+</style>
+<div class="view-frame">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <!-- show employee view -->
+    <div class="view-content mt-modal-recording">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="">人员信息管理</a> <span class="divider"></span></li>
+                <li class="active">工资条</li>
+            </ul>
+        </div>
+        <!--<div class="tabs-title"></div>-->
+        <div class="mt-student-m br-gray h-auto">
+            <h2>工资条</h2>
+            <ul class="f14 cf"><!-- ng-click="downloadTem()"-->
+                <li><a class="mt-blue" target="_blank" href="{{downloadUrl}}">下载工资条导入模板</a></li>
+                <li><a class="mt-purple" ng-click="createMonthPayroll()">创建月度工资表</a></li>
+            </ul>
+        </div>
+        <div class="br-gray mt-list">
+            <h2><span class="h2-span">工资条列表</span></h2>
+            <div class="overflow-x">
+                <table class="table table-bordered table-striped mt-scroll" style="background-color: #fff;" st-pipe="findPayrollItems" st-table="s">
+                    <thead>
+                    <tr>
+                        <th>月份</th>
+                        <th>人数</th>
+                        <th>创建时间</th>
+                        <th>状态</th>
+                        <th>发送时间</th>
+                        <th>操作</th>
+                    </tr>
+                    <tbody ng-show="!isLoading">
+                    <tr ng-repeat="row in payrollItems">
+                        <td>{{row.month_id}}</td>
+                        <td>{{row.count}}</td>
+                        <td>{{row.create_at | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                        <td>{{row.state?'已发送':'未发送'}}</td>
+                        <td>{{row.issue_date | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                        <td>
+                            <ul>
+                                <li>
+                                    <a ng-click="detailMonthPayrollList(row.month_id,'detail')">查看</a>
+                                </li>
+                                <li ng-if="!row.state">
+                                    <a ng-click="detailMonthPayrollList(row.month_id)">编辑</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tbody ng-show="isLoading">
+                    <tr>
+                        <td colspan="6" class="text-center">
+                            <div class="loading-indicator"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <!-- <tfoot>
+                     <tr>
+                         <td class="text-center" st-pagination="" st-items-by-page="10"
+                             st-template="partials/util/pagination.custom.html"
+                             st-template="partials/util/pagination.custom.html"
+                             colspan="8">
+                         </td>
+                     </tr>
+                     </tfoot>-->
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>

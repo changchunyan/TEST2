@@ -1,0 +1,32 @@
+<div class="row" ng-controller="BiBaseController">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content" ng-controller="BiClassHourController">
+	    <div>
+		    <ul class="breadcrumb">
+		        <li><img ng-src="img/icon/bi/jiaowu.png" src="img/icon/bi/jiaowu.png"> 教务报表<span class="divider"></span></li>
+		        <li class="active">课时统计</li>
+		    </ul>
+		</div>
+        <!-- 筛选条件 -->
+		<div ng-include="baseHtmlUrl" style="padding:0px 15px"></div>
+
+		<!-- 表格 -->
+		<div class="default-box">
+		    <h4>
+		       	课时统计
+		        <span ng-if="!isDay">（从 {{modelStartTime | date : 'yyyy-MM-dd'}} 至 {{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+		        <span ng-if="isDay">（{{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+		        <span ng-if="presentTime">最新统计时间：{{presentTime}}</span>
+		        <button class="btn btn-success bi-list-head" ng-click="exportAll()">导出列表</button>
+		        <button class="btn btn-success bi-list-head" ng-click="exchangeTable()" ng-if="isSchoolUser">
+		        	<span ng-if="currentTable==='1'">数据明细</span>
+		        	<span ng-if="currentTable==='2'">数据汇总</span>
+		        </button>
+		    </h4>
+		    <br/>
+			<div ng-include="'partials/bi/biClassHour/biClassHour.table.html'"></div>
+		</div>
+    </div>
+</div>

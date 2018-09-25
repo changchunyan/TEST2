@@ -1,0 +1,96 @@
+<div class="view-frame">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+
+    <div class="view-content">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="">培训管理</a> <span class="divider"></span></li>
+                <li class="active">个人培训中心</li>
+            </ul>
+        </div>
+        <tabs>
+            <pane title="培训管理">
+                <div class="row">
+                    <div class="c-select-text">
+                    <label for="trainingName">培训名称</label>
+                    <input type="text" name="trainingName" id="trainingName" class="search-form-input"
+                           ng-model="sf_training.trainingName"  />
+                    <label for="trainingType">所属培训类别</label>
+                    <input type="text" name="trainingType" id="trainingType" ng-click="showTrainingType()" class="search-form-input"
+                           ng-model="selectedTrainingType.name"  />
+                    <label for="trainingNature">报名状态</label>
+					<select ng-model="sf_training.trainingStatus" name="trainingNature" id="trainingNature"
+                   		class="search-form-input">
+               			<option value="">------请选择------</option>
+               			<option value="1">未报名</option>
+               			<option value="2">已报名</option>
+               			<option value="3">已结束(已报名)</option>
+               			<option value="4">已结束(未报名)</option>
+           			</select>    
+                    <label for="trainingDateBegin">培训日期</label>
+                    <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange=""  name="trainingDateBegin" id="trainingDateBegin" class="search-form-input"
+                           ng-model="sf_training.trainingDateBegin"  />  
+                	<label for="trainingDateEnd">————</label>
+                   	<input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange=""  name="trainingDateEnd" id="trainingDateEnd" class="search-form-input margin-left-20"
+                           ng-model="sf_training.trainingDateEnd"  /> 
+                  
+                    <div class="c_center">
+                        <button id="keydown-query" class="btn" ng-click="getTrainingByFilter()">查询</button>
+                        <button class="btn" ng-click="reset()">重置</button>
+                    </div>
+
+                </div>
+
+                    <div class="table-responsive c-select-text" style="overflow:scroll;overflow-y:hidden">
+                        <div class="yws-container">
+                            <div class="yws-left"><h4>列表</h4></div>
+                        </div>
+
+                        <table st-pipe="getTrainingList" st-table="trainings" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>培训编号</th>
+                                <th>培训名称</th>
+                                <th>所属培训类别</th>
+                                <th>培训发布日期</th>
+                                <th>培训时间</th>
+                                <th>培训性质</th>
+                                <th>查看</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="training in trainings">
+                                <td>{{training.id}}</td>
+                                <td>{{training.name}}</td>
+                                <td>{{training.trainingType.name}}</td>
+                                <td>{{training.createdAt | date: 'yyyy-MM-dd'}}</td>
+                                <td>{{training.trainingDate}}</td>
+                                <td>{{dictData.trainingNature[training.trainingNature-1].name}}</td>
+                                <td>
+                                	<a ng-click="showDetail(training)" title="查看"><span class="glyphicon glyphicon-plus"></span></a>
+                                </td>
+                                <td>
+                                	<a ng-if="!training.timeOut && !training.isSignUp" ng-click="signUp(training)" title="报名" ng-style="{ 'color':'#0000FF'}">报名</a><!-- 还没过报名截止时间，可以报名 -->
+                                	<label ng-if="training.timeOut && !training.end&& !training.isSignUp" ng-style="{ 'color':'#cccccc'}">报名</label><!-- 超过报名截止时间，但是培训还没结束，不能报名，置灰 -->
+                                	<label ng-if="!training.end && training.isSignUp" ng-style="{ 'color':'#5cb85c'}">已报名</label>
+                                	<label ng-if="training.end && training.isSignUp"  ng-style="{ 'color':'#cccccc'}">已结束(已报名)</label>
+                                	<label ng-if="training.end && !training.isSignUp"  ng-style="{ 'color':'#cccccc'}">已结束(未报名)</label>                                
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="8">
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    </div>
+            </pane>
+        </tabs>
+    </div>
+</div>

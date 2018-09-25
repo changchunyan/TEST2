@@ -1,0 +1,209 @@
+<!-- search form -->
+<div class=" pl-0 br-gray">
+    <form id="search-form " class="c-select-text">
+        <table rules="none">
+            <tr>
+                <td>
+                    <label for="name" class="search-form-label">姓名</label>
+                    <input ng-model="se.user.name" type="text" name="name" id="name" class="search-form-input" />
+                </td>
+                <td>
+                    <label for="id" class="search-form-label">工号</label>
+                    <input ng-model="se.id" type="text" name="id" id="id" class="search-form-input" />
+                </td>
+                <td>
+                    <label for="mobile" class="search-form-label">手机号</label>
+                    <input ng-model="se.mobile" type="text" name="mobile" id="mobile" class="search-form-input" />
+                </td>
+                <td>
+                    <label for="age" class="search-form-label">年龄</label>
+                    <input ng-model="se.age" type="text" name="age" id="age" class="search-form-input" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="department" class="search-form-label">部门/校区</label>
+                    <input ng-click="showSelectDepartment()" ng-model="employee.department.name" type="text" name="department" id="department"  class="search-form-input" />
+                </td>
+                <td>
+                    <label for="position" class="search-form-label">岗位</label>
+                    <select ng-options="position.name for position in positions track by position.id"
+                            ng-model="se.position" name="position" id="position" class="search-form-input">
+                    </select>
+                    <!--<input ng-model="employee.position" type="text" name="position" id="position"  class="search-form-input" />-->
+                </td>
+                <td>
+                    <label for="registeredResidenceType" class="search-form-label">户口性质</label>
+                    <select ng-model="se.registeredResidenceType" name="registeredResidenceType" id="registeredResidenceType"
+                            class="search-form-input" ng-options="tl.id as tl.name for tl in dictData.registeredResidenceType">
+                        <option value="">------请选择------</option>
+                    </select>
+                </td>
+                <td>
+                    <label for="educationDegree" class="search-form-label" >学历</label>
+                    <select ng-model="se.educationDegree" name="educationDegree" id="educationDegree"
+                            class="search-form-input" ng-options="tl.id as tl.name for tl in dictData.educationDegree">
+                        <option value="">------请选择------</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="employmentLevel" class="search-form-label">职级</label>
+                    <select ng-model="se.employmentLevel" name="employmentLevel" id="employmentLevel" ng-blur="getEmploymentLevel()"
+                            class="search-form-input" ng-options="tl.id as tl.name for tl in dictData.employmentLevel">
+                        <option value="">------请选择------</option>
+                    </select>
+                </td>
+                <td>
+                    <label for="starLevel" class="search-form-label">星级</label>
+                    <select ng-model="se.starLevel" name="starLevel" id="starLevel"
+                            class="search-form-input" ng-options="tl.id as tl.name for tl in dictData.starLevel">
+                        <option value="">------请选择------</option>
+                    </select>
+                </td>
+                <td><label for="subject" class="search-form-label">学科</label>
+                    <select ng-model="se.subject" name="subject" id="subject" class="search-form-input"
+                            ng-options="subject.name for subject in subjects">
+                        <option value="">------请选择------</option>
+                    </select>
+                </td>
+                <td>
+                    <label for="ourAge"  class="search-form-label">司龄</label>
+                    <input ng-model="se.workingYears" type="text" name="ourAge" id="ourAge"  class="search-form-input" />
+                </td>
+            </tr>
+            <tr>
+                <!-- <td>
+                    <label for="hiringDate" class="search-form-label">入职日期</label>
+                    <input type="text" name="hiringDate" id="hiringDate" datePicker ng-model="se.hiringDate"
+                           class="search-form-input" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  onchange="" readonly/>
+                </td> -->
+                <td class=" width-85">
+                    <label for="hiringDateBegin" class="search-form-label">入职日期</label>
+                    <input type="text" name="hiringDateBegin" id="hiringDateBegin" datePicker ng-model="se.hiringDateBegin"
+                           class="search-form-label mt-input-1" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  onchange="" readonly/>
+                    -
+                    <input type="text" name="hiringDateEnd" id="hiringDateEnd" datePicker ng-model="se.hiringDateEnd"
+                           class="search-form-label mt-input-1" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  onchange="" readonly/>
+                </td>
+                <td>
+                    <label for="contractType"  class="search-form-label">合同类型</label>
+                    <select ng-model="se.contractType" name="contractType" id="contractType"
+                            class="search-form-input" ng-options="tl.id as tl.name for tl in dictData.contractType">
+                        <option value="">------请选择------</option>
+                    </select>
+                </td>
+                <td>
+                    <label for="employmentType"  class="search-form-label">在职状态</label>
+                    <select ng-model="se.employmentType" name="employmentType" id="employmentType"
+                            class="search-form-input" ng-options="tl.id as tl.name for tl in dictData.employmentType">
+                        <option value="">------请选择------</option>
+                    </select>
+                </td>
+                <td>
+                    <label for="employer"  class="search-form-label">合同签署单位</label>
+                    <select ng-model="se.employer" name="employer" id="employer"
+                            class="search-form-input" ng-options="tl.id as tl.name for tl in dictData.employer">
+                        <option value="">------请选择------</option>
+                    </select>
+                </td>
+            </tr>
+
+        </table>
+        <div class="c_center">
+            <button id="keydown-query3" class="btn-base btn btn-success btn-select" ng-click="getEmployeesByFilters(0)">查询</button>
+            <button class="btn-base btn btn-reast" ng-click="reset(0)">重置</button>
+        </div>
+    </form>
+</div>
+<div class="table-responsive c-select-text pl-0 br-gray pt-0" >
+    <h2 class="yws-left width100 mt-student-m"><span class="yws-left">员工列表</span>
+        <ul class="f14 cf yws-left width80 ml15">
+            <li ng-if="showPermissions('EmployeeManagement_add')"><a class="mt-purple" ng-click="showAddView()">添加员工</a></li>
+            <li ng-if="showPermissions('EmployeeManagement_export')"><a class="mt-export" ng-click="exportToExcel()">导出花名册</a></li>
+        </ul>
+    </h2>
+    <table st-pipe="getServingEmployees" st-table="employees" class="table table-bordered table-striped">
+        <!--<div class="yws-container ">
+
+            <div class="yws-right">
+                <button class="btn btn-success" ng-click="showAddView()">添加员工</button>
+                &lt;!&ndash;  <button class="btn btn-success"><a ng-href="{{domain}}/优胜教育教师导入模版.xlsx">下载教师导入模版</a></button>
+                <button class="btn btn-success" ng-click="showImportModal()">导入教师</button> &ndash;&gt;
+                <button class="btn btn-success" ng-click="exportToExcel()">导出花名册</button>
+            </div>
+        </div>-->
+
+        <thead>
+        <tr>
+            <th style="padding-left: 10px">员工工号</th>
+            <th>员工姓名</th>
+            <th>系统登录账号</th>
+            <th>手机号</th>
+            <th>所属机构</th>
+            <th>所属岗位</th>
+            <th>工作身份</th>
+            <th>职级</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="employee in employees track by $index">
+            <td style="padding-left: 10px">{{employee.id}}</td>
+            <td>{{employee.user.name}}</td>
+            <td>{{employee.user.account}}</td>
+            <td>{{employee.mobile}}</td>
+            <td>{{employee.department.name}}</td>
+            <td>{{employee.position.name}}</td>
+            <td>{{dictData.employmentType[employee.employmentType-1].name}}</td>
+            <td>{{dictData.employmentLevel[employee.employmentLevel].name}}</td>
+            <td>
+                <a class="showUI" id="nw+{{$index}}"  ng-click="nw[$index]=true"><span class="glyphicon glyphicon-caozuo" title="操作"></span></a>
+                <bubble  ng-if="nw[$index]" for="nw+{{$index}}" align="bottom" close="nw[$index]=false" close-action="outerchick " ng-mouseleave="nw[$index]=false;">
+                    <ul>
+                        <li ng-if="showPermissions('EmployeeManagement_edit')" ng-click="showEditView(employee)">
+                            <a>修改信息</a>
+                        </li>
+                        <li ng-if="showPermissions('EmployeeManagement_show')" ng-click="showDetailView(employee)">
+                            <a>查看详细</a>
+                        </li>
+                        <li ng-if="showPermissions('EmployeeManagement_resetPasswd')" ng-click="resetPassword(employee)">
+                            <a>重置密码</a>
+                        </li>
+                        <!-- <li ng-click="oneKeyTransfer(employee)">
+                            <a>一键转移</a>
+                        </li> -->
+                        <li ng-if="showPermissions('EmployeeManagement_change')" ng-click="addPersonalChange(employee)">
+                            <a>异动</a>
+                        </li>
+                        <li ng-if="showPermissions('EmployeeManagement_resign')" ng-click="removeEmployee(employee)">
+                            <a>离职</a>
+                        </li>
+                    </ul>
+                </bubble>
+                </a>
+            </td>
+            <!--	<a ng-click="activeEmail(employee)"><span class="glyphicon glyphicon-star"></span></a>&nbsp;
+            <a ng-click="showEditView(employee)" title="修改"><span class="glyphicon glyphicon-pencil"></span></a> &nbsp;
+            <a ng-click="showDetailView(employee)" title="查看详细"><span class="glyphicon glyphicon-plus"></span></a> &nbsp;
+            <a ng-click="removeEmployee(employee)" title="删除"><span class="glyphicon glyphicon-delete"></span></a>&nbsp;
+            <a ng-click="resetPassword(employee)" title="重置密码"><span class="glyphicon glyphicon-yws-lock"></span></a>&nbsp;
+            <a ng-click="oneKeyTransfer(employee)" title="一键转移"><span class="glyphicon glyphicon glyphicon-transfer"></span></a>&nbsp; -->
+        </tr>
+        </tbody>
+        <tbody ng-show="isLoading">
+        <tr>
+            <td colspan="13" class="text-center"><div class="loading-indicator"></div>
+            </td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="9">
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+

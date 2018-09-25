@@ -1,0 +1,78 @@
+<!--top-->
+<div st-pipe="$queLib.pageFindQustAll" st-table="qustList">
+    <div class="mt-input-group pra"><label>题型</label><select ng-model="$queLib.queTableState.question_type" ng-options="option.id as option.name for option in queTypeList">
+        <option value="">请选择</option>
+    </select><label class="ml-20">难度</label><select ng-model="$queLib.queTableState.diffculty">
+        <option value="">请选择</option>
+        <option value="1">易</option>
+        <option value="2">中</option>
+        <option value="3">难</option>
+        <option value="4">极难</option>
+    </select>
+        </select>
+        <!--<label class="ml-20">状态</label><select name="">
+    <option>请选择</option>
+</select>-->
+    </div>
+    <div class="mt-input-group pra">
+        <label class="c3 f16 strong">试题列表</label>
+        <input class="ml-20" ng-model="$queLib.queTableState.keyword" placeholder="输入试题名称" style="width:40%;">
+        <a><i class="glyphicon glyphicon-search"></i> </a>
+    </div>
+    <!--试题列表-->
+    <div class="tars-content of">
+        <div class="paper-item" ng-repeat="el in qustList">
+            <h2 class="f14 c5 bgc-3e"><i class="serial">{{$index+1}}</i><span class="ml-5">题型：{{el.questionType}}</span>
+                <button class="fr cart" ng-click="$queLib.add(el)" ng-disabled="el.exist">放入试题框</button>
+                <span class="fr">
+                    难度：{{el.difficulty|difficulty:el.difficulty}} 
+                    <a class="cfd2">|</a> 
+                    组卷：{{el.countRef}} 次 
+                    <a class="cfd2">|</a>
+                     题号：{{el.id+10}}
+                </span>
+            </h2>
+            <div class="topic">
+                <h6><label>年份：{{el.paperYear}}年</label><label class="ml15">{{el.paperName}}</label></h6>
+                <div class="cf1b">
+
+                    <!--<h3>【题文】翻译下面的话</h3>
+                    <h4 class="f16">我只是占位符我只是占位符我只是占位符我只是占位符我只是占位符</h4>
+                    <ul class="f14 mt-10">
+                        <li>A 是占位符我只是占位符我只是占位符我只是占位符 </li>
+                        <li>B 是占位符我只是占位符我只是占位符我 </li>
+                        <li>C 是占位符我只是占位符我只是占位符</li>
+                        <li>D 是占位符我只是占位符我只</li>
+                    </ul>-->
+                    <div ng-bind-html="getSceHtml(el.qBody)"></div>
+                    <div ng-bind-html="getSceHtml(el.qOptions)"></div>
+                    <p class="mt-10 f14" ng-if="el.qAnswer" ng-bind-html="getSceHtml(el.qAnswer)"></p>
+                    <p class="mt-10 f14" ng-if="el.qAnalysis" ng-bind-html="getSceHtml(el.qAnalysis)"></p>
+                </div>
+            </div>
+        </div>
+        <!--
+        TODO:别删除，这个是模板
+        <div class="paper-item">
+            <h2 class="f14 c5 bgc-3e"><i class="serial">01</i><span class="ml-5">题型：选择题</span><a class="fr cart">放入试题框</a><span class="fr">难度：较难 <a class="cfd2">|</a> 状态：停用 <a class="cfd2">|</a> 题号：65222</span></h2>
+            <div class="topic">
+                <h6><label>年份：2008年</label><label>基础试题19.2252</label></h6>
+                <div class="cf1b">
+                    <h3>【题文】翻译下面的话</h3>
+                    <h4 class="f16">我只是占位符我只是占位符我只是占位符我只是占位符我只是占位符</h4>
+                    <ul class="f14 mt-10">
+                        <li>A 是占位符我只是占位符我只是占位符我只是占位符 </li>
+                        <li>B 是占位符我只是占位符我只是占位符我 </li>
+                        <li>C 是占位符我只是占位符我只是占位符</li>
+                        <li>D 是占位符我只是占位符我只</li>
+                    </ul>
+                    <p class="mt-10 f14">答案：C<br/>解析：是占位符我只是占位符我只</p>
+                </div>
+            </div>
+        </div>-->
+        <!--分页-->
+        <div class="mt-page f14" id="mt_page">
+            <!-- ng-if="totalPages"-->
+        </div>
+    </div>
+</div>

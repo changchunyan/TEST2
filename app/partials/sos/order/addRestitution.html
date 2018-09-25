@@ -1,0 +1,131 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true" style="overflow-y:auto" ng-controller="OrderAddAuditBakRestitutionController">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="addRestitutionForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle"></h4>
+                </div>
+                <div class="modal-body mt-modal-order pb-20">
+                    <div class="br-gray modal-input pl-0"><!-- 返课订单课程详情列表-->
+                        <table class="table table-bordered table-striped mt-table1" st-table="orderRestitutionAvailableOrders" >
+                            <thead>
+                            <tr>
+                                <th>选择</th>
+                                <th>合同编号</th>
+                                <th>学员姓名</th>
+                                <th>签约时间</th>
+                                <th>总价</th>
+                                <th>已上课时</th>
+                                <th>剩余课时</th>
+                            </tr>
+                            </thead>
+                            <tr ng-repeat="row in orderRestitutionAvailableOrders">
+                                <td><input  name="orderRestitution" ng-checked="row.orderNo == order.orderNo" type="radio" ng-click="selectOrderRestitution(row)" ></td>
+                                <td>{{row.orderNo}}</td>
+                                <td>{{row.name}}</td>
+                                <td>{{row.contractStartDate | date:'yyyy-MM-dd'  }}</td>
+                                <td>{{row.realTotalAmount}}</td>
+                                <td>{{row.totalCourseNum-row.consumeCourseNum}}</td>
+                                <td>{{row.consumeCourseNum}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="mt-dashed"></div>
+                    <div class="row div-h50">
+                        <div class="col-sm-6 ">
+                            <label for="productId" class="col-sm-4 control-label">产品类型</label>
+                            <div class="col-sm-6">
+                                <select ng-change="onProductIdSelect()" ng-model="productId" name="productId" id="productId" class="input-sm form-control"
+                                        ng-options="option.id as option.name for option in productIds " required>
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 ">
+                            <label for="courseTypeId" class="col-sm-4 control-label">课程类型</label>
+                            <div class="col-sm-6">
+                                <select ng-change="onCourseTypeIdSelect()" ng-model="courseTypeId" name="courseTypeId" id="courseTypeId" class="input-sm form-control"
+                                        ng-options="option.id as option.name for option in courseTypeIds" required>
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 ">
+                            <label for="subjectId" class="col-sm-4 control-label">课程年级</label>
+                            <div class="col-sm-6">
+                                <select ng-model="gradeId" name="gradeId" id="gradeId" class="input-sm form-control"
+                                        ng-options="option.id as option.name for option in gradeIds" required>
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 ">
+                            <label for="gradeId" class="col-sm-4 control-label"> 产品科目</label>
+                            <div class="col-sm-6">
+                                <select ng-model="subjectId" name="subjectId" id="subjectId" class="input-sm form-control"
+                                        ng-options="option.id as option.name for option in subjectIds" required>
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="originalNum" class="col-sm-4 control-label">*返课课时</label>
+                            <div class="col-sm-6">
+                                <input type="number" min="0"  placeholder="单位为小时" name="originalNum" id="originalNum"  ng-maxlength="10" ng-pattern="/^[1-9]\d*\b|0$/"  ng-model="order.originalNum" class="input-sm form-control" required/>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="reason" class="col-sm-4 control-label">* 返课原因</label>
+                            <div class="col-sm-6">
+                                <select  ng-model="order.reason" name="reason" id="reason" class="input-sm form-control" 
+                                         ng-options="option.code as option.name for option in restitutionCourseReasons" required>
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-12 " >
+                            <button class="btn btn-success c3-lable cf br0 br-4 ti-0 fr" ng-click="addRestitutionCourse()" >添加课程</button>
+                        </div>
+                    </div>
+                    <div class="mt-dashed"></div>
+                    <div class="br-gray modal-input pl-0"><!-- 课程列表 -->
+                        <table class="table table-bordered table-striped mt-table1" st-table="order.orderCourses" >
+                            <thead>
+                            <tr>
+                                <th>课程ID</th>
+                                <th>课程类型</th>
+                                <th>年级</th>
+                                <th>科目</th>
+                                <th>性质</th>
+                                <th>课时量</th>
+                            </tr>
+                            </thead>
+                            <tr  ng-repeat="row in order.orderCourses">
+                                <td>{{row.courseId}}</td>
+                                <td>{{row.courseTypeName}}</td>
+                                <td>{{row.gradeName}}</td>
+                                <td>{{row.subjectName}}</td>
+                                <td ng-show="row.courseProperty == 2">赠课</td>
+                                <td ng-show="row.courseProperty == 3">返课</td>
+                                <td ng-show="row.courseProperty == null || row.courseProperty == 0 ">其他</td>
+                                <td>{{row.originalNum}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                    <button type="button" class="btn btn-success c5-lable" ng-disabled="addRestitutionForm.$invalid || order.orderCourses == undefined"  ng-click="saveRestitution()">保存
+                    </button>
+                    <img ng-if="dataLoading"
+                         src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

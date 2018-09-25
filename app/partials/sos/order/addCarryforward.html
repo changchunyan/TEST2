@@ -1,0 +1,216 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true" ng-controller="OrderManagementController">
+    <div class="modal-dialog" style="width:70%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" ng-bind="modalTitle"></h4>
+            </div>
+            <div id="mt-xxxxxx01">
+                <tabs>
+                    <pane title="课时订单结转">
+                        <div class="table-responsive">
+                            <form name="addCarryForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                                <div class="modal-body mt-modal-order">
+                                    <div class="br-gray modal-input pl-0">
+                                        <table class="table table-bordered table-striped"
+                                               st-table="orderTransferAvailableOrders">
+                                            <thead>
+                                            <tr>
+                                                <th>选择</th>
+                                                <th>合同编号</th>
+                                                <th>学员姓名</th>
+                                                <th>签约时间</th>
+                                                <th>总价</th>
+                                                <th>已上课时</th>
+                                                <th>剩余课时</th>
+                                            </tr>
+                                            </thead>
+                                            <tr ng-repeat="row in orderTransferAvailableOrders">
+                                                <td>
+                                                    <input type="radio" name="carryOrder" ng-click="selectOne(row,1)">
+                                                </td>
+                                                <td ng-if="row.orderNo!=row.originalOrderNo">{{row.orderNo}}</td>
+                                                <td ng-if="row.orderNo==row.originalOrderNo"></td>
+                                                <td>{{row.name}}</td>
+                                                <td>{{row.contractStartDate | date:'yyyy-MM-dd' }}</td>
+                                                <td>{{row.realTotalAmount}}</td>
+                                                <td>{{(row.totalCourseNum-row.consumeCourseNum) | number:1}}</td>
+                                                <td>{{row.consumeCourseNum}}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <hr>
+                                    <div class="overflow-x">
+                                        <table class="table table-bordered table-striped"
+                                               st-table="orderTransferAvailableOrders">
+                                            <thead>
+                                            <tr>
+                                                <th>课程名称</th>
+                                                <th>科目</th>
+                                                <th>课时性质</th>
+                                                <th>签约时间</th>
+                                                <th>购买数量</th>
+                                                <th>购买单价</th>
+                                                <th>消课课时</th>
+                                                <th>剩余课时/次</th>
+                                                <th>待分配课时/次</th>
+                                                <th>结转课时</th>
+                                                <th>结转金额</th>
+                                            </tr>
+                                            </thead>
+                                            <tr ng-repeat="row in order.orderCourses" name="orderCourse">
+                                                <td>{{row.course_name}}</td>
+                                                <td>{{row.subject_name}}</td>
+                                                <td ng-show="row.course_property == 1">正课</td>
+                                                <td ng-show="row.course_property == 2">赠课</td>
+                                                <td ng-show="row.course_property == 3">返课</td>
+                                                <td ng-show="row.course_property == 4">试听课</td>
+                                                <td ng-show="row.course_property == null || row.course_property == 0 ">
+                                                    其他
+                                                </td>
+                                                <td>{{row.contract_start_date | date:'yyyy-MM-dd' }}</td>
+                                                <td>{{row.original_num}}</td>
+                                                <td>{{row.actual_price}}</td>
+                                                <td>{{row.original_num - row.course_num | number:2}}</td>
+                                                <!-- 消课 =总课时-剩余课时 -->
+                                                <td>{{row.course_num}}</td>
+                                                <td>{{row.plan_available_num}}</td>
+                                                <td><input ng-model="row.carryForwardCourseNum" type="number"
+                                                           required class="input-sm" ng-pattern="doubleNumReg"
+                                                           ng-change="changeCarryCourseNum(row)" min="0"/>
+                                                </td>
+                                                <td>{{row.carryForwardAmount}}</td><!-- 通过结转课时*单价而来 -->
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6 form-group">
+                                            <label for="name" class=" control-label">结转金额</label>
+                                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                                <input type="text" name="name" id="name"
+                                                       ng-change="islegalCarryAmount(1)" ng-model="order.carryAmount"
+                                                       ng-maxlength="100" required class="input-sm" style="width:90%;"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4 form-group">
+                                            <label for="name" class=" control-label">转出日期</label>
+                                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                                <input type="text" datepicker
+                                                       onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"
+                                                       onchange="" readonly
+                                                       ng-value="order.carryTime | date:'yyyy-MM-dd' "
+                                                       ng-model="order.carryTime" required class="form-control"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-success c5-lable"
+                                            ng-disabled="addCarryForm.$invalid || carryAmountLegal"
+                                            ng-click="saveCarryOrder(1)">保存
+                                    </button>
+                                    <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                                    <img ng-if="dataLoading"
+                                         src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
+                                </div>
+                            </form>
+                        </div>
+                    </pane>
+                    <pane title="充值订单结转">
+                        <div class="table-responsive">
+                            <form name="orderRechargeCarryForm" role="form" class="form-horizontal showcase-form"
+                                  novalidate="">
+
+                                <div class="modal-body mt-modal-order">
+                                    <div class="br-gray modal-input pl-0"><!-- 转让订单课程详情列表-->
+                                        <table class="table table-bordered table-striped"
+                                               st-table="orderRechargeTransferAvailableOrders">
+                                            <thead>
+                                            <tr>
+                                                <th>选择</th>
+                                                <th>合同编号</th>
+                                                <th>学员姓名</th>
+                                                <th>签约时间</th>
+                                                <th>充值金额</th>
+                                                <th>实交金额</th>
+                                                <th>已消金额</th>
+                                                <th>剩余金额</th>
+                                                <th>剩余实交金额</th>
+                                                <th>可排金额</th>
+                                            </tr>
+                                            </thead>
+                                            <tr ng-repeat="row in orderRechargeTransferAvailableOrders">
+                                                <td><input type="radio" name="carryOrderTopRadio"
+                                                           ng-click="selectOne(row,2)"></td>
+                                                <td ng-if="row.orderNo!=row.originalOrderNo">{{row.orderNo}}</td>
+                                                <td ng-if="row.orderNo==row.originalOrderNo"></td>
+                                                <td>{{row.name}}</td>
+                                                <td>{{row.contractStartDate | date:'yyyy-MM-dd' }}</td>
+                                                <td>{{row.totalPrice}}</td>
+                                                <td>{{row.realTotalAmount}}</td>
+                                                <td>{{row.totalPrice-row.additionalAmount | number:2}}</td>
+                                                <td>{{row.additionalAmount}}</td>
+                                                <td>{{row.additionalAmount * row.realTotalAmount/row.totalPrice | number
+                                                    : 2}}
+                                                </td>
+                                                <td>{{row.avaliableAmount}}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-4 form-group">
+                                            <label for="agreementNo" class=" control-label">结转金额</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" ng-model="order.carryAmount"
+                                                       ng-change="islegalCarryAmount(2)" required
+                                                       class="input-sm form-control"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-4 form-group">
+                                            <label for="name" class=" control-label">剩余充值金额</label>
+                                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                                <input type="text" readonly ng-model="order.additionalAmount"
+                                                       required class="input-sm" style="width:70%;"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4 form-group">
+                                            <label for="startDate" class=" control-label">剩余实际金额</label>
+                                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                                <input type="text" readonly ng-model="order.additionalAmountAct"
+                                                       required class="input-sm" style="width:70%;"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4 form-group">
+                                            <label for="name" class=" control-label">转出日期</label>
+                                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                                <input type="text" datepicker
+                                                       onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"
+                                                       onchange="" readonly
+                                                       ng-value="order.carryTime | date:'yyyy-MM-dd' "
+                                                       ng-model="order.carryTime" required class="form-control"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-success c5-lable"
+                                            ng-disabled="orderRechargeCarryForm.$invalid || carryAmountLegal"
+                                            ng-click="saveCarryOrder(2)">保存
+                                    </button>
+                                    <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                                    <img ng-if="dataLoading"
+                                         src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
+                                </div>
+                            </form>
+                        </div>
+                    </pane>
+                </tabs>
+            </div>
+        </div>
+    </div>
+</div>

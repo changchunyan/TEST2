@@ -1,0 +1,132 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="form">
+                <div class="modal-header">
+                    <h4 class="modal-title" ng-bind="addchangeModalTitle"></h4>
+                </div>
+                <div class="modal-body">
+			        <div class="tab-block-title">新增异动</div>
+			       	<label>
+				       	异动前部门岗位：{{newChange.departmentBefore.name}}&nbsp;&nbsp;{{newChange.positionBefore.name}}&nbsp;&nbsp;&nbsp;&nbsp;
+				       	异动前底薪：{{newChange.basicSalaryBefore}}元&nbsp;&nbsp;&nbsp;&nbsp;异动前绩效：{{newChange.performanceBefore}}元&nbsp;&nbsp;&nbsp;&nbsp;
+				       	异动前提成：{{newChange.commissionBefore}}元&nbsp;&nbsp;&nbsp;&nbsp;异动前课补：{{dictData.courseType[newChange.courseLevelBefore-1].name}}  
+			        </label>
+			        <div class="tab-block-contents">
+			            <div class=" ">
+			                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.departmentAfter.$dirty && form.departmentAfter.$error.required }">
+			                    <label for="departmentAfter" class="col-sm-3 control-label">异动部门</label>
+			                    <div class="col-sm-9">
+				                    <input name="departmentAfter" id="departmentAfter" class="form-control"
+			                               ng-model="newChange.departmentAfter.name" ng-click="showSelectDepartment(2)" required/>
+			                    </div>
+			                </div>
+			                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.positionAfter.$dirty && form.positionAfter.$error.required }">
+			                    <label for="positionAfter" class="col-sm-3 control-label">异动岗位</label>
+			                    <div class="col-sm-9">
+				                    <select ng-options="position.name for position in positions track by position.id"
+			                            ng-model="newChange.positionAfter" name="positionAfter" id="positionAfter" class="form-control" required>
+			                        </select>
+			                    </div>
+			                </div>
+			            </div>
+			            
+			            <div class=" ">
+			                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.employmentLevelAfter.$dirty && form.employmentLevelAfter.$error.required }">
+			                    <label for="changeType" class="col-sm-3 control-label">职级</label>
+			                    <div class="col-sm-9">
+				                    <select ng-model="newChange.employmentLevelAfter" name="employmentLevelAfter" id="employmentLevelAfter"
+			                                class="form-control" ng-options="tl.id as tl.name for tl in dictData.employmentLevel" required>
+			                            <option value="">------请选择------</option>
+			                        </select>
+			                    </div>
+			                </div>
+			            </div>
+			            
+			            <div class=" ">
+			                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.basicSalaryAfter.$dirty && form.basicSalaryAfter.$error.required }">
+			                    <label for="basciSalaryAfter" class="col-sm-3 control-label">异动底薪</label>
+			                    <div class="col-sm-9">
+			                        <input type="text" name="basicSalaryAfter" id="basicSalaryAfter" ng-model="newChange.basicSalaryAfter"
+			                               class="form-control" placeholder="只能填写数字"/>
+			                    </div>
+			                </div>
+			                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.performanceAfter.$dirty && form.performanceAfter.$error.required }">
+			                    <label for="performanceAfter" class="col-sm-3 control-label">异动绩效</label>
+			                    <div class="col-sm-9">
+			                        <input type="text" name="performanceAfter" id="performanceAfter" ng-model="newChange.performanceAfter"
+			                               class="form-control" placeholder="只能填写数字"/>
+			                    </div>
+			                </div>
+			            </div>
+			            <div class=" ">
+			                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.commissionAfter.$dirty && form.commissionAfter.$error.required }">
+			                    <label for="commissionAfter" class="col-sm-3 control-label">异动提成</label>
+			                    <div class="col-sm-9">
+			                        <input type="text" name="commissionAfter" id="commissionAfter" ng-model="newChange.commissionAfter"
+			                               class="form-control"/>
+			                    </div>
+			                </div>
+			                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.basicSalaryFloatAfter.$dirty && form.basicSalaryFloatAfter.$error.required }">
+			                    <label for="basicSalaryFloatAfter" class="col-sm-3 control-label">浮动底薪</label>
+			                    <div class="col-sm-9">
+			                        <input type="text" name="basicSalaryFloatAfter" id="basicSalaryFloatAfter" ng-model="newChange.basicSalaryFloatAfter"
+			                               class="form-control" placeholder="只能填写数字"/>
+			                    </div>
+			                </div>
+		                </div>
+		                <div class=" ">
+		                	<div class="col-sm-6 form-group" ng-class="{ 'has-error': form.classHourDuty.$dirty && form.classHourDutyAfter.$error.required }">
+			                    <label for="classHourDutyAfter" class="col-sm-3 control-label">义务课时</label>
+			                    <div class="col-sm-9">
+			                        <input type="text" name="classHourDutyAfter" id="classHourDutyAfter" ng-model="newChange.classHourDutyAfter"
+			                               class="form-control" placeholder="只能填写数字"/>
+			                    </div>
+			                </div>
+			                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.otherSalaryAfter.$dirty && form.otherSalaryAfter.$error.required }">
+			                    <label for="otherSalaryAfter" class="col-sm-3 control-label">其他薪资</label>
+			                    <div class="col-sm-9">
+			                        <input type="text" name="otherSalaryAfter" id="other" ng-model="newChange.otherSalaryAfter"
+			                               class="form-control" placeholder="只能填写数字"/>
+			                    </div>
+			                </div>
+		                </div>
+			            <div class="">   
+			                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.courseLevelAfter.$dirty && form.courseLevelAfter.$error.required }">
+			                    <label for="courseLevelAfter" class="col-sm-3 control-label">异动课补</label>
+			                    <div class="col-sm-9">
+				                    <select ng-model="newChange.courseLevelAfter" name="courseLevelAfter" id="courseLevelAfter"
+			                                class="form-control" ng-options="tl.id as tl.name for tl in dictData.courseType">
+			                            <option value="">------请选择------</option>
+			                        </select>
+			                    </div>
+			                </div>
+			                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.changeType.$dirty && form.changeType.$error.required }">                    
+			                    <label for="changeType" class="col-sm-3 control-label">异动类型</label>
+			                    <div class="col-sm-9">
+				                    <select ng-model="newChange.changeType" name="changeType" id="changeType"
+			                                class="form-control" ng-options="tl.id as tl.name for tl in dictData.changeType">
+			                            <option value="">------请选择------</option>
+			                        </select>
+			                    </div>
+			                </div>
+			            </div>
+			             <div class=" ">
+			                <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.remark.$dirty && form.remark.$error.required }">
+			                    <label for="remark" class="col-sm-3 control-label">备注</label>
+			                    <div class="col-sm-9">
+			                        <input type="text" name="remark" id="remark" ng-model="newChange.remark"
+			                               class="form-control"/>
+			                    </div>
+			                </div>
+			            </div>
+        			</div>
+        			<div class="modal-footer">
+	                    <button class="btn btn-success" ng-click="saveChange()" ng-disabled="form.$invalid">确定</button>
+						<button class="btn btn-default" ng-click="cancleChange()" >取消</button>
+	                </div>
+                </div>
+             </form>
+    	</div>
+    </div>
+</div>

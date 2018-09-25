@@ -1,0 +1,658 @@
+<div class="workbench-container" ng-controller="workbench.xuexiMasterCtrl as xxmc">
+    <!--包括图表和快速链接-->
+    <div class="yws-container">
+        <!--图表-->
+        <div class="yws-left  workbench-chart mt-left">
+            <div class="workbench-chart-container" >
+                <tabs>
+                    <pane title="团队数据"  >
+                        <div class="yws-container {{tac.classDataType}}" title=""  style="background-color: #FFFFFF" ng-controller="workbench.xuexiMaster.teamCtrl as tac">
+                            <!--饼图模块-->
+                            <div class="pie-chart">
+                                <div class="pie-chart-container">
+                                    <div class="chart-top">
+                                        <div class="yws-left">
+                                            <button type="button" ng-click=" selectedCycle(tac.classDataType+' .pie-chart .chart-top .yws-left','day', getPieDate,tac)" class="btn btn-success cycle-day chart-active">日</button>
+                                            <button type="button" ng-click=" selectedCycle(tac.classDataType+' .pie-chart .chart-top .yws-left','week', getPieDate,tac)" class="btn btn-success cycle-week">周</button>
+                                            <button type="button" ng-click=" selectedCycle(tac.classDataType+' .pie-chart .chart-top .yws-left','month', getPieDate,tac)" class="btn btn-success cycle-month">月</button>
+                                        </div>
+                                        <div class="yws-right">
+                                            <button type="button" ng-click="selectedDetail(tac.classDataType+' .pie-chart .chart-top .yws-right','notShowDetail', ifShowDetail,tac)"  class="btn btn-success not-show-detail chart-active">汇总</button>
+                                            <button type="button" ng-click="selectedDetail(tac.classDataType+' .pie-chart .chart-top .yws-right','showDetail', ifShowDetail,tac)"  class="btn btn-success show-detail">明细</button>
+                                        </div>
+                                    </div>
+                                    <div class="yws-container chart-content" ng-if="!tac.views.isShowDetail">
+                                        <div class="yws-left cir-container"><div class="pie-circular circular-cfj1"><div class="circular-title" ng-bind=" tac.views.pieData.visitCount"></div></div><div class="cir-bottom">到访数</div></div>
+                                        <div class="yws-left cir-container"><div class="pie-circular circular-cfj2"><div class="circular-title" ng-bind=" tac.views.pieData.signedCount"></div></div><div class="cir-bottom">签单数</div></div>
+                                        <!--<div class="yws-left cir-container"><div class="pie-circular circular-cfj3"><div class="circular-title" ng-bind=" tac.views.pieData.referralCount"></div></div><div class="cir-bottom">推荐数</div></div>-->
+                                        <div class="yws-left cir-container"><div class="pie-circular circular-cfj4"><div class="circular-title" ng-bind=" tac.views.pieData.signedMoney"></div></div><div class="cir-bottom">签单金额</div></div>
+
+                                    </div>
+                                    <div class="yws-container" ng-if="tac.views.isShowDetail">
+                                        <div class="table-responsive no-b-t" style="overflow-y:hidden">
+                                            <table class="table table-bordered table-striped mt-table1"  st-pipe="tac.callDataMinxi" st-table="tac.dataMingxi" >
+                                                <thead>
+                                                <tr>
+                                                    <th>学习顾问</th>
+                                                    <th>到访数</th>
+                                                    <th>签约数</th>
+                                                    <th>签约金额</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody >
+                                                <tr ng-repeat="row in tac.dataMingxi">
+                                                    <td>{{row.userName}} </td>
+                                                    <td>{{row.daoFangShu || 0}} </td>
+                                                    <td>{{row.qianYue}} </td>
+                                                    <td>{{row.qianDanJinEr}} </td>
+                                                </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                <tr>
+                                                    <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="24"></td>
+                                                </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="chart-foot yws-container">
+                                        <div class="update-time yws-right">{{tac.views.updateTimeDsc}}</div>
+                                    </div>
+                                </div>
+                                <div class="mt-center"></div>
+                            </div>
+                            <!--折线图模块-->
+                            <div class="line-chart">
+                                <div class="line-chart-container">
+                                    <div ng-if="!tac.views.isShowTop10">
+                                        <div class="chart-top">
+                                            <div class="yws-left">
+                                                <!-- <button type="button" ng-click=" selectedCycle('line-chart .chart-top','day', getLineDateByCycle)"  class="btn cycle-day chart-active">日</button>-->
+                                                <button type="button" ng-click=" selectedCycle(tac.classDataType+' .line-chart .chart-top','day', getLineDateByCycle,tac)" class="btn btn-success cycle-day chart-active ">日</button>
+                                                <button type="button" ng-click=" selectedCycle(tac.classDataType+' .line-chart .chart-top','week', getLineDateByCycle,tac)" class="btn btn-success cycle-week ">周</button>
+                                                <button type="button" ng-click=" selectedCycle(tac.classDataType+' .line-chart .chart-top','month', getLineDateByCycle,tac)"  class="btn btn-success cycle-month">月</button>
+                                            </div>
+                                            <div class="yws-right">
+                                                <button type="button" ng-click="ifShowTop10(true,tac)"  class="btn btn-success cycle-month">10强排名</button>
+                                            </div>
+
+                                        </div>
+                                        <div class="yws-container line-container">
+                                            <div class="chart-button-left yws-left">
+                                                <button class="but-count yws-lef line-visit-count chart-active" ng-click=" selectedCount(tac.classDataType+' .chart-button-left','visitCount',getLineDateByCount,tac)">到访数</button>
+                                                <button class="but-count yws-lef line-signed-count" ng-click=" selectedCount(tac.classDataType+' .chart-button-left','signedCount',getLineDateByCount,tac)">签单数</button>
+                                                <button class="but-count yws-lef line-signed-money" ng-click=" selectedCount(tac.classDataType+' .chart-button-left','signedMoney',getLineDateByCount,tac)">签单金额</button>
+                                                <!--<button class="but-count yws-lef line-referral-count" ng-click=" selectedCount(tac.classDataType+' .chart-button-left','referralCount',getLineDateByCount,tac)">推荐数</button>-->
+                                            </div>
+                                            <div class="yws-container yws-content">
+                                               <!-- <line-chart ng-if="!tac.views.isLineMonth" config="config" data=" tac.views.lineData"></line-chart>
+                                                <line-chart ng-if="tac.views.isLineMonth" config="config" data=" tac.views.lineMonthData"></line-chart>-->
+                                                <line-chart ng-if="tac.lineConfig.dateType == 1" config="config" data=" tac.views.lineDayData"></line-chart>
+                                                <line-chart ng-if="tac.lineConfig.dateType == 2" config="config" data=" tac.views.lineData"></line-chart>
+                                                <line-chart ng-if="tac.lineConfig.dateType == 3" config="config" data=" tac.views.lineMonthData"></line-chart>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div ng-if="tac.views.isShowTop10">
+                                        <div>
+                                            <div class="chart-top">
+                                                <div class="yws-left">
+                                                    <button type="button" ng-click="ifShowTop10(false,tac)"  class="btn btn-success cycle-month">返回</button>
+                                                </div>
+                                                <div class="yws-right">
+                                                    我的排名：{{tac.rank}}名
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="table-responsive no-b-t" style="overflow-y:hidden">
+                                            <table class="table table-bordered table-striped mt-table1"  st-pipe="tac.callDataTop10" st-table="tac.dataTop10" >
+                                                <thead>
+                                                <tr>
+                                                    <th>排名</th>
+                                                    <th>名称</th>
+                                                    <th>所属校区</th>
+                                                    <th st-sort="qidan" class="sort-link">签单数</th>
+                                                    <th st-sort="jine" class="sort-link">签单金额</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody >
+                                                <tr ng-repeat="row in tac.dataTop10">
+                                                    <td>{{$index+1}} </td>
+                                                    <td>{{row.name}} </td>
+                                                    <td>{{row.depName}}</td>
+                                                    <td>{{row.qianYue}}</td>
+                                                    <td>{{row.qianDanJinEr}}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </pane>
+                    <pane title="个人数据"  >
+                        <div class="yws-container {{osc.classDataType}}" title="" style="background-color: #FFFFFF" ng-controller="workbench.xuexiMaster.oneSelfCtrl as osc">
+                            <!--饼图模块-->
+                            <div class="pie-chart">
+                                <div class="pie-chart-container">
+                                    <div class="chart-top">
+                                        <div class="yws-left">
+                                            <button type="button" ng-click=" selectedCycle(osc.classDataType+' .pie-chart .chart-top .yws-left','day', getPieDate,osc)" class="btn btn-success cycle-day chart-active">日</button>
+                                            <button type="button" ng-click=" selectedCycle(osc.classDataType+' .pie-chart .chart-top .yws-left','week', getPieDate,osc)" class="btn btn-success cycle-week">周</button>
+                                            <button type="button" ng-click=" selectedCycle(osc.classDataType+' .pie-chart .chart-top .yws-left','month', getPieDate,osc)" class="btn btn-success cycle-month">月</button>
+                                        </div>
+                                        <!--<div class="yws-right">
+                                            <button type="button" ng-click="selectedDetail(osc.classDataType+' .pie-chart .chart-top .yws-right','notShowDetail', ifShowDetail,osc)"  class="btn btn-success not-show-detail chart-active">汇总</button>
+                                            <button type="button" ng-click="selectedDetail(osc.classDataType+' .pie-chart .chart-top .yws-right','showDetail', ifShowDetail,osc)"  class="btn btn-success show-detail">明细</button>
+                                        </div>-->
+                                    </div>
+                                    <div class="yws-container chart-content" ng-if="!osc.views.isShowDetail">
+                                        <div class="yws-left cir-container"><div class="pie-circular circular-cfj1"><div class="circular-title" ng-bind=" osc.views.pieData.visitCount"></div></div><div class="cir-bottom">到访数</div></div>
+                                        <div class="yws-left cir-container"><div class="pie-circular circular-cfj2"><div class="circular-title" ng-bind=" osc.views.pieData.signedCount"></div></div><div class="cir-bottom">签单数</div></div>
+                                        <!--<div class="yws-left cir-container"><div class="pie-circular circular-cfj3"><div class="circular-title" ng-bind=" osc.views.pieData.referralCount"></div></div><div class="cir-bottom">推荐数</div></div>-->
+                                        <div class="yws-left cir-container"><div class="pie-circular circular-cfj4"><div class="circular-title" ng-bind=" osc.views.pieData.signedMoney"></div></div><div class="cir-bottom">签单金额</div></div>
+
+                                    </div>
+                                    <div class="yws-container" ng-if="osc.views.isShowDetail">
+                                        <h2>明细</h2>
+                                    </div>
+                                    <div class="chart-foot yws-container">
+                                        <div class="update-time yws-right">{{osc.views.updateTimeDsc}}</div>
+                                    </div>
+                                </div>
+                                <div class="mt-center"></div>
+                            </div>
+                            <!--折线图模块-->
+                            <div class="line-chart">
+                                <div class="line-chart-container">
+                                    <div ng-if="!osc.views.isShowTop10">
+                                        <div class="chart-top">
+                                            <div class="yws-left">
+                                                <!-- <button type="button" ng-click=" selectedCycle('line-chart .chart-top','day', getLineDateByCycle)"  class="btn cycle-day chart-active">日</button>-->
+                                                <button type="button" ng-click=" selectedCycle(osc.classDataType+' .line-chart .chart-top','week', getLineDateByCycle,osc)" class="btn btn-success cycle-week chart-active">周</button>
+                                                <button type="button" ng-click=" selectedCycle(osc.classDataType+' .line-chart .chart-top','month', getLineDateByCycle,osc)"  class="btn btn-success cycle-month">月</button>
+                                            </div>
+                                            <div class="yws-right">
+                                                <button type="button" ng-click="ifShowTop10(true,osc)"  class="btn btn-success cycle-month">10强排名</button>
+                                            </div>
+
+                                        </div>
+                                        <div class="yws-container line-container">
+                                            <div class="chart-button-left yws-left">
+                                                <button class="but-count yws-lef line-visit-count chart-active" ng-click=" selectedCount(osc.classDataType+' .chart-button-left','visitCount',getLineDateByCount,osc)">到访数</button>
+                                                <button class="but-count yws-lef line-signed-count" ng-click=" selectedCount(osc.classDataType+' .chart-button-left','signedCount',getLineDateByCount,osc)">签单数</button>
+                                                <button class="but-count yws-lef line-signed-money" ng-click=" selectedCount(osc.classDataType+' .chart-button-left','signedMoney',getLineDateByCount,osc)">签单金额</button>
+                                                <button class="but-count yws-lef line-referral-count" ng-click=" selectedCount(osc.classDataType+' .chart-button-left','referralCount',getLineDateByCount,osc)">推荐数</button>
+                                            </div>
+                                            <div class="yws-container yws-content">
+                                                <line-chart ng-if="!osc.views.isLineMonth" config="config" data=" osc.views.lineData"></line-chart>
+                                                <line-chart ng-if="osc.views.isLineMonth" config="config" data=" osc.views.lineMonthData"></line-chart>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div ng-if="osc.views.isShowTop10">
+                                        <div>
+                                            <div class="chart-top">
+                                                <div class="yws-left">
+                                                    <button type="button" ng-click="ifShowTop10(false,osc)"  class="btn btn-success cycle-month">返回</button>
+                                                </div>
+                                                <div class="yws-right">
+                                                    我的排名：{{osc.rank}}名
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="yws-container no-b-t">
+                                            <table class="table table-bordered table-striped mt-table1"  st-pipe="osc.callDataTop10" st-table="osc.dataTop10" >
+                                                <thead>
+                                                <tr>
+                                                    <th>排名</th>
+                                                    <th>名称</th>
+                                                    <th>所属校区</th>
+                                                    <th st-sort="qidan" class="sort-link">签单数</th>
+                                                    <th st-sort="jine" class="sort-link">签单金额</th>
+                                                    <th st-sort="xiaoke" class="sort-link">人均消课数</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody >
+                                                <tr ng-repeat="row in osc.dataTop10">
+                                                    <td>{{$index+1}} </td>
+                                                    <td>{{row.name}} </td>
+                                                    <td>{{row.depName}}</td>
+                                                    <td>{{row.qianYue}}</td>
+                                                    <td>{{row.qianDanJinEr}}</td>
+                                                    <td>{{row.renJunXiaoKe}}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </pane>
+                    <pane title="评价汇总"  >
+                        <div class="yws-container {{pjc.classDataType}}" title=""  style="background-color: #FFFFFF" ng-controller="workbench.xuexiMaster.pingjiaCtrl as pjc">
+                            <!--饼图模块-->
+                            <div class="pie-chart">
+                                <div class="pie-chart-container">
+                                    <div class="chart-top">
+                                        <div class="yws-left" ng-if="pjc.views.isShowDetail">
+                                            <button type="button" ng-click=" selectedCycle(pjc.classDataType+' .pie-chart .chart-top .yws-left','day', getPieDate,pjc)" class="btn btn-success cycle-day chart-active">教师日评</button>
+                                            <button type="button" ng-click=" selectedCycle(pjc.classDataType+' .pie-chart .chart-top .yws-left','week', getPieDate,pjc)" class="btn btn-success cycle-week">学管月评</button>
+                                            <!--<button type="button" ng-click=" selectedCycle(pjc.classDataType+' .pie-chart .chart-top .yws-left','month', getPieDate,pjc)" class="btn btn-success cycle-month">月</button>-->
+                                        </div>
+                                        <div class="yws-right">
+                                            <button type="button" ng-click="selectedDetail(pjc.classDataType+' .pie-chart .chart-top .yws-right','notShowDetail', ifShowDetail,pjc)"  class="btn btn-success not-show-detail chart-active">汇总</button>
+                                            <button type="button" ng-click="selectedDetail(pjc.classDataType+' .pie-chart .chart-top .yws-right','showDetail', ifShowDetail,pjc)"  class="btn btn-success show-detail">明细</button>
+                                        </div>
+                                    </div>
+                                    <div class="yws-container chart-content" ng-if="!pjc.views.isShowDetail">
+                                        <div class="yws-left cir-container width25"><div class="pie-circular circular-cfj1"><div class="circular-title" ng-bind=" pjc.views.pieData.riChaPing"></div></div><div class="cir-bottom">教师日差评</div></div>
+                                        <div class="yws-left cir-container width25"><div class="pie-circular circular-cfj2"><div class="circular-title" ng-bind=" pjc.views.pieData.yueChaPing"></div></div><div class="cir-bottom">学管月差评</div></div>
+                                        <div class="yws-left cir-container width25"><div class="pie-circular circular-cfj3"><div class="circular-title" ng-bind=" pjc.views.pieData.tiFenLv"></div></div><div class="cir-bottom">提分率</div></div>
+                                        <div class="yws-left cir-container width25"><div class="pie-circular circular-cfj3"><div class="circular-title" ng-bind=" pjc.views.pieData.manYiDu"></div></div><div class="cir-bottom">满意度</div></div>
+                                    </div>
+                                    <div class="yws-container no-b-t" style="overflow-y:hidden" ng-if="pjc.views.isShowDetail">
+                                        <table class="table table-bordered table-striped mt-table1"  st-pipe="pjc.callDataMinxi" st-table="pjc.dataMingxi" >
+                                            <thead>
+                                            <tr>
+                                                <th>校区名称</th>
+                                                <th ng-if="pjc.pieConfig.dateType==1">教师姓名</th>
+                                                <th ng-if="pjc.pieConfig.dateType==2">学管姓名</th>
+                                                <th>学生姓名</th>
+                                                <th>分数</th>
+                                                <th style="width: 80px;max-width: 149px;overflow: hidden;">意见与建议</th>
+                                                <th>状态</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody >
+                                            <!--  temp.put("schoolName", schoolName);
+                                              temp.put("teacherName", teacherName);
+                                              temp.put("studentName", studentName);
+                                              temp.put("grade", grade);
+                                              temp.put("recommendation", recommendation);
+                                              temp.put("state", state);-->
+                                            <tr ng-repeat="row in pjc.dataMingxi">
+                                                <td>{{row.schoolName || '无'}}</td>
+                                                <td>{{row.teacherName || '无'}}</td>
+                                                <td>{{row.studentName || '无'}}</td>
+                                                <td>{{row.grade || '无'}}</td>
+                                                <td style="width: 80px;max-width: 149px;overflow: hidden;text-decoration: underline;" ng-click="openTextWindow(row.recommendation)" >{{row.recommendation || '无'}}</td>
+                                                <td>{{row.state || '无'}}</td>
+                                            </tr>
+                                            </tbody>
+                                            <tfoot>
+                                            <tr>
+                                                <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="24"></td>
+                                            </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <div class="chart-foot yws-container">
+                                        <div class="update-time yws-right">{{pjc.views.updateTimeDsc}}</div>
+                                    </div>
+                                </div>
+                                <div class="mt-center"></div>
+                            </div>
+                            <!--折线图模块-->
+                            <div class="line-chart">
+                                <!-- <div class="line-chart-container">
+                                     <div ng-if="!jwc.views.isShowTop10">
+                                         <div class="chart-top">
+                                             <div class="yws-left">
+                                                 &lt;!&ndash; <button type="button" ng-click=" selectedCycle('line-chart .chart-top','day', getLineDateByCycle)"  class="btn cycle-day chart-active">日</button>&ndash;&gt;
+                                                 <button type="button" ng-click=" selectedCycle(jwc.classDataType+' .line-chart .chart-top','day', getLineDateByCycle,jwc)" class="btn btn-success cycle-day chart-active ">日</button>
+                                                 <button type="button" ng-click=" selectedCycle(jwc.classDataType+' .line-chart .chart-top','week', getLineDateByCycle,jwc)" class="btn btn-success cycle-week">周</button>
+                                                 <button type="button" ng-click=" selectedCycle(jwc.classDataType+' .line-chart .chart-top','month', getLineDateByCycle,jwc)"  class="btn btn-success cycle-month">月</button>
+                                             </div>
+                                             &lt;!&ndash; <div class="yws-right">
+                                                  <button type="button" ng-click="ifShowTop10(true,jwc)"  class="btn btn-success cycle-month">10强排名</button>
+                                              </div>&ndash;&gt;
+
+                                         </div>
+                                         <div class="yws-container line-container">
+                                             <div class="chart-button-left yws-left">
+                                                 &lt;!&ndash; <button class="but-count yws-lef line-visit-count chart-active" ng-click=" selectedCount(jwc.classDataType+' .chart-button-left','visitCount',getLineDateByCount,jwc)">到访数</button>
+                                                  <button class="but-count yws-lef line-signed-count" ng-click=" selectedCount(jwc.classDataType+' .chart-button-left','signedCount',getLineDateByCount,jwc)">签单数</button>
+                                                  <button class="but-count yws-lef line-signed-money" ng-click=" selectedCount(jwc.classDataType+' .chart-button-left','signedMoney',getLineDateByCount,jwc)">签单金额</button>
+                                                  <button class="but-count yws-lef line-referral-count" ng-click=" selectedCount(jwc.classDataType+' .chart-button-left','referralCount',getLineDateByCount,jwc)">推荐数</button>
+  &ndash;&gt;
+                                                 <button class="but-count yws-lef line-siting-count chart-active" ng-click=" selectedCount(jwc.classDataType+' .chart-button-left','sitingCount',getLineDateByCount,jwc)">试听课时</button>
+                                                 <button class="but-count yws-lef line-chenggong-count" ng-click=" selectedCount(jwc.classDataType+' .chart-button-left','chenggongCount',getLineDateByCount,jwc)">成功单数</button>
+                                                 <button class="but-count yws-lef line-xiaoke-count" ng-click=" selectedCount(jwc.classDataType+' .chart-button-left','xiaokeCount',getLineDateByCount,jwc)">消课数</button>
+
+                                             </div>
+                                             <div class="yws-container yws-content">
+                                                 &lt;!&ndash;<line-chart ng-if="!jwc.views.isLineMonth" config="config" data=" jwc.views.lineData"></line-chart>
+                                                 <line-chart ng-if="jwc.views.isLineMonth" config="config" data=" jwc.views.lineMonthData"></line-chart>&ndash;&gt;
+                                                 <line-chart ng-if="jwc.lineConfig.dateType == 1" config="config" data=" jwc.views.lineDayData"></line-chart>
+                                                 <line-chart ng-if="jwc.lineConfig.dateType == 2" config="config" data=" jwc.views.lineData"></line-chart>
+                                                 <line-chart ng-if="jwc.lineConfig.dateType == 3" config="config" data=" jwc.views.lineMonthData"></line-chart>
+                                             </div>
+                                         </div>
+                                     </div>
+                                     <div ng-if="jwc.views.isShowTop10">
+                                         <div>
+                                             <div class="chart-top">
+                                                 <div class="yws-left">
+                                                     <button type="button" ng-click="ifShowTop10(false,jwc)"  class="btn btn-success cycle-month">返回</button>
+                                                 </div>
+                                                 <div class="yws-right">
+                                                     我的排名：{{jwc.rank}}名
+                                                 </div>
+                                             </div>
+                                         </div>
+
+                                         <div class="table-responsive" style="overflow:scroll;overflow-y:hidden">
+                                             <table class="table table-bordered table-striped"  st-pipe="jwc.callDataTop10" st-table="jwc.dataTop10" >
+                                                 <thead>
+                                                 <tr>
+                                                     <th>排名</th>
+                                                     <th>名称</th>
+                                                     <th>所属校区</th>
+                                                     <th st-sort="shiting" class="sort-link">试听课时</th>
+                                                     <th st-sort="chenggong" class="sort-link">成功单数</th>
+                                                     <th st-sort="xiaoke" class="sort-link">消课数</th>
+                                                 </tr>
+                                                 </thead>
+                                                 <tbody >
+                                                 <tr ng-repeat="row in jwc.dataTop10">
+                                                     <td>{{$index+1}}</td>
+                                                     <td>{{row.userName}}</td>
+                                                     <td>{{row.deptName}}</td>
+                                                     <td>{{row.listenCourse}}</td>
+                                                     <td>{{row.sucOrder}}</td>
+                                                     <td>{{row.pastCourse}}</td>
+                                                 </tr>
+                                                 </tbody>
+                                             </table>
+                                         </div>
+
+                                     </div>
+                                 </div>-->
+
+                            </div>
+                        </div>
+                    </pane>
+                </tabs>
+            </div>
+
+        </div>
+        <!--快速链接-->
+        <div class="yws-right workbench-links">
+            <div class="links-top">
+                快速链接
+            </div>
+            <div class="links-content ">
+                <li><a href="#/sos-admin/customer_student">学员管理<img  src="img/workbench/jiantou-right.png" ></a></li>
+                <li><a href="#/sos-admin/invitationDetail">邀约管理<img  src="img/workbench/jiantou-right.png" ></a></li>
+                <li><a href="#/sos-admin/course_plan">排课管理<img  src="img/workbench/jiantou-right.png" ></a></li>
+                <li><a href="#/sos-admin/refund">退费管理<img  src="img/workbench/jiantou-right.png" ></a></li>
+            </div>
+            <div class="links-bottom"></div>
+        </div>
+    </div>
+
+    <!--提醒模块-->
+    <div class="yws-container workbench-warn mt-workbench-warn">
+        <div class="warn-title">
+            <span class="c3 f16 bt2">日程提醒</span>
+        </div>
+        <div class="warn-content mt-title">
+            <tabs>
+                <pane title="信息提醒" >
+                    <div class="table-responsive table-scroll table-margin-20" >
+                        <table class="table table-bordered table-striped mt-table1"  st-pipe="callInfoWarn"  st-table="xxmc.infoWarn">
+                            <thead>
+                            <tr>
+                                <th>提醒时间</th>
+                                <th>姓名</th>
+                                <th>电话</th>
+                                <th>提醒内容</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="row in xxmc.infoWarn">
+                                <td>{{row.remindTime | date:'yyyy-MM-dd HH:mm' }}</td>
+                                <td>{{row.name}}</td>
+                                <td>{{row.phone}}</td>
+                                <td>{{row.remindContent}}</td>
+                                <td><a ng-click="toLeadsOrStudent(row)"  class="ng-scope"><span class="glyphicon glyphicon-plus" title="详情"></span></a></td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="24"></td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </pane>
+                <pane title="到访提醒" >
+                    <div class="table-responsive table-scroll table-margin-20" >
+                        <table class="table table-bordered table-striped mt-table1"  st-pipe="callVisitWarn"  st-table="xxmc.visitWarn">
+                            <thead>
+                            <tr>
+                                <th>学员姓名</th>
+                                <th>电话</th>
+                                <th>渠道来源</th>
+                                <th>来源详情</th>
+                                <th>邀约时间</th>
+                                <th>预到访时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="row in xxmc.visitWarn">
+                                <td>{{row.name}}</td>
+                                <td>{{row.phone}}</td>
+                                <td>{{row.channel1Name}}</td>
+                                <td>{{row.channel2Name}}</td>
+                                <td>{{ row.invitateTime | date:'yyyy-MM-dd HH:mm' }}</td>
+							    <td>{{ row.receiveTime | date:'yyyy-MM-dd HH:mm' }}</td>
+                                <td><a ng-click="toLeadsOrStudent(row)"  class="ng-scope"><span class="glyphicon glyphicon-plus" title="详情"></span></a></td>
+                            </tr>
+
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="24"></td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </pane>
+                <pane title="上课提醒" >
+                    <div class="table-responsive table-scroll table-margin-20" >
+                        <table class="table table-bordered table-striped mt-table1"  st-pipe="callCourseWarn"  st-table="xxmc.courseWarn">
+                            <thead>
+                            <tr>
+                                <th>学员姓名</th>
+                                <th>一对多名称</th>
+                                <th>电话</th>
+                                <th>课程名称</th>
+                                <th>科目</th>
+                                <th>上课时间</th>
+                                <th>下课时间</th>
+                                <th>上课课时</th>
+                                <th>任课老师</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="row in xxmc.courseWarn">
+                                <td>{{row.student_name}}</td>
+                                <td>{{row.crm_order_student_course_id}}</td>
+                                <td>{{row.phone}}</td>
+                                <td ng-if="row.type==3">试听课</td>
+                                <td ng-if="row.type!=3">{{row.coursename}}</td>
+                                <td>{{row.subject_name}}</td>
+                                <td>{{row.start_time | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                                <td>{{row.end_time | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                                <td>{{row.course_num}}</td>
+                                <td>{{row.teacher_name}}</td>
+                                <td><a ng-click="toLeadsOrStudent(row)"  class="ng-scope"><span class="glyphicon glyphicon-plus" title="详情"></span></a></td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="24"></td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </pane>
+                <pane title="续费提醒" >
+                    <div class="table-responsive table-scroll table-margin-20" >
+                        <table class="table table-bordered table-striped mt-table1"  st-pipe="callXufeiWarn"  st-table="xxmc.xufeiWarn">
+                            <thead>
+                            <tr>
+                                <th>姓名</th>
+                                <th>联系方式</th>
+                                <th>在读状态</th>
+                                <th>剩余课时</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="row in xxmc.xufeiWarn">
+                                <td>{{row.name}}</td>
+                                <td>{{row.phone}}</td>
+                                <td ng-if="row.status == 1">在读</td>
+                                <td ng-if="row.status == 2">结课</td>
+                                <td ng-if="row.status == 3">停课</td>
+                                <td ng-if="row.status == 4">退费</td>
+                                <td ng-if="row.status == 5">转课</td>
+                                <td ng-if="row.status == null"></td>
+                                <td>{{row.course_num}}</td>
+                                <td><a ng-click="toLeadsOrStudent(row)"  class="ng-scope"><span class="glyphicon glyphicon-plus" title="详情"></span></a></td>
+                            </tr>
+
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="24"></td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </pane>
+                <pane title="教师日差评提醒" >
+                    <div class="table-responsive table-scroll table-margin-20" >
+                        <table class="table table-bordered table-striped mt-table1"  st-pipe="callDayTeacherWarn"  st-table="xxmc.dayTeacherWarn">
+                            <thead>
+                            <tr>
+                                <th>学生姓名</th>
+                                <th>教师姓名</th>
+                                <th>上课时间</th>
+                                <th>分数</th>
+                                <th style="width: 160px;max-width: 200px;overflow: hidden;">意见与建议</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="row in xxmc.dayTeacherWarn">
+                                <td>{{row.studentName}}</td>
+                                <td>{{row.teacherName}}</td>
+                                <td>{{row.date}}</td>
+                                <td>{{row.grade}}</td>
+                                <td style="width: 160px;max-width: 200px;overflow: hidden;text-decoration: underline;" ng-click="openTextWindow(row.recommendation)">{{row.recommendation}}</td>
+                                <td>{{row.state}}</td>
+                                <td><a ng-click="goTeacherDay()"  class="ng-scope">查看</a></td>
+                            </tr>
+
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="24"></td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </pane>
+                <pane title="学管月差评提醒" >
+                    <div class="table-responsive table-scroll table-margin-20" >
+                        <table class="table table-bordered table-striped mt-table1"  st-pipe="callMonthTeacherMasterWarn"  st-table="xxmc.monthTeacherMasterWarn">
+                            <thead>
+                            <tr>
+                                <th>学生姓名</th>
+                                <th>教师姓名</th>
+                                <th>分数</th>
+                                <th style="width: 160px;max-width: 200px;overflow: hidden;">意见与建议</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="row in xxmc.monthTeacherMasterWarn">
+                                <td>{{row.studentName}}</td>
+                                <td>{{row.teacherName}}</td>
+                                <td>{{row.grade}}</td>
+                                <td style="width: 160px;max-width: 200px;overflow: hidden;text-decoration: underline;" ng-click="openTextWindow(row.recommendation)">{{row.recommendation}}</td>
+                                <td>{{row.state}}</td>
+                                <td><a ng-click="goTeacherMasterMonth()"  class="ng-scope">查看</a></td>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="24"></td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </pane>
+              <!--   <pane title="试听提醒" >
+                    <div class="table-responsive table-scroll" >
+                        <table class="table table-bordered table-striped"  st-pipe="callListenWarn"  st-table="xxmc.listenWarn" >
+                            <thead>
+                            <tr>
+                                <th>学员姓名</th>
+                                <th>电话</th>
+                                <th>课程名称</th>
+                                <th>科目</th>
+                                <th>上课时间</th>
+                                <th>下课时间</th>
+                                <th>上课课时</th>
+                                <th>任课老师</th>
+                            </tr>
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="row in xxmc.listenWarn">
+                                <td>{{row.student_name}}</td>
+                                <td>{{row.phone}}</td>
+                                <td ng-if="row.type==3">试听课</td>
+                                <td ng-if="row.type!=3">{{row.coursename}}</td>
+                                <td>{{row.subject_name}}</td>
+                                <td>{{row.start_time | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                                <td>{{row.end_time | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                                <td>{{row.course_num}}</td>
+                                <td>{{row.teacher_name}}</td>
+                            </tr>
+
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="24"></td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </pane> -->
+
+            </tabs>
+        </div>
+    </div>
+
+</div>

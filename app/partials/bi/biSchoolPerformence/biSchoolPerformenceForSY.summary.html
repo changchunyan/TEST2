@@ -1,0 +1,92 @@
+<!-- 筛选条件 -->
+<search on-department-clicked="showSelectDepartment()"
+        department="selectdDepartment"
+        search-model="searchModel"
+        is-school-user="isSchoolUser"
+        provinces="provinces"
+        on-province-changed="getCitysByProvinceCode(searchModel.schoolProvince)"
+        cities="cities"
+        on-reset="reset(isQ)"
+        on-search="argJudgement(getSchoolPerfermenceSummary)"/>
+
+<!--统计图-->
+<div class="container-full mt-tongji pb-20"
+     ng-if="summaryModel.marketOrderCount&&position_idFun()">
+    <div class="row">
+        <div class="col-lg-12">
+            <div style="float: left; " ng-repeat="el in iframeList">
+                <h3>{{el.title}}</h3>
+                <div style="height: {{el.height||'630px'}};overflow: hidden;">
+                    <iframe id="f1" src="{{el.url}}" width="550" height="3000" seamless='seamless'
+                            scrolling='no' style="position: relative;top: {{el.top||'-1500px'}};left: -20px; background: url('./img/Loading_icon.gif') no-repeat center;background-position-y: {{el.bgpy||'1500px !important'}}"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 表格 -->
+<div class="default-box">
+    <h4>
+                        校区业绩   - 汇总
+       <!--  <span ng-if="!isDay">（从 {{modelStartTime | date : 'yyyy-MM-dd'}} 至 {{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+        <span ng-if="isDay">（{{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+        <span ng-if="presentTime">最新统计时间：{{presentTime}}</span> -->
+        <button class="btn btn-success bi-list-head" ng-click="exportSummaryToExcel()">导出列表</button>
+    </h4>
+    <br/>
+    <div class="table-responsive">
+        <table st-pipe="getSchoolPerfermenceSummary" st-table="tableModel" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th style="font-weight: bold;" rowspan="2">区域/校区</th>
+                <th class="bi-th1" style="font-weight: bold;" colspan="4">营销数据</th>
+                <th class="bi-th2" style="font-weight: bold;" colspan="4">续费数据</th>
+                <th class="bi-th3" style="font-weight: bold;" colspan="2">教务数据</th>
+                <th class="bi-th4" style="font-weight: bold;">转平台数据</th>
+                <th class="bi-th5" style="font-weight: bold;">总实收数据</th>
+            </tr>
+            <tr>
+                <td class="bi-th1" data-content="指定周期内指定校区新增类型为“新签”的订单数总和" 
+                	data-placement="top" webui-popover>签单数</td>
+                <td class="bi-th1" data-content="指定周期内指定校区新增类型为“新签”的订单金额总和" 
+                	data-placement="top" webui-popover>签单金额</td>
+                <td class="bi-th1" data-content="指定周期内指定校区新增类型为“新签”的已退费订单金额总和" 
+                	data-placement="top" webui-popover>退费金额</td>
+                <td class="bi-th1" data-content="指定周期内指定校区新增类型为“新签”的订单金额总和" 
+                	data-placement="top" webui-popover>实收金额</td>
+                <td class="bi-th2" data-content="指定周期内指定校区新增类型为“续费”和渠道为“学习顾问推荐”的订单数总和" 
+                	data-placement="top" webui-popover>签单数</td>
+                <td class="bi-th2" data-content="指定周期内指定校区新增订单类型为“续费”和渠道为“学习顾问推荐”的订单记录的总金额数" 
+                	data-placement="top" webui-popover>签单金额</td>
+                <td class="bi-th2" data-content="指定周期内指定校区新增订单类型为“续费”和渠道为“学习顾问推荐”的已退费订单记录的总金额数" 
+                	data-placement="top" webui-popover>退费金额</td>
+                <td class="bi-th2" data-content="指定周期内指定校区新增订单类型为“续费”和渠道为“学习顾问推荐”的订单记录的总金额数" 
+                	data-placement="top" webui-popover>实收金额</td>
+                <td class="bi-th3" data-content="指定周期内指定校区成功消课的排课记录对应的课时量" 
+                	data-placement="left" webui-popover>消课课次</td>
+                <td class="bi-th3" data-content="指定周期内指定校区成功消课的排课记录对应的课时小时数" 
+                	data-placement="left" webui-popover>时长</td>
+               	<td class="bi-th4">转平台金额</td>
+                <td class="bi-th5">总实收金额</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{selectdDepartment.name}}</td>
+                <td>{{summaryModel.marketOrderCount}}</td>
+                <td>{{summaryModel.marketOrderAmount}}</td>
+                <td>{{summaryModel.marketRefundAmount}}</td>
+                <td>{{summaryModel.marketRealAmount}}</td>
+                <td>{{summaryModel.managementOrderCount}}</td>
+                <td>{{summaryModel.managementOrderAmount}}</td>
+                <td>{{summaryModel.managementRefundAmount}}</td>
+                <td>{{summaryModel.managementRealAmount}}</td>
+                <td>{{summaryModel.courseNum | number : 1}}</td>
+                <td>{{summaryModel.courseHours | number : 1}}小时</td>
+                <td>{{summaryModel.changePlatformAmount}}</td>
+                <td>{{summaryModel.totalRealAmount}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

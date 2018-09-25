@@ -1,0 +1,220 @@
+<!-- 筛选条件 -->
+<div ng-include="baseHtmlUrl" style="padding: 0px 15px"></div>
+<div class="default-box">
+    <h4>
+                        数据汇总表
+    	<span ng-if="!isDay">（从 {{modelStartTime | date : 'yyyy-MM-dd'}} 至 {{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+        <span ng-if="isDay">（{{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+        <span ng-if="presentTime">最新统计时间：{{presentTime}}</span>
+        <button class="btn btn-success bi-list-head" ng-click="exportToExcel(2)" >导出列表 </button>
+    </h4>
+    <br/>
+    <div id="exportable" class="table-responsive">
+        <table  st-pipe="getSummaryByFilter" st-table="educationTab" class="table table-bordered table-striped"
+            style="width:1600px;">
+            <thead>
+            <tr>
+                <th rowspan="2" id="xq">校区</th>
+                <th rowspan="2" id="xqxz">校区性质</th>
+                <th rowspan="2" id="xqgsqy">校区归属区域</th>
+                <th rowspan="2" id="xszs1">学生总数</th>
+                <th rowspan="2" id="jsrs1">教师人数</th>
+                <th rowspan="2" id="zzjs1">兼职教师人数</th>
+                <th rowspan="2" id="wxjs1">五星级教师数</th>
+                <th rowspan="2" id="wzzjs1">未转正教师数</th>
+                <th rowspan="2" id="zzxhzks1">专职消耗总课时</th>
+                <th rowspan="2" id="jzxhzks1">兼职消耗总课时</th>
+                <th rowspan="2" id="qtxkzks1">其他消课总课时</th>
+                <th rowspan="2" id="zzrjks1">专职人均课时数</th>
+                <th rowspan="2" id="jzrjks1">兼职人均课时数</th>
+                <th colspan="8" >试听</th>
+                <th rowspan="2" id="workzzxk1">周中专职消课数
+                <th rowspan="2" id="workzzstxk1">周中专职试听消课数</th>
+                <th rowspan="2" id="workjzxk1">周中兼职消课数</th>
+                <th rowspan="2" id="workjzstxk1">周中兼职试听消课数</th>
+                <th rowspan="2" id="weekzzxk1">周末专职消课数</th>
+                <th rowspan="2" id="weekzzstxk1">周末专职试听消课数</th>
+                <th rowspan="2" id="weekjzxk1">周末兼职消课数</th>
+                <th rowspan="2" id="weekjzstxk1">周末兼职试听消课数</th>
+                <th rowspan="2" id="xfxs1">续费小时数</th>
+                <th rowspan="2" id="tjxs1">推荐小时数</th>
+            </tr>
+            <tr>
+                <td id="stzzzks1">专职总课时</td>
+                <td id="stjzzks1">兼职总课时</td>
+                <td id="stzongks1">总课时</td>
+                <td id="stchenggks1">成功课时</td>
+                <td id="stzzcgds1">专职成功单数</td>
+                <td id="stzzstcgl1">专职试听成功率</td>
+                <td id="stjzcgds1">兼职成功单数</td>
+                <td id="stjzstcgl1">兼职试听成功率</td>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{entity.schoolName}}</td>
+                <td>{{entity.schoolTypeName}}</td>
+                <td>{{entity.schoolAreaName}}</td>
+                <td>{{entity.studentCount}}</td>
+                <td>{{entity.fullTimeTeacherCount}}</td>
+                <td>{{entity.partTimeTeacherCount}}</td>
+                <td>{{entity.fiveStarTeacherCount}}</td>
+                <td>{{entity.probationTeacherCount}}</td>
+
+                <td>{{entity.fullTimeCourseCount}}</td>
+                <td>{{entity.partTimeCourseCount}}</td>
+                <td>{{entity.otherSchoolCourseCount}}</td>
+                <td>{{entity.fullTimeAvgCountNum}}</td>
+                <td>{{entity.partTimeAvgCountNum}}</td>
+
+                <td>{{entity.audtionFullTimeCourseCount}}</td>
+                <td>{{entity.audtionPartTimeCourseCount}}</td>
+                <td>{{entity.audtionTotalCourseCount}}</td>
+                <td>{{entity.audtionSuccessCourseCount}}</td>
+                <td>{{entity.audtionFullTimeSuccessCount}}</td>
+                <td>{{entity.audtionFullTimeSuccessRatio}}</td>
+                <td>{{entity.audtionPartTimeSuccessCount}}</td>
+                <td>{{entity.audtionPartTimeSuccessRatio}}</td>
+
+                <td>{{entity.workFullTimeCourse}}</td>
+                <td>{{entity.workFullTimeAudCourse}}</td>
+                <td>{{entity.workPartTimeCourse}}</td>
+                <td>{{entity.workPartTimeAudCourse}}</td>
+
+                <td>{{entity.weekFullTimeCourse}}</td>
+                <td>{{entity.weekFullTimeAudCourse}}</td>
+                <td>{{entity.weekPartTimeCourse}}</td>
+                <td>{{entity.weekPartTimeAudCourse}}</td>
+
+                <td>{{entity.continueHourCount}}</td>
+                <td>{{entity.recommendHourCount}}</td>
+            </tr>
+            </tbody>
+            <tbody ng-show="isLoading">
+            <tr>
+                <td colspan="31" class="text-center">
+                    <div class="loading-indicator"></div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    window.load = pause_other();
+    function pause_other(){
+        window.setTimeout("tooltipShow_other()", 50);
+    }
+    function tooltipShow_other() {
+        var node = $("#xszs1");
+        var content = '指定周期内剩余课时数不为0的学生的总数';
+        node.webuiPopover({content:content,trigger:'hover'});
+
+        var node1 = $("#jsrs1");
+        var content1 = '指定周期内专职教师的人数';
+        node1.webuiPopover({content:content1,trigger:'hover'});
+
+        var node2 = $("#zzjs1");
+        var content2 = '指定周期内兼职教师的人数';
+        node2.webuiPopover({content:content2,trigger:'hover'});
+
+        var node3 = $("#wxjs1");
+        var content3 = "指定周期内五星教师人数";
+        node3.webuiPopover({content:content3,trigger:'hover'});
+
+        var node4 = $("#wzzjs1");
+        var content4 = "指定周期内未转正教师的人数";
+        node4.webuiPopover({content:content4,trigger:'hover'});
+
+        var node9 = $("#zzxhzks1");
+        var content9 = "指定周期内专职教师成功消课（消课状态：满意或暂时没有评价）的所有课时的总和";
+        node9.webuiPopover({content:content9,trigger:'hover'});
+
+        var node5 = $("#zzxhzks1");
+        var content5 = "指定周期内专职教师成功消课（消课状态：满意或暂时没有评价）的所有课时的总和";
+        node5.webuiPopover({content:content5,trigger:'hover'});
+
+        var node6 = $("#jzxhzks1");
+        var content6 = "指定周期内兼职教师成功消课（消课状态：满意或暂时没有评价）的所有课时的总和";
+        node6.webuiPopover({content:content6,trigger:'hover'});
+
+        var node7 = $("#zzrjks1");
+        var content7 = "指定周期内专职消耗总课时数/专职教师的人数";
+        node7.webuiPopover({content:content7,trigger:'hover'});
+
+        var node8 = $("#jzrjks1");
+        var content8 = "指定周期内兼职消耗总课时数/兼职教师的人数";
+        node8.webuiPopover({content:content8,trigger:'hover'});
+
+        var node10= $("#stzzzks1");
+        var content10 = "指定周期内的专职教师的试听排课的消课（消课状态：满意或暂时没有评价）的总课时";
+        node10.webuiPopover({content:content10,trigger:'hover'});
+
+        var node11= $("#stjzzks1");
+        var content11 = "指定周期内的兼职教师的试听排课的消课（消课状态：满意或暂时没有评价）的总课时";
+        node11.webuiPopover({content:content11,trigger:'hover'});
+
+        var node12= $("#stzongks1");
+        var content12 = "指定周期内的试听消课（消课状态：满意或暂时没有评价）的总的课时数";
+        node12.webuiPopover({content:content12,trigger:'hover'});
+
+        var node13= $("#stchenggks1");
+        var content13 = "指定周期内的成功试听的订单的所有课时的总和";
+        node13.webuiPopover({content:content13,trigger:'hover'});
+
+        var node14= $("#stzzcgds1");
+        var content14 = "指定周期内的订单类型是试听由专职教师成功签单的订单数";
+        node14.webuiPopover({content:content14,trigger:'hover'});
+
+        var node15= $("#stzzstcgl1");
+        var content15 = "指定周期内的订单类型是试听由专职教师成功签单的订单数/参与试听消课的学生的数量(上课老师为专职)";
+        node15.webuiPopover({content:content15,trigger:'hover'});
+
+        var node16= $("#stjzcgds1");
+        var content16 = "指定周期内的订单类型是试听由兼职教师成功签单的订单数";
+        node16.webuiPopover({content:content16,trigger:'hover'});
+
+        var node17= $("#stjzstcgl1");
+        var content17 = "指定周期内的订单类型是试听由兼职教师成功签单的订单数/参与试听消课的学生的数量(上课教师为兼职)";
+        node17.webuiPopover({content:content17,trigger:'hover'});
+
+
+        var node20=$("#workzzxk1");
+        var content20 = "指定周期内周中专职教师的成功消课的课时的总和";
+        node20.webuiPopover({content:content20,trigger:'hover'});
+        var node21=$("#workzzstxk1");
+        var content21 = "指定周期内周中专职教师的试听成功消课的课时的总和";
+        node21.webuiPopover({content:content21,trigger:'hover'});
+        var node22=$("#workjzxk1");
+        var content22 = "指定周期内周中兼职教师的成功消课的课时的总和";
+        node22.webuiPopover({content:content22,trigger:'hover'});
+        var node23=$("#workjzstxk1");
+        var content23 = "指定周期内周中兼职教师的试听成功消课的课时的总和";
+        node23.webuiPopover({content:content23,trigger:'hover'});
+        var node24=$("#weekzzxk1");
+        var content24 = "指定周期内周末专职教师的成功消课的课时的总和";
+        node24.webuiPopover({content:content24,trigger:'hover'});
+        var node25=$("#weekzzstxk1");
+        var content25 = "指定周期内周末专职教师的试听成功消课的课时的总和";
+        node25.webuiPopover({content:content25,trigger:'hover'});
+        var node26=$("#weekjzxk1");
+        var content26 = "指定周期内周末兼职教师的成功消课的课时的总和";
+        node26.webuiPopover({content:content26,trigger:'hover'});
+        var node27=$("#weekjzstxk1");
+        var content27 = "指定周期内周末兼职教师的试听成功消课的课时的总和";
+        node27.webuiPopover({content:content27,trigger:'hover'});
+
+        var node31 = $("#xfxs1");
+        var content31 = "指定周期内的订单类型为续费的订单的课时数总和";
+        node31.webuiPopover({content:content31,trigger:'hover'});
+
+        var node30 = $("#tjxs1");
+        var content30 = "指定周期内订单类型为推荐的订单的课时数总和";
+        node30.webuiPopover({content:content30,trigger:'hover'});
+
+        var node32=$("#qtxkzks1");
+        var content32 = "指定周期内的学生为本校区，但是教师为其他校区的消课数的总和";
+        node32.webuiPopover({content:content32,trigger:'hover'});
+    }
+</script>

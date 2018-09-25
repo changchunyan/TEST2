@@ -1,0 +1,92 @@
+<div class="view-frame">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+
+    <div class="view-content">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="">人力资源系统管理</a> <span class="divider"></span></li>
+                <li class="active">人员角色管理</li>
+            </ul>
+        </div>
+        <tabs>
+            <pane title="人员角色管理">
+                <div class="row">
+                    <div class="c-select-text padding-0-20 form-horizontal yws-container">
+                        <div class="col-sm-3 form-group">
+                            <label class="col-sm-4 control-label" for="employeeId">员工工号</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="employeeId" id="employeeId" ng-model="sf_employee.id" />
+                            </div>
+                        </div>
+                        <div class="col-sm-3 form-group">
+                            <label class="col-sm-4 control-label" for="employeeName">员工姓名</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="employeeName" id="employeeName" ng-model="sf_employee.name" />
+                            </div>
+                        </div>
+                        <div class="col-sm-3 form-group">
+                            <label class="col-sm-4 control-label" for="department">所属机构</label>
+                            <div class="col-sm-8">
+                                <input id="department" class="form-control" type="text" ng-click="showSelectDepartment()" ng-model="sf_employee.department.name" />
+                            </div>
+                        </div>
+                        <div class="col-sm-3 form-group">
+                            <label class="col-sm-4 control-label" for="position" >岗位</label>
+                            <div class="col-sm-8">
+                                <select ng-options="position.name for position in positions track by position.id" ng-model="sf_employee.position" name="position" id="position" class="form-control"></select>
+                            </div>
+                        </div>
+
+                        <div class="c_center col-sm-12">
+                            <button id="keydown-query" class="btn btn-primary" ng-click="getEmployeeRoleByFilters()">查询</button>
+                            <button class="btn" ng-click="reset()">重置</button>
+                        </div>
+
+                    </div>
+
+                    <div class="table-responsive c-select-text" style="overflow:scroll;overflow-y:hidden">
+                        <h4>人员角色列表</h4>
+                        <table st-pipe="list" st-table="employee_roles" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>员工工号</th>
+                                    <th>员工姓名</th>
+                                    <th>所属机构</th>
+                                    <th>所属岗位</th>
+                                    <th>角色</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="employee_role in employee_roles">
+                                    <td>{{employee_role.id}}</td>
+                                    <td>{{employee_role.name}}</td>
+                                    <td>{{employee_role.departmentName}}</td>
+                                    <td>{{employee_role.positionName}}</td>
+                                    <td>{{employee_role.roles | nameList}}</td>
+                                    <td><a ng-click="edit(employee_role)" title="修改角色"><span class="glyphicon glyphicon-pencil"></span></a></td>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody ng-show="isLoading">
+                                <tr>
+                                    <td colspan="13" class="text-center">
+                                        <div class="loading-indicator"></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="6">
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </pane>
+        </tabs>
+    </div>
+</div>

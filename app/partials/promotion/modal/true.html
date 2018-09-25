@@ -1,0 +1,48 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <form class="modal-dialog form-horizontal" name="shengban" style="width:700px;">
+        <div class="modal-content mt-label-h2">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">升班确认</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-option">
+                    <p class="lh-35" >已选则的学员（{{stuList.length}}）人</p>
+                    <p class="bgc-3e lh-35">
+                        <label ng-repeat="el in stuList" style="margin-left: 10px;">{{el.studentName}}</label>
+                    </p>
+                    <p class="lh-35" >升班 班级（{{aSelected.length}}）个</p>
+                    <p class="bgc-3e lh-35">
+                        <label ng-repeat="el in aSelected" style="margin-left: 10px;">{{el.name}}</label>
+                    </p>
+                    <p class="lh-35" >升班日期</p>
+                    <p class="bgc-3e h-50 pl-10">
+                        <input style="height:22px;" ng-model="time" readonly onchange="" id="sTime" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'1990-01-01',maxDate:'2030-12-31'})" >
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 20px">
+                <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                <button type="button" class="btn btn-success c5-lable" ng-click="determineCheack()">确定</button>
+            </div>
+        </div>
+    </form>
+    <script type="text/javascript">
+    	setTimeout(function(){
+    		var now = new Date();
+    		var nowDayOfWeek = now.getDay();         //今天本周的第几天
+		    var nowDay = now.getDate();              //当前日
+		    var nowMonth = now.getMonth()+1;           //当前月
+		    var nowYear = now.getYear();             //当前年
+		    nowYear += (nowYear < 2000) ? 1900 : 0; 
+		    if (nowMonth<10) {
+		    	nowMonth='0' + nowMonth;
+		    }
+		    if (nowDay<10) {
+		    	nowDay='0' + nowDay;
+		    }
+    		$('#sTime').val([nowYear,nowMonth,nowDay].join('-'));
+    	}, 100);
+    </script>
+</div>

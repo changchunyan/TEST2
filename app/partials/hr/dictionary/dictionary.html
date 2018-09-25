@@ -1,0 +1,140 @@
+<div class="view-frame">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="">字典维护</a> <span class="divider"></span></li>
+                <li class="active">字典维护</li>
+            </ul>
+        </div>
+        <div class="details-title">字典维护</div>
+        <div class="tabs-wrap min-height900">
+            <div class="table table-bordered border-ccc padding-0-20">
+                <h3>公式2</h3>
+                <hr>
+                社保公司承担费用 = 养老基数 * 公司缴纳百分比（养老） + 失业基数 * 公司缴纳百分比（失业） +
+                    医疗基数 * 公司缴纳百分比（医疗） + 生育基数 * 公司缴纳百分比(生育) + 工伤基数 * 公司缴纳百分比(工伤)<br />
+                社保个人承担费用 = 养老基数 * 个人缴纳百分比（养老） + 失业基数 * 个人缴纳百分比（失业） +
+                    医疗基数 * 个人缴纳百分比（医疗） + 生育基数 * 个人缴纳百分比(生育) + 工伤基数 * 个人缴纳百分比(工伤)<br />
+                公积金公司承担费用 = 公积金基数 * 公积金缴纳百分比（公司）<br />
+                公积金个人承担费用 = 公积金基数 * 公积金缴纳百分比（个人）<br /><br />
+                <hr>
+                <div class="operations-panel">
+                    <button class="btn btn-success c5-lable" ng-click="update()">保存</button>
+                    <!--<button class="btn btn-default" ng-click="cancel()">取消</button>-->
+                </div>
+                <h3>社保参数</h3><hr>
+        <!--        <div class="row">
+                    <div class="col-sm-6 form-group">
+                        <label for="pensionBase" class="col-sm-4 control-label">社保基数</label>
+                        <div class="col-sm-8">
+                            <input type="text" ng-model="dictionary.pensionBase" name="pensionBase" id="pensionBase" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label for="defaultBase" class="col-sm-4 control-label">医疗/生育/工伤基数(社保基数低于此标准时使用)</label>
+                        <div class="col-sm-8">
+                            <input type="text" ng-model="dictionary.defaultBase" name="defaultBase" id="defaultBase" class="form-control"/>
+                        </div>
+                    </div>
+                </div>-->
+                <div class="">
+                    <div class="col-sm-6 form-group">
+                        <label for="pensionRateCompany" class="col-sm-4 control-label">公司缴纳百分比（养老）</label>
+                        <div class="col-sm-8">
+                            <input type="text" ng-model="dictionary.pensionRateCompany" name="pensionRateCompany" id="pensionRateCompany" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label for="pensionRatePersonal" class="col-sm-4 control-label">个人缴纳百分比（养老）</label>
+                        <div class="col-sm-8">
+                            <input type="text" ng-model="dictionary.pensionRatePersonal" name="pensionRatePersonal" id="pensionRatePersonal" class="form-control"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="col-sm-6 form-group">
+                        <label for="unemploymentRateCompany" class="col-sm-4 control-label">公司缴纳百分比（失业）</label>
+                        <div class="col-sm-8">
+                            <input type="text" ng-model="dictionary.unemploymentRateCompany" name="unemploymentRateCompany" id="unemploymentRateCompany" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label for="unemploymentRatePersonal" class="col-sm-4 control-label">个人缴纳百分比（失业）</label>
+                        <div class="col-sm-8">
+                            <input type="text" ng-model="dictionary.unemploymentRatePersonal" name="unemploymentRatePersonal" id="unemploymentRatePersonal" class="form-control"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="col-sm-6 form-group">
+                        <label for="medicalRateCompany" class="col-sm-4 control-label">公司缴纳百分比（医疗）</label>
+                        <div class="col-sm-8">
+                            <input type="text" ng-model="dictionary.medicalRateCompany" name="medicalRateCompany" id="medicalRateCompany" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label for="medicalRatePersonal" class="col-sm-4 control-label">个人缴纳百分比（医疗）</label>
+                        <div class="col-sm-8">
+                            <input type="text" ng-model="dictionary.medicalRatePersonal" name="medicalRatePersonal" id="medicalRatePersonal" class="form-control"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="col-sm-6 form-group">
+                        <label for="maternityRateCompany" class="col-sm-4 control-label">公司缴纳百分比（生育）</label>
+                        <div class="col-sm-8">
+                            <input type="text" ng-model="dictionary.maternityRateCompany" name="maternityRateCompany" id="maternityRateCompany" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label for="maternityRatePersonal" class="col-sm-4 control-label">个人缴纳百分比（生育）</label>
+                        <div class="col-sm-8">
+                            <input type="text" ng-model="dictionary.maternityRatePersonal" name="maternityRatePersonal" id="maternityRatePersonal" class="form-control"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="col-sm-6 form-group">
+                        <label for="injuryRateCompany" class="col-sm-4 control-label">公司缴纳百分比（工伤）</label>
+                        <div class="col-sm-8">
+                            <input type="text" ng-model="dictionary.injuryRateCompany" name="injuryRateCompany" id="injuryRateCompany" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label for="injuryRatePersonal" class="col-sm-4 control-label">个人缴纳百分比（工伤）</label>
+                        <div class="col-sm-8">
+                            <input type="text" ng-model="dictionary.injuryRatePersonal" name="injuryRatePersonal" id="injuryRatePersonal" class="form-control"/>
+                        </div>
+                    </div>
+                </div>
+                <h3>公积金参数</h3><hr>
+                <!--<div class="row">
+                    <div class="col-sm-6 form-group">
+                        <label for="accumulationFoudBase" class="col-sm-4 control-label">公积金基数</label>
+                        <div class="col-sm-8">
+                            <input type="text" ng-model="dictionary.accumulationFoudBase" name="accumulationFoudBase" id="accumulationFoudBase" class="form-control"/>
+                        </div>
+                    </div>
+                </div>-->
+                <div class="yws-container">
+                    <div class="col-sm-6 form-group">
+                        <label for="accumulationFoudRateCompany" class="col-sm-4 control-label">公积金缴纳百分比（公司）</label>
+                        <div class="col-sm-8">
+                            <input type="text" ng-model="dictionary.accumulationFoudRateCompany" name="accumulationFoudRateCompany" id="accumulationFoudRateCompany" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label for="accumulationFoudRatePersonal" class="col-sm-4 control-label">公积金缴纳百分比（个人）</label>
+                        <div class="col-sm-8">
+                            <input type="text" ng-model="dictionary.accumulationFoudRatePersonal" name="accumulationFoudRatePersonal" id="accumulationFoudRatePersonal" class="form-control"/>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            </div>
+        </div>
+    </div>
+</div>

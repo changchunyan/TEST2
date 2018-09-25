@@ -1,0 +1,58 @@
+<style>
+    td{white-space: normal;word-wrap : break-word }
+</style>
+<div class="view-frame" ng-controller="WagBasicDataController as WagBasicDataController">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div  class="view-content user-love">
+        <div class="br-gray ">
+            <h2 class="pl-20 c3">基础数据</h2>
+            <div class="overflow-x">
+                <table class="table table-bordered table-striped table-condensed ">
+                    <thead>
+                    <tr class="br-gray-t">
+                        <th>大区</th>
+                        <th>分公司</th>
+                        <th>区域</th>
+                        <th>校区</th>
+                        <th>课时数</th>
+                        <th>续推金额</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody ng-show="!isrendLoading">
+                    <tr ng-repeat="row in departmentDataList">
+
+                        <td>{{row.distirctParent}}</td>
+                        <td>{{row.distirct}}</td>
+                        <td>{{row.region}}</td>
+                        <td>{{row.school}}</td>
+                        <td>{{row.courseNum}}</td>
+                        <td >0</td>
+                        <td ><a ng-click="detail1(row)" title="查看详细"><span class="glyphicon glyphicon-plus"></span></a></td>
+
+                    </tr>
+                    </tbody>
+                    <tbody ng-show="isrendLoading">
+                    <tr>
+                        <td colspan="15" class="text-center">
+                            <div class="loading-indicator"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <!--<tfoot>
+                    <tr>
+                        <td class="text-center" st-pagination="" st-items-by-page="10"
+                            st-template="partials/util/pagination.custom.html" colspan="15">
+                        </td>
+                    </tr>
+                    </tfoot>-->
+                </table>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+

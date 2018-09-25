@@ -1,0 +1,114 @@
+<div class="view-frame" ng-controller="integralController">
+    <div class="view-left">
+        <nav-side menu-data="menu.subMenu"></nav-side>
+    </div>
+
+    <div class="view-content">
+        <!-- 面包屑 -->
+        <div>
+            <div>
+                <ul class="breadcrumb">
+                    <li><a href="#/">首页</a> <span class="divider"></span></li>
+                    <li><a href="#/o2o-admin">O2O管理系统</a> <span class="divider"></span></li>
+                    <li class="active">积分管理</li>
+                </ul>
+            </div>
+        </div>
+        <div class="mt-o2o margin-top-10">
+            <div class="tabs-title br-gray-t c3 br0">
+                积分管理<i>?</i>
+            </div>
+            <mt-tabs tabel="tabelDatas" index="selectIndex"></mt-tabs>
+            <div class="br-gray pl-0">
+                <table class="table table-bordered table-striped table-condensed mt-table1 br0"
+                       st-pipe="getIntegralList" st-table="integralList" ng-if="selectIndex==0">
+                    <thead>
+                    <tr>
+                        <th>姓名</th>
+                        <th>电话</th>
+                        <th>总积分</th>
+                        <th>最近一次积分时间</th>
+                    </tr>
+
+                    </thead>
+                    <tbody ng-show="!isLoading">
+                    <tr ng-repeat="row in integralList">
+                        <td>{{ row.name }}</td>
+                        <td>{{row.account}}</td>
+                        <td>{{row.valueAfter}}</td>
+                        <td>{{row.time | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+
+                    </tr>
+                    </tbody>
+                    <tbody ng-show="isLoading">
+                    <tr>
+                        <td colspan="4" class="text-center">
+                            <div class="loading-indicator"></div>
+                        </td>
+                    </tr>
+                    <tfoot>
+                    <tr>
+                        <td class="text-center" st-pagination="" st-items-by-page="10"  st-template="partials/util/pagination.custom.html" colspan="9" />
+                    </tr>
+                    </tfoot>
+                    </tbody>
+
+                </table>
+                <table class="table table-bordered table-striped table-condensed mt-table1 br0"
+                       st-pipe="getIntegralRuleList" st-table="integralRulesList" ng-if="selectIndex==1">
+                    <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>规则名称</th>
+                        <th>具体规则</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody ng-show="!isCourseLoading">
+                    <tr ng-repeat="row in integralRulesList">
+                        <td>{{$index+1}}</td>
+                        <td>{{row.group_name}}</td>
+                        <td><!--{{row.desp}}--><!--getDespList(row,el)-->
+                            <p ng-repeat="two in row.desp track by $index">{{getDespList(two)}}</p>
+                        </td>
+                        <td>{{row.state | schemeStatusText:row.state}}</td>
+                        <td>
+                            <a class="showUI" id="nw+{{$index}}"  ng-click="nw[$index]=true"><span class="glyphicon glyphicon-caozuo" title="操作"></span></a>
+                            <bubble  ng-if="nw[$index]" for="nw+{{$index}}" align="bottom" close="nw[$index]=false" close-action="outerchick " ng-mouseleave="nw[$index]=false;"><!--ng-mouseleave="nw[$index]=false;"-->
+                                <ul>
+                                    <li>
+                                        <a ng-if="!row.state" ng-click="getRulesGroupById(row)">
+                                            编辑
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a ng-click="changeRuleState(row)">
+                                            <span ng-if="row.state">关闭</span>
+                                            <span ng-if="!row.state">打开</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </bubble>
+                        </td>
+
+                    </tr>
+                    </tbody>
+                    <tbody ng-show="isCourseLoading">
+                    <tr>
+                        <td colspan="8" class="text-center">
+                            <div class="loading-indicator"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td class="text-center" st-pagination="" st-items-by-page="20" colspan="8">
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

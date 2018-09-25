@@ -1,0 +1,47 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" ng-bind="userInfoModalTitle"></h4>
+            </div>
+            <div class="modal-body">
+	        	<div class="table-responsive c-select-text" style="overflow:scroll;overflow-y:hidden">
+				    <div class="yws-container">
+				        <div class="yws-left"><h4>列表</h4></div>
+				    </div>
+				
+				    <table st-pipe="getSignUpUserList" st-table="signUpUserList" class="table table-bordered table-striped">
+				        <thead>
+				        <tr>
+				            <th>报名序号</th>
+				            <th>姓名</th>
+				            <th>电话</th>
+				            <th>所属机构</th>
+				            <th>岗位</th>
+				        </tr>
+				        </thead>
+				        <tbody>
+				        <tr ng-repeat="user in signUpUserList track by $index">
+				            <td>{{$index+1}}</td>
+				            <td>{{user.userName}}</td>
+				            <td>{{user.mobile}}</td>
+				            <td>{{user.deptName}}</td>
+				            <td>{{user.posName}}</td>
+				        </tr>
+				        </tbody>
+				        <tfoot>
+				        <tr>
+				            <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="5">
+				            </td>
+				        </tr>
+				        </tfoot>
+				    </table>
+				</div>
+			</div>
+			<div class="modal-footer">
+	            <button type="button" class="btn btn-success" ng-click="$hide()">确定</button>
+	        </div>
+        </div>    
+    </div>
+</div>

@@ -1,0 +1,466 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true"
+     ng-controller="CoursePlanOperateController as planOperate">
+    <form class="modal-dialog form-horizontal" name="coursePlan">
+        <div class="modal-content mt-label-h2">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" ng-bind="coursePlanModalTitle"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row ml-0">
+                    <div class="form-group col-sm-12">
+                        <!-- ng-class="{'col-sm-12':detail.type==7||detail.type==3||detail.type==2,'col-sm-9':detail.type!=7&&detail.type!=3&&detail.type!=2}"-->
+                        <div class="row mt-li-bg" ng-if="detail.type!=7" style="background: none">
+                            <div>
+                                <span>学生姓名</span>
+                                <input autocomplete="off" type="text" name="name" id="name"
+                                       ng-model="$parent.detail.name" placeholder="1到20个字符" ng-maxlength="40"
+                                       ng-minlength="1" required="" class="input-sm form-control teachinghoursname"
+                                       ng-readonly="showCreat!=0"
+                                       ng-change="gusseyourresult()" ng-blur="hideThisul()"
+                                       style="width: 179px;margin: 0px;display: inline-block;">
+                                <div class=" ng-scope" ng-if="showCreat==0" style="display: inline-block;">
+                                    <input ng-if="detail.type!=1" ng-click="createLeadsmessege()" type="button"
+                                           class="btn btn-success needsclick" value="创建"
+                                           style="background: #2fb0ee;color: #fff;   border-radius: 4px;border: none;">
+                                </div>
+                                <ul class="order_mess_show ng-hide" ng-show="hasresult" style="left: 72px;">
+                                    <li class="bgc_gree" ng-repeat="row in gusseresult"
+                                        ng-click="addthisinput('gusseresult',$index)"
+                                        style="background: none;color: #000;font-size:12px;width:120%;height: 20px;line-height: 20px;text-indent: 0px;">
+                                        <span>{{row.name}}</span><span>{{row.state==1?'学':'客'}}</span><span>{{row.phone}}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div style="position: absolute;width:30%;left: 392px;top: 5px;">所属人:<span>{{detail.belong_user_name}}</span>
+                            </div>
+                            <div class="pl-20 pt-20"
+                                 ng-if="(detail.type == 1 || detail.type == 15 || detail.type == 16) ">
+                                <label for="">
+                                    <input name="typesofPk" type="radio" ng-value="1" ng-model="detail.type"
+                                           ng-click="chooseStudentPk()">
+                                    学员排课
+                                </label>
+                                <label for="">
+                                    <input name="typesofPk" type="radio" ng-value="15" ng-model="detail.type"
+                                           ng-click="choosePkType()">
+                                    扩科试听
+                                </label>
+                                <label for="">
+                                    <input name="typesofPk" type="radio" ng-value="16" ng-model="detail.type"
+                                           ng-click="choosePkType()">
+                                    换老师试听
+                                </label>
+                            </div>
+                        </div>
+
+
+                        <ul class="row mt-li-bg" ng-if="detail.type==7">
+                            <li class="col-sm-6">班级姓名：<span>{{detail.name}}</span></li>
+                            <li class="col-sm-6">班主任：<span>{{detail.user_name}}</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div ng-if="detail.type == 1||detail.type == 2||detail.type == 15 || detail.type == 16"
+                     class="modal-table table-nav" data="{{detail}}">
+                    <span ng-class="{'active':now==3}" ng-click="showPaikeView(3)">课时排课</span>
+                    <span ng-class="{'active':now==1}" ng-if="detail.type != 15 && detail.type != 16"
+                          ng-click="showPaikeView(1)">储值排课</span>
+                </div>
+
+                <div ng-if="!detail.name" ng-click="remindChoseStudent()"
+                     style="position: absolute;top: 50px;left: 0;height: 100%;width: 100%;background-color: transparent;z-index: 100;"></div>
+
+
+                <div class="row m0">
+                    <div class="col-sm-12 form-group m0"
+                         ng-if="detail.type == 1 || detail.type == 3 || detail.type == 15 || detail.type == 16">
+                        <!--<label class="col-sm-12 control-label">课程名称 </label>-->
+                        <!--<div class="col-sm-12">-->
+                        <div>
+                            <span class="c86" ng-if="now == 1">电子帐户余额：&nbsp;{{detailForUp.accountBalance}}&nbsp;本订单余额:&nbsp;{{orderBalance}}</span>
+                        </div>
+                        <label ng-if="now == 1" class="lable-h2 fl">订单编号</label>
+                        <input ng-if="now == 1" type="text" class="form-control ng-pristine "
+                               style="display: inline-block;width: 50%" name="storedOrderId"
+                               id="storedOrderId" ng-model="storedOrderId" readonly/>
+                        <label ng-if="now != 1" class="lable-h2 fl">课程名称</label>
+                        <input ng-if="detail.type == 1 && now != 1" type="text" class="form-control ng-pristine "
+                               style="display: inline-block;width: 50%"
+                               name="courseName" id="courseName" ng-model="coursePlanFilter.courseName" readonly/>
+                        <input ng-if="(detail.type == 15 || detail.type == 16) && now != 1" type="text" value="学员试听"
+                               class="form-control ng-pristine "
+                               style="display: inline-block;width: 50%" name="courseName" id="courseName" readonly/>
+                        <input ng-if="detail.type == 2 && now != 1" type="text" class="form-control ng-pristine "
+                               style="display: inline-block;width: 70%"
+                               name="courseName" id="courseName" ng-model="courseName" readonly/>
+                        <input ng-if="detail.type == 3 && now != 1" type="text" class="form-control ng-pristine "
+                               style="display: inline-block;width: 70%"
+                               name="courseName" id="courseName" value="试听课程" readonly>
+                        <input ng-if="detail.type == 7 && now != 1" type="text" class="form-control ng-pristine "
+                               style="display: inline-block;width: 70%"
+                               name="courseName" id="courseName" ng-value="detail.course_name" readonly>
+                        <button ng-if="detail.type == 1 && now != 1 && detail.type == 1" type="button"
+                                class="btn btn-default bg-color-blue" ng-click="showOrderCourseList(detail)">选择课程
+                        </button>
+                        <button ng-if="now == 1" type="button" class="btn btn-default bg-color-blue"
+                                ng-click="showStoredOrderList(detail)">查看订单
+                        </button>
+                        <span ng-if="now == 1">{{scheme_name}}</span>
+                        <!--非班级排课-->
+                        <span class="c86" ng-if="detail.type!=7 && now != 1 && detail.type != 15 && detail.type != 16">可排课时：&nbsp;{{plan_available_num|number:2}}&nbsp;课时规格:&nbsp;{{order_rule_name}}</span>
+
+                        <span class="c86"
+                              ng-if="detail.type!=7 && now != 1 && (detail.type == 15 || detail.type == 16)">可排课时：&nbsp;{{plan_available_num ? plan_available_num.plan_available_num : 6|number:2}}&nbsp;课时规格:&nbsp;1小时</span>
+                        <!--班级排课-->
+                        <span class="c86" ng-if="detail.type==7 && now != 1">计划课时：&nbsp;{{detail.plan_course_count}}&nbsp;&nbsp;</span>
+                        <span class="c86"
+                              ng-if="detail.type==7 && now != 1">已排课时：&nbsp;{{detail.all_course_plan_count}}</span>
+                        <!--</div>-->
+                    </div>
+                    <!--一对多排课@李世明2016-11-18 新增-->
+                    <div class="col-sm-12 form-group m0" ng-if="detail.type == 2">
+                        <div class="group-list bg-gray pl-0" style="padding-bottom: 0">
+                            <div style="margin-bottom:5px;overflow: hidden;">
+                                <div style="width:56px;float: left;overflow: hidden;margin-top: 20px"><label
+                                        class="label-h2 fl f14">{{(now==3)?'选择科目':'课程设置'}}</label></div>
+                                <!--<div style="width: 90%;float: left;">
+                                    <div class="fl" ng-repeat="el in CGoupStudentCourseList">&lt;!&ndash;  style="width:122px;"&ndash;&gt;
+                                        <a class="btn btn-default lable-btn" ng-class="{selected:el.selected, unselected:!el.selected}"  ng-click="selectStuCourse(el,$index)">{{el.studentName}}</a>&lt;!&ndash;style="width:80px;"&ndash;&gt;
+                                        <img src="img/modal/choose.png" class="img-date-time" ng-click="selectStuCourse(el,$index)">
+                                    </div>
+                                </div>-->
+
+
+                                <div class="br-gray pl-0">
+                                    <table class="table table-bordered table-striped table-condensed mt-table1"
+                                           st-pipe="getOrderCourseList" st-table="orderCourse">
+                                        <thead>
+                                        <tr>
+                                            <th>姓名</th>
+                                            <th ng-if="now == 3">课程名称</th>
+                                            <th ng-if="now == 3">剩余课时</th>
+                                            <th ng-if="now == 3">可排课时</th>
+                                            <th ng-if="now == 3">方式</th>
+                                            <th ng-if="now != 3">合同编号</th>
+                                            <th ng-if="now != 3">师资档位</th>
+                                            <th ng-if="now != 3">订单余额</th>
+                                            <th ng-if="now != 3">可排金额</th>
+                                            <th ng-if="now != 3">课时单价</th>
+                                            <th>折算系数</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="orderInfo">
+                                        <tr ng-if="detail.type == 1||detail.type == 2"
+                                            ng-repeat="row in CGoupStudentCourseList" ng-init="selectStuCourseModelUpdate($index,0)">
+                                            <td>
+                                                {{row.studentName}}
+                                            </td>
+                                            <td ng-if="now == 3">{{row.course_name}}<a
+                                                    ng-click="selectStuCourse(row,$index)">&nbsp;选择</a></td>
+                                            <td ng-if="now == 3">{{row.course_num}}</td>
+                                            <td ng-if="now == 3">{{row.plan_available_num}}</td>
+                                            <td ng-if="now == 3">{{row.teachingStyle}}</td>
+                                            <td ng-if="now != 3">{{row.order_no}}<a
+                                                    ng-click="selectStuCourse(row,$index)">&nbsp;查看</a></td>
+                                            <td ng-if="now != 3">{{row.order_teacher_level_name}}</td>
+                                            <td ng-if="now != 3">{{row.additional_amount|number:1}}</td>
+                                            <td ng-if="now != 3">{{row.avaliable_amount|number:1}}</td>
+                                            <td ng-if="now != 3">{{row.order_charge}}</td>
+                                            <td><input ng-change="changeCoefficient(false)" ng-model="row.coefficient"
+                                                       required
+                                                       ng-pattern="/^(([0-1]{1}(\.[0-9]{0,2}))|2|1)$/"><a
+                                                    ng-click="changeCoefficient(true,$index)">&nbsp;重置</a></td>
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <p class="c86" style="clear: both;padding-left: 75px">
+                                    {{((now==3&&stuUnSelectNum)||(now==1&&!stuUnSelectNum))?('可排课时：
+                                    '+(plan_available_num?plan_available_num:0)+',课时规格:
+                                    '+order_rule_name):('请选择每个学员排课的课程 课程规格'+order_rule_name)}}</p>
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div ng-if="now == 1&&detail.type == 1" class="row m0 mt-form-control mt-10">
+                    <div class="col-sm-6 form-group m0">
+                        <label class="lable-h2 fl tool-bg" style="background-position:right 5px; " title=""
+                               data-toggle="tooltip" data-placement="top"
+                               data-original-title="默认每年9月1日，学员的年级会自动升级">学员年级</label>
+                        <select ng-model="detailForUp.grade_id" name="grade_id" id="grade_id"
+                                class="form-control ng-pristine ml-0"
+                                ng-options="option.id as option.name for option in gradeIds"
+                                ng-change="changeCustomerGrade()" required>
+                            <option value="">请选择</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 form-group m0">
+                        <label class="lable-h2 fl">排课师资</label>
+                        <input type="text" class="form-control ng-pristine  col-sm-6" name="teacherLevel"
+                               id="teacherLevel" ng-model="order_teacher_level_name"
+                               readonly>
+                    </div>
+                    <div class="col-sm-6 form-group m0">
+                        <label class="lable-h2 fl">课时单价</label>
+                        <input type="text" class="form-control ng-pristine  col-sm-6" name="orderCharge"
+                               id="orderCharge" ng-model="order_charge"
+                               readonly>
+                    </div>
+                    <div>
+                        <span class="c86">可排金额：&nbsp;{{order_avaliable_amount| number:2}}&nbsp;可排课时：&nbsp;{{plan_available_num}}&nbsp;课时规格:&nbsp;{{order_rule_name}}</span>
+                    </div>
+                </div>
+                <div class="row m0 mt-form-control mt-10">
+                    <div class="col-sm-6 form-group m0">
+                        <label class="lable-h2 fl">排课科目</label>
+                        <select ng-model="coursePlanFilter.subjectId" name="subjectId" id="subjectId"
+                                class="form-control ng-pristine ml-0"
+                                ng-options="option.id as option.name for option in omsSubject"
+                                ng-change="selectSubject()" required>
+                            <option value="">请选择</option>
+                        </select>
+                        <!--<select class="form-control ng-pristine ml-0" id="subjectId" name="subjectId"
+                                ng-model="coursePlanFilter.subjectId" ng-change="selectSubject()" data="{{coursePlanFilter.subjectId}}">
+                            <option ng-repeat="row1 in omsSubject" value="{{row1.id}}"
+                                    ng-selected="row1.id == subjectID" data="{{subjectID}}">{{row1.name}}
+                            </option>
+                        </select>-->
+                    </div>
+                    <div class="col-sm-6 form-group m0">
+                        <label class="lable-h2 fl">授课老师</label>
+                        <input type="text" class="form-control ng-pristine  col-sm-6" name="teacherName" readonly
+                               id="teacherName" ng-model="coursePlanFilter.teacherName"
+                               ng-click="showTeacherList(detail)">
+                    </div>
+                </div>
+                <div class="row m0 mt-form-control mt-10"
+                     ng-if="detail.type == 1 || detail.type == 15 || detail.type == 16">
+                    <div class="col-sm-6 form-group m0" ng-if="detail.type != 15 && detail.type != 16">
+                        <label class="lable-h2 fl">课程方式</label>
+                        <input type="text" class="form-control ng-pristine  col-sm-6"
+                               ng-model="coursePlanFilter.teachingStyle" readonly>
+                    </div>
+                    <div class="col-sm-6 form-group m0" ng-if="detail.type != 15 && detail.type != 16"
+                         style="display:none">
+                        <label class="lable-h2 fl">折算系数</label>
+                        <input type="text" class="form-control ng-pristine  col-sm-6" name="coefficient"
+                               id="coefficient" required ng-model="coursePlanFilter.coefficient"
+                               ng-pattern="/^(([0-1]{1}(\.[0-9]{0,2}))|2|1)$/" ng-change="changeCofficientOne(false)">&nbsp;
+                        <a ng-click="changeCofficientOne(true)">重置</a>
+                    </div>
+                </div>
+
+                <!-- 20180825添加上课途径 -->
+                <div class="row m0 mt-form-control mt-10">
+                    <div class="col-sm-6 form-group m0">
+                        <label class="lable-h2 fl">上课途径</label>
+                        <select
+                                ng-model="newParams.typeO2o" class="input-sm form-control ng-pristine ml-0"
+                                ng-options="option.id as option.name for option in inClassOptions" required>
+                            <option value="">请选择</option>
+                        </select>
+                    </div>
+
+                </div>
+                <!-- 20180825添加上课途径 -->
+
+
+
+                <div class="plan-top-left-title ml-0 c3e">
+                    <label class="lable-check" for="timeSearch" ng-class="{'active':timeSearchFlag}"
+                           ng-click="setingSelectTeacher(1)">按时间段查询可用的教师<span class="pl-30 cf8" ng-if="timeSearchFlag">{{select.startDate | date:'yyyy-MM-dd'}}&nbsp;&nbsp;{{select.time1+':'+select.time2+'-'+select.timeEnd}}</span></label>
+                    <input type="checkbox" name="timeSearch" id="timeSearch" class="hide" value="1"
+                           ng-click="showTimeSearch()">
+                    <div class="of">
+                        <label class="cf8 f14">本校区老师</label>
+                        <a class="bg-color-blue fr btn-common" ng-click="showTeacherList(detail)">
+                            全部老师
+                        </a>
+                        <!--<div class="col-sm-6 form-group m0">
+                        <div class="btn btn-success yws-right mt-success" ng-click="showTeacherTimes()">查看老师时间表</div>
+                    </div>-->
+                    </div>
+                </div>
+
+                <div class="row m0">
+                    <div class="col-sm-12 form-group m0">
+                        <div class="group-list bg-gray" ng-repeat="element in subjectTeacherGroup track by $index"
+                             ng-if="subjectTeacherGroup.length">
+                            <div style="margin-bottom:5px;overflow: hidden;">
+                                <div style="width:4%;float: left;overflow: hidden;margin-top: 20px"><img
+                                        ng-src="{{'img/teacherTime/time-'+(element.subjectId<=18?element.subjectId:19)+'.png'}}"
+                                        title="{{element.subjectName}}" alt="{{element.subjectName}}"
+                                        style="margin-top: 0"></div>
+                                <div style="width: 95%;float: left;">
+                                    <div ng-repeat="teacher in element.teachers track by $index" style="width:122px;"
+                                         class="fl">
+                                        <!--选择用这个 ng-click="btnSelectTeacher(teacher)"-->
+                                        <a class="btn btn-default lable-btn"
+                                           ng-class="{selected:teacher.selected, unselected:!teacher.selected}"
+                                           style="width:80px;"
+                                           ng-click="btnSelectTeacher(teacher)">{{teacher.nameDisplay}}</a>
+                                        <img src="img/modal/rili.png" class="img-date-time"
+                                             ng-click="selectDateTime(teacher,'1',detail.crm_student_id)">
+                                    </div>
+                                </div>
+                                <div class="cf8 ti-20" ng-if="timeSearchFlag">已将该时间段不可用的教师隐藏</div>
+
+                            </div>
+                        </div>
+                        <div ng-if="!subjectTeacherGroup" class="group-list bg-gray">
+                            请先选择科目
+                        </div>
+                        <div ng-if="subjectTeacherGroup.length == 0" class="group-list bg-gray">
+                            校区无此科目老师
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-if="!recording" class="ptm10">
+                    <div class="row m0" style="margin-left: 50px">
+                        <div class="col-sm-12 form-group m0">
+                            <div class="yes-radio " ng-class="{true:'radio-checked',false:''}[selected.isWeekShow]"
+                                 ng-click="checkedShowCycle('week')">
+                                <input type="radio">
+                            </div>
+                            定制排课时间规则
+                            <div class="yes-radio " ng-class="{true:'radio-checked',false:''}[selected.isDayShow]"
+                                 ng-click="checkedShowCycle('day')">
+                                <input type="radio">
+                            </div>
+                            精准日期时间排课(单次)
+                        </div>
+                    </div>
+                    <div ng-if="selected.isWeekShow" class="mt-20">
+                        <div class="row m0">
+                            <div class="col-sm-12 form-group m0 br-gray pl-0 pr-0">
+                                <h2 class="pl-20">上课时间</h2>
+                                <table class="table table-bordered table-striped mt-table1">
+                                    <thead>
+                                    <tr>
+                                        <th>星期</th>
+                                        <th>上课时间</th>
+                                        <th>上课时长</th>
+                                        <th>下课时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="courseTimeAddList">
+                                    <tr ng-repeat="row in show.planLists">
+                                        <td>{{row.startDate}}</td>
+                                        <td>{{row.startTime}}</td>
+                                        <td>{{row.timelong}}</td>
+                                        <td>{{row.endTime}}</td>
+                                        <td>
+                                            <a ng-click="show.deletePlan(row)" title="删除"><span
+                                                    class="glyphicon glyphicon-delete"></span></a> &nbsp;
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <h3 class="h3-o2o f14 pl-20 of" style="margin-top: 10px">
+                                    <a ng-click="showAddCoursePlanTime()" class="yws-left width10 add-a">添加</a>
+                                    <p style="width:80%;" class="yws-right text-right pr-20">
+                                        <span ng-click="show.judgeType('2')"
+                                              ng-class="{'active':select.type==2}">批量排课</span>
+                                        <span ng-click="show.judgeType('0')"
+                                              ng-class="{'active':select.type==0}">只排本周</span>
+                                        <span ng-click="show.judgeType('1')"
+                                              ng-class="{'active':select.type==1}">只排下周</span></p>
+                                </h3>
+                            </div>
+                            <!--批量排课显示-->
+                            <div ng-if="show.isWeekNumber">
+                                <div class="row m0">
+                                    <div class="col-sm-3 mt-date">
+                                        <h2 class="lable-h2">开始日期</h2>
+                                        <input type="text" datepicker="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"
+                                               onchange="" readonly="" name="leadsName" ng-model="select.pTimeStart"
+                                               placeholder="批量开始日期" class="form-control ng-pristine " required="">
+                                    </div>
+                                    <div class="col-sm-3 mt-date">
+                                        <h2 class="lable-h2">结束日期</h2>
+                                        <input type="text" datepicker="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"
+                                               onchange="" readonly="" name="leadsName" ng-model="select.pTimeEnd"
+                                               placeholder="批量结束日期" class="form-control ng-pristine " required="">
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <h2 class="lable-h2">最多排课次数</h2>
+                                        <input type="number" name="weekNumber" ng-model="select.weekNumber" max="1000"
+                                               min="1" class="form-control ng-pristine "
+                                               placeholder="不填则按日期排满">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div ng-if="selected.isDayShow||recording">
+                    <div class="row m0">
+                        <div class="col-sm-3 mt-date">
+                            <h2 class="lable-h2">上课日期</h2>
+                            <input type="date" name="startDate" id="startDate" ng-model="select.startDate"
+                                   class="form-control" ng-change="getEndTimeNew()"
+                                   required onfocus="(this.type='date')"
+                                   value="{{ select.startDate | date:'yyyy-MM-dd' }}"/>
+                            <!--onfocus="(this.type='date')"
+                                   value="{{ select.startDate | date:'yyyy-MM-dd' }}" -->
+                        </div>
+
+                        <div class="col-sm-3">
+                            <h2 class="lable-h2">上课时间</h2>
+                            <!--select.time1-->
+                            <input type="text" id="leadsName1" name="leadsName1" ng-model="select.time1" placeholder="时"
+                                   class="form-control ng-pristine fl width40"
+                                   required="" ng-change="getEndTimeNew()" ng-focus="getEndTimeNew()">
+                            <span class="fl">:</span>
+                            <input sytle="flex:1" type="text" name="leadsName2" ng-model="select.time2" placeholder="分"
+                                   class="form-control ng-pristine fl width40"
+                                   required="" ng-change="getEndTimeNew()" ng-focus="getEndTimeNew()">
+                        </div>
+                        <div class="col-sm-3">
+                            <h2 class="lable-h2">上课时长</h2>
+                            <select ng-if="(plan_available_num && (plan_available_num - 0.5)>0.001||plan_available_num<0.45)||!plan_available_num || detail.type == 16 || detail.type==15"
+                                    ng-model="select.timeSize" id="timeSize" name="select.timeSize"
+                                    ng-init="initTimeSize('')" class="input-sm form-control"
+                                    ng-options="option.id as option.name for option in TIME_SIZE"
+                                    type="search" required="" ng-change="getEndTimeNew()">
+                                <option value="">请选择</option>
+                            </select>
+                            <input readonly ng-init="initTimeSize(0.5)" class="input-sm form-control"
+                                   ng-if="plan_available_num - 0.5<=0.001 && plan_available_num && plan_available_num - 0.5>=0"
+                                   required=""
+                                   ng-model="select.timeSize">
+                        </div>
+                        <div class="col-sm-3">
+                            <h2 class="lable-h2">下课时间</h2>
+                            <input type="text" readonly="" name=timeEnd ng-model="select.timeEnd" placeholder="自动生成"
+                                   class="form-control ng-pristine "
+                                   required="">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 20px">
+                <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                <button type="button" class="btn btn-success c5-lable" ng-if="!recording" ng-click="show.submitPlan()"
+                        ng-disabled="coursePlan.$invalid">
+                    提交排课
+                </button>
+                <button type="button" class="btn btn-success c5-lable" ng-if="recording" ng-click="show.submitPlan()"
+                        ng-disabled="coursePlan.$invalid">
+                    记录上课
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

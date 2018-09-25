@@ -1,0 +1,58 @@
+<div class="modal crm-importOrders-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" ng-bind="modalChargingTitle"></h4>
+            </div>
+            <div class="modal-body mt-modal-order">
+                <div class="table-responsive br-gray pl-0">
+                    <table class="table table-bordered table-striped mt-table1" st-pipe="getChargingSchemeList" st-table="chargingSchemeList"
+                        style="background-color: #fff;">
+                        <thead>
+                            <tr>
+                                <th>选择</th>
+                                <th>报价单名称</th>
+                                <th>授权机构</th>
+                                <th>创建时间</th>
+                                <th>更新时间</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="row in chargingSchemeList">
+                                <td>
+                                    <input  ng-show="updateIndex != -1" type="radio" ng-checked="row.id == order.orderChargingId" ng-click="selectOneCharging(row)" name="orderChargingId" />
+                                    <input  ng-show="updateIndex == -1" type="radio" ng-checked="row.id == moreOrder.orderChargingId" ng-click="selectOneChargingV2(row)" name="orderChargingId" />
+                                </td>
+                                <td>{{row.schemeName}}</td>
+                                <td>{{row.departmentName}}</td>
+                                <td>{{row.createdAt | date:'yyyy-MM-dd'}}</td>
+                                <td>{{row.updatedAt | date:'yyyy-MM-dd'}}</td>
+                            </tr>
+                        </tbody>
+                        <tbody ng-show="isLoading">
+                            <tr>
+                                <td colspan="5" class="text-center">
+                                    <div class="loading-indicator"></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td class="text-center" colspan="5" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html">
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer text-center ">
+                <div class="yws-right">
+                    <button class="btn btn-default" ng-click="$hide()">取消</button>
+                    <button class="btn btn-success c5-lable" ng-click="selectOneChargingConfirm()">确定</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

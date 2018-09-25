@@ -1,0 +1,156 @@
+<div class="view-frame" ng-controller="CreatePlanCtrl as cpc">
+	<div class="view-left">
+		<div ng-include="'partials/common/common.indexLeft.html'"></div>
+	</div>
+	<div ng-show="!isAdding" class="view-content">
+		<div>
+			<ul class="breadcrumb">
+				<li><a href="#">首页</a> <span class="divider"></span></li>
+				<li><a href="#/sos-admin">学员教务</a> <span class="divider"></span></li>
+				<li class="active">排课</li>
+			</ul>
+		</div>
+        <div class="details-title">教师课表</div>
+        <div class="plan-details">
+            <div class="paln-top-wrap">
+                <div class="yws-container">
+                    <div class="plan-top-left">
+                        <div class="plan-top-left-title">可选课程<span>{{coursePlanParams.plan_available_num || 0}}</span>小时</div>
+                        <div class="plan-top-left-wrap">
+                            <form name="selectForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                                <div class="col-sm-12 form-group">
+                                    <label  class="col-sm-4 control-label">上课星期</label>
+                                    <div class="col-sm-8">
+                                        <select ng-model="select.week"
+                                                name="selectForm.week"  class="input-sm form-control"
+                                                ng-options="option.id as option.name for option in WEEKS" type="search" required="" ng-change="show.getEndTime()">
+                                            <option value="">请选择</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 form-group">
+                                    <label  class="col-sm-4 control-label">上课时间</label>
+                                    <div class="col-sm-8">
+                                        <input ype="text" datepicker="" onclick="WdatePicker({dateFmt:'H:mm',minDate:'6:00:00',maxDate:'23:00:00'})" onchange="" readonly="" name="leadsName"
+                                               ng-model="select.time" placeholder="上课时间" class="form-control ng-pristine " required="" ng-change="show.getEndTime()" ng-focus="show.getEndTime()">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 form-group">
+                                    <label  class="col-sm-4 control-label">上课时长</label>
+                                    <div class="col-sm-8">
+                                        <select ng-model="select.timeSize"
+                                                name="select.timeSize"  class="input-sm form-control"
+                                                ng-options="option.id as option.name for option in TIME_SIZE" type="search" required="" ng-change="show.getEndTime()">
+                                            <option value="">请选择</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 form-group">
+                                    <label  class="col-sm-4 control-label">下课时间</label>
+                                    <div class="col-sm-8">
+                                        <input ype="text"  readonly="" name="leadsName"
+                                               ng-model="select.timeEnd" placeholder="自动生成" class="form-control ng-pristine " required="">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 form-group">
+                                    <label  class="col-sm-4 control-label">排课方式</label>
+                                    <div class="col-sm-8">
+                                        <label class="col-sm-6"><input type="radio"  name="person-action" value="0" ng-model="select.type" ng-click="show.judgeType()">只排本周</label>
+                                        <label class="col-sm-6"><input type="radio"  name="person-action" value="1" ng-model="select.type" ng-click="show.judgeType()">只排下周</label>
+                                        <label class="col-sm-6"><input type="radio"  name="person-action" value="2" ng-model="select.type" ng-click="show.judgeType()">按周批量排</label>
+                                        <!--<label class="col-sm-6"><input type="radio"  name="person-action" value="3" ng-model="select.type" ng-click="show.judgeType()">按起止日期量排</label>-->
+                                    </div>
+                                </div>
+
+                                <!--批量排课显示-->
+                                <div ng-if="show.isWeekNumber">
+                                    <div class="col-sm-12 form-group">
+                                        <label  class="col-sm-4 control-label">开始日期</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" datepicker="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="" readonly="" name="leadsName"
+                                                   ng-model="select.pTimeStart" placeholder="批量开始日期" class="form-control ng-pristine " required="">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 form-group">
+                                        <label  class="col-sm-4 control-label">结束日期</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" datepicker="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="" readonly="" name="leadsName"
+                                                   ng-model="select.pTimeEnd" placeholder="批量结束日期" class="form-control ng-pristine " required="" >
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 form-group" >
+                                        <label  class="col-sm-4 control-label">最多排课次数</label>
+                                        <div class="col-sm-8">
+                                            <input type="number"  name="weekNumber"
+                                                   ng-model="select.weekNumber" max="1000" min="1" class="form-control ng-pristine " placeholder="不填则按日期排满" >
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="text-center padding-20-0">
+                                    <button class="btn btn-success" ng-disabled="selectForm.$invalid" ng-click="show.submitPlan()">提交排课</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="plan-top-right">
+                        <div>
+                            <div class="plan-top-right-title yws-container">
+                                <div class="yws-left font-size-16">本次排课列表</div>
+                                <div class="yws-right">
+                                    <div class="btn yws-btn-delete" ng-click="show.deletePlans()">全部删除</div>
+                                </div>
+                            </div>
+                            <div class="table-responsive" style="background-color:#fff">
+                                <table st-pipe="getPlanLists" st-table="plans" class="table table-bordered table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>上课日期</th>
+                                        <th>上课时间</th>
+                                        <th>下课时间</th>
+                                        <th>课程类别</th>
+                                        <th>科目</th>
+                                        <th>任课老师</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody >
+                                    <tr ng-repeat="row  in show.planListsPage">
+                                        <td>{{row.start | date:'yyyy-MM-dd'}}</td>
+                                        <td>{{row.start | date:'HH:mm'}}</td>
+                                        <td>{{row.end  | date:'HH:mm'}}</td>
+                                        <td>{{coursePlanParams.course_type_name}}</td>
+                                        <td>{{coursePlanParams.subjectName}}</td>
+                                        <td>{{coursePlanParams.teacherName}}</td>
+                                        <td>
+                                            <a ng-click="show.deletePlan(row)" title="删除"><span class="glyphicon glyphicon-delete"></span></a> &nbsp;
+                                        </td>
+                                    </tr>
+                                    </tbody>
+
+                                    <tfoot>
+                                    <tr>
+                                        <td class="text-center" st-pagination="" st-items-by-page="5" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html"  colspan="6"></td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--中间分隔线-->
+                <div class="plan-top-bottom">
+                    <div class="plan-top-bottom-border-title">教师时间表</div>
+                    <div class="plan-top-bottom-border"></div>
+                </div>
+
+
+            </div>
+            <div ng-include="'partials/sos/coursePlan/plan.pad.html'"></div>
+        </div>
+    </div>
+</div>

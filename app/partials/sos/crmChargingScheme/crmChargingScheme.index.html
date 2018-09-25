@@ -1,0 +1,88 @@
+<div class="view-frame" ng-controller="CrmChargingSchemeController as ccsc">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <!--计费方案列表-->
+    <div class="view-content mt-new-ui user-love">
+        <div class="yws-nav">
+            <div>
+                <ul class="breadcrumb">
+                    <li><a href="#/">首页</a> <span class="divider"></span></li>
+                    <li><a href="#/sos-admin">学员教务</a> <span class="divider"></span></li>
+                    <li><a>产品课程管理</a><span class="divider"></span></li>
+                    <li class="active">计费方案管理</li>
+                </ul>
+            </div>
+            <div class="mt-10 br-gray">
+                <div class="tabs-title border-1 c3">计费方案管理</div>
+                <div class="mt-student-m">
+                    <ul class="f14 cf">
+                        <li><a class="mt-blue" ng-click="showAddOrEditModal()" ng-if="showPermissions('ChargingSchemeAdd')">添加方案</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="br-gray mt-list">
+                <h2 class="pl-20 c3">计费方案列表</h2>
+                <div class="overflow-x">
+                    <table class="table table-bordered table-striped table-condensed mt-table1"
+                           st-pipe="getPageList" st-table="chargingSchemeList">
+                        <thead>
+	                        <tr class="br-gray-t">
+	                            <th>报价单名称</th>
+	                            <th>授权机构</th>
+	                            <th>状态</th>
+	                            <th>使用学员数</th>
+	                            <th>创建人</th>
+	                            <th>创建时间</th>
+	                            <th>更新时间</th>
+	                            <th>操作</th>
+	                        </tr>
+                        </thead>
+                        <tbody>
+	                        <tr ng-repeat="row in chargingSchemeList">
+	                            <td>{{row.schemeName}}</td>
+	                            <td>{{row.departmentName}}</td>
+	                            <td>{{row.schemeStatus|schemeStatusText:row.schemeStatus}}</td>
+	                            <td>{{row.studentCount}}</td>
+	                            <td>{{row.createName}}</td>
+	                            <td>{{row.createdAt | date:'yyyy-MM-dd'}}</td>
+	                            <td>{{row.updatedAt | date:'yyyy-MM-dd'}}</td>
+	                            <td>
+                                <a class="showUI" id="nw+{{$index}}"  ng-click="nw[$index]=true"><span class="glyphicon glyphicon-caozuo" title="操作"></span></a>
+                                <bubble ng-if="nw[$index]" for="nw+{{$index}}" align="bottom" close="nw[$index]=false" close-action="outerchick " ng-mouseleave="nw[$index]=false;">
+                                    <ul>
+                                        <li ng-click="showAddOrEditModal(row,'1')" ng-if="showPermissions('ChargingSchemeCheck')">
+                                            <a>查看</a>
+                                        </li>
+                                        <li ng-click="showAddOrEditModal(row)" ng-if="showPermissions('ChargingSchemeEdit')">
+                                            <a>编辑</a>
+                                        </li>
+                                        <li ng-click="deleteChargingScheme(row)" ng-if="row.studentCount==0&&showPermissions('ChargingSchemeDelete')">
+                                            <a>删除</a>
+                                        </li>
+
+                                    </ul>
+                                </bubble>
+                            </td>
+	                        </tr>
+                        </tbody>
+                        <tbody ng-show="isMyCrmCustomerStudentGroupListLoading">
+	                        <tr>
+	                            <td colspan="9" class="text-center">
+	                                <div class="loading-indicator"></div>
+	                            </td>
+	                        </tr>
+                        </tbody>
+                        <tfoot>
+	                        <tr>
+	                            <td class="text-center" st-pagination="" st-items-by-page="10"
+	                                st-template="partials/util/pagination.custom.html" colspan="9">
+	                            </td>
+	                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

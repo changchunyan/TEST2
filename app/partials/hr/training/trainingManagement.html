@@ -1,0 +1,101 @@
+<div class="view-frame">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+
+    <div class="view-content">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="">培训管理</a> <span class="divider"></span></li>
+                <li class="active">培训管理</li>
+            </ul>
+        </div>
+        <tabs>
+            <pane title="培训管理">
+                <div class="row">
+                    <div class="c-select-text">
+                    <label for="trainingId">培训编号</label>
+                    <input type="text" name="trainingId" id="trainingId" class="search-form-input"
+                           ng-model="sf_training.trainingId"  />
+                    <label for="trainingName">培训名称</label>
+                    <input type="text" name="trainingName" id="trainingName" class="search-form-input"
+                           ng-model="sf_training.trainingName"  />
+                    <label for="trainingType">所属培训类别</label>
+                    <input type="text" name="trainingType" id="trainingType" ng-click="showTrainingType()" class="search-form-input"
+                           ng-model="sf_training.trainingType.name"  />
+                       <label for="trainingNature">培训性质</label>
+					<select ng-model="sf_training.trainingNature" name="trainingNature" id="trainingNature"
+                   		class="search-form-input" ng-options="tl.id as tl.name for tl in dictData.trainingNature">
+               			<option value="">------请选择------</option>
+           			</select>    
+					<br/>
+                    <label for="trainingDateBegin">培训日期</label>
+                    <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange=""  name="trainingDateBegin" id="trainingDateBegin" class="search-form-input"
+                           ng-model="sf_training.trainingDateBegin"  />  
+                	<label for="trainingDateEnd" class="margin-left10">————</label>
+                   	<input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange=""  name="trainingDateEnd" id="trainingDateEnd" class="search-form-input margin-left-8"
+                           ng-model="sf_training.trainingDateEnd"  /> 
+                  
+                    <div class="c_center">
+                        <button id="keydown-query" class="btn" ng-click="getTrainingByFilter()">查询</button>
+                        <button class="btn" ng-click="reset()">重置</button>
+                    </div>
+
+                </div>
+
+                    <div class="table-responsive c-select-text" style="overflow:scroll;overflow-y:hidden">
+                        <div class="yws-container">
+                            <div class="yws-left"><h4>列表</h4></div>
+                            <div class="yws-right">
+                                <button class="btn btn-success" ng-click="addTraining()">新增培训</button>
+                            </div>
+                        </div>
+
+                        <table st-pipe="getTrainingList" st-table="trainings" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>培训编号</th>
+                                <th>培训名称</th>
+                                <th>培训描述</th>
+                                <th>所属培训类别</th>
+                                <th>培训日期</th>
+                                <th>培训性质</th>
+                                <th>查看报名情况</th>
+                                <th>查看</th>
+                                <th>修改</th>
+                                <th>删除</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="training in trainings">
+                                <td>{{training.id}}</td>
+                                <td>{{training.name}}</td>
+                                <td>{{training.trainingDescription}}</td>
+                                <td>{{training.trainingType.name}}</td>
+                                <td>{{training.trainingDate | date : 'yyyy-MM-dd'}}</td>
+                                <td>{{dictData.trainingNature[training.trainingNature-1].name}}</td>
+                                <td><a ng-click="showSignUpUserInfo(training)" title="查看报名用户信息">{{training.signUpUsers.length}}人报名</a></td>
+                                <td>
+                                	<a ng-click="showDetail(training)" title="查看"><span class="glyphicon glyphicon-plus"></span></a>
+                                </td>
+                                <td>
+                                	<a ng-click="editTraining(training)" title="修改"><span class="glyphicon glyphicon-pencil"></span></a>
+                                </td>
+                                <td>
+                                	<a ng-click="removeTraining(training)" title="删除"><span class="glyphicon glyphicon-delete"></span></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="10">
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    </div>
+            </pane>
+        </tabs>
+    </div>
+</div>

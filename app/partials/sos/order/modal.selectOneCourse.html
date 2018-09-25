@@ -1,0 +1,46 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="addOrderForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="chooseOneTitle"></h4>
+                </div>
+                <div class="modal-body">
+                            <div class="border-top1">
+                                <div>
+                                    <span class="width40 text-center inline-block">请选择该课程下的科目</span>
+                                    <!--<a ng-click="deleteOneCourse(row)"><span class="glyphicon glyphicon-delete" title="删除"></span></a>-->
+                                </div>
+                                <div>
+                                    <input type="text" ng-model="chooseOne.showSubjectName" class="width80" disabled>
+                                    <a class="showUI"   id="nw2+{{$index}}"  ng-click="bubble.open = true"><span class="glyphicon glyphicon-caozuo" title="操作"></span></a>
+                                    <bubble  ng-if="bubble.open" for="nw2+{{$index}}" align="bottom" close="bubble.open=false" close-action="outerchick " ng-mouseleave="bubble.open=false;"><!--ng-mouseleave="nw[$index]=false;"-->
+                                        <ul>
+                                            <li   ng-repeat="subject in subjectIdsModal" ng-click="setOneCourseSubject(chooseOne,subject)" ng-class="{true: 'active', false: ''}[isCheckedSubject(chooseOne,subject)]" >
+                                                <a  >{{subject.name}}</a>
+                                            </li>
+
+                                            </ul>
+                                    </bubble>
+                                </div>
+                            </div>
+                </div>
+                <div class="modal-footer margin-top20">
+                    <button type="button" class="btn btn-default"  ng-click="$hide()">取消</button>
+                    <button type="button" class="btn btn-success"  ng-click="doSelectOneCourse()">确定</button><!-- -->
+                    <img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+<style>
+    .col-sm-6{
+        padding-top: 10px;
+    }
+   .form-horizontal .control-label{
+    padding-top: 17px;
+   }
+</style>

@@ -1,0 +1,21 @@
+<div class="view-frame" ng-controller="BiBaseController">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content" ng-controller="BiSchoolPerformenceController">
+	    <div>
+		    <ul class="breadcrumb">
+		        <li><a href="">校区业绩</a><span class="divider"></span></li>
+		        <li class="active">素养校区业绩统计</li>
+		    </ul>
+		</div>
+        <tabs pane-changed="getTabIndex(selectedPane)">
+        	<pane title="校区业绩明细">
+        		<div ng-include="'partials/bi/biSchoolPerformence/biSchoolPerformenceForSY.statistics.html'" ng-if="channelTab==='0'"></div>
+        	</pane>
+        	<pane title="全部数据汇总" ng-if="!isSchoolUser">
+        		<div ng-include="'partials/bi/biSchoolPerformence/biSchoolPerformenceForSY.summary.html'" ng-if="channelTab==='1'"></div>
+        	</pane>
+        </tabs>
+    </div>
+</div>

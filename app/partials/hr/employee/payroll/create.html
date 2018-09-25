@@ -1,0 +1,43 @@
+<link href="css/smarty.css" rel="stylesheet">
+<style>
+    .modal-dialog, .modal-content {
+        min-width: 500px !important;
+        width: 500px !important;
+    }
+
+    .modal-body {
+        box-sizing: border-box;
+        padding-top: 50px;
+        min-height: 150px;
+        height: 150px;
+        min-width: 490px;
+        width: 490px;
+    }
+</style>
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true" style="overflow-y:auto">
+    <div class="modal-dialog">
+        <form role="form" class="form-inline">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">创建月度工资表</h4>
+                </div>
+                <div class="modal-body mt-modal-order">
+                    <div style="width: 300px;margin: 0 auto">
+                        <label>发薪月度</label>
+                        <input style="width: 150px;" type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM'})" onchange="" readonly
+                               required ng-model="params.month"/>
+                    </div>
+                </div>
+                <div class="modal-footer margin-top20">
+                    <button type="button" class="btn btn-success c5-lable" ng-click="saveMonthPayroll()">
+                        确定
+                    </button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+

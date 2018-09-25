@@ -1,0 +1,42 @@
+<!-- 筛选条件 -->
+<div ng-include="baseHtmlUrl" style="padding: 0px 15px"></div>
+<!-- 表格 -->
+<div class="default-box">
+    <h4>
+                        外呼统计
+        <span ng-if="!isDay">（从 {{modelStartTime | date : 'yyyy-MM-dd'}} 至 {{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+        <span ng-if="isDay">（{{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+        <span ng-if="presentTime">最新统计时间：{{presentTime}}</span>
+    </h4>
+    <br/>
+    <div class="table-responsive">
+        <table st-pipe="getStatistics" st-table="tableModel" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th style="font-weight: bold;" rowspan="1">姓名</th>
+                <th style="font-weight: bold;" rowspan="1"><span>岗位</span></th>
+                <th style="font-weight: bold;" rowspan="1"><span>外呼量</span></th>
+                <th style="font-weight: bold;" rowspan="1"><span>接通量</span></th>
+                <th style="font-weight: bold;" rowspan="1"><span>外呼时长</span></th>
+                <th style="font-weight: bold;" rowspan="1"><span>平均通话时长</span></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="statisticsModel in statisticsModels">
+                <td>{{statisticsModel.teacherName}}</td>
+                <td>{{statisticsModel.positionName}}</td>
+                <td>{{statisticsModel.outboundPhoneNum}}</td>
+                <td>{{statisticsModel.connectedNum}}</td>
+                <td>{{statisticsModel.connectedSum | number:2}}分钟</td>
+                <td>{{statisticsModel.connectedSum/statisticsModel.connectedNum | number:2}}分钟</td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="13" class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" >
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,95 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+		<form name="updateLeadsForm" role="form" class="form-horizontal showcase-form table-responsive">
+			<div class="modal-header">
+				<button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" ng-bind="modalTitle1"></h4>
+			</div>
+			<div class="modal-body">
+				<div class="plan-contents">
+					<div class="plan-part">
+							<div class="plan-part-title"><span>1</span>创建意向客户信息</div>
+							<table st-pipe="getLeadsBasicInfo" st-table="tableState" class="table table-bordered table-striped table-condensed">
+								<thead>
+									<tr>
+										<th>学生姓名</th>
+										<th>年级</th>
+										<th>电话</th>
+										<!--<th>渠道</th>
+										<th ng-if="mediaChannel2List.length">渠道详情</th>-->
+										<th>一级渠道</th>
+										<th ng-if="mediaChannel2List.length">二级渠道</th>
+										<th ng-if="mediaChannel3List.length">渠道详情</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>
+											<input type="text" name="updateLeadsForm.leadsName" id="leadsName" ng-model="detail.name" placeholder="1到20个字符" class="form-control" ng-maxlength="20" ng-minlength="1" required/>
+										</td>
+										<td>
+											<select  class="input-sm form-control"   name="grade_id" id="grade_id" ng-model="detail.grade_id" ng-change="selectGrade(gradeId)" style="width:100px;" required>
+												<option ng-repeat="row in omsGrade" value="{{row.id}}" ng-selected="row.id == detail.grade_id">{{row.name}}</option>
+											</select>
+										</td>
+										<td>
+											<input type="text" name="phone" id="phone" class="form-control" ng-model="detail.phone" required ng-pattern="/^[0-9]*$/" ng-maxlength="11" ng-blur="checkPhone()"/>
+										</td>
+										<!--<td>
+											<select ng-model="detail.media_channel_id_1" name="media_channel_id_1" id="media_channel_id_1" class="form-control"
+													ng-options="option.id as option.name for option in mediaChannel1List" ng-change="mediaChannel1ChangeForUpdate()" required>
+												<option value="">请选择</option>
+											</select>
+										</td>
+										<td ng-if="mediaChannel2List.length">
+											<select ng-model="detail.media_channel_id_2" name="media_channel_id_2" id="media_channel_id_2" class="form-control"
+													ng-options="option.id as option.name for option in mediaChannel2List" ng-disabled="isEdit" required>
+												<option value="">请选择</option>
+											</select>
+										</td>-->
+										<td>
+											<select ng-model="detail.media_channel_id_1" name="media_channel_id_1"
+													id="media_channel_id_1" class="form-control"
+													ng-options="option.id as option.name for option in mediaChannel1List"
+													ng-change="mediaChannel1ChangeForUpdate(1)" required>
+												<option value="">请选择</option>
+											</select>
+										</td>
+										<td ng-if="mediaChannel2List.length">
+											<select ng-model="detail.media_channel_id_2" name="media_channel_id_2"
+													id="media_channel_id_2" class="form-control"
+													ng-options="option.id as option.name for option in mediaChannel2List"
+													ng-disabled="isEdit" ng-change="mediaChannel1ChangeForUpdate(2)" required>
+												<option value="">请选择</option>
+											</select>
+										</td>
+										<td ng-if="mediaChannel3List.length">
+											<select ng-model="detail.media_channel_id_3" name="media_channel_id_3"
+													id="media_channel_id_3" class="form-control"
+													ng-options="option.id as option.name for option in mediaChannel3List"
+													ng-disabled="isEdit" required>
+												<option value="">请选择</option>
+											</select>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" ng-click="forwardCreateLeadAndPlanPage()" ng-disabled="updateLeadsForm.$invalid">创建新意向客户并排课</button>
+			</div>
+		</form>
+    </div>
+  </div>
+</div>
+<style>
+	input.form-control, select.form-control {
+		margin-left: 0;
+	}
+</style>
+
+
+

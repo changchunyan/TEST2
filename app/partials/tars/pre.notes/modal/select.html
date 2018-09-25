@@ -1,0 +1,57 @@
+<div class="modal crm-invitationDetail-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="form">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="preModalTitle"></h4>
+                </div>
+                <div class="modal-body text-center pb-20" st-pipe="_modal.findCoursePlanByFilter" st-table="coursePlanList">
+                    <!--查询条件列-->
+                    <div class="form-option">
+                        <div class="mt-input-group pra tl br-0 vr">
+                            <label for="type_1" class="radio-vr" ng-class="{'active':_modal.stuParam.objType==1}">学员</label>
+                            <input class="hide" type="radio" id="type_1" value="1" ng-model="_modal.stuParam.objType">
+                            <label for="type_2" class="radio-vr" ng-class="{'active':_modal.stuParam.objType==2}">一对多</label>
+                            <input class="hide" type="radio" id="type_2" value="2" ng-model="_modal.stuParam.objType">
+                            <label for="type_3" class="radio-vr" ng-class="{'active':_modal.stuParam.objType==3}">班级</label>
+                            <input class="hide" type="radio" id="type_3" value="3" ng-model="_modal.stuParam.objType">
+                            <!--<label>学员</label>--><select ng-model="_modal.coursePlanParam.objId" ng-options="option.objId as option.objName for option in stuList" ng-change="_modal.preCoursePlanByFilter()">
+                            <option value="">请选择</option>
+                        </select></div>
+                    </div>
+                    <!--查询结果列-->
+                    <div class="br-gray pl-0">
+                        <h2 class="tl ti-20">排课记录</h2>
+                        <table class="table mt-table1">
+                            <thead><tr>
+                                <th>上课时间</th>
+                                <th>上课课时</th>
+                                <th>课程标题</th>
+                                <th>操作</th>
+                            </tr></thead>
+                            <tbody><tr class="tl" ng-repeat="el in coursePlanList" >
+                                <td>{{el.startTime|date:'yyyy-MM:dd HH:mm'}}</td>
+                                <td>{{el.courseNum}}</td>
+                                <td>{{el.title}}</td>
+                                <td><a ng-click="_modal.select(el)" ng-if="!(el.teacherHandoutsState&&el.teacherHandoutsState==1)">选择</a></td>
+                            </tr></tbody>
+                            <tfoot ng-if="coursePlanList.length">
+                            <tr>
+                                <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="4">
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="text-center">
+                        <button type="button" class="btn btn-default" ng-click="$hide()">关闭</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

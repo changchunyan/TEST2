@@ -1,0 +1,39 @@
+<div class="modal admin-permission-modal createVersionModel" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="form">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">添加版本更新日志</h4>
+                </div>
+                <div class="modal-body">
+                    <label class="mr-14 ml-20">日志标题： <input maxlength="30" class="add-model-input" type="text" placeholder="(必填项不可为空)" ng-model="createVersionData.title" ng-change="isCanSave('add')"></label>
+                    <label class="ml-20">编号： <input maxlength="16" class="add-model-input" type="text" placeholder="(必填项不可为空)"  ng-model="createVersionData.version" ng-change="isCanSave('add')" ></label>
+                    <p></p>
+                    <label class="mt-20 ml-20 margin-left-20"><span>简介： </span><textarea  name="" id="" cols="100" rows="4" placeholder="限制160个字符(必填项不可为空)" maxlength="160" ng-model="createVersionData.introduction" ng-change="isCanSave('add')"></textarea></label>
+                    <div id="summernote"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                    <button type="submit" class="btn btn-success" ng-click="saveCreate()" ng-disabled="saveFlag">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $('#summernote').each(function() {
+        var $this = $(this);
+        var placeholder = $this.attr("placeholder") || '';
+        var url = $this.attr("action") || '';
+        $this.summernote({
+            lang : 'zh-CN',
+            placeholder : placeholder,
+            minHeight : 300,
+            dialogsFade : true,// Add fade effect on dialogs
+            dialogsInBody : true,// Dialogs can be placed in body, not in
+// summernote.
+            disableDragAndDrop : false,// default false You can disable drag
+// and drop
+        });
+    });</script>

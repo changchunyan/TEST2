@@ -1,0 +1,24 @@
+<div class="view-frame">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+       <!-- <div ng-include="'partials/common/common.indexLeft.html'"></div>-->
+    </div>
+    <div class="view-content view-content-bg" ng-controller="sosGuideController">
+        <div class="guide-wrap mt-lable" style="padding:0;">
+            <div class="top">
+                <span>您现在的位置：<a>学员教务</a> &gt; 首页</span>
+                <p class="hide">标红色的流程按钮表示当前系统功能权限不匹配，需要进行修改.</p>
+            </div>
+            <h1>{{lableDateOne.titleH1}}</h1>
+            <div class="guide-group" ng-repeat="mtData in lableDateOne.titleH2">
+                <h2>{{mtData.title}}</h2>
+                <ul>
+                    <li ng-repeat="dataList in mtData.datas" ng-style="dataList.width"><a class="guide-btn" ng-class="'c'+($index+1)+'-lable'" href="{{dataList.href}}" title="{{dataList.tip}}"
+                           data-toggle="tooltip" data-placement="bottom">{{dataList.btn}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+

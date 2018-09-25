@@ -1,0 +1,438 @@
+<div class="modal oms-course-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog hk-reminds-con" style="width: 80%" ng-click="setTimeBoxIsHide($event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" ng-bind="modalTitleForRemindingList"></h4>
+            </div>
+            <div class="hk-reminding-box">
+                <div class="mt-10 mt-t-20">
+                    <div class="tabs-title border-1">
+                        <span class="br-l-2" ng-if="isShowWitchReminds" ng-class="{'hk-active':isRemindsContentShow==1}" ng-click="RemindsTabTitle(1)">{{remindsTitle1}}<em class="hk-num" ng-if="chargeRemindCount">{{chargeRemindCount}}</em></span>
+                        <span class="br-l-2" ng-if="isShenHeRemindsShow  && currentUser.position_id!=79&&currentUser.position_id!=228&&currentUser.position_id!=226&&currentUser.position_id!=235&&currentUser.position_id!=250&&currentUser.position_id!=267&&currentUser.position_id!=355" ng-class="{'hk-active':isRemindsContentShow==2}" ng-click="RemindsTabTitle(2)">{{remindsTitle2}}<em class="hk-num" ng-if="checkRemindCount">{{checkRemindCount}}</em></span>
+                        <span class="br-l-2" ng-if="isAllotRemindsShow&&canViewAllot()" ng-class="{'hk-active':isRemindsContentShow==3}" ng-click="RemindsTabTitle(3)">{{remindsTitle3}}<em class="hk-num" ng-if="allotRemindCount">{{allotRemindCount}}</em></span>
+                        <span class="br-l-1" ng-if="isPastRemindsShow" ng-class="{'hk-active':isRemindsContentShow==4}" ng-click="RemindsTabTitle(4)">{{remindsTitle4}}<em class="hk-num" ng-if="pastRemindCount">{{pastRemindCount}}</em></span>
+                    </div>
+                </div>
+
+                <!------订单收费------>
+                <div class="br-gray mt-list ng-scope" ng-if="isRemindsContentShow==1" >
+                    <ul class="nav nav-tabs ng-scope"><li ng-class="{active:hkSelectedKinds==1}" class="ng-scope"><a href="" class="ng-binding" ng-click="getRemindsData(1,1,1)">本人数据</a></li><li class="ng-scope" ng-class="{'active':hkSelectedKinds==2}" ng-if="!isKechengguwen&&!isYinxiaoguangpeisheng&&!isXuexiguwen&&!isYunyingguanpeisheng"><a href="" ng-click="getRemindsData(1,2,1)">部门数据</a></li></ul>
+                    <div class="hk-border-1"></div>
+                    <div class="hk-tab-content" ng-show="isHasData">
+                        <div class="hk-tab-leftcon">
+                            <ul class="hk-reminding-list">
+                                <li class="hk-noreading"  ng-class="{'hk-selected':isRowSelectedId==row.id}" ng-repeat="row in remindsObj" ng-click="getRemindsInfo(row.id)">{{row.studentName}}<span ng-if="row.order_type == 1">新签</span><span ng-if="row.order_type == 2">续费</span>订单收费  已签约{{row.signDays}}天 尾款{{row.pay_due_amount|number:2}}</li>
+                                <nav class="ng-scope" ng-if="hTotalPages>1">
+                                    <ul class="pagination">
+                                        <li><a ng-click="hSelectedPage(1,hkSelectedKinds,1)">首页</a>
+                                        </li><li><a class="prev-a" ng-click="hSelectedPage(1,hkSelectedKinds,hCurentPages-1)">&nbsp;</a>
+                                    </li><li><a class="ng-binding"><input type="text" class="select-page ng-pristine ng-untouched ng-valid needsclick" ng-model="hCurentPages" ng-change="hSelectedPage(1,hkSelectedKinds,hCurentPages)">/{{hTotalPages}} </a>
+                                    </li><li><a class="next-a" ng-click="hSelectedPage(1,hkSelectedKinds,hCurentPages + 1)">&nbsp;</a>
+                                    </li><li><a ng-click="hSelectedPage(1,hkSelectedKinds,hTotalPages)">尾页</a></li>
+                                    </ul>
+                                </nav>
+                            </ul>
+                        </div>
+                        <div class="hk-tab-rightcon"  ng-click="setTimeBoxIsHide($event)" >
+                            <div class="hk-message-p clearfix">
+                                信息详情
+                                <ul>
+                                    <li ng-click="showSetRemindsTimeBox($event)">暂不处理
+                                        <div class="hk-toolTip" id="setTimeAlert" ng-if="isShowBox">
+                                            <div class="hk-triangle-up"></div>
+                                            <div class="hk-set-con1" ng-if="isSetTimelist">
+                                                <div class="hk-date-choose">
+                                                    <p>
+                                                        <span>请您设置下次提醒的时间</span>
+                                                        <input type="text" datepicker ng-model="remindsTimeVal" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:new Date()});" ng-focus="setisTimeChoose()" class="hk-date-set"/>
+                                                        <span class="hk-date-bg"></span>
+                                                    </p>
+                                                    <ul class="clearfix hk-date-click">
+                                                        <li ng-class="{'on':isTimeChoose==1}"  ng-click="setTimeDay(1)">明天</li>
+                                                        <li ng-class="{'on':isTimeChoose==7}" ng-click="setTimeDay(7)">7天后</li>
+                                                        <li ng-class="{'on':isTimeChoose==15}" ng-click="setTimeDay(15)">15天后</li>
+                                                        <li ng-class="{'on':isTimeChoose==30}" ng-click="setTimeDay(30)">30天后</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="hk-btn-set">
+                                                    <button ng-class="{'hk-ok-time':remindsTimeVal!=''}" ng-click="remindsTimeSetOk(remindsFeeDetail.remindID,$event)">确定</button><button   ng-click="setTimeClose($event)">关闭</button><button ng-click="setTimeNoReminds($event)">不再提醒</button></div>
+
+                                            </div>
+                                            <div class="hk-set-con2" ng-if="!isSetTimelist">
+                                                <p class="hk-date-choose">
+                                                    不再提醒此信息，是否确定？
+                                                </p>
+                                                <div class="hk-btn-set hk-noSet-re">
+                                                    <button class="hk-ok-time" ng-click="chooseNoReminds(remindsFeeDetail.remindID)">确定</button><button ng-click="setTimeNoRemindCancle($event)">取消</button></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li ng-click="editOrder(remingdsRowObj)" ng-if="remingdsRowObj.orderCategory==1" ng-controller="OrderManagementController as orderM">修改</li>
+                                    <li ng-click="editOrderTopup(remingdsRowObj)" ng-if="remingdsRowObj.orderCategory==3" ng-controller="OrderManagementController as orderM">修改</li>
+                                    <li ng-controller="OrderManagementController as orderM" ng-click="ordersMoreChargeInit(remingdsRowObj)">收费</li>
+                                    <!--<li ng-click="openShouFeeAlert()">收费</li>-->
+                                </ul>
+                            </div>
+                            <p class="hk-update-time">更新日期:<span ng-bind="remindsFeeDetail.updated_at|date:'yyyy/MM/dd'"></span>
+                            </p>
+
+                            <p class="hk-master-info">
+                                您的客户<span ng-bind="remindsFeeDetail.studentName"></span>有一笔<span ng-if="remindsFeeDetail.orderType==1">新签</span><span ng-if="remindsFeeDetail.orderType==2">续费</span>订单尚未清款。请提醒客户及时交清订单尾款，以便尽早为学生排课。
+                            </p>
+
+                            <div class="hk-hetong-con">
+                                <p class="hk-hetong-info">
+                                    <span class="hk-agree-f">合同编号:<span class="hk-blue-letter" ng-if="remindsFeeDetail.nakedContract==0&&remindsFeeDetail.orderNo!=remindsFeeDetail.originalOrderNo" ng-bind="remindsFeeDetail.order_no"></span></span>
+                                    <span>签约时间:<span class="hk-blue-letter" ng-bind="remindsFeeDetail.contractStartDate|date:'yyyy/MM/dd'"></span>（已签约<em
+                                            class="hk-blue-letter" ng-bind="remindsFeeDetail.signDays"></em>天）</span>
+                                </p>
+                                <p class="hk-hetong-info">
+                                    <span class="hk-agree-f">订单总课时:<span class="hk-blue-letter">{{remindsFeeDetail.courseNum}}</span>课时</span><span
+                                        class="hk-agree-f1">合同金额:<span class="hk-blue-letter">{{remindsFeeDetail.realTotalAmount|number:2}}</span>元</span><span
+                                        class="hk-agree-f1">已付:<em class="hk-blue-letter">{{remindsFeeDetail.realPayAmount|number:2}}</em>元</span><span>尾款:<em class="hk-blue-letter">{{(remindsFeeDetail.realTotalAmount-remindsFeeDetail.realPayAmount)|number:2}}</em>元</span>
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!------订单审核------>
+                <div class="br-gray mt-list ng-scope" ng-if="isRemindsContentShow==2 && currentUser.position_id!=79&&currentUser.position_id!=228&&currentUser.position_id!=226&&currentUser.position_id!=235&&currentUser.position_id!=250&&currentUser.position_id!=267&&currentUser.position_id!=355" ng-show="isHasData">
+                    <div class="hk-tab-content">
+                        <div class="hk-tab-leftcon">
+                            <ul class="hk-reminding-list">
+                                <li class="hk-noreading" id={{row.id}} ng-class="{'hk-selected':isRowSelectedId==row.id}" ng-repeat="row in remindsObj" ng-click="getRemindsInfo(row.id,row)">{{row.studentName}}<span ng-if="row.order_type == 1">新签</span><span ng-if="row.order_type == 2">续费</span>订单审核  清款日期:{{row.pay_date|date:'yyyy/MM/dd'}}</li>
+                                <nav class="ng-scope" ng-if="hTotalPages>1">
+                                    <ul class="pagination">
+                                        <li><a ng-click="hSelectedPage(2,2,1)">首页</a>
+                                        </li><li><a class="prev-a" ng-click="hSelectedPage(2,2,hCurentPages-1)">&nbsp;</a>
+                                    </li><li><a class="ng-binding"><input type="text" class="select-page ng-pristine ng-untouched ng-valid needsclick" ng-model="hCurentPages" ng-change="hSelectedPage(2,2,hCurentPages)">/{{hTotalPages}} </a>
+                                    </li><li><a class="next-a" ng-click="hSelectedPage(2,2,hCurentPages + 1)">&nbsp;</a>
+                                    </li><li><a ng-click="hSelectedPage(2,2,hTotalPages)">尾页</a></li>
+                                    </ul>
+                                </nav>
+                            </ul>
+                        </div>
+                        <div class="hk-tab-rightcon">
+                            <div class="hk-message-p clearfix">
+                                信息详情
+                                <ul ng-controller="OrderManagementController as orderM">
+                                    <li ng-click="showSetRemindsTimeBox($event)">暂不处理
+                                        <div class="hk-toolTip" id="setTimeAlert2" ng-if="isShowBox">
+                                            <div class="hk-triangle-up"></div>
+                                            <div class="hk-set-con1" ng-if="isSetTimelist">
+                                                <div class="hk-date-choose">
+                                                    <p>
+                                                        <span>请您设置下次提醒的时间</span>
+                                                        <input type="text" datepicker ng-model="remindsTimeVal" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:new Date()});" ng-focus="setisTimeChoose()" class="hk-date-set"/>
+                                                        <span class="hk-date-bg"></span>
+                                                    </p>
+                                                    <ul class="clearfix hk-date-click">
+                                                        <li ng-class="{'on':isTimeChoose==1}"  ng-click="setTimeDay(1)">明天</li>
+                                                        <li ng-class="{'on':isTimeChoose==7}" ng-click="setTimeDay(7)">7天后</li>
+                                                        <li ng-class="{'on':isTimeChoose==15}" ng-click="setTimeDay(15)">15天后</li>
+                                                        <li ng-class="{'on':isTimeChoose==30}" ng-click="setTimeDay(30)">30天后</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="hk-btn-set">
+                                                    <button ng-class="{'hk-ok-time':remindsTimeVal!=''}" ng-click="remindsTimeSetOk(remindsFeeDetail.remindID,$event)">确定</button><button   ng-click="setTimeClose($event)">关闭</button><button ng-click="setTimeNoReminds($event)">不再提醒</button></div>
+
+                                            </div>
+                                            <div class="hk-set-con2" ng-if="!isSetTimelist">
+                                                <p class="hk-date-choose">
+                                                    不再提醒此信息，是否确定？
+                                                </p>
+                                                <div class="hk-btn-set hk-noSet-re">
+                                                    <button class="hk-ok-time" ng-click="chooseNoReminds(remindsFeeDetail.remindID)">确定</button><button ng-click="setTimeNoRemindCancle($event)">取消</button></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li ng-click="chargeBackOrder(remingdsRowObj)" ng-if="remingdsRowObj.orderCategory==1">退单</li>
+                                    <li ng-click="chargeBackOrderTopup(remingdsRowObj)" ng-if="remingdsRowObj.orderCategory==3">退单</li>
+                                    <li ng-click="editOrder(remingdsRowObj)" ng-if="remingdsRowObj.orderCategory==1">修改</li>
+                                    <li ng-click="editOrderTopup(remingdsRowObj)" ng-if="remingdsRowObj.orderCategory==3">修改</li>
+                                    <li ng-click="auditOrder(remingdsRowObj)" ng-if="remingdsRowObj.orderCategory==1">审核</li>
+                                    <li ng-click="auditOrderTopup(remingdsRowObj)" ng-if="remingdsRowObj.orderCategory==3">审核</li>
+                                </ul>
+                            </div>
+                            <p class="hk-update-time">更新日期:<span ng-bind="remindsFeeDetail.updated_at|date:'yyyy/MM/dd'"></span>
+                            </p>
+
+                            <p class="hk-master-info">
+                                您校区的客户<span ng-bind="remindsFeeDetail.studentName"></span>有一笔<span ng-if="remindsFeeDetail.order_type==1">新签</span><span ng-if="remindsFeeDetail.order_type==2">续费</span>订单已清款，正等待审核，请及时核对订单信息并审核，以便学习顾问尽早为学生排课。
+                            </p>
+
+                            <div class="hk-hetong-con">
+                                <p class="hk-hetong-info">
+                                    <span class="hk-agree-f">合同编号:<span class="hk-blue-letter" ng-if="remindsFeeDetail.nakedContract==0&&remindsFeeDetail.orderNo!=remindsFeeDetail.originalOrderNo" ng-bind="remindsFeeDetail.order_no"></span></span>
+                                    <span class="hk-agree-f1">签约时间:<span class="hk-blue-letter" ng-bind="remindsFeeDetail.contractStartDate|date:'yyyy/MM/dd'"></span></span>
+                                    <span>清款日期:<span class="hk-blue-letter" ng-bind="remindsFeeDetail.pay_date|date:'yyyy/MM/dd'"></span>（已清款<em
+                                            class="hk-blue-letter" ng-bind="remindsFeeDetail.payDays"></em>天）
+                                    </span>
+                                </p>
+
+                                <p class="hk-hetong-info">
+                                    <span class="hk-agree-f">订单总课时:<span class="hk-blue-letter">{{remindsFeeDetail.courseNum}}</span>课时</span><span
+                                        class="">合同金额:<span class="hk-blue-letter">{{remindsFeeDetail.realTotalAmount|number:2}}</span>元</span>
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+				<!------学员分配------>
+				<div class="br-gray mt-list ng-scope" ng-if="isRemindsContentShow==3&&canViewAllot()" ng-show="isHasData">
+                    <div class="hk-tab-content">
+                        <div class="hk-tab-leftcon">
+                            <ul class="hk-reminding-list">
+                                <li class="hk-noreading" id={{row.id}} ng-class="{'hk-selected':isRowSelectedId==row.id}" ng-repeat="row in remindsObj" ng-click="getAllotRemindsInfo(row)">{{row.remind_title}}</li>
+                                <nav class="ng-scope" ng-if="hTotalPages>1">
+                                    <ul class="pagination">
+                                        <li><a ng-click="hSelectedPage(3,2,1)">首页</a>
+                                        </li><li><a class="prev-a" ng-click="hSelectedPage(3,2,hCurentPages-1)">&nbsp;</a>
+                                    </li><li><a class="ng-binding"><input type="text" class="select-page ng-pristine ng-untouched ng-valid needsclick" ng-model="hCurentPages" ng-change="hSelectedPage(3,2,hCurentPages)">/{{hTotalPages}} </a>
+                                    </li><li><a class="next-a" ng-click="hSelectedPage(3,2,hCurentPages + 1)">&nbsp;</a>
+                                    </li><li><a ng-click="hSelectedPage(3,2,hTotalPages)">尾页</a></li>
+                                    </ul>
+                                </nav>
+                            </ul>
+                        </div>
+                        <div class="hk-tab-rightcon">
+                            <div class="hk-message-p clearfix">
+                                	信息详情
+                                <ul ng-controller="OrderManagementController as orderM">
+                                    <li ng-click="showSetRemindsTimeBox($event)">暂不处理
+                                        <div class="hk-toolTip" id="setTimeAlert2" ng-if="isShowBox">
+                                            <div class="hk-triangle-up"></div>
+                                            <div class="hk-set-con1" ng-if="isSetTimelist">
+                                                <div class="hk-date-choose">
+                                                    <p>
+                                                        <span>请您设置下次提醒的时间</span>
+                                                        <input type="text" datepicker ng-model="remindsTimeVal" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:new Date()});" ng-focus="setisTimeChoose()" class="hk-date-set"/>
+                                                        <span class="hk-date-bg"></span>
+                                                    </p>
+                                                    <ul class="clearfix hk-date-click">
+                                                        <li ng-class="{'on':isTimeChoose==1}"  ng-click="setTimeDay(1)">明天</li>
+                                                        <li ng-class="{'on':isTimeChoose==7}" ng-click="setTimeDay(7)">7天后</li>
+                                                        <li ng-class="{'on':isTimeChoose==15}" ng-click="setTimeDay(15)">15天后</li>
+                                                        <li ng-class="{'on':isTimeChoose==30}" ng-click="setTimeDay(30)">30天后</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="hk-btn-set">
+                                                    <button ng-class="{'hk-ok-time':remindsTimeVal!=''}" ng-click="remindsTimeSetOk(remindsFeeDetail.remindID,$event)">确定</button><button   ng-click="setTimeClose($event)">关闭</button><button ng-click="setTimeNoReminds($event)">不再提醒</button></div>
+
+                                            </div>
+                                            <div class="hk-set-con2" ng-if="!isSetTimelist">
+                                                <p class="hk-date-choose">
+                                                    	不再提醒此信息，是否确定？
+                                                </p>
+                                                <div class="hk-btn-set hk-noSet-re">
+                                                    <button class="hk-ok-time" ng-click="chooseNoReminds(remindsFeeDetail.remindID)">确定</button><button ng-click="setTimeNoRemindCancle($event)">取消</button></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                   <!--  <li ng-click="chargeBackOrder(remingdsRowObj)">分配学员</li> -->
+                                    <li ng-if="remindsFeeDetail.employmentStatus == null" ng-click="keepNow(remindsFeeDetail)">保持当前</li>
+                                    <li ng-click="showAllotStudentView(remindsFeeDetail)">分配学员</li>
+                                </ul>
+                            </div>
+                            <p class="hk-update-time">更新日期:<span ng-bind="remindsFeeDetail.updated_at|date:'yyyy/MM/dd'"></span></p>
+                            <p class="hk-master-info" style="font-size: 18px;" ng-if="remindsFeeDetail.employmentStatus == null">
+                               	您的校区有新学员<span ng-bind="remindsFeeDetail.studentName"></span>报名签约，请及时为学员分配学习顾问。<br>
+                               	● 学生年级为<span ng-bind="remindsFeeDetail.gradeName"></span>，共报名<span ng-bind="remindsFeeDetail.originalCourseNum"></span>课时，签约金额
+                               	<span ng-bind="remindsFeeDetail.orderAmount"></span>元。业绩所属人为<span ng-bind="remindsFeeDetail.achievementPerson"></span>，当前所属人为
+                               	<span ng-bind="remindsFeeDetail.studentUserName"></span>。<br>
+                               	● 以下是<span ng-bind="remindsFeeDetail.studentName"></span>同学的基本信息：
+                            </p>
+                            <div class="hk-master-info" ng-if="remindsFeeDetail.employmentStatus == null">
+                            	<table>
+                            		<tbody>
+                            			<tr>
+                            				<td>姓名：<span ng-bind="remindsFeeDetail.studentName"></span></td>
+                            				<td>电话：<span ng-bind="remindsFeeDetail.studentPhone"></span></td>
+                            			</tr>
+	                               		<tr>
+	                               			<td>性别：<span ng-bind="remindsFeeDetail.studentGender"></span></td>
+	                               			<td>年龄：<span ng-bind="remindsFeeDetail.studentAge"></span></td>
+	                               		</tr>
+	                               		<tr>
+	                               			<td>年级：<span ng-bind="remindsFeeDetail.gradeName"></span></td>
+	                               			<td>公立学校：<span ng-bind="remindsFeeDetail.studentSchoolName"></span></td>
+	                               		</tr>
+	                               		<tr>
+	                               			<td>渠道来源：<span ng-bind="remindsFeeDetail.channel1Name"></span></td>
+	                               			<td>渠道详情：<span ng-bind="remindsFeeDetail.channel2Name"></span></td>
+	                               		</tr>
+                            		</tbody>
+                            	</table>
+                            </div>
+                            <p class="hk-master-info" ng-if="remindsFeeDetail.employmentStatus == 0">
+                               	您的校区的<span ng-bind="remindsFeeDetail.oldPositionName"></span>
+                               	<span ng-bind="remindsFeeDetail.userName"></span>
+                               	已异动到
+                               	<span ng-bind="remindsFeeDetail.departmentName"></span>
+                               	做
+                               	<span ng-bind="remindsFeeDetail.positionName"></span>
+                               	，请您将<span ng-bind="remindsFeeDetail.userName"></span>所负责的
+                               	<span ng-bind="remindsFeeDetail.size"></span>位学员分配给新班主任。<br/>
+                               	以下是<span ng-bind="remindsFeeDetail.userName"></span>所负责的学员名单：
+                            </p>
+                            <p class="hk-master-info" ng-if="remindsFeeDetail.employmentStatus == 1">
+                               	您的校区的<span ng-bind="remindsFeeDetail.oldPositionName"></span>
+                               	<span ng-bind="remindsFeeDetail.userName"></span>
+                               	已离职，请您将<span ng-bind="remindsFeeDetail.userName"></span>所负责的
+                               	<span ng-bind="remindsFeeDetail.size"></span>位学员分配给新班主任。<br/>
+                               	以下是<span ng-bind="remindsFeeDetail.userName"></span>所负责的学员名单：
+                            </p>
+                            <div class=" br-gray pl-0" ng-if="remindsFeeDetail.employmentStatus!=null">
+                                <table class="table table-striped mt-table1">
+                                    <thead>
+                                    <tr>
+                                        <th>姓名</th>
+                                        <th>年级</th>
+                                        <th>公立学校</th>
+                                        <th>剩余课时</th>
+                                        <th>在读状态</th>
+                                        <th>处理状态</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="student in remindsFeeDetail.studentList">
+                                        <td>{{student.crmStudentName}}</td>
+                                        <td>{{student.gradeName}}</td>
+                                        <td>{{student.schoolName}}</td>
+                                        <td>{{student.courseNum}}</td>
+                                        <td>
+                                            <div ng-if="student.status == 1">在读</div>
+                                            <div ng-if="student.status == 2">结课</div>
+                                            <div ng-if="student.status == 3">停课</div>
+                                            <div ng-if="student.status == 4">退费</div>
+                                            <div ng-if="student.status == 5">转课</div>
+                                            <div ng-if="student.status == null">&nbsp;</div>
+                                        </td>
+                                        <td>
+                                            <span ng-if="!student.state" class="glyphicon glyphicon-undo" title="未分配"></span>
+                                            <span ng-if="student.state" class="glyphicon glyphicon-done" title="已分配"></span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!------消课------>
+                <div class="br-gray mt-list ng-scope" ng-if="isRemindsContentShow==4" >
+                    <ul class="nav nav-tabs ng-scope"><li ng-class="{active:hkSelectedKinds==1}" class="ng-scope"><a href="" class="ng-binding" ng-click="getRemindsData(4,1,1)">本人数据</a></li><li class="ng-scope" ng-class="{'active':hkSelectedKinds==2}" ng-if="!isKechengguwen&&!isYinxiaoguangpeisheng&&!isXuexiguwen&&!isYunyingguanpeisheng"><a href="" ng-click="getRemindsData(4,2,1)">部门数据</a></li></ul>
+                    <div class="hk-border-1"></div>
+                    <div class="hk-tab-content" ng-show="isHasData">
+                        <div class="hk-tab-leftcon">
+                            <ul class="hk-reminding-list">
+                                <li class="hk-noreading"  ng-class="{'hk-selected':isRowSelectedId==row.id}" ng-repeat="row in remindsObj" ng-click="getPastCoursePlanInfo(row)">{{row.student_name}}<span ng-if="row.course_property ==null ">试听</span>&nbsp;&nbsp;{{row.grade_name}}&nbsp;&nbsp; {{row.start_time|date:'yyyy/MM/dd'}}</li>
+                                <nav class="ng-scope" ng-if="hTotalPages>1">
+                                    <ul class="pagination">
+                                        <li><a ng-click="hSelectedPage(4,hkSelectedKinds,1)">首页</a>
+                                        </li><li><a class="prev-a" ng-click="hSelectedPage(4,hkSelectedKinds,hCurentPages-1)">&nbsp;</a>
+                                    </li><li><a class="ng-binding"><input type="text" class="select-page ng-pristine ng-untouched ng-valid needsclick" ng-model="hCurentPages" ng-change="hSelectedPage(4,hkSelectedKinds,hCurentPages)">/{{hTotalPages}} </a>
+                                    </li><li><a class="next-a" ng-click="hSelectedPage(4,hkSelectedKinds,hCurentPages + 1)">&nbsp;</a>
+                                    </li><li><a ng-click="hSelectedPage(4,hkSelectedKinds,hTotalPages)">尾页</a></li>
+                                    </ul>
+                                </nav>
+                            </ul>
+                        </div>
+                        <div class="hk-tab-rightcon"  ng-click="setTimeBoxIsHide($event)" >
+                            <div class="hk-message-p clearfix">
+                                信息详情
+                                <ul>
+
+                                    <li ng-click="remove(remindsFeeDetail)" ng-controller="CoursePlanController as cp">删除</li>
+                                    <li ng-click="showSetRemindsTimeBox($event)">暂不处理
+                                        <div class="hk-toolTip" id="setTimeAlert" ng-if="isShowBox">
+                                            <div class="hk-triangle-up"></div>
+                                            <div class="hk-set-con1" ng-if="isSetTimelist">
+                                                <div class="hk-date-choose">
+                                                    <p>
+                                                        <span>请您设置下次提醒的时间</span>
+                                                        <input type="text" datepicker ng-model="remindsTimeVal" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:new Date()});" ng-focus="setisTimeChoose()" class="hk-date-set"/>
+                                                        <span class="hk-date-bg"></span>
+                                                    </p>
+                                                    <ul class="clearfix hk-date-click">
+                                                        <li ng-class="{'on':isTimeChoose==1}"  ng-click="setTimeDay(1)">明天</li>
+                                                        <li ng-class="{'on':isTimeChoose==7}" ng-click="setTimeDay(7)">7天后</li>
+                                                        <li ng-class="{'on':isTimeChoose==15}" ng-click="setTimeDay(15)">15天后</li>
+                                                        <li ng-class="{'on':isTimeChoose==30}" ng-click="setTimeDay(30)">30天后</li>
+                                                    </ul>
+                                                </div>
+                                                <div class="hk-btn-set">
+                                                    <button ng-class="{'hk-ok-time':remindsTimeVal!=''}" ng-click="remindsTimeSetOk(remindsFeeDetail.remindID,$event)">确定</button><button   ng-click="setTimeClose($event)">关闭</button><button ng-click="setTimeNoReminds($event)">不再提醒</button></div>
+
+                                            </div>
+                                            <div class="hk-set-con2" ng-if="!isSetTimelist">
+                                                <p class="hk-date-choose">
+                                                    不再提醒此信息，是否确定？
+                                                </p>
+                                                <div class="hk-btn-set hk-noSet-re">
+                                                    <button class="hk-ok-time" ng-click="chooseNoReminds(remindsFeeDetail.remindID)">确定</button><button ng-click="setTimeNoRemindCancle($event)">取消</button></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li ng-click="showEditCoursePlan(remindsFeeDetail)" ng-controller="CoursePlanController as cp">编辑</li>
+                                    <li ng-click="yesconsume(remindsFeeDetail)" ng-controller="CoursePlanController as cp" >确定消课</li>
+
+                                </ul>
+                            </div>
+                            <p class="hk-update-time">更新日期:<span ng-bind="remindsFeeDetail.start_time|date:'yyyy-MM-dd'"></span>
+                            </p>
+
+                            <p class="zq-blue-letter">
+                                您的学生<span class="hk-blue-letter" ng-bind="remindsFeeDetail.student_name"></span>于<span class="hk-blue-letter" ng-bind="remindsFeeDetail.start_time|date:'yyyy/MM/dd'"></span><span ng-if="remindsFeeDetail.course_property == null">有试听排课</span><span  ng-if="remindsFeeDetail.course_property != null">有排课</span>，科目是<span class="hk-blue-letter" ng-bind="remindsFeeDetail.subject_name"></span>，老师是<span class="hk-blue-letter"ng-bind="remindsFeeDetail.teacher_name"></span>，上课时间是<span class="hk-blue-letter" ng-bind="remindsFeeDetail.start_time|date:'HH:mm'"></span>，下课时间是同日的<span class="hk-blue-letter" ng-bind="remindsFeeDetail.end_time|date:'HH:mm'"></span>，上课时长是<span class="hk-blue-letter" ng-if="remindsFeeDetail.order_rule != 2"><span class="hk-blue-letter" ng-bind="remindsFeeDetail.course_num"></span></span><span class="hk-blue-letter" ng-if="remindsFeeDetail.order_rule == 2"><span ng-bind="remindsFeeDetail.course_num_2"></span></span>课时，如学生已上课，请您进行消课操作
+                            </p>
+
+                            <div class="hk-hetong-con">
+                                <p class="hk-hetong-info">
+                                    <span class="hk-agree-f">学生姓名:<span class="hk-blue-letter"  ng-bind="remindsFeeDetail.student_name"></span></span>
+                                    <span class="hk-agree-f">学生电话:<span class="hk-blue-letter" ng-bind="remindsFeeDetail.phone"></span></span>
+                                    <span class="hk-agree-f">学生年级:<span class="hk-blue-letter" ng-bind="remindsFeeDetail.grade_name"></span></span>
+                                </p>
+                               <p class="hk-hetong-info">
+                                    <span class="hk-agree-f">课程名称:<span ng-if="remindsFeeDetail.coursename !=null "><span class="hk-blue-letter"  ng-bind="remindsFeeDetail.coursename"></span></span><span ng-if="remindsFeeDetail.coursename == null"><span class="hk-blue-letter">试听课程</span></span></span>
+
+                                    <span class="hk-agree-f">课程性质:<span ng-if="remindsFeeDetail.course_property !=null "><span class="hk-blue-letter"  ng-bind="remindsFeeDetail.course_property"></span></span><span ng-if="remindsFeeDetail.course_property == null"><span class="hk-blue-letter">试听</span></span></span>
+                                    <span class="hk-agree-f">排课科目:<span class="hk-blue-letter" ng-bind="remindsFeeDetail.subject_name"></span></span>
+                                </p>
+                                  </p>
+                               <p class="hk-hetong-info">
+                                    <span class="hk-agree-f">授课老师:<span class="hk-blue-letter"  ng-bind="remindsFeeDetail.teacher_name"></span></span>
+                                    <span class="hk-agree-f">授课老师电话:<span class="hk-blue-letter" ng-bind="remindsFeeDetail.mobile"></span></span>
+
+                                    <span class="hk-agree-f">兼职/全职:<span ng-if="remindsFeeDetail.part_full !=2 "><span class="hk-blue-letter">兼职</span></span><span ng-if="remindsFeeDetail.part_full == 2"><span class="hk-blue-letter">全职</span></span></span>
+                                </p>
+                                <p class="hk-hetong-info">
+                                    <span class="hk-agree-f">上课日期:<span class="hk-blue-letter"  ng-bind="remindsFeeDetail.start_time|date:'yyyy/MM/dd'"></span></span>
+                                    <span class="hk-agree-f">上课时间:<span class="hk-blue-letter" ng-bind="remindsFeeDetail.start_time|date:'HH:mm'"></span></span>
+                                    <span class="hk-agree-f">上课时长:<span  ng-if="remindsFeeDetail.order_rule !=2 "><span class="hk-blue-letter" ng-bind="remindsFeeDetail.course_num"></span></span><span ng-if="remindsFeeDetail.order_rule == 2"><span class="hk-blue-letter" ng-bind="remindsFeeDetail.course_num_2"></span></span></span>
+                                </p>
+                                <p class="hk-hetong-info">
+                                    <span class="hk-agree-f">所属人:<span class="hk-blue-letter"  ng-bind="remindsFeeDetail.xueguanname"></span></span>
+                                    <span class="hk-agree-f">所属人电话:<span class="hk-blue-letter" ng-bind="remindsFeeDetail.xueguanphone"></span></span>
+                                    <span class="hk-agree-f">所属人岗位:<span class="hk-blue-letter" ng-bind="remindsFeeDetail.p_name"></span></span>
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="hk-ok-con">
+                <button class="hk-ok-click" ng-click="$hide()">确定</button>
+            </div>
+        </div>
+    </div>
+   </div>

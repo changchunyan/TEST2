@@ -1,0 +1,254 @@
+<style>
+    .tab{float:left;height:30px;line-height:30px;padding:0 30px;font-size:14px;cursor: pointer}
+    .on{background:#ccc}
+</style>
+<div class="modal crm-invitationDetail-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-small">
+        <div class="modal-content" style="width:510px;">
+            <form name="form">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-l abel="Close" ng-click="$hide()"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle"></h4>
+                </div>
+                <div class="modal-body mt-yue">
+                    <div ng-if="!laifangyaoyuecheck">
+                        邀约时间:{{aaaaa.invitate_time | date:'yyyy-MM-dd'}}
+                        预计到访时间：{{ nochangesort.viewTime | date:'yyyy-MM-dd'}}
+                        邀约内容:
+                        <span ng-if="nochangesort.invitationContentType==1">物料领取</span>
+                        <span ng-if="nochangesort.invitationContentType==2">活动</span>
+                        <span ng-if="nochangesort.invitationContentType==3">测评</span>
+                        <span ng-if="nochangesort.invitationContentType==4">讲座</span>
+                        <span ng-if="nochangesort.invitationContentType==5">托管自习</span>
+                    </div>
+                    <div ng-if="!laifangyaoyuecheck">
+                        <input type="checkbox"   ng-click="edittablaifang()"  name="laifangtag1" ng-model="flaglaifang.lai">已到访
+                        <input type="checkbox"  ng-click="edittablaifangwei()" name="laifangtag2" ng-model="flaglaifang.wei">未到访
+                    </div>
+                    <div class="tabcontainer">
+                        <div style="height:0px;"></div>
+                        <div ng-if="laifangtabhide">
+                            <div class="tab" ng-class="{'on':(one||yaoyuefang)}" ng-click="onclicktabone()">
+                                邀约记录
+                            </div>
+                            <div class="tab" ng-class="{'on':two}" ng-click="onclicktabtwo()">
+                                到访记录
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div ng-if="saveType == 2" class="col-sm-12 saveType2  br-gray-t pb-20">
+                            <div class="row ">
+                                <div class="col-sm-6 ">
+                                    <label for="leadName" class="fl control-label">* 学生姓名</label>
+                                    <div class="col-sm-6 ml-10"
+                                         ng-class="{ 'has-error': form.leadName.$dirty && form.leadName.$error.required}">
+                                        <input type="text" placeholder="1到20个字符" ng-maxlength="20" ng-minlength="1"
+                                               name="leadName" id="leadName" ng-model="CrmInvitationDetailVoForCreate.name"
+                                               required class="input-sm form-control"/>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="leadPhone" class="fl control-label">* 电话</label>
+                                    <div class="col-sm-6 ml-10"
+                                         ng-class="{ 'has-error': form.leadPhone.$dirty && form.leadPhone.$error.required }">
+                                        <input type="text" ng-blur="checkPhone()" name="leadPhone" id="leadPhone"
+                                               class="input-sm form-control"
+                                               ng-model=" CrmInvitationDetailVoForCreate.leadPhone" required=""
+                                               ng-pattern="/^[0-9]*$/" ng-maxlength="11">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label for="leadGradeId" class="fl control-label mr-28">* 年级</label>
+                                    <div class="col-sm-6 ml-10"
+                                         ng-class="{ 'has-error': form.leadGradeId.$dirty && form.leadGradeId.$error.required }">
+                                        <select ng-model="CrmInvitationDetailVoForCreate.leadGradeId" name="leadGradeId"
+                                                id="leadGradeId" class="form-control"
+                                                ng-options="option.id as option.name for option in leadGradeIds" required>
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="leadMediaChannelId1" class="fl control-label">* 渠道</label>
+                                    <div class="col-sm-6 ml-10"
+                                         ng-class="{ 'has-error': form.leadMediaChannelId1.$dirty && form.leadMediaChannelId1.$error.required }">
+                                        <select ng-model="CrmInvitationDetailVoForCreate.leadMediaChannelId1"
+                                                name="leadMediaChannelId1" id="leadMediaChannelId1" class="form-control"
+                                                ng-options="option.id as option.name for option in mediaChannel1List"
+                                                ng-change="mediaChannel1Change2()" required>
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-if="mediaChannel2List2.length > 0" class="row">
+                                <div class="col-sm-6">
+                                    <label for="leadMediaChannelId2" class="col-sm-4 control-label" style="padding-right: 0">* 渠道详情</label>
+                                    <div class="col-sm-6 ml-5">
+                                        <select ng-model="CrmInvitationDetailVoForCreate.leadMediaChannelId2"
+                                                name="leadMediaChannelId2" id="leadMediaChannelId2" class="form-control"
+                                                ng-options="option.id as option.name for option in mediaChannel2List2"
+                                                required>
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <!-- ng-if="saveType == 2"-->
+                    <!--<div ng-if="saveType == 2" class="row br-gray-t"></div>&lt;!&ndash; ng-if="saveType == 2"&ndash;&gt;-->
+                <div ng-if="oneflag && laifangyaoyuecheck">
+                    <div ng-if="laifangtabhide">
+                    <div class="form-group of row mt-20"
+                         ng-class="{ 'has-error': form.invitateTime.$dirty && form.invitateTime.$error.required }">
+                        <label for="invitateTime" class="fl">* &nbsp;&nbsp;邀约时间</label>
+                        <div class="col-sm-10">
+                            <input type="text" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" name="invitateTime" id="invitateTime"
+                                   class="form-control" ng-model="CrmInvitationDetailVoForCreate.invitateTime"
+                                   value="{{ CrmInvitationDetailVoForCreate.invitateTime | date:'yyyy-MM-dd' }}" onchange=""
+                                   readonly="readonly" required style="background: none"/>
+                            <span ng-show="form.invitateTime.$dirty && form.invitateTime.$error.required"
+                                  class="help-block">请输入邀约时间</span>
+                        </div>
+                    </div>
+                    <div class="form-group of row"
+                         ng-class="{ 'has-error': form.receiveTime.$dirty && form.receiveTime.$error.required }">
+                        <label for="receiveTime" class="fl">*预计到访时间</label>
+                        <div class="col-sm-9">
+                            <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange=""
+                                   name="receiveTime" id="receiveTime" class="form-control col-sm-10"
+                                   ng-model="CrmInvitationDetailVoForCreate.receiveTime"
+                                   value="{{ CrmInvitationDetailVoForCreate.receiveTime | date:'yyyy-MM-dd'}}"  required/>
+                            <!-- <input type="text" name="receiveTime" id="receiveTime" datePicker ng-model="CrmInvitationDetailVoForCreate.receiveTime"
+                                 class="form-control" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})"  onchange="" />  -->
+                            <span ng-show="form.invitateTime.$dirty && form.invitateTime.$error.required"
+                                  class="help-block">请输入邀约时间</span>
+                        </div>
+                    </div>
+                    <div class="form-group of row" >
+                        <label for="invitationContent2" class="col-sm-3">* 邀约内容</label>
+                        <!--<textarea name="invitationContent" id="invitationContent" placeholder="邀约内容..."-->
+                        <!--class="form-control col-sm-12" ng-maxlength="100"-->
+                        <!--ng-model="CrmInvitationDetailVoForCreate.invitationContent" required/>-->
+                        <!--<span ng-show="form.invitationContent.$dirty && form.invitationContent.$error.required"-->
+                        <!--class="help-block">请输入邀约内容</span>-->
+                        <select id="invitationContent2" ng-model="CrmInvitationDetailVoForCreate.invitationContentType" class="col-sm-6" required ng-value="CrmInvitationDetailVoForCreate.invitationContentType">
+                            <option value="1" selected="selected">物料领取</option>
+                            <option value="2">活动</option>
+                            <option value="3">测评</option>
+                            <option value="4">讲座</option>
+                            <option value="5">托管自习</option>
+                        </select>
+                    </div>
+                    </div>
+                </div>
+<!--tab2的内容--><div ng-if="twoflag && twozhifang && laifangyaoyuecheck">
+
+                    <div class="form-group of row"
+                         ng-class="{ 'has-error': form.receiveTime.$dirty && form.receiveTime.$error.required }">
+                        <label for="receiveTime" class="fl">* 到访时间</label>
+                        <div class="col-sm-10">
+                            <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange=""
+                                   name="receiveTime" id="receiveTime" class="form-control col-sm-10"
+                                   ng-model="CrmInvitationDetailVoForCreate.viewTime"
+                                   value="{{ CrmInvitationDetailVoForCreate.viewTime | date:'yyyy-MM-dd'}}" readonly required/>
+                            <!-- <input type="text" name="receiveTime" id="receiveTime" datePicker ng-model="CrmInvitationDetailVoForCreate.receiveTime"
+                                 class="form-control" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})"  onchange="" />  -->
+                            <span ng-show="form.invitateTime.$dirty && form.invitateTime.$error.required"
+                                  class="help-block">请输入到访时间</span>
+                        </div>
+                    </div>
+                    <div class="form-group of row" >
+                        <label for="invitationContent3" class="col-sm-2">* 到访内容</label>
+                        <!--<textarea name="invitationContent" id="invitationContent" placeholder="邀约内容..."-->
+                        <!--class="form-control col-sm-12" ng-maxlength="100"-->
+                        <!--ng-model="CrmInvitationDetailVoForCreate.invitationContent" required/>-->
+                        <!--<span ng-show="form.invitationContent.$dirty && form.invitationContent.$error.required"-->
+                        <!--class="help-block">请输入邀约内容</span>-->
+                        <select id="invitationContent3" ng-model="CrmInvitationDetailVoForCreate.visitContentType" class="col-sm-6" required ng-value="CrmInvitationDetailVoForCreate.visitContentType">
+                            <option value="1" selected="selected">物料领取</option>
+                            <option value="2">活动</option>
+                            <option value="3">测评</option>
+                            <option value="4">讲座</option>
+                            <option value="5">托管自习</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                    <!--有没有确认的 直接点击会确认-->
+                    <div ng-if="!laifangyaoyuecheck">
+                        <div ng-if="!flaglaifang.wei">
+                        <div class="form-group of row"
+                             ng-class="{ 'has-error': form.viewTime.$dirty && form.viewTime.$error.required }">
+                            <label for="receiveTime" class="fl">* 到访时间</label>
+                            <div class="col-sm-10">
+                                <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange=""
+                                       name="viewTime" id="" class="form-control col-sm-10"
+                                       ng-model="aaaaa.viewTime"
+                                       value="{{ aaaaa.viewTime | date:'yyyy-MM-dd'}}" readonly required/>
+                                <!-- <input type="text" name="receiveTime" id="receiveTime" datePicker ng-model="CrmInvitationDetailVoForCreate.receiveTime"
+                                     class="form-control" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})"  onchange="" />  -->
+                                <span ng-show="form.viewTime.$dirty && form.viewTime.$error.required"
+                                      class="help-block">请输入到访时间</span>
+                            </div>
+                        </div>
+                        <div class="form-group of row" >
+                            <label for="invitationContent4" class="col-sm-2">* 到访内容</label>
+                            <!--<textarea name="invitationContent" id="invitationContent" placeholder="邀约内容..."-->
+                            <!--class="form-control col-sm-12" ng-maxlength="100"-->
+                            <!--ng-model="CrmInvitationDetailVoForCreate.invitationContent" required/>-->
+                            <!--<span ng-show="form.invitationContent.$dirty && form.invitationContent.$error.required"-->
+                            <!--class="help-block">请输入邀约内容</span>-->
+                            <select id="invitationContent4" ng-model="aaaaa.visitContentType" class="col-sm-6" required ng-value="aaaaa.visitContentType">
+                                <option value="1" selected="selected">物料领取</option>
+                                <option value="2">活动</option>
+                                <option value="3">测评</option>
+                                <option value="4">讲座</option>
+                                <option value="5">托管自习</option>
+                            </select>
+                        </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <div ng-if="!saveType" class="text-center">
+                        <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                        <button type="submit" class="btn btn-success c5-lable"
+                                ng-if="!flag" ng-click="saveInvitationDetail()"
+                                ng-disabled="form.$invalid">保存
+                        </button>
+                        <button type="submit" class="btn btn-success c5-lable"
+                                ng-if="flag" ng-click="visit(aaaaa,2);"
+                                ng-disabled="form.$invalid">保存
+                        </button>
+                        <img ng-if="dataLoading"
+                             src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
+                    </div>
+                    <div ng-if="saveType" class="text-center">
+                        <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                        <button type="submit" class="btn btn-success c5-lable" ng-if="saveType == 1"
+                                ng-click="saveInvitationDetail()" ng-disabled="form.$invalid">保存
+                        </button>
+                        <button type="submit" class="btn btn-success c5-lable" ng-if="saveType == 2"
+                                ng-click="saveInvitationDetailNew()" ng-disabled="form.$invalid">保存
+                        </button>
+                        <img ng-if="dataLoading"
+                             src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

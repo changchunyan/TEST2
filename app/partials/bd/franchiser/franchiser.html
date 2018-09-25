@@ -1,0 +1,115 @@
+<div class="view-frame" ng-controller="BdFranchiserController as lsc">
+    <div class="view-left">
+        <nav-side menu-data="menu.subMenu"></nav-side>
+    </div>
+
+    <div class="view-content">
+        <div>
+            <div>
+                <ul class="breadcrumb">
+                    <li><a href="#/">首页</a> <span class="divider"></span></li>
+                    <li><a href="#/bd-admin">招商客户关系管理</a> <span class="divider"></span></li>
+                    <li><a href="#/bd-admin/franchiser_list">加盟信息管理</a> <span class="divider"></span></li>
+                    <li class="active">加盟信息查看</li>
+                </ul>
+            </div>
+        </div>
+        <table class="table">
+            <tr>
+                <td class="info" colspan="2" style="text-align: center;">
+                    <button type="button" ng-click="viewLead()" class="btn btn-primary">查看客户资料</button>
+                </td>
+                <td class="info" colspan="2" style="text-align: center;">
+                    <button type="button" class="btn btn-primary" ng-click="approve()" ng-if="showPermissions('BdLeadsNoticeAudit') && (detail.contract_status!=2&&detail.contract_status!=4)">合同通过</button>
+                </td>
+                <td class="info" colspan="2" style="text-align: center;">
+                    <button type="button" class="btn btn-primary" ng-click="reject()" ng-if="showPermissions('BdLeadsNoticeAudit') && (detail.contract_status!=2&&detail.contract_status!=4)">合同驳回</button>
+                </td>
+                <td class="info" colspan="2" style="text-align: center;">
+                    <button type="button" class="btn btn-primary" ng-click="invalid()" ng-if="showPermissions('BdLeadsNoticeAudit') && (detail.contract_status!=2&&detail.contract_status!=4)">合同作废</button>
+                </td>
+            </tr>
+        </table>
+        <table class="table table-bordered">
+            <tr>
+                <td colspan="10">加盟商加盟通知书</td>
+            </tr>
+            <tr>
+                <td class="info">签约加盟商姓名</td><td ng-bind="detail.name"></td>
+                <td class="info">校区联系人姓名</td><td ng-bind="detail.contact_name"></td>
+                <td class="info">校区联系人电话</td><td ng-bind="detail.contact_phone"></td>
+            </tr>
+            <tr>
+                <td class="info">电子邮箱</td><td ng-bind="detail.email"></td>
+                <td class="info">合同编号</td><td ng-bind="detail.contract_no"></td>
+                <td class="info">合同状态</td><td ng-bind="detail.contract_status_name"></td>
+            </tr>
+            <tr>
+                <td class="info">合同开始日期</td><td>{{ detail.contract_starttime | date:'yyyy-MM-dd' }}</td>
+                <td class="info">合同结束日期</td><td>{{ detail.contract_endtime | date:'yyyy-MM-dd' }}</td>
+                <td class="info">加盟城市/区域</td><td>{{detail.province_name}}/{{detail.city_name}}/{{detail.area_name}}</td>
+            </tr>
+            <tr>
+                <td class="info">通讯地址</td><td colspan="5" ng-bind="detail.address"></td>
+            </tr>
+            <tr>
+                <td class="info">是否为首次加盟</td><td ng-bind="detail.is_first_name"></td>
+                <td class="info">推荐人姓名</td><td ng-bind="detail.referee_name"></td>
+                <td class="info">是否股份合作</td><td ng-bind="detail.is_stock_partnership_name"></td>
+            </tr>
+            <tr>
+                <td class="info">股份比例</td><td><div ng-if="detail.is_stock_partnership==1">优胜:{{detail.stock_by_yws}}  投资人:{{detail.stock_by_investor}}</div></td>
+                <td class="info">延期支持时间</td><td ng-bind="detail.postpone_time_name"></td>
+                <td class="info">权益进比例</td><td ng-bind="detail.equity_ratio"></td>
+            </tr>
+            <tr>
+                <td class="info">城市级别</td><td ng-bind="detail.city_level_name"></td>
+                <td class="info">加盟形式</td><td ng-bind="detail.join_form_name"></td>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td colspan="10">加盟费用</td>
+            </tr>
+            <tr>
+                <td class="info">加盟费</td><td ng-bind="detail.fee"></td>
+                <td class="info">保证金</td><td ng-bind="detail.deposit"></td>
+                <td class="info">建校设计费</td><td ng-bind="detail.design_fee"></td>
+            </tr>
+            <tr>
+                <td class="info">CCTV使用费</td><td ng-bind="detail.cctv_fee"></td>
+                <td class="info">YWS使用费</td><td ng-bind="detail.yws_fee"</td>
+                <td class="info">教材费</td><td ng-bind="detail.book_fee"></td>
+            </tr>
+            <tr>
+                <td class="info">其他费用</td><td ng-bind="detail.other_fee"></td>
+                <td class="info">总计</td><td colspan='3'>{{ detail.fee + detail.deposit + detail.design_fee + detail.cctv_fee + detail.yws_fee + detail.book_fee + detail.other_fee }}</td>
+            </tr>
+            <tr>
+                <td colspan="10">加盟项目类别</td>
+            </tr>
+            <tr>
+                <td class="info">加盟项目类别</td><td ng-bind="detail.project_type_name"></td>
+                <td class="info">项目详情</td><td ng-bind="detail.project_detail_name"></td>
+                <td class="info">CCTV标识使用周期</td><td ng-bind="detail.cctv_period_name"></td>
+            </tr>
+            <tr>
+                <td colspan="10">加盟商情况描述</td>
+            </tr>
+            <tr>
+                <td class="info">投资能力</td><td colspan="5" ng-bind="detail.invest_ability"></td>
+            </tr>
+            <tr>
+                <td class="info">性格特征</td><td colspan="5" ng-bind="detail.characteristic"></td>
+            </tr>
+            <tr>
+                <td class="info">城市概况</td><td colspan="5" ng-bind="detail.city_profile"></td>
+            </tr>
+            <tr>
+                <td class="info">特殊需求点</td><td colspan="5" ng-bind="detail.special_need"></td>
+            </tr>
+        </table>
+
+
+
+</div>
+</div>

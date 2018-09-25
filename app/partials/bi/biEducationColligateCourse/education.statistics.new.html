@@ -1,0 +1,52 @@
+<search on-department-clicked="showSelectDepartment()"
+        department="selectdDepartment"
+        search-model="searchModel"
+        is-school-user="isSchoolUser"
+        provinces="provinces"
+        on-province-changed="getCitysByProvinceCode(searchModel.schoolProvince)"
+        cities="cities"
+        on-reset="reset(isQ)"
+        hide-end-date="true"
+        on-search="argJudgement(getDataByFilter)"/>
+<div id="exportable" class="table-responsive" style=" ">
+  <table st-pipe="getStatistics" st-table="educationTab" class="table table-bordered table-striped"  style="width:100%;">
+    <thead>
+      <tr>
+          <th id="schoolName">校区</th>
+          <th id="numberOfStudents">学员总数</th>
+          <th id="numberOfActiveStudents">上课学员数</th>
+          <th id="numberOfFrequentStudents">优质课时≥4小时</th>
+          <th id="numberOfInfrequentStudents">优质课时＜4小时</th>
+          <th id="numberOfInactiveStudents">停课学员数</th>
+          <th id="numberOfFulltimeTeachers">全职教师数</th>
+          <th id="numberOfActiveFulltimeTeachers">全职上课教师数</th>
+          <th id="averageFulltimeTeacherClassHour">全职教师平均课时</th>
+          <th id="averageFulltimeTeacherClassHourBySubject">全职科目平均课时</th>
+          <th id="numberOfParttimeTeachers">兼职上课教师数</th>
+          <th id="totalClassHour">总消课课时</th>
+          <th id="totalWeekdayClassHour">周中消课课时</th>
+          <th id="totalWeekendClassHour">周末消课课时</th>
+          <th id="averageClassHourByStudent">学生平均课时</th>
+      </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="entity in resultAllList">
+        <td>{{entity.schoolName}}</td>
+        <td><a ng-click="showStudentNumberByGradeModal(entity.numberOfStudentsByGrade, '学员总数')">{{entity.numberOfStudents}}</a></td>
+        <td><a ng-click="showStudentNumberByGradeModal(entity.numberOfActiveStudentsByGrade, '上课学员数')">{{entity.numberOfActiveStudents}}</a></td>
+        <td>{{entity.numberOfFrequentStudents}}</td>
+        <td>{{entity.numberOfInfrequentStudents}}</td>
+        <td>{{entity.numberOfInactiveStudents}}</td>
+        <td><a ng-click="showTeacherNumberBySubjectModal(entity.numberOfFulltimeTeachersBySubject, '全职教师数')">{{entity.numberOfFulltimeTeachers}}</a></td>
+        <td><a ng-click="showTeacherNumberBySubjectModal(entity.numberOfActiveFulltimeTeachersBySubject, '上课教师数')">{{entity.numberOfActiveFulltimeTeachers}}</a></td>
+        <td>{{entity.averageFulltimeTeacherClassHour}}</td>
+        <td><a ng-click="showCourseNumberBySubjectModal(entity.averageFulltimeTeacherClassHourBySubject, '全职科目平均课时')">查看</a></td>
+        <td><a ng-click="showTeacherNumberBySubjectModal(entity.numberOfParttimeTeachersBySubject, '兼职教师数')">{{entity.numberOfParttimeTeachers}}</a></td>
+        <td>{{entity.totalClassHour}}</td>
+        <td>{{entity.totalWeekdayClassHour}}</td>
+        <td>{{entity.totalWeekendClassHour}}</td>
+        <td>{{entity.averageClassHourByStudent}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>

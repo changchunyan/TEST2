@@ -1,0 +1,270 @@
+<div class="modal-tab-panel padding-20-40">
+    <h4>个人信息</h4>
+    <div class="row">
+        <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.name.$dirty && form.name.$error.required }">
+            <label for="name" class="col-sm-6 col-md-6 col-lg-4 control-label">姓名</label>
+            <div class="col-sm-6 col-md-6 col-lg-8">
+                <input type="text" placeholder="2--30个字符" name="name" id="name" class="form-control"
+                       ng-model="employee.user.name" required/>
+            </div>
+        </div>
+        <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.mobile.$dirty && form.mobile.$error.required }">
+            <label for="mobile" class="col-sm-6 col-md-6 col-lg-4 control-label teacher-info-required">手机号</label>
+            <div class="col-sm-6 col-md-6 col-lg-8">
+                <input type="text" name="mobile" id="mobile" ng-blur="checkIsExist()" class="form-control"
+                       ng-model="employee.mobile" required/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 form-group"
+             ng-class="{ 'has-error': form.idNumber.$dirty && form.idNumber.$error.required }">
+            <label for="idNumber" class="col-sm-6 col-md-6 col-lg-4 control-label">身份证号</label>
+            <div class="col-sm-6 col-md-6 col-lg-8">
+                <input type="text" name="idNumber" id="idNumber" class="form-control" ng-model="employee.idNumber"/>
+            </div>
+        </div>
+        <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.email.$dirty && form.email.$error.required }">
+            <label for="email" class="col-sm-6 col-md-6 col-lg-4 control-label">邮箱</label>
+            <div class="col-sm-6 col-md-6 col-lg-8">
+                <input type="email" name="email" id="email" class="form-control" ng-model="employee.user.email"/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 form-group"
+             ng-class="{ 'has-error': form.birthDate.$dirty && form.birthDate.$error.required}">
+            <label for="birthDate" class="col-sm-6 col-md-6 col-lg-4 control-label teacher-info-required">出生日期</label>
+            <div class="col-sm-6 col-md-6 col-lg-8">
+                <input type="text" name="birthDate" id="birthDate" datePicker ng-model="employee.birthDate"
+                       class="form-control" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange=""
+                       ng-change="getAge()" readonly/>
+            </div>
+        </div>
+        <div ng-if="!employee.partFull || employee.partFull == 1" class="col-sm-6 form-group"
+             ng-class="{ 'has-error': form.gender.$dirty && form.gender.$error.required }">
+            <label for="gender" class="col-sm-6 col-md-6 col-lg-4 control-label teacher-info-required">性别</label>
+            <div class="col-sm-6 col-md-6 col-lg-8">
+                <select ng-model="employee.user.gender" name="gender" id="gender"
+                        class="form-control" ng-options="tl.id as tl.name for tl in dictData.gender">
+                    <option value="">------请选择------</option>
+                </select>
+            </div>
+        </div>
+        <!-- 全职的性别必填 -->
+        <div ng-if="employee.partFull == 2" class="col-sm-6 form-group"
+             ng-class="{ 'has-error': form.gender.$dirty && form.gender.$error.required }">
+            <label for="gender" class="col-sm-6 col-md-6 col-lg-4 control-label teacher-info-required">性别</label>
+            <div class="col-sm-6 col-md-6 col-lg-8">
+                <select ng-model="employee.user.gender" name="gender" id="gender"
+                        class="form-control" ng-options="tl.id as tl.name for tl in dictData.gender">
+                    <option value="">------请选择------</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.age.$dirty && form.age.$error.required }">
+            <label for="age" class="col-sm-6 col-md-6 col-lg-4 control-label">年龄</label>
+            <div class="col-sm-6 col-md-6 col-lg-8">
+                <input type="text" ng-model="employee.age" name="age" id="age" class="form-control"/>
+            </div>
+        </div>
+        <div class="col-sm-6 form-group"
+             ng-class="{ 'has-error': form.maritalStatus.$dirty && form.maritalStatus.$error.required }">
+            <label for="maritalStatus" class="col-sm-6 col-md-6 col-lg-4 control-label">婚姻状况</label>
+            <div class="col-sm-6 col-md-6 col-lg-8">
+                <select ng-model="employee.maritalStatus" name="maritalStatus" id="maritalStatus"
+                        class="form-control" ng-options="tl.id as tl.name for tl in dictData.maritalStatus">
+                    <option value="">------请选择------</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 form-group"
+             ng-class="{ 'has-error': form.ethnic.$dirty  && form.ethnic.$error.required }">
+            <label for="ethnic" class="col-sm-6 col-md-6 col-lg-4 control-label">民族</label>
+            <div class="col-sm-6 col-md-6 col-lg-8">
+                <input type="text" name="ethnic" id="ethnic" class="form-control" ng-model="employee.ethnic"/>
+            </div>
+        </div>
+        <div class="col-sm-6 form-group"
+             ng-class="{ 'has-error': form.provinceCode.$dirty && form.provinceCode.$error.required }">
+            <label for="provinceCode" class="col-sm-6 col-md-6 col-lg-4 control-label">户口所在省</label>
+            <div class="col-sm-6 col-md-6 col-lg-8">
+                <select ng-model="employee.provinceCode" name="provinceCode" id="provinceCode" class="form-control"
+                        ng-options="option.provinceCode as option.provinceName for option in provinces"
+                        ng-change="getCityByProvince(employee.provinceCode)">
+                    <option value="">------请选择省份------</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 form-group"
+             ng-class="{ 'has-error': form.cityCode.$dirty && form.cityCode.$error.required }">
+            <label for="cityCode" class="col-sm-6 col-md-6 col-lg-4 control-label">户口所在市</label>
+            <div class="col-sm-6 col-md-6 col-lg-8">
+                <select ng-model="employee.cityCode" name="cityCode" id="cityCode" class="form-control"
+                        ng-options="option.cityCode as option.cityName for option in cities"
+                        ng-change="getAreaByCity(employee.cityCode)">
+                    <option value="">------请选择市------</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-6 form-group"
+             ng-class="{ 'has-error': form.areaCode.$dirty && form.areaCode.$error.required }">
+            <label for="areaCode" class="col-sm-6 col-md-6 col-lg-4 control-label">户口所在区/县</label>
+            <div class="col-sm-6 col-md-6 col-lg-8">
+                <select ng-model="employee.areaCode" style="width:95%;" name="areaCode" id="areaCode"
+                        class="form-control"
+                        ng-options="option.areaCode as option.areaName for option in areas">
+                    <option value="">------请选择区/县------</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div ng-if="employee.partFull == 2" class="col-sm-6 form-group"
+             ng-class="{ 'has-error': form.registeredResidenceType.$dirty && form.registeredResidenceType.$error.required }">
+            <label for="registeredResidenceType" class="col-sm-6 col-md-6 col-lg-4 control-label">户口性质</label>
+            <div class="col-sm-6 col-md-6 col-lg-8">
+                <select ng-model="employee.registeredResidenceType" name="registeredResidenceType"
+                        id="registeredResidenceType" ng-blur="getResidenceType()"
+                        class="form-control"
+                        ng-options="tl.id as tl.name for tl in dictData.registeredResidenceType">
+                    <option value="">------请选择------</option>
+                </select>
+            </div>
+        </div>
+        <div ng-if="!employee.partFull || employee.partFull == 1" class="col-sm-6 form-group"
+             ng-class="{ 'has-error': form.registeredResidenceType.$dirty && form.registeredResidenceType.$error.required }">
+            <label for="registeredResidenceType" class="col-sm-6 col-md-6 col-lg-4 control-label">户口性质</label>
+            <div class="col-sm-6 col-md-6 col-lg-8">
+                <select ng-model="employee.registeredResidenceType" name="registeredResidenceType"
+                        id="registeredResidenceType" ng-blur="getResidenceType()"
+                        class="form-control"
+                        ng-options="tl.id as tl.name for tl in dictData.registeredResidenceType">
+                    <option value="">------请选择------</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-6 form-group"
+             ng-class="{ 'has-error': form.address.$dirty && form.address.$error.required }">
+            <label for="address" class="col-sm-6 col-md-6 col-lg-4 control-label teacher-info-required">现居住地</label>
+            <div class="col-sm-6 col-md-6 col-lg-8">
+                <input type="text" ng-model="employee.address" name="address" id="address" class="form-control"/>
+            </div>
+        </div>
+    </div>
+    <h4>学历信息</h4>
+    <hr>
+    <div class="row">
+        <div class="col-sm-6 form-group"
+             ng-class="{ 'has-error': form.highestEducationInstitute.$dirty && form.highestEducationInstitute.$error.required }">
+            <label for="highestEducationInstitute"
+                   class="col-sm-6 col-md-6 col-lg-4 control-label teacher-info-required">毕业院校</label>
+            <div class="col-sm-6 col-md-6 col-lg-8">
+                <input type="text" placeholder="4--50个字符" name="highestEducationInstitute"
+                       id="highestEducationInstitute" class="form-control"
+                       ng-model="employee.highestEducationInstitute"/>
+            </div>
+        </div>
+        <div class="col-sm-6 form-group"
+             ng-class="{ 'has-error': form.major.$dirty && form.major.$error.required }">
+            <label for="major" class="col-sm-6 col-md-6 col-lg-4 control-label teacher-info-required">专业</label>
+            <div class="col-sm-6 col-md-6 col-lg-8">
+                <input type="text" ng-model="employee.major" name="major" id="major" class="form-control"/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 form-group"
+             ng-class="{ 'has-error': form.latestEducationStartDate.$dirty && form.latestEducationStartDate.$error.required }">
+            <label for="latestEducationStartDate" class="col-sm-6 col-md-6 col-lg-4 control-label">入学时间</label>
+            <div class="col-sm-6 col-md-6 col-lg-8">
+                <input type="text" name="latestEducationStartDate" id="latestEducationStartDate" datePicker
+                       ng-model="employee.latestEducationStartDate"
+                       class="form-control" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="" readonly/>
+            </div>
+        </div>
+        <div class="col-sm-6 form-group"
+             ng-class="{ 'has-error': form.graduationDate.$dirty && form.graduationDate.$error.required }">
+            <label for="graduationDate" class="col-sm-6 col-md-6 col-lg-4 control-label">毕业时间</label>
+            <div class="col-sm-6 col-md-6 col-lg-8">
+                <input type="text" name="graduationDate" id="graduationDate" datePicker
+                       ng-model="employee.graduationDate"
+                       class="form-control" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="" readonly/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div ng-if="employee.partFull == 2" class="col-sm-6 form-group"
+             ng-class="{ 'has-error': form.educationDegree.$dirty && form.educationDegree.$error.required }">
+            <label for="educationDegree"
+                   class="col-sm-6 col-md-6 col-lg-4 control-label teacher-info-required">学历</label>
+            <div class="col-sm-6 col-md-6 col-lg-8">
+                <select ng-model="employee.educationDegree" name="educationDegree" id="educationDegree"
+                        class="form-control" ng-options="tl.id as tl.name for tl in dictData.educationDegree">
+                    <option value="">------请选择------</option>
+                </select>
+            </div>
+        </div>
+        <div ng-if="!employee.partFull ||employee.partFull == 1" class="col-sm-6 form-group"
+             ng-class="{ 'has-error': form.educationDegree.$dirty && form.educationDegree.$error.required }">
+            <label for="educationDegree"
+                   class="col-sm-6 col-md-6 col-lg-4 control-label teacher-info-required">学历</label>
+            <div class="col-sm-6 col-md-6 col-lg-8">
+                <select ng-model="employee.educationDegree" name="educationDegree" id="educationDegree"
+                        class="form-control" ng-options="tl.id as tl.name for tl in dictData.educationDegree">
+                    <option value="">------请选择------</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-6 form-group"
+             ng-class="{ 'has-error': form.educationDegreeType.$dirty && form.educationDegreeType.$error.required }">
+            <label for="educationDegreeType" class="col-sm-6 col-md-6 col-lg-4 control-label">取得方式</label>
+            <div class="col-sm-6 col-md-6 col-lg-8">
+                <select ng-model="employee.educationDegreeType" name="educationDegreeType" id="educationDegreeType"
+                        class="form-control" ng-options="tl.id as tl.name for tl in dictData.educationDegreeType">
+                    <option value="">------请选择------</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <h4>联系人信息</h4>
+    <hr>
+    <div class="row">
+        <div class="col-sm-6 form-group"
+             ng-class="{ 'has-error': form.emergencyContactName.$dirty && form.emergencyContactName.$error.required }">
+            <label for="emergencyContactName" class="col-sm-6 col-md-6 col-lg-4 control-label">紧急联系人</label>
+            <div class="col-sm-6 col-md-6 col-lg-8">
+                <input type="text" ng-model="employee.emergencyContactName" name="emergencyContactName"
+                       id="emergencyContactName" class="form-control" ng-maxlength="50"/>
+            </div>
+        </div>
+        <div class="col-sm-6 form-group"
+             ng-class="{ 'has-error': form.emergencyContactNumber.$dirty && form.emergencyContactNumber.$error.required }">
+            <label for="emergencyContactNumber" class="col-sm-6 col-md-6 col-lg-4 control-label">联系人电话</label>
+            <div class="col-sm-6 col-md-6 col-lg-8">
+                <input type="text" ng-model="employee.emergencyContactNumber" name="emergencyContactNumber"
+                       id="emergencyContactNumber" class="form-control"/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 form-group"
+             ng-class="{ 'has-error': form.emergencyContactRelationship.$dirty && form.emergencyContactRelationship.$error.required }">
+            <label for="emergencyContactRelationship" class="col-sm-6 col-md-6 col-lg-4 control-label">联系人关系</label>
+            <div class="col-sm-6 col-md-6 col-lg-8">
+                <select ng-model="employee.emergencyContactRelationship" name="emergencyContactRelationship"
+                        id="emergencyContactRelationship"
+                        class="form-control"
+                        ng-options="tl.id as tl.name for tl in dictData.emergencyContactRelationship">
+                    <option value="">------请选择------</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>

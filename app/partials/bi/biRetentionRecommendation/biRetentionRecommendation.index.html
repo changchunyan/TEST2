@@ -1,0 +1,14 @@
+<div class="view-frame" ng-controller="BiBaseController">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content" ng-controller="BiRetentionRecommendationController">
+        <div>
+		    <ul class="breadcrumb">
+		        <li><img ng-src="img/icon/bi/yingxiao.png" src="img/icon/bi/yingxiao.png"> 教务报表<span class="divider"></span></li>
+		        <li class="active">年级学科续推</li>
+		    </ul>
+		</div>
+    <div ng-include="'partials/bi/biRetentionRecommendation/biRetentionRecommendation.summary.html?version=1'"></div>
+	</div>
+</div>

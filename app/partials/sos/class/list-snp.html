@@ -1,0 +1,215 @@
+<div class="view-frame" ng-controller="SNPClassManagementController as cmc">
+
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+
+    <div class="view-content mt-new-ui user-love"  st-pipe="getMyCrmCustomerStudentClassList" st-table="MyCrmCustomerStudentClassList">
+        <div class="yws-nav">
+            <div>
+                <ul class="breadcrumb">
+                    <li><a href="#/">首页</a> <span class="divider"></span></li>
+                    <li><a href="#/sos-admin">学员教务</a> <span class="divider"></span></li>
+                    <li><a href="#/sos-admin/class">在读学员管理</a> <span class="divider"></span></li>
+                    <li class="active">班级管理</li>
+                </ul>
+            </div>
+            <div class="mt-10 br-gray">
+                <div class="tabs-title border-1 c3">托管管理</div>
+                <div class="mt-student-m">
+                    <ul class="f14 cf">
+                        <li><a ng-if="!isBanKeTeacher && showPermissions('CreateClass')" class="mt-blue" ng-click="showAddClassView()">新增班级</a>
+                        </li>
+                        <li><a ng-if="showPermissions('classReference')" class="mt-blue" ng-click="relationshipModal()">升班关系</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+			<div class="mt-student-m br-gray h-auto no-media ml-0 span-20">
+				<ul class="one h-auto pr-0">
+					<div class="mt-select" style="min-height: 35px">
+						<div class="rbg mt-0" style="border: none;">
+							<ul class="h-auto" style="padding-right: 0; margin-top: 10px;">
+								<div class="of" style="width: 1100px;">
+									<li class="no-mar ml-0">
+										<label class="bg-none">班级名称</label>
+										<input placeholder="请输入" ng-model="filter.name">
+									</li>
+                                    <li class="no-mar m1-0" style="min-width: 130px; margin-left: 15px;">
+                                        <label class="bg-none">托管老师</label>
+                                        <input placeholder="请输入" ng-model="filter.teacherName">
+                                    </li>
+                                    <li   style="min-width: 130px; margin-left: 15px;">
+                                        <label class="bg-none">课程名称</label>
+                                        <input placeholder="请输入" ng-model="filter.courseName">
+                                    </li>
+            						<li  style="min-width: 130px; margin-left: 15px;line-height: 28px">
+            							<label class="bg-none" style="margin-left: 5px;">上课时间</label>
+            							<select ng-model="filter.classTimeInterval" st-search="filter.classTimeInterval" type="search" style="width: 100%">
+            								<option value="">请选择</option>
+            								<option value="1">周一</option>
+            								<option value="2">周二</option>
+            								<option value="3">周三</option>
+            								<option value="4">周四</option>
+            								<option value="5">周五</option>
+            								<option value="6">周六</option>
+            							</select>
+            						</li>
+									<a class="guolv ml-0 mr-14 alreadyDoneCheck" style="color:#428bca;margin-top: 8px;margin-left:30px !important" ng-class="{'now':isAlreadyDone}" ng-click="alreadyDone()">过滤已结业班级</a>
+								</div>
+							</ul>
+                            <ul class="h-auto" style="padding-right: 0; margin-top: 10px;">
+                                <div class="of" style="width: 1100px;">
+                                    <li class="mt-three option no-mar" vr-select data-mt="{{QYDatas}}" changefun="getMyCrmCustomerStudentClassList" style="margin-right: 15px; margin-top: 10px;">
+                                        <label class="bg-none">开班日期</label>
+                                        <input class="three-1" >
+                                        <div class="three-1">不限</div>
+                                        <input class="three-2" readonly type="search" placeholder="" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})" ng-model="filter.openStartTime"  >
+                                        <div class="three-2"></div><span class="dao bg-none">到</span>
+                                        <input class="three-2" readonly type="search" name="" placeholder="" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})" ng-model="filter.openEndTime"  >
+                                        <div class="three-2"></div>
+                                    </li>
+                                    <li class="mt-three option no-mar" vr-select data-mt="{{QYDatas}}" changefun="getMyCrmCustomerStudentClassList">
+                                        <label class="bg-none">结业日期</label>
+                                        <input class="three-1" >
+                                        <div class="three-1">不限</div>
+                                        <input class="three-2" readonly type="search" placeholder="" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})" ng-model="filter.closeStartTime">
+                                        <div class="three-2"></div><span class="dao bg-none">到</span>
+                                        <input class="three-2" readonly type="search" name="" placeholder="" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})" ng-model="filter.closeEndTime">
+                                        <div class="three-2"></div>
+                                    </li>
+                                </div>
+                            </ul>
+                            <ul class="h-auto" style="float: left">
+                                <ul class=" time-show lh-auto span-54 pl-0" style="float: left;">
+                                    <li class="ml-0">
+                                        <a class="mt-btn cf bg-color-blue br ti-0 li-btn-1 pr-0 mt-0" href="javascript:void (0);" ng-click="callServerOneTabGo()" id="keydown-query">查询</a>
+                                        <a class="mt-btn ml15 brc3 li-btn-1 pr-0 mt-0 ti-0"  id="resetInputAll" ng-click="resetSelectOrder()">重置</a>
+                                    </li>
+                                </ul>
+        					</ul>
+						</div>
+					</div>
+				</ul>
+				<div class="rbg mt-select" ng-show="selectMore" style="border-top: 1px dotted #ccc;">
+					<div class="rbg br0" style="float:left;margin-top: 0">
+						<ul class="inline-block time-show lh-auto span-54 pl-0">
+							<br/>
+						</ul>
+					</div>
+					<ul style="min-height:65px; clear: both">
+						<!--隐藏更多-->
+						<li class="w1 down" style="min-width: 100%">
+							<a ng-click="changeSelectMore(0)" style="margin-top: 33px" class="mt-more">&nbsp;</a>
+						</li>
+					</ul>
+
+				</div>
+			</div>
+
+
+
+            <div class="br-gray mt-list"  style="position: relative">
+                <h2 class="pl-20 c3">
+					班级列表
+				</h2>
+				<div class="br-gray edit-col" ng-if="_showCol" ng-style="$editColCss" event-listener-scroll="" data-parent-fixed="mt-list">
+					<h2 class="cf">编辑列<a class="close glyphicon glyphicon-remove" ng-click="showCol(0)"></a></h2>
+					<ul class="select-col-list">
+						<h2 ng-class="{'active':isAll}" ng-click="selectColAll()">全选</h2>
+						<div style="height:298px;overflow-y: auto;border-bottom: 1px #ccc solid">
+							<li ng-repeat="colList in lEditColList" ng-class="{'active':colList.select}" ng-click="selectCol($index)">{{colList.name}}</li>
+						</div>
+						<a class="btn reast" ng-click="reastCol()">恢复默认</a>
+					</ul>
+				</div>
+
+				<div class="overflow-x isShowCol">
+                    <table class="table table-bordered table-striped table-condensed mt-table1">
+                        <thead>
+	                        <tr class="br-gray-t">
+	                            <th>班级名称</th>
+	                            <th>课程名称</th>
+	                            <th>托管老师</th>
+	                            <th>体验班</th>
+                                <th>招生人数</th>
+	                            <th class="pr55">上课时间</th>
+	                            <th>开班日期</th>
+	                            <th ng-if="!isBanKeTeacher">结业日期</th>
+	                            <th>操作</th>
+	                        </tr>
+                        </thead>
+                        <tbody>
+	                        <tr ng-repeat="row in MyCrmCustomerStudentClassList track by $index">
+	                            <td ng-if="!isBanKeTeacher"><a ng-click="showDetailModal(row, '0')" class="c1-f">{{row.name}}</a></td>
+	                            <td>{{row.courseName}}</td>
+	                            <td>{{row.teacherName}}</td>
+	                            <td ng-if="row.classType===2">是</td>
+                                <td ng-if="row.classType!==2">否</td>
+                                <td style="white-space: nowrap;">
+	                                <span class="yws-tiao" style="border: none;border-radius: 0">
+	                                    <div class="text" style="width:100%;text-align: left;position:inherit;">{{row.appliedCount}} / {{row.planCount}}</div>
+	                                    <div style="width:100%;height:6px;background-color: #ccc;overflow:hidden;border-radius: 3px;">
+	                                        <i class="bg" ng-if="row.planCount==0" style="width: 50%;height: 6px;position: relative;top: -13px;"></i>
+	                                        <i class="bg" ng-if="row.planCount!=0" style="width: 50%;height: 6px;position: relative;top: -13px;" ng-style="{  'width': ((row.appliedCount)/(row.planCount))*100 + '%'}" ng-class="{'c1-i':((row.appliedCount)/(row.planCount))<0.5,'c2-i': 0.5<=((row.appliedCount)/(row.planCount))&&((row.appliedCount)/(row.planCount))<0.8,'c3-i':0.8<=((row.appliedCount)/(row.planCount))}"></i>
+	                                    </div>
+	                                </span>
+	                            </td>
+                                <td>
+									<div ng-repeat="element in row.classTimeList">
+                                        <ul>
+                                            <li class="lh20">{{element.startDate}}<span class="pl-10">{{element.startTime}}-{{element.endTime}}</span></li>
+                                        </ul>
+									</div>
+	                            </td>
+	                            <td>{{row.startTime | date : "yyyy-MM-dd"}}</td>
+	                            <td ng-if="!isBanKeTeacher">{{row.endTime  | date : "yyyy-MM-dd"}}</td>
+	                            <td style="position: absolute;right: 5px;">
+	                                <a class="showUI" id="nw+{{$index}}" ng-click="nw[$index]=true">
+									<span class="glyphicon glyphicon-caozuo" title="操作"></span>
+	                                </a>
+	                                <bubble ng-if="nw[$index]" for="nw+{{$index}}" align="bottom" close="nw[$index]=false"
+	                                        close-action="outerchick " ng-mouseleave="nw[$index]=false;">
+	                                    <ul>
+	                                    	<li>
+	                                            <a ng-if="isBanKeTeacher && showPermissions('ViewClass')" ng-click="showDetailModalForTeacher(row, '0')">查看</a>
+	                                            <a ng-if="!isBanKeTeacher && showPermissions('ViewClass')" ng-click="showDetailModal(row, '0')">查看</a>
+	                                        </li>
+	                                        <li ng-if="!isBanKeTeacher && showPermissions('AllotStudentToClass') && row.status == 0 && row.classType!=2">
+	                                            <a ng-click="showDetailModal(row, '1')">分班</a>
+	                                        </li>
+	                                        <li ng-if="!isBanKeTeacher && row.status == 1 && showPermissions('ChangeClassStatus')">
+	                                            <a ng-click="cancleComplete(row.id)">撤销结业</a>
+	                                        </li>
+	                                        <li ng-if="!isBanKeTeacher && row.status == 0 && showPermissions('ChangeClassStatus')">
+	                                            <a ng-click="complete(row)">结业</a>
+	                                        </li>
+	                                        <li ng-if="showPermissions('upgradeClass') && row.classType!=2">
+	                                            <a ng-click="upgradeClass(row)">升班</a>
+	                                        </li>
+	                                    </ul>
+	                                </bubble>
+	                            </td>
+	                        </tr>
+                        </tbody>
+                        <tbody ng-if="isLoading">
+	                        <tr>
+	                            <td colspan="15" class="text-center">
+	                                <div class="loading-indicator"></div>
+	                            </td>
+	                        </tr>
+                        </tbody>
+                        <tfoot>
+	                        <tr>
+	                            <td class="text-center" st-pagination="" st-items-by-page="10"
+	                                st-template="partials/util/pagination.custom.html" colspan="15">
+	                            </td>
+	                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+	<script src="js/jqDom.js"></script>
+</div>

@@ -1,0 +1,140 @@
+<style>
+    .coupon-icon{
+        display: block;
+        margin-top:16px;
+        width: 200px;
+        height: 126px;
+        /*border: 3px solid #000000;*/
+        border-radius: 35px;
+        padding: 0;
+        position: relative;
+    }
+    .coupon-icon-img{
+        margin: 0;
+        padding: 0;
+        display: block;
+        width:100%;
+        max-height: 100%;
+        border-radius: 35px;
+    }
+    .coupon-icon-circle{
+        position: absolute;
+        bottom: 17px;
+        right: 15px;
+        width: 38px;
+        height: 38px;
+        background-color: #efefef; /* Can be set to transparent */
+        -webkit-border-radius: 19px;
+        margin-top: 50px;
+    }
+    .coupon-icon-due{
+        position: absolute;
+        bottom: 30px;
+        right: 50px;
+        font-size: 50px;
+        color: red;
+    }
+    .coupon-icon-tag{
+        line-height: 34px;
+        margin-left: 14%
+    }
+    .marginTop15{
+        margin-top: -15px;
+    }
+    .display{
+        display: none;
+    }
+    .img-ash{
+        opacity:0.4;
+        filter:alpha(opacity=40); /* For IE8 and earlier */
+    }
+    .img-ash90{
+        opacity:0.1;
+        filter:alpha(opacity=10); /* For IE8 and earlier */
+    }
+</style>
+<div class="view-frame" ng-controller="CouponManagementController as cmc">
+    <div class="view-left">
+        <nav-side menu-data="menu.subMenu"></nav-side>
+    </div>
+
+    <div class="col-sm-10  coupon-main">
+        <div class="row" style="padding-top:20px;">
+            <button class="btn btn-primary col-xs-offset-8" ng-click="cmc.addCouponShow()" style="width:90px;">添加优惠券</button>
+        </div>
+        <yws-base-lists call-list="">
+            <!--<table   st-pipe="callCouponList" st-table="list" >-->
+            <div class="row" ng-if="!cmc.isLoadingCouponList">
+                <div ng-repeat="row in cmc.couponList" class="col-xs-6 col-md-3 js-coupon" data-id="1">
+                    <div ng-click="cmc.detailCouponShow(row)"  class="thumbnail coupon-icon center-block " >
+                        <!-- ../../../../test/test.jpg-->
+                        <img class="coupon-icon-img" ng-src="{{cmc.view.defaultImg(row.imageMax) }}" alt="{{row.couponName}}"  title="{{row.couponName}}" ng-class="{ true:'img-ash90', false:''}[row.isShelve!=1]">
+                        <a ng-if="!ifTimeDue(row.validityendtime)" ng-switch="row.isShelve" class="coupon-icon-circle">
+                            <!--<span ng-switch-default class="coupon-icon-tag" ng-click="cmc.view.clickUpOut(row,$event)">上架</span>--><!--//0 表示下架 1 上架 但上架时显示下架-->
+                            <span ng-switch-when="0" class="coupon-icon-tag" ng-click="cmc.view.clickUpOut(row,$event)">上架</span>
+                            <span ng-switch-when="1" class="coupon-icon-tag"  ng-click="cmc.view.clickUpOut(row,$event)">下架</span>
+                        </a>
+                        <div ng-if="ifTimeDue(row.validityendtime)" class="coupon-icon-due ">过期</div>
+
+                        <!--<a class="coupon-icon-circle"><span class="coupon-icon-tag">下架</span></a>-->
+                    </div>
+                    <div class="caption marginTop15">
+                        <p class="center-block">
+                            <a  class="btn btn-primary" role="button" ng-click="cmc.detailCouponShow(row)">查看</a>
+                            <a  class="btn btn-default" role="button" ng-click="cmc.deleteCoupon(row)">删除</a>
+                        </p>
+                    </div>
+                </div>
+                <!-- <div class="col-xs-6 col-md-3 js-coupon" data-id="1">
+                     <div  class="thumbnail coupon-icon center-block">
+                         <img class="coupon-icon-img" src="../../../../test/test.jpg" alt="...">
+                         <a class="coupon-icon-circle"><span class="coupon-icon-tag">上架</span></a>
+                         &lt;!&ndash;<a class="coupon-icon-circle"><span class="coupon-icon-tag">下架</span></a>&ndash;&gt;
+                     </div>
+                     <div class="caption ">
+                         <p class="center-block">
+                             <a href="#" class="btn btn-primary" role="button" ng-click="ctrl.editCouponShow(coupon)">编辑</a>
+                             <a href="#" class="btn btn-default" role="button" ng-click="ctrl.deleteCoupon(coupon)">删除</a>
+                         </p>
+                     </div>
+                 </div>
+                 <div class="col-xs-6 col-md-3 js-coupon" data-id="1">
+                     <div  class="thumbnail coupon-icon center-block img-ash ">
+                         <img class="coupon-icon-img" src="../../../../test/test.jpg" alt="...">
+                         <a class="coupon-icon-circle"><span class="coupon-icon-tag">上架</span></a>
+                         <a class="coupon-icon-circle"><span class="coupon-icon-tag">下架</span></a>
+                     </div>
+                     <div class="caption ">
+                         <p class="center-block">
+                             <a href="#" class="btn btn-primary" role="button">编辑</a>
+                             <a href="#" class="btn btn-default" role="button">删除</a></p>
+                     </div>
+                 </div>
+                 <div class="col-xs-6 col-md-3 js-coupon" data-id="1">
+                     <div  class="thumbnail center-block coupon-icon ">
+                         <img class="coupon-icon-img img-ash90" src="../../../../test/test.jpg" alt="...">
+                         <div class="coupon-icon-circle js-up-out">
+                             <a ><span class="coupon-icon-tag">上架</span></a>
+                             <a class=" display"><span class="coupon-icon-tag">下架</span></a>
+                         </div>
+                         <div class="coupon-icon-due">过期</div>
+                     </div>
+                     <div class="caption ">
+                         <p class="center-block">
+                             <a href="#" class="btn btn-primary" role="button">编辑</a>
+                             <a href="#" class="btn btn-default" role="button">删除</a></p>
+                     </div>
+                 </div>-->
+            </div>
+            <div class="row" ng-if="cmc.isLoadingCouponList">
+                <div>
+                    <div colspan="24" class="text-center"><div class="loading-indicator"></div>
+                    </div>
+                </div>
+            </div>
+
+            <yws-pagination page-size="Page.pageSize" page-current="Page.pageCurrent" page-items="12" page-on-select="callCouponListController" ></yws-pagination>
+        </yws-base-lists>
+
+    </div>
+</div>

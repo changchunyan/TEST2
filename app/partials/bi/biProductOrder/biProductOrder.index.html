@@ -1,0 +1,15 @@
+<div class="view-frame" ng-controller="BiBaseController">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content" ng-controller="BiProductOrderController">
+        <div>
+		    <ul class="breadcrumb">
+		        <li><img ng-src="img/icon/bi/yingxiao.png" src="img/icon/bi/yingxiao.png"> 营销报表<span class="divider"></span></li>
+		        <li class="active">产品类型</li>
+		    </ul>
+		</div>
+    <div ng-if="huizongShow" ng-include="'partials/bi/biProductOrder/biProductOrder.summary.html'"></div>
+    <div ng-if="mingxiShow" ng-include="'partials/bi/biProductOrder/biProductOrder.statistics.html'"></div>
+	</div>
+</div>

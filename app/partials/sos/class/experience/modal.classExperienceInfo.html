@@ -1,0 +1,138 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true" data-flag="{{operationType}}">
+    <form class="modal-dialog form-horizontal" name="classExperience" style="min-width: 1000px;">
+        <div class="modal-content mt-label-h2">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">跟班体验</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row ml-0">
+                    <div class="form-group col-sm-12">
+                        <ul class="row mt-li-bg">
+                            <li class="col-sm-6">学生姓名：<span data-JSON="{{selectedStudent}}">{{selectedStudent.name}}</span></li>
+                            <li class="col-sm-6">所属人：<span>{{selectedStudent.belong_user_name}}</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row m0">
+                    <div class="col-sm-12 form-group m0">
+                        <label class="lable-h2 fl">课程名称</label>
+                        <input type="text" class="form-control ng-pristine " style="display: inline-block;width: 50%" 
+                        	name="courseName" id="courseName" ng-model="selectedStudent.courseName" readonly/>
+                        <span class="c86">可排课次：&nbsp;{{2-selectedStudent.classExperienceCount}}&nbsp;&nbsp;</span>
+                        <span class="c86">剩余课次：&nbsp;{{2-selectedStudent.classExperiencedCount}}</span>
+                    </div>
+                    <div class="col-sm-7 form-group m0">
+                        <label class="lable-h2 fl">班级名称</label>
+                        <input type="text" class="form-control ng-pristine " style="display: inline-block;width: 50%" 
+                        	name="selectClassName" id="selectClassName" ng-model="selectedStudent.selectClassName" readonly/>
+                        <button type="button" class="btn btn-default bg-color-blue" ng-click="showSelectClassView()">选择班级</button>
+
+                    </div>
+                    <div class="col-sm-5 form-group m0">
+                        <label class="lable-h2 fl">授课老师</label>
+                        <input type="text" class="form-control ng-pristine " style="display: inline-block;width: 50%"
+                        	name="selectClassName"  ng-model="selectedStudent.teacherName" readonly/>
+
+                    </div>
+                    <div class="col-sm-12">
+                        <ul class="one h-auto pr-0">
+                            <div class="mt-select" style="min-height: 35px">
+                                <div class="rbg mt-0" style="border: none;">
+                                    <ul class="h-auto" style="padding-right: 0">
+                                        <div class="of">
+                                            <li class="mt-three option no-mar fl" vr-select data-mt="{{nextCourseDatas}}" style="margin-left:0;margin-right: 20px;width: 510px;"><label class="fl bg-none" style="width:auto;font-size: 14px">上课时间</label>
+                                                <input class="three-1">
+                                                <div style="padding-left: 10px" class="three-1">不限</div>
+                                                <input class="three-2" readonly type="search" placeholder="" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})" ng-model="searchModel.start_time">
+                                                <div class="three-2"></div><span class="dao">到</span>
+                                                <input class="three-2" readonly type="search" name="" placeholder="" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})" ng-model="searchModel.end_time">
+                                                <div class="three-2"></div>
+                                            </li>
+                                            <ul class="inline-block fl time-show lh-auto span-54">
+                                                <a class="mt-btn cf bg-color-blue br ti-0 li-btn-1 pr-0 mt-0" href="javascript:void (0);" ng-click="getClassCoursePlans(classCoursePlanTableState)">查询</a>
+                                                <a class="more mr-14" style="color:#428bca;" ng-click="changeSelectMore(1,1)">{{selectMoreText}}</a>
+                                            </ul>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </div>
+                        </ul>
+                    </div>
+                    <div class="col-sm-12 form-group m0">
+                        <div class="group-list bg-gray pl-0" style="padding-bottom: 0">
+                            <table class="table mt-table1" st-pipe="getClassCoursePlans" st-table="classCoursePlanTable" 
+                            	ng-if="(operationType===2&&searchModel.start_time)||operationType===1">
+                                <thead>
+	                                <tr>
+	                                    <th>选择</th>
+	                                    <th>上课时间</th>
+	                                    <th>星期</th>
+	                                    <th>上课时长</th>
+	                                    <th>上课老师</th>
+	                                    <th>实到人数</th>
+	                                </tr>
+                                </thead>
+                                <tbody>
+	                                <tr ng-repeat="row in classCoursePlans">
+	                                    <td class="vr">
+				                           <label for="_input{{$index}}" class="radio-vr" ng-class="{'active':row.selectTrue}" style="width:28px;"></label>
+				                           <input type="radio" name="classCoursePlanRadio" id="_input{{$index}}" ng-click="selectClassCoursePlan('classCoursePlans',$index)"
+				                           		class="hide" value="{{$index}}"/>
+				                       </td>
+	                                    <td>{{row.startTime|date:'yyyy-MM-dd HH:mm:ss'}}</td>
+	                                    <td>{{row.startTime | getZhou:row.startTime}}</td>
+	                                    <td>{{row.course_num}}小时</td>
+	                                    <td>{{row.teacher_name}}</td>
+	                                    <td>{{row.experiencedCount}}/{{row.experienceCount}}</td>
+	                                </tr>
+                                </tbody>
+                                <tfoot>
+				                   <tr>
+				                       <td colspan="6" class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html"></td>
+				                   </tr>
+				               </tfoot>
+                                <tfoot>
+                                <tr style="height: 53px" ng-if="operationType===2">
+                                    <td class="vr" style="padding-left: 8px">
+                                       	 已选择：
+                                    </td>
+                                    <td style="padding-left: 8px">{{selectedStudent.classCoursePlan.startTime|date:'yyyy-MM-dd'}}</td>
+                                    <td style="padding-left: 8px">{{selectedStudent.classCoursePlan.startTime|getZhou:selectedStudent.classCoursePlan.startTime}}</td>
+                                    <td style="padding-left: 8px">{{selectedStudent.classCoursePlan.course_num}}小时</td>
+                                    <td style="padding-left: 8px">{{selectedStudent.classCoursePlan.teacher_name}}</td>
+                                    <td style="padding-left: 8px">{{selectedStudent.classCoursePlan.count_num}}/{{selectedStudent.classCoursePlan.plan_count}}</td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer margin-top20">
+                <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+	            <button type="button" class="btn btn-success" ng-if="operationType===1"
+	            	ng-click="createClassExerience(selectedStudent)">确定</button>
+	            <button type="button" class="btn btn-success" ng-if="operationType===2"
+	            	ng-click="editClassExperience(selectedStudent)">确定</button>
+          	</div>
+        </div>
+    </form>
+    <script>
+        (function () {
+            setTimeout(function () {
+                var flag = angular.element('[data-flag]')
+                var _dom =  $(flag).find('div.three-1')
+                _dom.trigger('click',_dom)
+                setTimeout(function () {
+                    $(document).find('[data-flag]').find('.select-option').find('li').eq(3).trigger('click')
+                    console.log($(document).find('[data-flag]').find('.select-option').find('li').eq(3).html())
+                })
+            },100)
+        })()
+    </script>
+    <script src="js/jqDom.js"></script>
+</div>
+

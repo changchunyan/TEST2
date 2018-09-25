@@ -1,0 +1,22 @@
+<div class="view-frame" ng-controller="BiBaseController">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    
+    <div class="view-content" ng-controller="BiCommunicationController">
+	    <div>
+		    <ul class="breadcrumb">
+		        <li><a href="">营销报表</a><span class="divider"></span></li>
+		        <li class="active">沟通统计</li>
+		    </ul>
+		</div>
+        <tabs pane-changed="getTabIndex(selectedPane)">
+        	<pane title="数据明细表">
+        		<div ng-include="'partials/bi/biCommunication/biCommunication.statistics.html'" ng-if="channelTab==='1'"></div>
+        	</pane>
+        	<pane title="数据汇总表" ng-if="!isSchoolUser">
+        		<div ng-include="'partials/bi/biCommunication/biCommunication.summary.html'" ng-if="channelTab==='2'"></div>
+        	</pane>
+        </tabs>
+    </div>
+</div>

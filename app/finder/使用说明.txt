@@ -1,0 +1,16 @@
+使用：
+	页面中
+	<div id="finder"></div>
+	
+	js中
+	<script type="text/javascript">
+		function init() {
+			var finder = new CKFinder();
+			finder.replace('finder');
+		}
+		init();
+	</script>
+	
+	目前只可以看到自己的文件夹
+	
+	文件服务端在  finder/config.js中配置

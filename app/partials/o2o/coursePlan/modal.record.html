@@ -1,0 +1,36 @@
+<div class="modal oms-record-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <form name="form">
+        <div class="modal-header">
+          <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" ng-bind="modalTitle"></h4>
+        </div>
+        <div class="modal-body">
+      <!--   <div class="form-group" >
+                 <select ng-model="OmsCoursePlanVoForCreate.remark" name="OmsCoursePlanVoForCreate.remark" id="OmsCoursePlanVoForCreate.remark" class="input-sm form-control ng-pristine ng-valid ng-touched">
+	                 <option value="不满意" class="">-- 不满意 --</option>
+	                 <option value="消课错误" class="" >-- 消课错误 --</option>
+	                 <option value="其他原因" class="" >-- 其他原因 --</option>
+                 </select>
+            </div>
+        </div> -->
+        <div>
+             <span>请选择取消消课原因</span>
+          </div>
+        <div>
+             <a class="btn" ng-click="CoursePlanquick(1)" ng-class="{true:'btn-success',false:''}[    quick[1]]">不满意</a>
+            <a class="btn" ng-click="CoursePlanquick(2)" ng-class="{true:'btn-success',false:''}[quick[2]]">消课错误</a>
+            <a class="btn" ng-click="CoursePlanquick(3)" ng-class="{true:'btn-success',false:''}[quick[3]]">其他原因</a>
+          </div>
+          <div ng-if=remark>
+            <textarea name="invitationContent" id="invitationContent" placeholder="请输入原因(限30字)" class="form-control" ng-maxlength="30"  ng-model="OmsCoursePlanVoForCreate.remarkext" onfocus="this.placeholder=''" onblur="this.placeholder='请输入原因(限30字)'" />
+          </div>
+            <div class="text-center" >
+                <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+	          	<button type="submit" class="btn btn-success" ng-click="saveUnsatisfied()" ng-disabled="form.$invalid">确定</button>
+	          </div>
+        </form>
+        </div>
+    </div>
+</div>

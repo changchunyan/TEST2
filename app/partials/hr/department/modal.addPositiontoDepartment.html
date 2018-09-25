@@ -1,0 +1,52 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle"></h4>
+                </div>
+                <div class="modal-body of">
+                    <div>
+                        <div style="float:left;">
+                            可添加岗位<br/><br/>
+                            <select ng-model="addPosition" multiple style="width: 200px;height:380px;">
+                                <option ng-repeat="position in selectablePositions" ng-dblclick="togglePosition(position)">
+                                    {{position.name}}
+                            </select>
+                        </div>
+                        <div style="float:left;width:100px;margin-top:50px;margin-left:20px;margin-right:20px">
+                            <button type="button" class="btn btn-default" ng-click="addSchoolPosToDept()">一对一标配</button>
+                            <br/><br/>
+                            <button type="button" class="btn btn-default" ng-click="addYSPPosToDept()">优胜派标配</button>
+                            <br/><br/>
+                            <button type="button" class="btn btn-default" ng-click="addYSBPosToDept()">优胜班标配</button>
+                            <br/><br/>
+                            <button type="button" class="btn btn-default" ng-click="addYSGJPosToDept()">优胜国际标配</button>
+                            <br/><br/>
+                            <button type="button" class="btn btn-default" ng-click="addPosToDept(addPosition)">添加岗位</button>
+                            <br/><br/>
+                            <button  type="button" class="btn btn-default" ng-click="removePosFromDept(removePosition)">删除岗位</button>
+                            <br/><br/>
+                            <button  type="button" class="btn btn-default" ng-click="clearDeptPos()">清空岗位</button>
+                        </div>
+                        <div style="float:left;">
+                            本机构已有岗位<br/><br/>
+                            <select ng-model="removePosition" multiple style="width: 200px;height:380px;">
+                                <option ng-repeat="position in selectedPositions" ng-dblclick="togglePosition(position)">
+                                    {{position.name}}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                    <button type="button" class="btn btn-success c5-lable" ng-click="save()">保存</button>
+<!--
+                    <img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+-->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

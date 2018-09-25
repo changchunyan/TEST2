@@ -1,0 +1,21 @@
+<div class="modal input-w-auto requrie-input" tabindex="-1" role="dialog" aria-hidden="true">
+    <form class="modal-dialog form-horizontal" style="width:1000px;" name="updateForm" role="form" novalidate="">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="closeDetailModal()">
+                	<span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" ng-bind="editModalTitle"></h4>
+            </div>
+            <div class="modal-body pb-20">
+		        <div ng-include="basicInfoUrl"></div>
+            </div>
+            <div class="modal-footer">
+            	<button type="button" class="btn btn-default" ng-click="closeDetailModal()">关闭</button>
+            	<button type="button" ng-disabled="updateForm.$invalid"  class="btn btn-success c5-lable" ng-click="update(studentClass)" ng-if="studentClass.isEdit || studentClass.isEditCoursePlanSetting">确定</button>
+            </div>
+        </div>
+	</form>
+</div>
+
+

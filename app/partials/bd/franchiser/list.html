@@ -1,0 +1,132 @@
+<div class="view-frame" ng-controller="BdFranchisersController as lsc">
+    <div class="view-left">
+        <nav-side menu-data="menu.subMenu"></nav-side>
+    </div>
+    <!--Leads List view-->
+    <div ng-show="isList" class="view-content">
+        <div>
+            <div>
+                <ul class="breadcrumb">
+                    <li><a href="#/">首页</a> <span class="divider"></span></li>
+                    <li><a href="#/bd-admin">招商客户关系管理</a> <span class="divider"></span></li>
+                    <li><a href="#/bd-admin/franchiser_list">加盟信息管理</a> <span class="divider"></span></li>
+                    <li class="active">加盟信息列表</li>
+                </ul>
+            </div>
+        </div>
+        <br/><br/>
+        <tabs>
+            <pane title="加盟信息">
+                <div class="table-responsive" style="overflow:scroll;overflow-y:hidden">
+                    <table class="table table-bordered table-striped table-condensed" st-pipe="getList"
+                           st-table="bdFranchiserList">
+                        <thead>
+                        <tr>
+                            <th ng-if="!isAllot">操作</th>
+                            <th>合同编号</th>
+                            <th>合同状态</th>
+                            <th>加盟商姓名</th>
+                            <th>校区联系人</th>
+                            <th ng-if="false">邮箱</th>
+                            <th>联系方式</th>
+                            <th>签约日期</th>
+                            <th>项目类型</th>
+                            <th>项目详情</th>
+                            <th>签约人</th>
+                        </tr>
+                        <tr>
+                            <!--<th style="line-height: 30px;"><span>查询条件</span></th>-->
+                            <th ng-if="!isAllot">&nbsp;</th>
+                            <th>
+                                <input st-search="filter.contract_no" placeholderm="合同编号" ng-model="filter.contract_no"
+                                       class="input-sm form-control" type="search"/>
+                            </th>
+                            <th>
+                                <select st-search="filter.contract_status" ng-model="filter.contract_status"
+                                        name="contract_status" id="contract_status" class="input-sm form-control"
+                                        ng-options="option.code as option.name for option in contractStatusList"
+                                        type="search">
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </th>
+                            <th>
+                                <input st-search="filter.name" placeholder="加盟商姓名" ng-model="filter.name"
+                                       class="input-sm form-control" type="search"/>
+                            </th>
+                            <th>
+                                <input st-search="filter.contact_name" placeholder="校区联系人"
+                                       ng-model="filter.contact_name" class="input-sm form-control" type="search"/>
+                            </th>
+                            <th ng-if="false">
+                                <input st-search="filter.email" placeholder="邮箱" ng-model="filter.email"
+                                       class="input-sm form-control" type="search"/>
+                            </th>
+                            <th>
+                                <input st-search="filter.contact_phone" placeholder="联系方式"
+                                       ng-model="filter.contact_phone" class="input-sm form-control" type="search"/>
+                            </th>
+                            <th><input ng-model="filter.create_at" st-search="filter.create_at" placeholder=""
+                                       type="date" class="input-sm form-control" type="search"/></th>
+                            <th>
+                                <select st-search="filter.project_type" ng-model="filter.project_type"
+                                        name="project_type" id="project_type" class="input-sm form-control"
+                                        ng-options="option.code as option.name for option in projectList" type="search"
+                                        ng-change="projectChanged()">
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </th>
+                            <th>
+                                <select st-search="filter.project_detail" ng-model="filter.project_detail"
+                                        name="project_detail" id="project_detail" class="input-sm form-control"
+                                        ng-options="option.code as option.name for option in projectDetailList"
+                                        type="search">
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </th>
+                            <th>
+                                <input ng-model="filter.creator_name" st-search="filter.creator_name"
+                                       class="input-sm form-control" placeholder="签约人" type="search"/>
+                            </th>
+                        </thead>
+                        <tbody ng-show="!isLoading">
+                        <tr ng-repeat="row in bdFranchiserList">
+                            <td>
+                                <a ng-click="view(row)"><span class="glyphicon glyphicon-search" title="查看"></span></a>&nbsp;
+                                <a ng-click="edit(row)" ng-show="enableEdit(row)"><span
+                                        class="glyphicon glyphicon-pencil" title="编辑"></span></a>
+                            </td>
+                            <td>{{row.contract_no}}</td>
+                            <td>{{row.contract_status_name}}</td>
+                            <td>{{row.name}}</td>
+                            <td>{{row.contact_name}}</td>
+                            <td ng-if="false">{{row.email}}</td>
+                            <td>{{row.contact_phone}}</td>
+                            <td>{{row.create_at | date:'yyyy-MM-dd'}}</td>
+                            <td>{{row.project_type_name}}</td>
+                            <td>{{row.project_detail_name}}</td>
+                            <td>{{row.creator_name}}</td>
+                        </tr>
+                        </tbody>
+                        <tbody ng-show="isLoading">
+                        <tr>
+                            <td colspan="13" class="text-center">
+                                <div class="loading-indicator"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-items-by-page="10"
+                                st-template="partials/util/pagination.custom.html"
+                                st-template="partials/util/pagination.custom.html" colspan="13">
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </pane>
+        </tabs>
+    </div>
+
+</div>
+

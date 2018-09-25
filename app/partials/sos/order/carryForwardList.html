@@ -1,0 +1,162 @@
+<div class="view-frame" ng-controller="OrderManagementController as omc">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content mt-new-ui user-love" st-pipe="getCarryForwardList" st-table="oneOrders">
+        <div class="yws-nav">
+            <ul class="breadcrumb">
+                <li><a href="#/">首页</a> <span class="divider"></span></li>
+                <li><a a href="#/sos-admin">学员教务</a> <span class="divider"></span></li>
+                <li><a>结转管理</a> <span class="divider"></span></li>
+                <li class="active">结转记录列表</li>
+            </ul>
+        </div>
+        <div class="mt-10">
+            <div class="tabs-title border-1 c3">结转管理</div>
+        </div>
+        <!--TODO:不要删-->
+        <div class="mt-student-m br-gray h-auto no-media ml-0 span-20">
+            <ul class="one h-auto pr-0">
+                <div class="mt-select" style="min-height: 35px">
+                    <div class="rbg mt-0" style="border: none;">
+                        <ul class="h-auto" style="padding-right: 0">
+                            <div class="of" style="float:left;">
+                                <li style="margin-left: 0">
+                                    <label class="bg-none">学员姓名</label>
+                                    <input placeholder="请输入" st-search="orderFilter.studentName" ng-model="orderFilter.studentName" type="search">
+                                </li>
+                                <li style="margin-right: 15px">
+                                    <label class="bg-none">转出合同号</label>
+                                    <input placeholder="请输入" st-search="orderFilter.orderNo" ng-model="orderFilter.orderNo" type="search">
+                                </li>
+                                <li style="margin-right: 15px">
+                                    <label class="bg-none">转入合同号</label>
+                                    <input placeholder="请输入" st-search="orderFilter.carryOrderNo" ng-model="orderFilter.carryOrderNo" type="search">
+                                </li>
+                                <li style="margin-right: 15px">
+                                    <label class="bg-none">经办人</label>
+                                    <input placeholder="请输入" st-search="orderFilter.operatorName" ng-model="orderFilter.operatorName" type="search">
+                                </li>
+                                <li style="margin-right: 15px">
+                                    <label class="bg-none">结转状态</label>
+                                    <select style="margin-top: -5px" class="input-sm form-control" st-search="orderFilter.carryStatus" ng-model="orderFilter.carryStatus"
+                                        type="search">
+                                        <option value="">&#45;&#45; 请选择 &#45;&#45;</option>
+                                        <option value="1"> 未转入</option>
+                                        <option value="2">已转入</option>
+                                        <option value="3">审核通过</option>
+                                        <option value="4">已撤销</option>
+                                        <option value="5">已退单</option>
+                                       
+                                    </select>
+                                </li>
+                            </div>
+                        </ul>
+                        <ul class="h-auto" style="padding-right: 0">
+                            <ul class="inline-block time-show lh-auto span-54 pl-0">
+                                <li class="mt-three option no-mar" vr-select data-mt="{{QYDatas}}" changefun="getCarryForwardList"><label class="bg-none">结转日期:</label>
+                                    <input class="three-1" ng-model="orderFilter.ceate_at" st-search="orderFilter.ceate_at">
+                                    <div class="three-1">不限</div>
+                                    <input class="three-2" readonly type="search" placeholder="" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})"
+                                        ng-model="orderFilter.carry_time_begin">
+                                    <div class="three-2"></div><span class="dao bg-none">到</span>
+                                    <input class="three-2" readonly type="search" name="" placeholder="" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})"
+                                        ng-model="orderFilter.carry_time_end">
+                                    <div class="three-2"></div>
+                                </li>
+                            </ul>
+                            <ul class="inline-block time-show lh-auto span-54 pl-0">
+                                <li class="mt-three option no-mar" vr-select data-mt="{{QYDatas}}" changefun="getCarryForwardList"><label class="bg-none">签约时间:</label>
+                                    <input class="three-1" ng-model="orderFilter.ceate_at" st-search="orderFilter.ceate_at">
+                                    <div class="three-1">不限</div>
+                                    <input class="three-2" readonly type="search" placeholder="" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})"
+                                        ng-model="orderFilter.contract_start_time_begin">
+                                    <div class="three-2"></div><span class="dao bg-none">到</span>
+                                    <input class="three-2" readonly type="search" name="" placeholder="" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})"
+                                        ng-model="orderFilter.contract_end_time_end">
+                                    <div class="three-2"></div>
+                                </li>
+                                <li>
+                                    <a id="keydown-query" class="mt-btn cf bg-color-blue br ti-0 li-btn-1 pr-0 mt-0" href="javascript:void (0);" ng-click="getCarryForwardListGo()">查询</a>
+                                    <a class="mt-btn ml15 brc3 li-btn-1 pr-0 mt-0 ti-0" id="resetInputAll" ng-click="resetSelectOrderCarry()">重置</a>
+                                </li>
+
+                            </ul>
+
+                        </ul>
+                    </div>
+                </div>
+            </ul>
+
+        </div>
+        <div class="br-gray mt-list">
+            <h2><span class="h2-span">结转列表</span></h2>
+            <div class="overflow-x">
+                <table class="table table-bordered table-striped table-condensed mt-table1 mt-scroll">
+                    <thead>
+                        <tr class="br-gray-t">
+                            <th>学员姓名</th>
+                            <th>转出合同编号</th>
+                            <th>转出日期</th>
+                            <th>转入合同号</th>
+                            <th>签约时间</th>
+                            <th>业绩类型</th>
+                            <th>结转状态</th>
+                            <th>结转金额</th>
+                            <th>经办人</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody ng-show="!isLoading">
+                        <tr ng-repeat="row in oneOrders">
+                            <td>{{row.studentName}}</td>
+                            <td>{{row.orderNo != row.originOrderNo ? row.orderNo : ''}}</td>
+                            <td>{{row.carryTime | date:'yyyy-MM-dd'}}</td>
+                            <td><!--{{row.carryOrderNo != row.carryOriginOrderNo ? row.carryOrderNo : ''}}-->{{row.carryStatus != 1 ? row.carryOrderNo :'&nbsp;'}}</td>
+                            <td>{{row.contractStartDate | date:'yyyy-MM-dd'}}</td>
+                            <td>{{row.orderType | orderType}}</td>
+                            <td>{{row.carryStatus | carryForwardStatus : row.carryStatus}}</td>
+                            <td>{{row.carryAmount}}</td>
+                            <td>{{row.operatorName}}</td>
+                            <td style="right: 28px;">
+                                <a class="showUI" id="nw+{{$index}}" ng-click="nw[$index]=true"><span
+                                    class="glyphicon glyphicon-caozuo" title="操作"></span></a>
+                                <bubble ng-if="nw[$index]" for="nw+{{$index}}" align="bottom" close="nw[$index]=false" close-action="outerchick " ng-mouseleave="nw[$index]=false;">
+                                    <ul>
+                                        <li ng-if="row.carryStatus == 1" ng-click="carryChangeInto(row)">
+                                            <a>转入</a>
+                                        </li>
+                                        <li ng-if="row.carryStatus == 1" ng-click="carryforwardRevoke(row)" style="white-space:nowrap;">
+                                            <a>撤销结转</a>
+                                        </li>
+                                        <!--<li ng-if="row.carryStatus == 2" ng-click="carryCharge(row)">
+                                            <a>收费</a>
+                                        </li>-->
+                                        <li ng-if="row.carryStatus == 2" ng-click="carryAudit(row)">
+                                            <a>审核</a>
+                                        </li>
+                                        <!--<li ng-if="row.carryStatus == 2 || row.carryStatus == 3" ng-click="carryforwardBack(row)">
+                                            <a>退单</a>
+                                        </li>-->
+										<li ng-if="row.carryStatus == 2" ng-click="carryforwardBack(row)">
+                                            <a>退单</a><!-- || row.carryStatus == 3 TODO:20180622 审核通过去掉退单-->
+                                        </li>
+                                    </ul>
+                                </bubble>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="10">
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="js/jqDom.js"></script>
+</div>

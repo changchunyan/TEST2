@@ -1,0 +1,162 @@
+<div class="view-frame">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div class="view-content">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="">招聘管理</a> <span class="divider"></span></li>
+                <li class="active">招聘管理</li>
+            </ul>
+        </div>
+        <div class="tabs-title">招聘管理</div>
+        <tabs>
+            <pane title="招聘管理">
+                <div class="row">
+                    <div class="form-horizontal c-select-text yws-container">
+                        <div class="yws-container">
+                            <div class="col-sm-4 form-group">
+                                <label for="department" class="col-sm-4  control-label">部门</label>
+                                <div class="col-sm-8">
+                                    <input id="department" type="text" class="form-control" ng-click="showSelectDepartment()" ng-model="sf_recruitment.department.name" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label for="position" class="col-sm-4  control-label">岗位</label>
+                                <div class="col-sm-8">
+                                    <select ng-options="position.name for position in positions track by position.id"
+                                            ng-model="sf_recruitment.position" name="position" id="position" class="form-control">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label for="recruitmentStatus" class="col-sm-4  control-label">招聘状态</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="sf_recruitment.recruitmentStatus" name="recruitmentStatus" id="recruitmentStatus"  class="form-control" >
+                                        <option value="">------请选择------</option>
+                                        <option value="0">全部</option>
+                                        <option value="1">招聘中</option>
+                                        <option value="2">招聘完成</option>
+                                        <option value="3">暂停招聘</option>
+                                        <option value="4">招聘超期</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label for="startTime" class="col-sm-4  control-label">提出时间</label>
+                                <div class="col-sm-8">
+                                    <!--<input type="date" name="startTime" id="startTime"  ng-model="sf_recruitment.startTime" class="form-control" />-->
+                                    <input type="text" name="startTime" id="startTime" datePicker ng-model="sf_recruitment.startTime"
+                                           class="form-control" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  onchange="" readonly/>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label for="deadline" class="col-sm-4  control-label">截止时间</label>
+                                <div class="col-sm-8">
+                                    <!--<input type="date" name="deadline" id="deadline"  ng-model="sf_recruitment.deadline" class="form-control" />-->
+                                    <input type="text" name="deadline" id="deadline" datePicker ng-model="sf_recruitment.deadline"
+                                           class="form-control" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  onchange="" readonly/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="c_center">
+                            <button id="keydown-query" class="btn btn-primary" ng-click="getRecruitmentByFilter()" style="margin-top: 27px;">查询</button>
+                            <button class="btn" ng-click="reset()" style="margin-top: 27px;">重置</button>
+                        </div>
+                    </div>
+                    <div class="table-responsive c-select-text" style="overflow:scroll;overflow-y:hidden">
+                    <div class="yws-container">
+                        <h4 class="yws-left">招聘需求列表</h4>
+                        <div class="yws-right">
+                            <button ng-if="showPermissions('CanAddRecruitmentNeed')" class="btn btn-success" ng-click="addRecruitment()" >新增招聘需求</button>
+                        </div>
+
+                    </div>
+
+                    <table st-pipe="getRecruitmentList" st-table="recruitments" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th width="10%">需求部门</th>
+                            <th width="10%">需求岗位</th>
+                            <th width="20%">岗位胜任力描述</th>
+                            <th width="10%">需求提出时间</th>
+                            <th width="10%">截止时间</th>
+                            <th width="10%">招聘进度</th>
+                            <th width="10%">简历库</th>
+                            <th width="10%">处理人</th>
+                            <th width="10%">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="recruitment in recruitments">
+                            <td>{{recruitment.department.name}}</td>
+                            <td>{{recruitment.position.name}}</td>
+                            <td>{{recruitment.description}}</td>
+                            <td>{{recruitment.startTime}}</td>
+                            <td>{{recruitment.deadline}}</td>
+                            <td style="position:relative">
+                                 <span style="position:absolute;width: 20px;left: 50%;margin-left:-10px;height: 16px;line-height: 16px;">
+                                    {{recruitment.completedCount}}/{{recruitment.recruitmentCount}}
+                                    </span>
+                                <!--已完成a6e22d-->
+                                <div ng-if="isFinish(recruitment)"
+                                     ng-style="{ 'backgroundColor':'#fe9900','width':'100%','height':'6px'}">
+                                </div>
+                                <!--未完成超时-->
+                                <div ng-if="!isFinish(recruitment) && isTimeout(recruitment)"
+                                     ng-style="{ 'backgroundColor':'#ff8486','width':'100%','height':'16px','borderRadius':'10px;'}">
+                                </div>
+                                <div ng-if="!isFinish(recruitment) && !isTimeout(recruitment) && !isPause(recruitment)"
+                                     ng-style="{ 'backgroundColor':'#5cb85c', 'width': (recruitment.completedCount/recruitment.recruitmentCount)*100 + '%','height':'16px'}">
+                                </div>
+                                <div ng-if="!isFinish(recruitment) && !isTimeout(recruitment) && isPause(recruitment)"
+                                     ng-style="{ 'backgroundColor':'#94A1A6', 'width': (recruitment.completedCount/recruitment.recruitmentCount)*100 + '%','height':'16px'}">
+                                </div>
+                            </td>
+                            <td>
+                                <a href="#/hr-admin/recruitmentTalent/{{recruitment.id}}"  title="查看简历库">
+                                    <span class="glyphicon glyphicon-yws-resume"></span>
+                                    ({{recruitment.resumeCount}})
+                                </a>
+                            </td>
+                            <td>{{recruitment.handler | handlerList}}</td>
+                            <td>
+                                <div>
+                                    <a ng-click="editRecruitment(recruitment)" title="修改">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </a>
+                                    <a ng-click="deleteRecruitment(recruitment)" title="删除">
+                                        <span class="glyphicon glyphicon-delete"></span>
+                                    </a>
+                                    <a ng-if="!isFinish(recruitment) && !isTimeout(recruitment) && isPause(recruitment)" ng-click="updateRecruitmentStatus(recruitment)" title="开始">
+                                        <span class="glyphicon glyphicon-yws-run"></span>
+                                    </a>
+                                    <a ng-if="!isFinish(recruitment) && !isTimeout(recruitment) && !isPause(recruitment)" ng-click="updateRecruitmentStatus(recruitment)" title="暂停">
+                                        &nbsp;&nbsp;<span class="glyphicon glyphicon-yws-stop"></span>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tbody ng-show="isLoading">
+                        <tr>
+                            <td colspan="13" class="text-center"><div class="loading-indicator"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="9">
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                </div>
+            </pane>
+        </tabs>
+    </div>
+</div>
+
+

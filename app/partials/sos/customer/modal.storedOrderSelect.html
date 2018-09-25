@@ -1,0 +1,45 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" ng-bind="courseOrderTitle"></h4>
+            </div>
+            <div class="modal-body pb-20">
+                <div class="br-gray pl-0">
+                    <table class="table table-bordered table-striped table-condensed mt-table1" st-pipe="getOrderCourseList" st-table="orderCourse">
+                        <thead>
+                        <tr>
+                            <th>合同编号</th>
+                            <th>订单类型</th>
+                            <th>签约时间</th>
+                            <th>增加账户金额</th>
+                            <th>账户余额</th>
+                            <th>计费方案</th>
+                            <th>师资挡位</th>
+                            <th>本年级单价</th>
+                        </tr>
+                        </thead>
+                        <tbody id="orderInfo">
+                        <tr ng-repeat="row in CustomerStudentCourseList" >
+                            <td >{{row.ordcourse_id}}</td>
+                            <td>{{row.order_type | orderType:row.order_type}}</td>
+                            <td >{{row.contract_start_date | date:'yyyy-MM-dd'}}</td>
+                            <td >{{row.total_price}}</td>
+                            <td>{{row.accountBalance}}</td>
+                            <td>{{row.scheme_name}}</td>
+                            <td>{{row.order_teacher_level_name}}</td>
+                            <td>{{row.order_charge}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" ng-click="cancle()">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

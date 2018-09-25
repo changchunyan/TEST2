@@ -1,0 +1,25 @@
+<div class="view-frame">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+
+    <div class="view-content">
+	    <div>
+		    <ul class="breadcrumb">
+		        <li><img ng-src="img/icon/bi/jiaowu.png" src="img/icon/bi/jiaowu.png"> 教务报表<span class="divider"></span></li>
+		        <li class="active">教师评价</li>
+		    </ul>
+		</div>
+        <tabs pane-changed="changeCurrentTab(selectedPane)">
+        	<pane title="教师日评">
+        		<div ng-include="'partials/bi/studentTeacherCommunication/studentTeacherCommunication.day.html'"></div>
+        	</pane>
+        	<pane title="教师月评">
+        		<div ng-include="'partials/bi/studentTeacherCommunication/studentTeacherCommunication.month.html'"></div>
+        	</pane>
+        	<pane title="评价汇总">
+        		<div ng-include="'partials/bi/studentTeacherCommunication/studentTeacherCommunication.summary.html'"></div>
+        	</pane>
+        </tabs>
+    </div>
+</div>

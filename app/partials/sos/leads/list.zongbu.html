@@ -1,0 +1,1690 @@
+<div class="view-frame" ng-controller="LeadsStudentController as lsc">
+
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+        <!--<div ng-include="'partials/common/common.indexLeft.html'"></div>-->
+    </div>
+    <!--LeadsStudent List view-->
+    <div ng-show="isList" class="view-content user-love">
+        <div>
+            <div>
+                <ul class="breadcrumb">
+                    <li><a href="#/">首页</a> <span class="divider"></span></li>
+                    <li><a href="#/fb-admin">前台业务</a> <span class="divider"></span></li>
+                    <li><a ng-click="showListView()">总部意向客户</a> <span class="divider"></span></li>
+                    <li class="active">意向客户列表</li>
+                </ul>
+            </div>
+            <div class="mt-10">
+                <div class="tabs-title border-1 c3">总部意向客户<span class="prl" ng-controller="callPhoneCtrl" ng-if="!isCallCenterMaster() && canCallPhone"><input class="f14 pl-10"
+                                                                                                                                                               placeholder="请输入电话号码" type="text" name="leadsPhone" id="leadsPhone" maxlength="14" ng-minlength="1" required><a class="a-call" ng-click="callPhoneAtHead()"></a></span><img src="img/icon/util/wen.png" style="width:18px;height:18px;float: right" class="hide"></div>
+
+                <div class="mt-student-m">
+                    <ul class="f14 cf">
+                        <li ng-if="showPermissions('phoneComplaint')"><a class="mt-tousu" ng-click="showPhoneComplaint()">标记为投诉</a></li>
+                        <li ng-if="showPermissions('LeadsImportModalDownload')"><a class="mt-purple" ng-click="showImportModal()">新增</a></li>
+                        <li ng-if="showPermissions('LeadsAllot') || showPermissions('SchoolLeadsAllot')"><a class="mt-gree" ng-click="showSpecialBatchAllotView()"  style="padding-right: 15px">批量分配</a></li>
+                        <li ng-if="showPermissions('LeadsAllot') || showPermissions('SchoolLeadsAllot')"><a class="mt-gree" ng-click="showSpecialAllotView()">分配</a></li>
+                    </ul>
+                </div>
+                <div class="br-gray mt-list">
+                    <h2 class="pl-20 c3">总部意向客户
+                    	<span class="vertical-align-bottom fr"><input type="checkbox" ng-click="quickSelectedException()">过滤异常客户</span>
+						<span class="vertical-align-bottom fr"><input type="checkbox" ng-click="quickSelectGraduation()" checked="isSelectedGraduation">过滤高中毕业意向客户</span>
+                    </h2>
+                    <div class="overflow-x">
+                        <table class="table table-bordered table-striped table-condensed mt-table1" st-pipe="getSchoolCrmLeadsStudentList" st-table="schoolCrmLeadsStudentList">
+                            <thead>
+                            <tr class="br-gray-t">
+                                <th>客户类型</th>
+                                <th>姓名</th>
+                                <th>电话</th>
+                                <th>异常标识</th>
+                                <th>年级</th>
+                                <th>公立学校</th>
+                                <th>渠道来源</th>
+                                <th>来源详情</th>
+                                <th>客户状态</th>
+                                <th>历史在读</th>
+                                <th>记录</th>
+                                <!--<th>状态详情 </th>-->
+                                <th>意向程度</th>
+                                <th id="goutong">上次沟通</th>
+                                <th>下次跟进时间</th>
+                                <th>所属校区</th>
+                                <th>创建时间</th>
+                                <th>创建人</th>
+                                <th>所属人</th>
+                                <th>推荐人</th>
+                                <th>操作</th>
+                            </tr>
+                            <tr>
+                                <!--<th style="line-height: 30px;"><span>查询条件</span></th>-->
+                                <th>
+                                    <select st-search="schoolCrmLeadsStudentFilter.leadsProperty" ng-model="schoolCrmLeadsStudentFilter.leadsProperty"
+                                            name="schoolCrmLeadsStudentFilter.leadsProperty" id="schoolCrmLeadsStudentFilter.leadsProperty" class="input-sm form-control"
+                                            ng-options="option.id as option.name for option in LEADS_PROPERTYS" type="search">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </th>
+                                <th>
+                                    <input st-search="schoolCrmLeadsStudentFilter.name" placeholder="姓名查询" ng-model="schoolCrmLeadsStudentFilter.name" class="input-sm form-control" type="search"/>
+                                </th>
+                                <th>
+                                    <input st-search="schoolCrmLeadsStudentFilter.phone" placeholder="电话查询" ng-model="schoolCrmLeadsStudentFilter.phone" class="input-sm form-control" type="search"/>
+                                </th>
+                                <th>
+                                    <select st-search="schoolCrmLeadsStudentFilter.exception_id" ng-model="schoolCrmLeadsStudentFilter.exception_id"
+                                            name="schoolCrmLeadsStudentFilter.exception_id" id="schoolCrmLeadsStudentFilter.exception_id" class="input-sm form-control"
+                                            ng-options="option.id as option.name for option in exceptionIds" type="search">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </th>
+                                <th>
+                                    <select st-search="schoolCrmLeadsStudentFilter.grade_id" ng-model="schoolCrmLeadsStudentFilter.grade_id"
+                                            name="schoolCrmLeadsStudentFilter.grade_id" id="schoolCrmLeadsStudentFilter.grade_id" class="input-sm form-control"
+                                            ng-options="option.id as option.name for option in gradeIds" type="search">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </th>
+                                <th>
+                                    <input st-search="schoolCrmLeadsStudentFilter.school_name" placeholder="公立学校" ng-model="schoolCrmLeadsStudentFilter.school_name" class="input-sm form-control" type="search"/>
+                                </th>
+                                <th ng-if="!isO2OOperationSpecialist()">
+                                    <select st-search="schoolCrmLeadsStudentFilter.media_channel_id_1" ng-model="schoolCrmLeadsStudentFilter.media_channel_id_1"
+                                            name="schoolCrmLeadsStudentFilter.media_channel_id_1" id="schoolCrmLeadsStudentFilter.media_channel_id_1" class="input-sm form-control"
+                                            ng-options="option.id as option.name for option in mediaChannel1List" ng-change="mediaChannel1ChangeForFilter()" type="search">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </th>
+                                <th ng-if="isO2OOperationSpecialist()">
+                                    <select st-search="schoolCrmLeadsStudentFilter.media_channel_id_1" ng-model="schoolCrmLeadsStudentFilter.media_channel_id_1"
+                                            name="schoolCrmLeadsStudentFilter.media_channel_id_1" id="schoolCrmLeadsStudentFilter.media_channel_id_1" class="input-sm form-control"
+                                            ng-options="option.id as option.name for option in mediaChannel1List" disabled>
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </th>
+                                <th>
+                                    <select ng-model="schoolCrmLeadsStudentFilter.media_channel_id_2" st-search="schoolCrmLeadsStudentFilter.media_channel_id_2"
+                                            name="schoolCrmLeadsStudentFilter.media_channel_id_2" id="schoolCrmLeadsStudentFilter.media_channel_id_2" class="input-sm form-control"
+                                            ng-options="option.id as option.name for option in mediaChannel2ListForMyFilter" type="search">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </th>
+                                <th>
+                                    <select ng-model="schoolCrmLeadsStudentFilter.state_id_1" st-search="schoolCrmLeadsStudentFilter.state_id_1"
+                                            name="schoolCrmLeadsStudentFilter.state1_id_1" id="schoolCrmLeadsStudentFilter.state1_id_1" class="input-sm form-control"
+                                            ng-options="option.id as option.name for option in state1List" ng-change="state1ChangeForFilter()" type="search">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </th>
+                                <th>
+                                    <select ng-model="schoolCrmLeadsStudentFilter.status" st-search="schoolCrmLeadsStudentFilter.status"
+                                            name="schoolCrmLeadsStudentFilter.status" id="schoolCrmLeadsStudentFilter.status" class="input-sm form-control"
+                                            ng-options="option.value as option.name for option in StudentStatus" type="search">
+                                        <option value="">请选择</option>
+                                    </select>
+                                </th>
+                                <!--<th>
+                                    <select ng-model="schoolCrmLeadsStudentFilter.state_id_2" st-search="schoolCrmLeadsStudentFilter.state_id_2"
+                                            name="schoolCrmLeadsStudentFilter.state_id_2" id="schoolCrmLeadsStudentFilter.state_id_2" class="input-sm form-control"
+                                            ng-options="option.id as option.name for option in state2List" type="search">
+                                        <option value="">&#45;&#45; 请选择 &#45;&#45;</option>
+                                    </select>
+                                </th>-->
+                                <th></th>
+                                <th>
+                                    <select ng-model="schoolCrmLeadsStudentFilter.purposeLevel" st-search="schoolCrmLeadsStudentFilter.purposeLevel"
+                                            name="schoolCrmLeadsStudentFilter.purposeLevel" id="schoolCrmLeadsStudentFilter.purposeLevel" class="input-sm form-control"
+                                            ng-options="option.value as option.name for option in purposeLevel" type="search">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </th>
+                                <th class="row">
+                                    <select style="width: 60%;" ng-model="schoolCrmLeadsStudentFilter.sortType" st-search="schoolCrmLeadsStudentFilter.sortType"
+                                            name="schoolCrmLeadsStudentFilter.sortType" id="schoolCrmLeadsStudentFilter.sortType" class="input-sm form-control col-sm-6"
+                                            ng-options="option.value as option.name for option in sortType" type="search">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                    <input style="width: 40%;" st-search="schoolCrmLeadsStudentFilter.sortDate" placeholder="天数" ng-model="schoolCrmLeadsStudentFilter.sortDate" class="input-sm form-control col-sm-6" type="number" ng-pattern="/^[0-9]*$/"/>
+                                </th>
+                                <th>
+                                    <!-- <input ng-model="schoolCrmLeadsStudentFilter.follow_up_at" st-search="schoolCrmLeadsStudentFilter.follow_up_at" type="text" datepicker
+                                    onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly  onchange=""  class="input-sm form-control" type="search"/> -->
+                                    <input ng-model="schoolCrmLeadsStudentFilter.follow_up_at" st-search="schoolCrmLeadsStudentFilter.follow_up_at" type="date" class="input-sm form-control" type="search"/>
+                                </th>
+                                <th></th>
+                                <th>
+                                    <input ng-model="schoolCrmLeadsStudentFilter.create_at" st-search="schoolCrmLeadsStudentFilter.create_at" type="date" class="input-sm form-control" type="search"/>
+                                </th>
+                                <th colspan="2">
+                                    <input ng-model="schoolCrmLeadsStudentFilter.belong_user_name" st-search="myCrmLeadsStudentFilter.belong_user_name" placeholder="所属人查询" class="input-sm form-control" type="search"/>
+                                </th>
+                                <th colspan="2">
+                                    <input st-search="schoolCrmLeadsStudentFilter.inviter_name" placeholder="推荐人查询" ng-model="schoolCrmLeadsStudentFilter.inviter_name" class="input-sm form-control" type="search"/>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody ng-show="!isSchoolLoading" ng-controller="callPhoneCtrl">
+                            <tr ng-repeat="row in schoolCrmLeadsStudentList">
+                                <td >
+                                    <a id="nwjp+{{$index}}"  ng-click="nwjp[$index]=true">
+                                        <span ng-if="row.leadsProperty != 2" class="leads-proterty-mo">陌</span>
+                                        <span ng-if="row.leadsProperty == 2" class="leads-proterty-zhong">重</span>
+                                    </a>
+                                    <bubble  ng-if="nwjp[$index]" for="nwjp+{{$index}}" align="bottom" close="nwjp[$index]=false" close-action="outerchick " ng-mouseleave="nwjp[$index]=false;"><!--ng-mouseleave="nwjp[$index]=false;"-->
+                                        <ul>
+                                            <li ng-class="{true: 'active', false: ''}[row.leadsProperty != 2]" ng-click="changeLeadsProterty(row,1)">
+                                                <a >陌拜</a>
+                                            </li>
+                                            <li ng-class="{true: 'active', false: ''}[row.leadsProperty == 2]"  ng-click="changeLeadsProterty(row,2)">
+                                                <a >重点跟踪</a>
+                                            </li>
+                                        </ul>
+                                    </bubble>
+                                </td>
+                                <td>{{row.name}}</td>
+                                <!--<td>{{row.phone}}</td>-->
+                                <td><!--{{row.phone}}-->
+                                    <a ng-click="callNumber(row,true)">
+                                        <span ng-if="!ifLastCommunicated(row)" class="glyphicon glyphicon-tel" title="未拨打"></span>
+                                        <span ng-if="ifLastCommunicated(row)" class="glyphicon glyphicon-tel2" title="已拨打"></span>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a id="nwj+{{$index}}"  ng-click="nwj[$index]=true">
+                                        <span ng-if="row.exception_status ==1 || !row.exception_status" class="glyphicon glyphicon-yichang wyc" title="无异常"></span>
+                                        <span ng-if="row.exception_status ==2" class="glyphicon glyphicon-yichang2" title="已经报名"></span>
+                                        <span ng-if="row.exception_status ==3" class="glyphicon glyphicon-yichang2" title="要求别打"></span>
+                                        <span ng-if="row.exception_status ==4" class="glyphicon glyphicon-yichang2" title="出国"></span>
+                                        <span ng-if="row.exception_status ==5" class="glyphicon glyphicon-yichang2" title="不念了"></span>
+                                        <span ng-if="row.exception_status ==6" class="glyphicon glyphicon-yichang2" title="不在本地"></span>
+                                    </a>
+                                    <bubble  ng-if="nwj[$index]" for="nwj+{{$index}}" align="bottom" close="nwj[$index]=false" close-action="outerchick "><!--ng-mouseleave="nwj[$index]=false;"-->
+                                        <ul>
+                                            <li ng-class="{true: 'active', false: ''}[row.exception_status ==1 || !row.exception_status]" ng-click="changeExceptionStatus(row,1)">
+                                                <a >无异常</a>
+                                            </li>
+                                            <li ng-class="{true: 'active', false: ''}[row.exception_status ==2]"  ng-click="changeExceptionStatus(row,2)">
+                                                <a >已经报名</a>
+                                            </li>
+                                            <li ng-class="{true: 'active', false: ''}[row.exception_status ==3]"  ng-click="changeExceptionStatus(row,3)">
+                                                <a >要求别打</a>
+                                            </li>
+                                            <li ng-class="{true: 'active', false: ''}[row.exception_status ==4]"  ng-click="changeExceptionStatus(row,4)">
+                                                <a >出国</a>
+                                            </li>
+                                            <li ng-class="{true: 'active', false: ''}[row.exception_status ==5]"  ng-click="changeExceptionStatus(row,5)">
+                                                <a >不念了</a>
+                                            </li>
+                                            <li ng-class="{true: 'active', false: ''}[row.exception_status ==6]"  ng-click="changeExceptionStatus(row,6)">
+                                                <a >不在本地</a>
+                                            </li>
+                                        </ul>
+                                    </bubble>
+                                </td>
+                                <td>{{row.grade_name}}</td>
+                                <td>{{row.school_name}}</td>
+                                <td>{{row.channel1Name}}</td>
+                                <td>{{row.channel2Name}}</td>
+                                <td>{{row.state1Name}}</td>
+                                <td>
+                                    <div ng-if="row.status == 2">结课</div>
+                                    <div ng-if="row.status == 4">退费</div>
+                                    <div ng-if="row.status == 5">转课</div>
+                                    <div ng-if="row.status == null">&nbsp;</div>
+                                </td>
+                                <td><a ng-click="showRecordModal(row)">查看</a></td>
+                                <!--<td>{{row.state2Name}}</td>-->
+                                <td>
+                                    <span ng-if="row.purpose_level && row.purpose_level == 1">高</span>
+                                    <span ng-if="row.purpose_level && row.purpose_level == 2">一般</span>
+                                    <span ng-if="row.purpose_level && row.purpose_level == 3">暂无</span>
+                                    <span ng-if="!row.purpose_level || (row.purpose_level && row.purpose_level == 4)">未标记</span>
+                                </td>
+                                <td>
+                                    <span ng-if="row.goutong && row.goutong != 1 && row.goutong != 2">{{row.goutong}}天前
+                                    </span>
+                                    <span ng-if="row.goutong == 1">昨天</span>
+                                    <span ng-if="row.goutong == 2">前天</span>
+                                    <div ng-if="!row.goutong && row.goutong != 0">无沟通<a ng-click="addInvitationCommunication(row)"><span class="glyphicon glyphicon-add-yuan" title="新增沟通"></span></a></div>
+                                    <div ng-if="!row.goutong && row.goutong == 0">今天<a ng-click="addInvitationCommunication(row)"><span class="glyphicon glyphicon-add-yuan" title="新增沟通"></span></a></div>
+                                </td>
+
+                                <td>{{row.follow_up_at | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                                <td>{{row.belong_school_name}}</td>
+                                <td>{{row.create_at  | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                                <td>{{row.create_by}}</td>
+                                <td>{{row.belong_user_name}}</td>
+                                <td>{{row.inviter_name}}</td>
+                                <td>
+                                    <a class="showUI" id="nw+{{$index}}"  ng-click="nw[$index]=true"><span class="glyphicon glyphicon-caozuo" title="操作"></span></a>
+                                    <bubble  ng-if="nw[$index]" for="nw+{{$index}}" align="bottom" close="nw[$index]=false" close-action="outerchick " ng-mouseleave="nw[$index]=false;"><!--ng-mouseleave="nw[$index]=false;"-->
+                                        <ul>
+                                            <li ng-if="showPermissions('LeadsView')">
+                                                <a ng-click="viewCrmLeadsStudent(row)" >查看</a>
+                                            </li>
+                                            <li ng-if="showPermissions('LeadsEdit')  && canEditAndDelete(row.belong_user_id)">
+                                                <a ng-click="editCrmLeadsStudent(row)" >编辑</a>
+                                            </li>
+                                            <li ng-if="(showPermissions('LeadsAllot') || showPermissions('SchoolLeadsAllot')) && !isO2OOperationSpecialist()">
+                                                <a ng-click="distributeLeadsStudent(row)" >分配</a>
+                                            </li>
+                                            <!--<li ng-if="!isCallCenterMaster()">
+                                                <a ng-click="callNumber(row)" >拨号</a>
+                                            </li>-->
+                                            <li ng-if="!isO2OOperationSpecialist()">
+                                                <a ng-click="addInvitationDetailByList(row)">邀约</a>
+                                            </li>
+                                            <li  ng-if="showPermissions('FreeListening')">
+                                                <a ng-click="addCoursePlanInfo(row,3)" >排试听</a>
+                                            </li>
+
+                                            <li ng-if="showPermissions('LeadsOrderAdd')">
+                                                <a ng-click="addCrmLeadsStudentOrder(row)"  >录订单</a>
+                                            </li>
+                                            <li ng-if="showPermissions('LeadsDelete')  && canEditAndDelete(row.belong_user_id) && !(row.u_id)">
+                                                <a ng-click="deleteCrmLeadsStudent(row)" >删除</a>
+                                            </li>
+
+                                        </ul>
+                                    </bubble>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tbody ng-show="isSchoolLoading">
+                            <tr>
+                                <td colspan="20" class="text-center"><div class="loading-indicator"></div>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="20">
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- add LeadsStudent view -->
+    <div ng-show="isAdding" class="view-content">
+        <div>
+            <div>
+                <ul class="breadcrumb">
+                    <li><a href="#/">首页</a> <span class="divider"></span></li>
+                    <li><a href="#/fb-admin">前台业务</a> <span class="divider"></span></li>
+                    <li><a ng-click="showListView()">总部意向客户</a> <span class="divider"></span></li>
+                    <li class="active">意向客户添加</li>
+                </ul>
+            </div>
+        </div>
+        <div class="details-title">意向客户添加 <span style="color:#Fc990a" ng-if='isCalling'>-------通话中</span></div>
+        <div class="details-body height830">
+            <div class="details-content">
+                <form name="addLeadsForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                    <div class="tab-panel">
+                        <div class="row">
+                            <div class="col-sm-4 form-group">
+                                <label for="leadsName" class="col-sm-4 control-label">* 客户姓名</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="leadsName" id="leadsName" placeholder="1到20个字符" class="form-control" ng-model=" CrmLeadsStudentVoForCreate.name" ng-maxlength="20" ng-minlength="1" required/>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label for="phone" class="col-sm-4 control-label">* 客户电话</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="phone" id="phone" class="form-control" ng-model="CrmLeadsStudentVoForCreate.phone" required ng-pattern="/^[0-9]*$/" ng-maxlength="11" ng-blur="repeatFroCreate(CrmLeadsStudentVoForCreate.phone)"/>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label for="age" class="col-sm-4 control-label">* 客户年龄</label>
+                                <div class="col-sm-8">
+                                    <input type="number" name="age" id="age" class="form-control" ng-model=" CrmLeadsStudentVoForCreate.age" ng-maxlength="2"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 form-group">
+                                <label for="mother_name" class="col-sm-4 control-label">* 母亲姓名</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="mother_name" id="mother_name" class="form-control" ng-model="CrmLeadsStudentVoForCreate.mother_name" ng-maxlength="20" ng-minlength="1" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label for="mother_phone" class="col-sm-4 control-label">* 母亲电话</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="mother_phone" id="mother_phone" class="form-control" ng-model="CrmLeadsStudentVoForCreate.mother_phone" ng-pattern="/^[0-9]*$/" ng-maxlength="11" ng-blur="repeatFroCreate(CrmLeadsStudentVoForCreate.mother_phone)"/>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group" >
+                                <label for="CrmLeadsStudentVoForCreate.gender" class="col-sm-4 control-label">* 客户性别</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="CrmLeadsStudentVoForCreate.gender" name="gender" id="CrmLeadsStudentVoForCreate.gender" class="form-control" ng-options="option.value as option.name for option in genders">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 form-group">
+                                <label for="father_name" class="col-sm-4 control-label">* 父亲姓名</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="father_name" id="father_name" class="form-control" ng-model="CrmLeadsStudentVoForCreate.father_name" ng-maxlength="20" ng-minlength="1" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label for="father_phone" class="col-sm-4 control-label">* 父亲电话</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="father_phone" id="father_phone" class="form-control" ng-model="CrmLeadsStudentVoForCreate.father_phone" ng-pattern="/^[0-9]*$/" ng-maxlength="11" ng-blur="repeatFroCreate(CrmLeadsStudentVoForCreate.father_phone)"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 form-group">
+                                <label for="school_name" class="col-sm-4 control-label">* 公立学校</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="school_name" id="school_name" class="form-control" ng-model="CrmLeadsStudentVoForCreate.school_name" ng-maxlength="50"/>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label for="grade_id" class="col-sm-4 control-label">* 所在年级</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="CrmLeadsStudentVoForCreate.grade_id" name="grade_id" id="grade_id" class="form-control" ng-options="option.id as option.name for option in gradeIds" required>
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label for="subject_id" class="col-sm-4 control-label">* 咨询科目</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="CrmLeadsStudentVoForCreate.subject_id" name="subject_id" id="subject_id" class="form-control" ng-options="option.id as option.name for option in subjectIds">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 form-group">
+                                <label for="state_id_1" class="col-sm-4 control-label">* 客户状态</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="CrmLeadsStudentVoForCreate.state_id_1" name="state_id_1" id="state_id_1" class="form-control"
+                                            ng-options="option.id as option.name for option in state1List" ng-change="state1Change()" required disabled="disabled">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- <div class="col-sm-4 form-group">
+                                <label for="state_id_2" class="col-sm-4 control-label">* 状态详情</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="CrmLeadsStudentVoForCreate.state_id_2" name="state_id_2" id="state_id_2" class="form-control"
+                                            ng-options="option.id as option.name for option in state2List" disabled="disabled">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+                            </div> -->
+                            <!--<div class="col-sm-4 form-group">
+                                <label for="time" class="col-sm-4 control-label">* 时间选择</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="time" id="time" class="form-control" value="{{mytime | date:'HH:mm:ss'}}" ng-click="showTimePiker()"/>
+                                    <section style="display:inline-block; min-height:240px;position: absolute;z-index: 99;" ng-show="timePikerShow">
+                                        <div ng-model="mytime" ng-change="changed()" class="well well-small" style="display:inline-block;">
+                                            <timepicker hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+                                            <button class="btn btn-danger" ng-click="clear()">清除</button>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>-->
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 form-group">
+                                <label for="media_channel_id_1" class="col-sm-4 control-label">* 渠道来源</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="CrmLeadsStudentVoForCreate.media_channel_id_1" name="media_channel_id_1" id="media_channel_id_1" class="form-control"
+                                            ng-options="option.id as option.name for option in mediaChannel1List" ng-change="mediaChannel1Change()" required>
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group" ng-if="mediaChannel2List.length > 0">
+                                <label for="media_channel_id_2" class="col-sm-4 control-label">* 渠道详情</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="CrmLeadsStudentVoForCreate.media_channel_id_2" name="media_channel_id_2" id="media_channel_id_2" class="form-control"
+                                            ng-options="option.id as option.name for option in mediaChannel2List" required>
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!--<div class="col-sm-4 form-group">
+                                <label for="dt" class="col-sm-4 control-label">* 日期选择</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="dt" id="dt" class="form-control" value="{{dt | date:'yyyy-MM-dd'}}" ng-click="showDatePiker()"/>
+                                    <section style="display:inline-block; min-height:240px;position: absolute;z-index: 99;background: white" ng-show="datePikerShow">
+                                        <datepicker ng-model="dt" min-date="minDate" show-weeks="false" class="wellwell-sm" ng-change="dateChange()"></datepicker>
+                                        <div style="text-align: center">
+                                            <button type="button" class="btn btn-success btn-sm" ng-click="today()">今天</button>
+                                            <button type="button" class="btn btn-sm btn-danger" ng-click="clear()" >清除</button>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>-->
+                        </div>
+                        <div class="row">
+                            <!-- <div class="col-sm-4 form-group">
+                                <label for="isPurpose" class="col-sm-4 control-label">* 是否意向</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="CrmLeadsStudentVoForCreate.isPurpose" name="isPurpose" id="isPurpose" class="form-control" required>
+                                        <option value="">-- 请选择 --</option>
+                                        <option value="true">是</option>
+                                        <option value="false">否</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group" ng-if="CrmLeadsStudentVoForCreate.isPurpose == 'true'">
+                                <label for="purposeMony" class="col-sm-4 control-label">* 意向金额</label>
+                                <div class="col-sm-8">
+                                    <input type="number" name="purposeMony" id="purposeMony" class="form-control" ng-model="CrmLeadsStudentVoForCreate.purposeMony" ng-pattern="/^[0-9]*$/" ng-maxlength="10" required/>
+                                </div>
+                            </div> -->
+                            <div class="col-sm-4 form-group">
+                                <label for="CrmLeadsStudentVoForCreate.purposeLevel" class="col-sm-4 control-label">* 意向程度</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="CrmLeadsStudentVoForCreate.purposeLevel"
+                                        name="CrmLeadsStudentVoForCreate.purposeLevel" id="CrmLeadsStudentVoForCreate.purposeLevel" class="form-control"
+                                        ng-options="option.value as option.name for option in purposeLevel" type="search">
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 form-group">
+                                <label for="province_code" class="col-sm-4 control-label">所属省</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="CrmLeadsStudentVoForCreate.province_code" name="province_code" id="province_code" class="form-control"
+                                            ng-options="option.provinceCode as option.provinceName for option in provinceList" ng-change="provinceChange()">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label for="city_code" class="col-sm-4 control-label">所属市</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="CrmLeadsStudentVoForCreate.city_code" name="city_code" id="city_code" class="form-control"
+                                            ng-options="option.cityCode as option.cityName for option in cityList" ng-change="cityChange()">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <label for="area_code" class="col-sm-4 control-label">所属区(县)</label>
+                                <div class="col-sm-8">
+                                    <select ng-model="CrmLeadsStudentVoForCreate.area_code" name="area_code" id="area_code" class="form-control"
+                                            ng-options="option.areaCode as option.areaName for option in areaList">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 ">
+                                <textarea style="width: 80%;"  ng-model="CrmLeadsStudentVoForCreate.customer_requirement" name="customer_requirement" id="customer_requirement" placeholder="用户需求..." class="form-control" rows="3" ng-maxlength="500"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center padding-20-0">
+                        <button class="btn btn-success c5-lable" ng-disabled="addLeadsForm.$invalid" ng-click="createLeadsStudent()">保存</button>
+                        <!--<button class="btn btn-success" ng-click="createLeadsStudent(form)">保存</button>-->
+                        <button class="btn btn-default" ng-click="showListView()">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- update LeadsStudent view -->
+    <div ng-show="isUpdate" class="view-content">
+        <div>
+            <div>
+                <ul class="breadcrumb">
+                    <li><a href="#/">首页</a> <span class="divider"></span></li>
+                    <li><a href="#/fb-admin">前台业务</a> <span class="divider"></span></li>
+                    <li><a ng-click="showListView()">总部意向客户</a> <span class="divider"></span></li>
+                    <li class="active">意向客户更新</li>
+                </ul>
+            </div>
+        </div>
+        <div class="details-title">意向客户编辑</div>
+        <div class="tabs-wrap height900">
+            <form name="updateLeadsForm" role="form" class="form-horizontal showcase-form table-responsive" novalidate="">
+                <div class="tab-panel">
+                    <div class="row">
+                        <div class="col-sm-4 form-group">
+                            <label for="leadsName" class="col-sm-4 control-label">* 客户姓名</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="leadsName" id="leadsName_for_update" ng-model="detailForUpdate.name" placeholder="1到20个字符" class="form-control" ng-maxlength="20" ng-minlength="2" required/>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 form-group">
+                            <label for="phone" class="col-sm-4 control-label">* 客户电话</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="phone" id="phone_for_update" class="form-control" ng-model="detailForUpdate.phone" required ng-pattern="/^[0-9]*$/" ng-maxlength="11" ng-change="repeatFroCreate(detailForUpdate.phone)"/>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 form-group">
+                            <label for="age" class="col-sm-4 control-label">* 出生年月</label>
+                            <div class="col-sm-8">
+                                <input ng-model="detailForUpdate.birthDate" name="birthDate" readonly onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'1990-01-01',maxDate:'2030-12-31'})" class="form-control"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 form-group">
+                            <label for="mother_name" class="col-sm-4 control-label">* 母亲姓名</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="mother_name" id="mother_name_for_update" class="form-control" ng-model="detailForUpdate.mother_name" ng-maxlength="20" ng-minlength="1"/>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 form-group">
+                            <label for="mother_phone" class="col-sm-4 control-label">* 母亲电话</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="mother_phone" id="mother_phone_for_update" class="form-control" ng-model="detailForUpdate.mother_phone" ng-pattern="/^[0-9]*$/" ng-maxlength="11" ng-change="repeatFroCreate(detailForUpdate.mother_phone)"/>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 form-group" >
+                            <label for="gender_for_update" class="col-sm-4 control-label">* 客户性别</label>
+                            <div class="col-sm-8">
+                                <select ng-model="detailForUpdate.gender" name="gender" id="gender_for_update" class="form-control" ng-options="option.value as option.name for option in genders">
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-sm-4 form-group">
+                            <label for="father_name" class="col-sm-4 control-label">* 父亲姓名</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="father_name" id="father_name_for_update" class="form-control" ng-model="detailForUpdate.father_name" ng-maxlength="20" ng-minlength="1"/>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 form-group">
+                            <label for="father_phone" class="col-sm-4 control-label">* 父亲电话</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="father_phone" id="father_phone_for_update" class="form-control" ng-model="detailForUpdate.father_phone" ng-pattern="/^[0-9]*$/" ng-maxlength="11" ng-change="repeatFroCreate(detailForUpdate.father_phone)"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 form-group">
+                            <label for="school_name" class="col-sm-4 control-label">* 公立学校</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="school_name" id="school_name_for_update" class="form-control" ng-model="detailForUpdate.school_name" ng-maxlength="50"/>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 form-group">
+                            <label for="grade_id" class="col-sm-4 control-label">* 所在年级</label>
+                            <div class="col-sm-8">
+                                <select ng-model="detailForUpdate.grade_id" name="grade_id" id="grade_id_for_update" class="form-control" ng-options="option.id as option.name for option in gradeIds" required>
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 form-group">
+                            <label for="subject_id" class="col-sm-4 control-label">* 咨询科目</label>
+                            <div class="col-sm-8">
+                                <select ng-model="detailForUpdate.subject_id" name="subject_id" id="subject_id_for_update" class="form-control" ng-options="option.id as option.name for option in subjectIds">
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 form-group">
+                            <label for="state_id_1" class="col-sm-4 control-label">* 客户状态</label>
+                            <div class="col-sm-8">
+                                <select ng-model="detailForUpdate.state_id_1" name="state_id_1" id="state_id_1_for_update" class="form-control"
+                                        ng-options="option.id as option.name for option in state1List" ng-change="state1ChangeForUpdate()" required disabled="disabled">
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 form-group">
+                            <label for="detailForUpdate.followUpAt" class="col-sm-4 control-label">* 下次跟进时间</label>
+                            <div class="col-sm-8">
+                                <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd H:mm:ss'})"   name="detailForUpdate.followUpAt"  class="form-control"
+                                       ng-model="detailForUpdate.followUpAt" ng-value="{{ detailForUpdate.followUpAt  }}" onchange=""  readonly  />
+                            </div>
+                        </div>
+                        <!-- <div class="col-sm-4 form-group">
+                            <label for="state_id_2" class="col-sm-4 control-label">* 状态详情</label>
+                            <div class="col-sm-8">
+                                <select ng-model="detailForUpdate.state_id_2" name="state_id_2" id="state_id_2_for_update" class="form-control"
+                                        ng-options="option.id as option.name for option in state2List" disabled="disabled">
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </div>
+                        </div> -->
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 form-group">
+                            <label for="media_channel_id_1" class="col-sm-4 control-label">* 渠道来源</label>
+                            <div class="col-sm-8">
+                                <select ng-model="detailForUpdate.media_channel_id_1" name="media_channel_id_1" id="media_channel_id_1_for_update" class="form-control"
+                                        ng-options="option.id as option.name for option in mediaChannel1List" ng-change="mediaChannel1ChangeForUpdate()" disabled readonly="readonly" required>
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 form-group" ng-if="detailForUpdate.media_channel_id_2">
+                            <label for="media_channel_id_2" class="col-sm-4 control-label">* 渠道详情</label>
+                            <div class="col-sm-8">
+                                <select ng-model="detailForUpdate.media_channel_id_2" name="media_channel_id_2" id="media_channel_id_2_for_update" class="form-control"
+                                        ng-options="option.id as option.name for option in mediaChannel2List" disabled readonly="readonly">
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- <div class="col-sm-4 form-group">
+                            <label for="isPurpose" class="col-sm-4 control-label">* 是否意向</label>
+                            <div class="col-sm-8">
+                                <select ng-model="detailForUpdate.isPurpose" name="isPurpose" id="isPurpose" class="form-control"
+                                        ng-options="option.value as option.name for option in trueOrFalse" required>
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 form-group" ng-if="detailForUpdate.isPurpose">
+                            <label for="purposeMony" class="col-sm-4 control-label">* 意向金额</label>
+                            <div class="col-sm-8">
+                                <input type="number" name="purposeMony" id="purposeMony" class="form-control" ng-model="detailForUpdate.purposeMony" ng-pattern="/^[0-9]*$/" ng-maxlength="10" required/>
+                            </div>
+                        </div> -->
+
+                        <div class="col-sm-4 form-group">
+                            <label for="detailForUpdate.purposeLevel" class="col-sm-4 control-label">* 意向程度</label>
+                            <div class="col-sm-8">
+                                <select ng-model="detailForUpdate.purposeLevel"
+                                    name="detailForUpdate.purposeLevel" id="detailForUpdate.purposeLevel" class="form-control"
+                                    ng-options="option.value as option.name for option in purposeLevel">
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 form-group">
+                            <label for="province_code" class="col-sm-4 control-label">所属省</label>
+                            <div class="col-sm-8">
+                                <select ng-model="detailForUpdate.province_code" name="province_code" id="province_code_for_update" class="form-control"
+                                        ng-options="option.provinceCode as option.provinceName for option in provinceList" ng-change="provinceChangeForUpdate()">
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 form-group">
+                            <label for="city_code" class="col-sm-4 control-label">所属市</label>
+                            <div class="col-sm-8">
+                                <select ng-model="detailForUpdate.city_code" name="city_code" id="city_code_for_update" class="form-control"
+                                        ng-options="option.cityCode as option.cityName for option in cityList" ng-change="cityChangeForUpdate()">
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 form-group">
+                            <label for="area_code" class="col-sm-4 control-label">所属区(县)</label>
+                            <div class="col-sm-8">
+                                <select ng-model="detailForUpdate.area_code" name="area_code" id="area_code_for_update" class="form-control"
+                                        ng-options="option.areaCode as option.areaName for option in areaList">
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 form-group">
+                            <div class="col-sm-12 text-center">
+                                <textarea ng-model="detailForUpdate.customer_requirement" name="customer_requirement" id="customer_requirement_for_update" placeholder="用户需求..." class="form-control width80" rows="3" ng-maxlength="500"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <input type="hidden" ng-model="detailForUpdate.crm_student_id"/>
+                    <button class="btn btn-success c5-lable" ng-disabled="updateLeadsForm.$invalid" ng-click="updateLeadsStudent()">保存</button>
+                    <button class="btn btn-default" ng-click="showListView()">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!--LeadsStudent Detail view-->
+    <div ng-if="isDetail" class="view-content2">
+
+        <div>
+            <div>
+                <ul class="breadcrumb">
+                    <li><a href="#/">首页</a> <span class="divider"></span></li>
+                    <li><a href="#/fb-admin">前台业务</a> <span class="divider"></span></li>
+                    <li><a ng-click="showListView()">总部意向客户</a> <span class="divider"></span></li>
+                    <li class="active">意向客户详情</li>
+                </ul>
+            </div>
+        </div>
+        <div class="details-title">意向客户详情
+            <span style="color:#Fc990a" ng-if='isCalling'>-------通话中</span>
+            <img ng-if='isCalling' src="img/icon/util/wen.png" class="icon-wen" style="width: 18px;height:18px;margin-left: 20px;" id="calling">
+            <div class="leads-top-btn">
+
+
+                <div class="operations-panel" >
+                    <button class="btn btn-success" ng-click="showListView()">返回</button>
+                </div>
+            </div>
+        </div>
+        <div class="tabs-wrap">
+            <!--<table class="table">
+                <tr>
+                    <td ng-if="showPermissions('FreeListening')" class="info" colspan="2" style="text-align: center;">
+                        <button type="button" class="btn btn-primary" ng-click="findHaveDaoFang(detail)">试听</button>
+                    </td>
+                    <td class="info" colspan="2" style="text-align: center;" ng-if="showPermissions('LeadsEdit')  && canEditAndDelete(detail.belong_user_id)">
+                        <button type="button" class="btn btn-primary" ng-click="editCrmLeadsStudent(detail)">编辑</button>
+                    </td>
+                    <td  ng-if="showPermissions('LeadsOrderAdd')" class="info" colspan="2" style="text-align: center;">
+                        <button type="button" class="btn btn-primary" ng-click="signContractOrder()" >签约</button>
+                    </td>
+                </tr>
+            </table>-->
+            <table class="table table-bordered border-ccc">
+                <tr>
+                    <!--<td class="info">编号</td><td ng-bind="detail.number"></td>-->
+                    <td class="info">姓名</td>
+                    <td>{{detail.name}}
+                        <a>
+                            <!--<span ng-if="detail.exception_status ==1 || !detail.exception_status" class="glyphicon glyphicon-yichang" title="正常"></span>-->
+                            <span ng-if="detail.exception_status !=1 && detail.exception_status" class="glyphicon glyphicon-yichang2" title="异常"></span>
+                        </a>
+
+                    </td>
+                    <td class="info">电话</td>
+                    <td >{{detail.phone}}
+                        <!--<span ng-if="detail.phone && (detail.phone_status ==1 || !detail.phone_status)" class="glyphicon glyphicon-yichang" title="正常"></span>-->
+                        <span ng-if="detail.phone && (detail.phone_status !=1 && detail.phone_status)" class="glyphicon glyphicon-yichang2" title="异常"></span>
+
+                    </td>
+                    <td class="info">咨询科目</td><td ng-bind="detail.subject_name"></td>
+
+                </tr>
+                <tr>
+                    <td class="info">母亲姓名</td><td ng-bind="detail.mother_name"></td>
+                    <td class="info">母亲电话</td>
+                    <td >{{detail.mother_phone}}
+                        <span ng-if="detail.mother_phone && (detail.mother_phone_status ==1 || !detail.mother_phone_status)" class="glyphicon glyphicon-yichang wyc" title="无异常"></span>
+                        <span ng-if="detail.mother_phone && detail.mother_phone_status ==2" class="glyphicon glyphicon-yichang2" title="空号"></span>
+                        <span ng-if="detail.mother_phone && detail.mother_phone_status ==3" class="glyphicon glyphicon-yichang2" title="错号"></span>
+                        <span ng-if="detail.mother_phone && detail.mother_phone_status ==4" class="glyphicon glyphicon-yichang2" title="停机"></span>
+                        <span ng-if="detail.mother_phone && detail.mother_phone_status ==5" class="glyphicon glyphicon-yichang2" title="被投诉"></span>
+                    </td>
+                    <td class="info">年级</td><td ng-bind="detail.grade_name"></td>
+                </tr>
+                <tr>
+                    <td class="info">父亲姓名</td><td ng-bind="detail.father_name"></td>
+                    <td class="info">父亲电话</td>
+                    <td >{{detail.father_phone}}
+                        <span ng-if="detail.father_phone && (detail.father_phone_status ==1 || !detail.father_phone_status)" class="glyphicon glyphicon-yichang wyc" title="无异常"></span>
+                        <span ng-if="detail.father_phone && detail.father_phone_status ==2" class="glyphicon glyphicon-yichang2" title="空号"></span>
+                        <span ng-if="detail.father_phone && detail.father_phone_status ==3" class="glyphicon glyphicon-yichang2" title="错号"></span>
+                        <span ng-if="detail.father_phone && detail.father_phone_status ==4" class="glyphicon glyphicon-yichang2" title="停机"></span>
+                        <span ng-if="detail.father_phone && detail.father_phone_status ==5" class="glyphicon glyphicon-yichang2" title="被投诉"></span>
+                    </td>
+                    <td class="info">...</td><td>...</td>
+                </tr>
+                <tr>
+                    <td class="info">公立学校</td><td ng-bind="detail.school_name"></td>
+                    <td class="info">性别</td><td ng-show="detail.gender == true">男</td><td ng-show="detail.gender == false">女</td><td ng-show="detail.gender == null"></td>
+                    <td class="info">出生年月</td>
+                    <td>{{detail.birthDate|date:'yyyy-MM-dd'}}</td>
+                </tr>
+                <tr>
+                    <td class="info">所属省</td><td ng-bind="detail.province_name"></td>
+                    <td class="info">所属市</td><td ng-bind="detail.city_name"></td>
+                    <td class="info">所属区(县)</td><td ng-bind="detail.area_name"></td>
+                </tr>
+                <tr>
+                    <td class="info">渠道来源</td><td ng-bind="detail.channel1Name"></td>
+                    <td class="info">客户状态</td><td ng-bind="detail.state1Name"></td>
+                    <td class="info">意向程度</td>
+                        <td ng-if="detail.purposeLevel && detail.purposeLevel == 1">高</td>
+                        <td ng-if="detail.purposeLevel && detail.purposeLevel == 2">一般</td>
+                        <td ng-if="detail.purposeLevel && detail.purposeLevel == 3">暂无</td>
+                        <td ng-if="!detail.purposeLevel || (detail.purposeLevel && detail.purposeLevel == 4)">未标记</td>
+                </tr>
+                <tr>
+                    <td class="info">渠道详情</td><td ng-bind="detail.channel2Name"></td>
+                    <!-- <td class="info">状态详情</td><td ng-bind="detail.state2Name"></td> -->
+                    <td class="info">下次跟进时间</td><td ng-bind="detail.followUpAt | date:'yyyy-MM-dd HH:mm:ss'"></td>
+                    <td class="info">创建时间</td><td ng-bind="detail.create_at | date:'yyyy-MM-dd HH:mm:ss'"></td>
+                    <!-- <td class="info">意向金额</td><td ng-bind="detail.purposeMony"></td> -->
+                </tr>
+                <tr>
+                    <td class="info">创建人</td><td ng-bind="detail.create_by_name"></td>
+                    <td class="info">所属人</td><td ng-bind="detail.belong_user_name"></td>
+                    <td class="info">推荐人</td><td ng-bind="detail.inviter_name"></td>
+                </tr>
+                <tr>
+                    <td class="info">客户需求</td><td colspan="5" ng-bind="detail.customer_requirement"></td>
+                </tr>
+            </table>
+            <div class="yws-container text-align-center padding-20-0 border-1-eded mt-btn-r">
+                <!--<td ng-if="showPermissions('FreeListening')" class="info" colspan="2" style="text-align: center;">-->
+                <button type="button" ng-if="showPermissions('FreeListening')" class="btn btn-primary margin-left-50" ng-click="addCoursePlanInfo(detail,3)">试听</button>
+                <!--</td>-->
+                <!--<td class="info" colspan="2" style="text-align: center;" ng-if="showPermissions('LeadsEdit')  && canEditAndDelete(detail.belong_user_id)">-->
+                <button type="button" ng-if="showPermissions('LeadsEdit')  && canEditAndDelete(detail.belong_user_id)" class="btn btn-primary margin-left-50" ng-click="editCrmLeadsStudent(detail)">编辑</button>
+                <!--</td>-->
+                <!--<td  ng-if="showPermissions('LeadsOrderAdd')" class="info" colspan="2" style="text-align: center;">-->
+                <button type="button" ng-if="showPermissions('LeadsOrderAdd')" class="btn btn-primary margin-left-50" ng-click="signContractOrder()" >录订单</button>
+                <!--</td>-->
+            </div>
+        </div>
+
+        <div ng-if="!isCallCenterMaster()">
+            <div class="tabs-title" >记录管理</div>
+            <tabs>
+                <pane title="沟通记录">
+
+                    <div class="table-responsive" >
+                        <div class="table-title">沟通记录列表</div>
+                        <table class="table table-bordered table-striped table-condensed" st-pipe="getCommunicationList" st-table="CrmLeadsStudentCommunicationList">
+                            <thead>
+                            <tr>
+                                <th>沟通时间</th>
+                                <th>沟通内容</th>
+                                <th>沟通人</th>
+                                <th>方式</th>
+                                <th>状态</th>
+                                <th>录音</th>
+                                <th ng-if="false">创建人</th>
+                                <th ng-if="false">创建时间</th>
+                                <th>沟通操作</th>
+                            </tr>
+                            </thead>
+                            <tbody ng-show="!isCommunicationLoading">
+                            <tr ng-repeat="row in CrmLeadsStudentCommunicationList">
+
+                                <td>{{ row.communicateTime | date:'yyyy-MM-dd' }}</td>
+                                <td>{{row.communicateContent}}</td>
+
+                                <td>{{row.username}}</td>
+                                <td>{{row.calltype}}</td>
+                                <td ng-if="row.callresult== 0">接通</td>
+                                <td ng-if="row.callresult== 1">正忙</td>
+                                <td ng-if="row.callresult== 2">无应答</td>
+                                <td ng-if="row.callresult!= 1 && row.callresult!= 2 && row.callresult!= 0 && row.callresult!=-1">失败</td>
+                                <td ng-if="row.callresult==-1"></td>
+                                <td>
+                                    <!-- <video controls>
+                                            <source ng-src="http://7xp05b.com2.z0.glb.qiniucdn.com/15311665826/1453820405234.mp3">
+                                        </video>-->
+                                    <button ng-if="row.recording_path" class="btn btn-primary" ng-click="playAudio(row.recording_path)">播放</button>
+                                    <!--<object height="50" width="190" data="{{row.recording_path}}"></object>-->
+                                    <!--  <audio controls="controls" src="{{row.recording_path}}">
+                                        </audio></td>-->
+                                </td>
+                                <!-- <embed controls="controls" src="{{row.recording_path}}">
+                                </embed> --></td>
+
+                                <!-- <td><audio controls="controls">
+                                    <source src="{{row.recording_path}}" type="audio/mpeg">
+                                    </audio></td> -->
+                                <td ng-if="false">{{row.createBy}}</td>
+                                <td ng-if="false">{{ row.createAt | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+                                <td>
+                                    <a ng-click="editInvitationCommunication(row)"><span class="glyphicon glyphicon-pencil" title="编辑沟通"></span></a>&nbsp;
+                                    <a ng-click="deleteInvitationCommunication(row)"><span class="glyphicon glyphicon-delete" title="删除沟通"></span></a>&nbsp;
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tbody ng-show="isCommunicationLoading">
+                            <tr>
+                                <td colspan="7" class="text-center"><div class="loading-indicator"></div></td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="text-center" st-pagination="" st-items-by-page="5" colspan="7" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html">
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </pane>
+
+
+                <pane title="邀约记录">
+                    <div class="table-responsive" >
+                        <div class="table-title">邀约记录列表</div>
+                        <button class="btn btn-success table-top-button" ng-click="addInvitationDetail()">新增邀约</button>
+                        <table class="table table-bordered table-striped table-condensed" st-pipe="getInvitationList" st-table="CrmLeadsStudentInvitationList">
+                            <thead>
+                            <tr>
+
+                                <th>邀约时间</th>
+                                <th>预到访时间</th>
+                                <th>邀约内容</th>
+                                <th>邀约人</th>
+                                <th ng-if="false">创建人</th>
+                                <th ng-if="false">创建时间</th>
+                                <th>邀约操作</th>
+                            </tr>
+                            </thead>
+                            <tbody ng-show="!isInvitationLoading">
+                            <tr ng-repeat="row in CrmLeadsStudentInvitationList">
+
+                                <td>{{ row.invitateTime | date:'yyyy-MM-dd HH:mm' }}</td>
+                                <td>{{ row.receiveTime | date:'yyyy-MM-dd HH:mm' }}</td>
+                                <td>{{row.invitationContent}}</td>
+                                <td>{{row.username}}</td>
+                                <td ng-if="false">{{row.createBy}}</td>
+                                <td ng-if="false">{{ row.createAt | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+                                <td>
+                                    <a ng-click="editInvitationDetail(row)"><span class="glyphicon glyphicon-pencil" title="编辑邀约"></span></a>&nbsp;
+                                    <a ng-click="deleteInvitationDetail(row)"><span class="glyphicon glyphicon-delete" title="删除邀约"></span></a>&nbsp;
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tbody ng-show="isInvitationLoading">
+                            <tr>
+                                <td colspan="7" class="text-center"><div class="loading-indicator"></div></td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="text-center" st-pagination="" st-items-by-page="5" colspan="7" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html">
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </pane>
+            </tabs>
+
+            <div class="tabs-title">消课管理</div>
+            <tabs>
+                <!-- <pane title="未消课记录"> -->
+                    <div class="table-responsive" >
+                        <div class="table-title">排课消课管理</div>
+                        <table class="table table-bordered table-striped table-condensed" st-pipe="callServer" st-table="displayed">
+                            <thead>
+                            <tr>
+                                <th>学生姓名</th>
+                                <th>消课状态</th>
+                                <th>课程名称</th>
+                                <th>科目</th>
+                                <th colspan='2' >上课时间</th>
+                                <th>上课课时</th>
+                                <th>任课老师</th>
+                                <th>不满意原因</th>
+                                <th>操作</th>
+                            </tr>
+                            <tr>
+                                <th><input st-search="student_name" placeholder="学生姓名" class="input-sm form-control" type="search"/></th>
+                                <th><select st-search="is_past" placeholder="消课状态" class="input-sm form-control">
+                                          <option value=""></option>
+                                          <option value="0">未消课</option>
+                                          <option value="1">已消课</option>
+                                     </select>
+                                </th>
+                                <th><input st-search="coursename" placeholder="查询" class="input-sm form-control" type="search"/></th>
+                                <th><input st-search="subject_name" placeholder="科目查询" class="input-sm form-control" type="search"/></th>
+                                <th><input st-search="start_time" placeholder=""  class="input-sm form-control" type="search" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="" readonly  style="margin-right:9%;"/></th>
+                                <th><input st-search="end_time" placeholder=""  class="input-sm form-control" type="search" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="" readonly /></th>
+                                <th><input st-search="course_num" placeholder="课时" class="input-sm form-control" type="search"/></th>
+                                <th><input st-search="teacher_name" placeholder="任课老师" class="input-sm form-control" type="search"/></th>
+                                <th><select st-search="remark" placeholder="不满意原因" class="input-sm form-control">
+                                      <option value=""></option>
+                                      <option value="不满意">不满意</option>
+                                      <option value="消课错误">消课错误</option>
+                                      <option value="其他原因">其他原因</option>
+                                  </select>
+                                </th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody ng-show="!isLoading">
+                            <tr ng-repeat="row in displayed">
+                                <td>{{ row.student_name }}</td>
+                                <td ng-if="row.is_past==0">未消课</td>
+                                <td ng-if="row.is_past==1">已消课</td>
+                                <td>试听课程</td>
+                                <td>{{row.subject_name}}</td>
+                                <td colspan='2'>{{row.start_time | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                                <td>{{row.course_num}}</td>
+                                <td>{{row.teacher_name}}</td>
+                                <td>{{row.remark}}</td>
+                                <td>
+                                	<a ng-if="row.is_past==0 && showPermissions('pastCoursePlan')" ng-click="yesconsume(row)"><span class="glyphicon glyphicon-shenhe" title="消课"></span></a>
+									<a ng-if="row.is_past==0 && showPermissions('editCoursePlan')" ng-click="showEditCoursePlan(row)"><span class="glyphicon glyphicon-pencil" title="编辑"></span></a>
+									<a ng-if="row.is_past==0 && showPermissions('deleteCoursePlan')" ng-click="removeCoursePlan(row)"><span class="glyphicon glyphicon-delete" title="删除排课"></span></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tbody ng-show="isLoading">
+                            <tr>
+                                <td colspan="10" class="text-center"><div class="loading-indicator"></div></td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="text-center" st-pagination="" st-items-by-page="10"  colspan="11" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html">
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                <!--
+                </pane>
+                 -->
+            </tabs>
+        </div>
+    </div>
+
+    <!--分配学员线索页面-->
+    <div ng-show="isAllot" class="view-content2">
+        <div>
+            <div>
+                <ul class="breadcrumb">
+                    <li><a href="#/">首页</a> <span class="divider"></span></li>
+                    <li><a href="#/fb-admin">前台业务</a> <span class="divider"></span></li>
+                    <li><a ng-click="showListView()">总部意向客户</a> <span class="divider"></span></li>
+                    <li class="active">Leads分配</li>
+                </ul>
+            </div>
+        </div>
+        <!--待分配学员列表-->
+        <div class="details-title">Leads分配</div>
+        <div class="details-body">
+            <div class="details-content">
+                <div class="table-responsive" >
+                    <div class="table-title">Leads分配列表</div>
+                    <table class="table table-bordered table-striped table-condensed" st-pipe="getAllotCrmLeadsStudentList" st-table="allotCrmLeadsStudentList">
+                        <thead>
+                        <tr>
+                            <!--<th><input type="checkbox" ng-checked="MyCrmCustomerStudentListForAddGroup.length == MyCrmCustomerStudentListOk.length" ng-click="checkAll()" >全选/反选</th>-->
+                            <th>选择</th>
+                            <th>学员姓名</th>
+                            <th>学员电话</th>
+                            <th>学员年级</th>
+                            <th>渠道来源</th>
+                            <th>渠道详情</th>
+                            <th>所属人</th>
+                        </tr>
+                        <tr>
+                            <th style="line-height: 30px;"><span>查询条件</span></th>
+                            <th>
+                                <input st-search="allotCrmLeadsStudentFilter.name" placeholder="姓名查询" ng-model="allotCrmLeadsStudentFilter.name" class="input-sm form-control" type="search"/>
+                            </th>
+                            <th>
+                                <input st-search="allotCrmLeadsStudentFilter.phone" placeholder="电话查询" ng-model="allotCrmLeadsStudentFilter.phone" class="input-sm form-control" type="search"/>
+                            </th>
+                            <th>
+                                <select st-search="allotCrmLeadsStudentFilter.grade_id" ng-model="allotCrmLeadsStudentFilter.grade_id"
+                                        name="allotCrmLeadsStudentFilter.grade_id" id="allotCrmLeadsStudentFilter.grade_id" class="input-sm form-control"
+                                        ng-options="option.id as option.name for option in gradeIds" type="search">
+                                    <option value="">-- 请选择查询班级--</option>
+                                </select>
+                            </th>
+                            <th>
+                                <select st-search="allotCrmLeadsStudentFilter.media_channel_id_1" ng-model="allotCrmLeadsStudentFilter.media_channel_id_1"
+                                        name="allotCrmLeadsStudentFilter.media_channel_id_1" id="allotCrmLeadsStudentFilter.media_channel_id_1" class="input-sm form-control"
+                                        ng-options="option.id as option.name for option in mediaChannel1List" ng-change="mediaChannel1ChangeForAllot()" type="search">
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </th>
+                            <th>
+                                <select ng-model="allotCrmLeadsStudentFilter.media_channel_id_2" st-search="allotCrmLeadsStudentFilter.media_channel_id_2"
+                                        name="allotCrmLeadsStudentFilter.media_channel_id_2" id="allotCrmLeadsStudentFilter.media_channel_id_2" class="input-sm form-control"
+                                        ng-options="option.id as option.name for option in mediaChannel2ListForMyAllot" type="search">
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </th>
+                            <th>
+                                <input st-search="allotCrmLeadsStudentFilter.belong_user_name" placeholder="所属人查询" ng-model="allotCrmLeadsStudentFilter.belong_user_name" class="input-sm form-control" type="search"/>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody ng-show="!isAllotCrmLeadsStudentListLoading">
+                        <tr ng-repeat="row in allotCrmLeadsStudentList">
+                            <td><input type="checkbox" ng-checked="isSelected(row)" ng-click="selectOne(row)" ></td>
+                            <td>{{row.name}}</td>
+                            <td>{{row.phone}}</td>
+                            <td>{{row.grade_name}}</td>
+                            <td>{{row.channel1Name}}</td>
+                            <td>{{row.channel2Name}}</td>
+                            <td>{{row.belong_user_name}}</td>
+                        </tr>
+                        </tbody>
+                        <tbody ng-show="isAllotCrmLeadsStudentListLoading">
+                        <tr>
+                            <td colspan="7" class="text-center"><div class="loading-indicator"></div></td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="7">
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!--已添加学员客户列表-->
+        <div class="details-body">
+            <div class="details-content height-500">
+                <div class="table-responsive" >
+                    <div class="table-title">选择结果列表</div>
+                    <table class="table table-bordered table-striped table-condensed">
+                        <thead>
+                        <tr>
+                            <th>选择</th>
+                            <th>学员姓名</th>
+                            <th>学员电话</th>
+                            <th>学员年级</th>
+                            <th>渠道来源</th>
+                            <th>渠道详情</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="row in MyCrmLeadsStudentListOk">
+                            <td><a ng-click="deleteOne(row)">删除</span></a></td>
+                            <td>{{row.name}}</td>
+                            <td>{{row.phone}}</td>
+                            <td>{{row.grade_name}}</td>
+                            <td>{{row.channel1Name}}</td>
+                            <td>{{row.channel2Name}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div ng-show="MyCrmLeadsStudentListOk.length > 0">
+                        <tabs>
+                            <pane title="本校区分配" ng-if="isSchoolUser()">
+                                <table class="table text-center">
+                                    <tr>
+                                        <td style="line-height: 32px;">岗位</td>
+                                        <td>
+                                            <select ng-model="allotCrmLeadsStudentFilter.position_id"
+                                                    name="allotCrmLeadsStudentFilter.position_id" id="allotCrmLeadsStudentFilter.position_id" class="input-sm form-control"
+                                                    ng-options="option.id as option.name for option in allAllotPosition" ng-change="positionChangeForAllot()">
+                                                <option value="">-- 请选择岗位 --</option>
+                                            </select>
+                                        </td>
+                                        <td style="line-height: 32px;">员工</td>
+                                        <td>
+                                            <select ng-model="allotCrmLeadsStudentFilter.user_id"
+                                                    name="allotCrmLeadsStudentFilter.user_id" id="allotCrmLeadsStudentFilter.user_id" class="input-sm form-control"
+                                                    ng-options="option.id as option.name for option in allAllotUser">
+                                                <option value="">-- 请选择员工 --</option>
+                                            </select>
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+                                <br/><br/>
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-success" ng-click="saveAllot()">分配</button>
+                                </div>
+                            </pane>
+                            <pane title="跨校区分配" ng-if="showPermissions('SchoolLeadsAllot')">
+                                <table class="table table-bordered table-striped table-condensed" st-pipe="getAllSchoolMaster" st-table="schoolMasterList">
+                                    <thead>
+                                    <tr>
+                                        <th>选择</th>
+                                        <th>校区名称</th>
+                                        <th>校区校长</th>
+                                        <th>大区名称</th>
+                                        <th>区域名称</th>
+                                        <th>省名称</th>
+                                        <th>市名称</th>
+                                        <th>区县名称</th>
+                                    </tr>
+                                    <tr>
+                                        <th>查询条件</th>
+                                        <th></th>
+                                        <th>
+
+                                        </th>
+                                        <th>
+                                            <select st-search="schoolMasterFilter.district_id" ng-model="schoolMasterFilter.district_id"
+                                                    name="schoolMasterFilter.district_id" id="schoolMasterFilter.district_id" class="input-sm form-control"
+                                                    ng-options="option.districtId as option.companyName + '-' +option.districtName for option in DepartmentsOfDistrictList" type="search"
+                                                    ng-change="getDepartmentsOfRegion()">
+                                                <option value="">-- 请选择大区 --</option>
+                                            </select>
+                                        </th>
+                                        <th>
+                                            <select st-search="schoolMasterFilter.region_id" ng-model="schoolMasterFilter.region_id"
+                                                    name="schoolMasterFilter.region_id" id="schoolMasterFilter.region_id" class="input-sm form-control"
+                                                    ng-options="option.regionId as option.regionName for option in DepartmentsOfRegion" type="search">
+                                                <option value="">-- 请选择区域 --</option>
+                                            </select>
+                                        </th>
+                                        <th>
+                                            <select st-search="schoolMasterFilter.province_code" ng-model="schoolMasterFilter.province_code" name="schoolMasterFilter.province_code" id="schoolMasterFilter.province_code" class="input-sm form-control"
+                                                    ng-options="option.provinceCode as option.provinceName for option in provinceList" type="search" ng-change="provinceChangeForBatchAllot()">
+                                                <option value="">-- 请选择 --</option>
+                                            </select>
+                                        </th>
+                                        <th>
+                                            <select st-search="schoolMasterFilter.city_code" ng-model="schoolMasterFilter.city_code" name="schoolMasterFilter.city_code" id="schoolMasterFilter.city_code" class="input-sm form-control"
+                                                    ng-options="option.cityCode as option.cityName for option in cityList" ng-change="cityChangeForBatchAllot()" type="search">
+                                                <option value="">-- 请选择 --</option>
+                                            </select>
+                                        </th>
+                                        <th>
+                                            <select st-search="schoolMasterFilter.area_code" ng-model="schoolMasterFilter.area_code" name="schoolMasterFilter.area_code" id="schoolMasterFilter.area_code" class="input-sm form-control"
+                                                    ng-options="option.areaCode as option.areaName for option in areaList" type="search">
+                                                <option value="">-- 请选择 --</option>
+                                            </select>
+                                        </th>
+                                    </tr>
+
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="row in schoolMasterList">
+                                        <td><input type="radio" id="allotCrmLeadsStudentFilter.school_master_id" name="allotCrmLeadsStudentFilter.school_master_id"
+                                                   ng-click="selectSchoolMaster(row)" ></td>
+                                        <td>{{row.dName}}</td>
+                                        <td>{{row.uName}}</td>
+                                        <td>{{row.districtPrarentName}}-{{row.districtName}}</td>
+                                        <td>{{row.regionName}}</td>
+                                        <td>{{row.dpName}}</td>
+                                        <td>{{row.dcName}}</td>
+                                        <td>{{row.daName}}</td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="7">
+                                        </td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                                <br/><br/>
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-success" ng-click="saveSchoolMasterAllot()">分配</button>
+                                </div>
+                            </pane>
+                        </tabs>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--批量分配学员线索页面-->
+    <div ng-show="isBatchAllot" class="view-content2">
+        <div>
+            <div>
+                <ul class="breadcrumb">
+                    <li><a href="#/">首页</a> <span class="divider"></span></li>
+                    <li><a href="#/fb-admin">前台业务</a> <span class="divider"></span></li>
+                    <li><a ng-click="showListView()">总部意向客户</a> <span class="divider"></span></li>
+                    <li class="active">Leads批量分配</li>
+                </ul>
+            </div>
+        </div>
+        <div class="details-title" style="overflow: visible">Leads批量分配
+            <div class="leads-top-btn">
+                <div class="operations-panel ng-scope right-title" id='yjqds'>
+                    <input type="checkbox" name="chickenEgg" value="1" ng-model="allotCrmLeadsStudentFilter.removeProtected " ng-change="showBatchAllotListByFilter()">过滤掉您可能不想分配的客户
+                </div>
+                <div class="operations-panel ng-scope right-title" id="yjqds2" >
+                    <input type="checkbox" name="chickenEgg" value="1" ng-model="allotCrmLeadsStudentFilter.removeAbnormal " ng-change="showBatchAllotListByFilter()">过滤异常客户
+                </div>
+            </div>
+        </div>
+        <!--待分配学员列表-->
+        <div class="details-body">
+            <div class="details-content">
+                <div class="table-responsive" >
+                    <div class="table-title">Leads批量分配列表</div>
+                    <table class="table table-bordered table-striped table-condensed" st-pipe="getAllotCrmLeadsStudentList" st-table="allotCrmLeadsStudentList">
+                        <thead>
+                        <tr>
+                            <!--<th><input type="checkbox" ng-checked="MyCrmCustomerStudentListForAddGroup.length == MyCrmCustomerStudentListOk.length" ng-click="checkAll()" >全选/反选</th>-->
+                            <th>学员姓名</th>
+                            <th>学员电话</th>
+                            <th>学员年级</th>
+                            <th>公立学校    </th>
+                            <th>渠道来源</th>
+                            <th>渠道详情</th>
+                            <th>所属人</th>
+                        </tr>
+                        <tr>
+                            <th>
+                                <input st-search="allotCrmLeadsStudentFilter.name" placeholder="姓名查询" ng-model="allotCrmLeadsStudentFilter.name" class="input-sm form-control" type="search"/>
+                            </th>
+                            <th>
+                                <input st-search="allotCrmLeadsStudentFilter.phone" placeholder="电话查询" ng-model="allotCrmLeadsStudentFilter.phone" class="input-sm form-control" type="search"/>
+                            </th>
+                            <th>
+                                <select st-search="allotCrmLeadsStudentFilter.grade_id" ng-model="allotCrmLeadsStudentFilter.grade_id"
+                                        name="allotCrmLeadsStudentFilter.grade_id" id="allotCrmLeadsStudentFilter.grade_id" class="input-sm form-control"
+                                        ng-options="option.id as option.name for option in gradeIds" type="search">
+                                    <option value="">-- 请选择查询班级--</option>
+                                </select>
+                            </th>
+                            <th>
+                                <input st-search="allotCrmLeadsStudentFilter.school_name" placeholder="公立学校" ng-model="allotCrmLeadsStudentFilter.school_name" class="input-sm form-control" type="search">
+                            </th>
+                            <th>
+                                <select st-search="allotCrmLeadsStudentFilter.media_channel_id_1" ng-model="allotCrmLeadsStudentFilter.media_channel_id_1"
+                                        name="allotCrmLeadsStudentFilter.media_channel_id_1" id="allotCrmLeadsStudentFilter.media_channel_id_1" class="input-sm form-control"
+                                        ng-options="option.id as option.name for option in mediaChannel1List" ng-change="mediaChannel1ChangeForAllot()" type="search">
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </th>
+                            <th>
+                                <select ng-model="allotCrmLeadsStudentFilter.media_channel_id_2" st-search="allotCrmLeadsStudentFilter.media_channel_id_2"
+                                        name="allotCrmLeadsStudentFilter.media_channel_id_2" id="allotCrmLeadsStudentFilter.media_channel_id_2" class="input-sm form-control"
+                                        ng-options="option.id as option.name for option in mediaChannel2ListForMyAllot" type="search">
+                                    <option value="">-- 请选择 --</option>
+                                </select>
+                            </th>
+                            <th>
+                                <input st-search="allotCrmLeadsStudentFilter.belong_user_name" placeholder="所属人查询" ng-model="allotCrmLeadsStudentFilter.belong_user_name" class="input-sm form-control" type="search"/>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody ng-show="!isAllotCrmLeadsStudentListLoading">
+                        <tr ng-repeat="row in allotCrmLeadsStudentList">
+                            <td>{{row.name}}</td>
+                            <td>{{row.phone}}</td>
+                            <td>{{row.grade_name}}</td>
+                            <td>{{row.school_name}}</td>
+                            <td>{{row.channel1Name}}</td>
+                            <td>{{row.channel2Name}}</td>
+                            <td>{{row.belong_user_name}}</td>
+                        </tr>
+                        </tbody>
+                        <tbody ng-show="isAllotCrmLeadsStudentListLoading">
+                        <tr>
+                            <td colspan="6" class="text-center"><div class="loading-indicator"></div></td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="1"></td>
+                            <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="2">
+                            </td>
+                            <td colspan="2">符合该查询条件的可分配总数<span style="color: red">{{totalLeads}}</span>条</td>
+                            <td colspan="1"></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!--批量分配表单-->
+        <div class="details-body">
+            <div class="details-content">
+                <div class="table-responsive" >
+
+                    <div id="kkk">
+
+                        <br/><br/>
+                        <tabs >
+                            <pane title="本校区批量分配" ng-if="isSchoolUser()">
+                                <table class="table">
+                                    <tbody>
+                                    <tr>
+                                        <td class="info" id="fenpei">每人分配客户数（上限500）<span style="color: red">&bull;</span></td>
+                                        <td><input type="number" placeholder="输入上限500" class="form-control" ng-model="batchSelecte.batchNum"  min="0" ng-change="batchNumChange()"/></td>
+                                        <td class="info">共分配客户数（上限2000）</td>
+                                        <td><input type="number" readonly class="form-control" ng-model="batchOperateCountNum"/></td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                                <div>被选人列表</div>
+                                <table class="table table-bordered table-striped table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th>删除</th>
+                                        <th>姓名</th>
+                                        <th>岗位</th>
+                                        <th>账号</th>
+                                    </tr>
+
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="row in EmpListOk">
+                                        <td><a ng-click="deleteOneEmp(row)"><span class="glyphicon glyphicon-delete" title="删除Leads"></span></a>
+                                        <td>{{row.uname}}</td>
+                                        <td>{{row.pname}}</td>
+                                        <td>{{row.uaccount}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <br /><br />
+                                <table class="table table-bordered table-striped table-condensed" st-pipe="findAllEmployeesOfCurrentUserSchool" st-table="employeesList">
+                                    <thead>
+                                    <tr>
+                                        <th>选择</th>
+                                        <th>姓名</th>
+                                        <th>岗位</th>
+                                        <th>账号</th>
+                                    </tr>
+                                    <tr>
+                                        <th><input type="checkbox" ng-checked="isSelectedAll()" ng-click="selectAll()" /></th>
+                                        <th></th>
+                                        <th>
+                                            <select st-search="employeesFilter.position_id" ng-model="employeesFilter.position_id"
+                                                    name="employeesFilter.position_id" id="employeesFilter.position_id" class="input-sm form-control"
+                                                    ng-options="option.id as option.name for option in allAllotPosition" type="search" ng-change="posisionChangeClear()">
+                                                <option value="">-- 请选择岗位 --</option>
+                                            </select>
+                                        </th>
+                                        <th></th>
+                                    </tr>
+
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="row in employeesList">
+                                        <td><input type="checkbox" ng-checked="isEmpSelected(row)" ng-click="selectOneEmp(row)" ></td>
+                                        <td>{{row.uname}}</td>
+                                        <td>{{row.pname}}</td>
+                                        <td>{{row.uaccount}}</td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="4">
+                                        </td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                                <br/><br/>
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-success" ng-click="batchAllotSave()">本校区批量分配</button>
+                                </div>
+                            </pane>
+                            <pane title="跨校区批量分配" ng-if="showPermissions('SchoolLeadsAllot')">
+                                <table class="table">
+                                    <tbody>
+                                    <tr>
+                                        <td class="info" id="fenpei">每人分配客户数（上限500）<span style="color: red">&bull;</span></td>
+                                        <td><input type="number" placeholder="输入上限500" class="form-control" ng-model="batchSelecte.batchNumSchool"  min="0" ng-change="batchNumChangeSchool()"/></td>
+                                        <td class="info">共分配客户数（上限2000）</td>
+                                        <td><input type="number" readonly class="form-control" ng-model="batchOperateCountNumSchool"/></td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                                <div>被选人列表</div>
+                                <table class="table table-bordered table-striped table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th>选择</th>
+                                        <th>校区名称</th>
+                                        <th>校区校长</th>
+                                        <th>大区名称</th>
+                                        <th>区域名称</th>
+                                        <th>省名称</th>
+                                        <th>市名称</th>
+                                        <th>区县名称</th>
+                                    </tr>
+
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="row in SchoolMasterListOk">
+                                        <td><a ng-click="deleteOneSchoolMaster(row)"><span class="glyphicon glyphicon-delete" title="删除Leads"></span></a>
+                                        <td>{{row.dName}}</td>
+                                        <td>{{row.uName}}</td>
+                                        <td>{{row.districtPrarentName}}-{{row.districtName}}</td>
+                                        <td>{{row.regionName}}</td>
+                                        <td>{{row.dpName}}</td>
+                                        <td>{{row.dcName}}</td>
+                                        <td>{{row.daName}}</td>
+                                    </tr>
+                                    </tbody>
+                                    <!--<tfoot>
+                                    <tr>
+                                        <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="4">
+                                        </td>
+                                    </tr>
+                                    </tfoot>-->
+                                </table>
+                                <br/><br/>
+                                <table class="table table-bordered table-striped table-condensed" st-pipe="getAllSchoolMaster" st-table="schoolMasterList">
+
+                                    <thead>
+                                    <tr>
+                                        <th>选择</th>
+                                        <th>校区名称</th>
+                                        <th>校区校长</th>
+                                        <th>大区名称</th>
+                                        <th>区域名称</th>
+                                        <th>省名称</th>
+                                        <th>市名称</th>
+                                        <th>区县名称</th>
+                                    </tr>
+                                    <tr>
+                                        <th><input type="checkbox" ng-checked="isSelectedAllSchool()" ng-click="selectAllSchool()" /></th>
+                                        <th></th>
+                                        <th>
+
+                                        </th>
+                                        <th>
+                                            <select st-search="schoolMasterFilter.district_id" ng-model="schoolMasterFilter.district_id"
+                                                    name="schoolMasterFilter.district_id" id="schoolMasterFilter.district_id" class="input-sm form-control"
+                                                    ng-options="option.districtId as option.companyName + '-' +option.districtName for option in DepartmentsOfDistrictList" type="search"
+                                                    ng-change="getDepartmentsOfRegion()">
+                                                <option value="">-- 请选择大区 --</option>
+                                            </select>
+                                        </th>
+                                        <th>
+                                            <select st-search="schoolMasterFilter.region_id" ng-model="schoolMasterFilter.region_id"
+                                                    name="schoolMasterFilter.region_id" id="schoolMasterFilter.region_id" class="input-sm form-control"
+                                                    ng-options="option.regionId as option.regionName for option in DepartmentsOfRegion" type="search">
+                                                <option value="">-- 请选择区域 --</option>
+                                            </select>
+                                        </th>
+                                        <th>
+                                            <select st-search="schoolMasterFilter.province_code" ng-model="schoolMasterFilter.province_code" name="schoolMasterFilter.province_code" id="schoolMasterFilter.province_code" class="input-sm form-control"
+                                                    ng-options="option.provinceCode as option.provinceName for option in provinceList" type="search" ng-change="provinceChangeForBatchAllot()">
+                                                <option value="">-- 请选择 --</option>
+                                            </select>
+                                        </th>
+                                        <th>
+                                            <select st-search="schoolMasterFilter.city_code" ng-model="schoolMasterFilter.city_code" name="schoolMasterFilter.city_code" id="schoolMasterFilter.city_code" class="input-sm form-control"
+                                                    ng-options="option.cityCode as option.cityName for option in cityList" ng-change="cityChangeForBatchAllot()" type="search">
+                                                <option value="">-- 请选择 --</option>
+                                            </select>
+                                        </th>
+                                        <th>
+                                            <select st-search="schoolMasterFilter.area_code" ng-model="schoolMasterFilter.area_code" name="schoolMasterFilter.area_code" id="schoolMasterFilter.area_code" class="input-sm form-control"
+                                                    ng-options="option.areaCode as option.areaName for option in areaList" type="search" ng-change="areaChangeClear()">
+                                                <option value="">-- 请选择 --</option>
+                                            </select>
+                                        </th>
+                                    </tr>
+
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="row in schoolMasterList">
+                                        <td><input type="checkbox" ng-checked="isSchoolMasterSelected(row)" ng-click="selectOneSchoolMaster(row)" ></td>
+                                        <td>{{row.dName}}</td>
+                                        <td>{{row.uName}}</td>
+                                        <td>{{row.districtPrarentName}}-{{row.districtName}}</td>
+                                        <td>{{row.regionName}}</td>
+                                        <td>{{row.dpName}}</td>
+                                        <td>{{row.dcName}}</td>
+                                        <td>{{row.daName}}</td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="7">
+                                        </td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                                <br/><br/>
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-success" ng-click="schoolBatchAllotSave()">跨校区批量分配</button>
+                                </div>
+                            </pane>
+                        </tabs>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script style="display:none" type="text/javascript" >
+    window.load = pause();
+    function pause(){
+        window.setTimeout("tooltipShow()", 1000);
+    }
+    function tooltipShow() {
+       /* var node = $("#goutong");
+        var content = '沟通记录在拨打电话30分钟后更新到系统中，因此沟通状态有延迟';
+        node.webuiPopover({content:content,trigger:'hover',placement:'top'});*/
+
+        var node2 = $("#fenpei");
+        var content2 = '如每人分配100条客户，共5人。将会把筛选结果的前500条按100条/人分配';
+        node2.webuiPopover({content:content2,trigger:'hover',placement:'top'});
+
+    }
+</script>

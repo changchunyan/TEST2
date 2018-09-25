@@ -1,0 +1,46 @@
+<div class="modal oms-record-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <form name="form">
+        <div class="modal-header">
+          <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" ng-bind="confilctModalTitle"></h4>
+        </div>
+        <div class="modal-body yws-container">
+            <div class="">
+            	<div style="font:20px;margin-left:20%;">
+            		检测到与下列已排课记录冲突，请与学习顾问沟通。<br/>
+            		学习顾问调整时间或删除该排课后，您可以设置不可排课时间。<br/>
+            	</div>
+                <table class="table table-bordered table-striped table-condensed">
+                    <thead class="table table-bordered table-striped table-condensed">
+	                    <tr>
+	                        <th>学生姓名</th>
+	                        <th>所属校区</th>
+	                        <th>学习顾问</th>
+	                        <th>上课时间</th>
+	                        <th>上课时长</th>
+	                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="row in warningStudentList">
+                        <th>{{row.studentName}}</th>
+						<th>{{row.belongSchoolName}}</th>
+						<th>{{row.belongUserName}}</th>
+						<th>{{row.startTime | date:'yyyy-MM-dd HH:mm:ss'}}</th>
+						<th>{{row.courseHour}}</th>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="text-center">
+                <button class="btn btn-success" ng-click="$hide()">确定</button>
+            </div>
+        </div>
+        </form>
+        </div>
+
+    </div>
+</div>

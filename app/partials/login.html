@@ -1,0 +1,101 @@
+<div ng-if="isMobile">
+    <link rel="stylesheet" href="bower_components/mobile-angular-ui/dist/css/mobile-angular-ui-base.min.css">
+    <!--头部-->
+    <div class="navbar navbar-app navbar-absolute-top login-top">
+        <div class="navbar-brand navbar-brand-center" ui-yield-to="title">
+            <img src="img/main/logo.png" class="m-top-logo" style="display: inline-block;">
+        </div>
+    </div>
+    <!--底部导航-->
+    <div class="navbar navbar-app navbar-absolute-bottom lg-bottom">
+        <div class="btn-group justified login-bottom">
+            欢迎使用优胜教育移动外呼程序
+        </div>
+    </div>
+
+    <div class="scrollable">
+        <div class="scrollable-content section" style="background-color: #2f2f2f">
+
+            <form role="form" ng-submit="login()" style="margin-top: 35%">
+                <fieldset>
+                    <div class="form-group has-success has-feedback">
+                        <input ng-model="user.username" required type="text" value="请输入用户名"
+                               class="form-control line-height50" maxlength="50" style="height: 50px;line-height: 50px;"
+                               placeholder="请输入用户名">
+                    </div>
+
+                    <div class="form-group">
+                        <input ng-model="user.password" required type="password" value="请输入密码"
+                               class="form-control line-height50" maxlength="50" style="height: 50px;line-height: 50px;"
+                               placeholder="请输入密码">
+                    </div>
+                    <div class="text-center" ng-show="error" style="margin-top: 40px;">
+                        <span class="alert alert-danger" style="position: static;">{{error}}</span>
+                    </div>
+
+
+                </fieldset>
+                <div class="text-center" style="margin-top: 50px">
+                    <button type="submit" ng-disabled="form.$invalid || dataLoading"
+                            class="btn btn-primary btn-block line-height50"
+                            style="height: 50px;line-height: 50px;background-color: #fe9900;width: 40%;display: inline-block">
+                        确定
+                    </button>
+                </div>
+
+                <div ui-content-for="navbarAction">
+                    <a class='btn' ng-click='login()'>Login</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+<div ng-if="!isMobile" class="pa">
+    <link rel="stylesheet" href="css/login.css?v=1.2">
+    <!--TODO:登录页面-->
+    <div class="login-body">
+        <div class="left">
+        <h1>欢迎来到<b>优胜教育后台管理系统！</b></h1>
+        <ul>
+            <li>客户资源分级分类，销售沟通更精准</li>
+            <li>邀约到访随时查看，管理业绩更轻松</li>
+            <li>校区课时全面纵览，排课调课更便捷</li>
+            <li>课时订单一键导出，财务数据更可靠</li>
+            <li>数据报表自动计数，人工统数不需要</li>
+        </ul>
+    </div>
+        <div class="right">
+            <form name="form" ng-submit="login()" role="form"><!-- class="collectInformation"-->
+                <ul class="login-name" ng-class="{'active':nameFocus}">
+                    <lable for="login-name" class="label-name lable-com">&nbsp;</lable>
+                    <input id="login-name" ng-focus="userNameFocus()" ng-blur="userNameBlur()" ng-model="user.username" required type="text" placeholder="请输入账号"
+                           maxlength="50">
+                </ul>
+                <ul class="login-pass" ng-class="{'active':passFocus}">
+                    <lable for="login-pass" class="label-pass  lable-com">&nbsp;</lable>
+                    <input id="login-pass" ng-focus="userPassFocus()" ng-blur="userPassBlur()" ng-model="user.password" required type="password" placeholder="请输入密码"
+                           maxlength="50">
+                </ul>
+                <ul class="login-code">
+                    <input ng-model="user.verifyCode" ng-focus="userCodeFocus()" required type="text" autocomplete="false" class="validateInput"
+                           placeholder="请输入验证码" ng-minlength="4" ng-minlength="4" maxlength="4"/>
+                    <a ng-click="getVerifyImg() ">
+                        <img id="vcode" style="vertical-align: middle;" title="点击更换" alt="验证图片" class="validateBtn"
+                             ng-src="{{verifyImg}}">
+                    </a>
+                </ul>
+                <ul class="login-submit" ng-class="{'active':dataLoading}">
+                    <button type="submit" ng-disabled="form.$invalid || dataLoading" class="enter">登录</button>
+                </ul>
+                <ul class="login-error"  ng-show="error">
+                    <span class="error-bg">{{error}}</span>
+                </ul>
+            </form>
+        </div>
+    </div>
+    <!-- footer开始 -->
+    <div class="footer">
+        Copyright(C)2000-2016 youwinedu.com Inc.All rights reserved.京ICP备05069609号-1（北京优胜辉煌教育科技有限公司）
+    </div>
+</div>

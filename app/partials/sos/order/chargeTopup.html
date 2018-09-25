@@ -1,0 +1,137 @@
+<div class="modal " tabindex="-1" role="dialog" aria-hidden="true" ng-controller="OrderChargeTopupController">
+    <div class="modal-dialog" style="width:70%">
+        <div class="modal-content">
+            <form name="chargeOrderForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header ">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle"></h4>
+                </div>
+                <div class="modal-body mt-modal-order">
+                    <div class="">
+
+                        <div class="row ">
+                            <div class="col-sm-3 clearfix">
+                                <label for="realTotalAmount" readonly class="control-label">* 充值订单实际金额</label>
+                                <div class="col-sm-3">
+                                    <input type="text" ng-if="order.orderStatus != undefined" disabled
+                                           name="realTotalAmount" ng-pattern="/^[1-9]\d*\b|0$/" id="realTotalAmount"
+                                           ng-value="order.totalPrice-order.privilegeAmount | number:2"
+                                           ng-maxlength="10" required
+                                           class="form-control" style="width:100px;"/>
+                                    <input type="text" ng-if="order.orderStatus == undefined" name="realTotalAmount"
+                                           ng-pattern="/^[1-9]\d*\b|0$/" id="realTotalAmount"
+                                           ng-value="order.recharge.totalPrice-order.recharge.privilegeAmount | number:2"
+                                           ng-maxlength="10"
+                                           required class="form-control" style="width:100px;"/>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3 clearfix">
+                                <label for="realPayAmount" class="control-label">* 已付价格</label>
+                                <div class="col-sm-3">
+                                    <input type="text" ng-if="order.orderStatus != undefined" disabled
+                                           name="realPayAmount" id="realPayAmount" ng-pattern="/^[1-9]\d*\b|0$/"
+                                           ng-model="order.realPayAmount" ng-maxlength="10" class="form-control"
+                                           style="width:100px;"
+                                    />
+                                    <input type="text" ng-if="order.orderStatus == undefined" disabled
+                                           name="realPayAmount" id="realPayAmount" ng-pattern="/^[1-9]\d*\b|0$/"
+                                           ng-model="order.recharge.realPayAmount" ng-maxlength="10"
+                                           class="form-control" style="width:100px;"
+                                    />
+                                </div>
+                            </div>
+                            <div class="col-sm-3 clearfix">
+                                <label for="payDueAmount" class="control-label">* 尾款金额</label>
+                                <div class="col-sm-3">
+                                    <input type="text" ng-if="order.orderStatus != undefined" disabled
+                                           name="payDueAmount" id="payDueAmount"
+                                           ng-value="order.totalPrice-order.privilegeAmount - order.realPayAmount -order.supplementaryFee | number:2"
+                                           ng-maxlength="10" class="form-control" style="width:100px;"/>
+                                    <input type="text" ng-if="order.orderStatus == undefined" disabled
+                                           name="payDueAmount" id="payDueAmount"
+                                           ng-value="order.recharge.totalPrice-order.recharge.privilegeAmount - order.recharge.realPayAmount -order.recharge.supplementaryFee | number:2"
+                                           ng-maxlength="10" class="form-control" style="width:100px;"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-dashed"></div>
+                        <div class="row">
+                            <div class="col-sm-6 form-group">
+                                <label for="supplementaryFee" class="control-label" style="padding-top:20px;">*
+                                    本次收费金额</label>
+                                <div class="col-sm-6 col-md-5 col-lg-6" style="padding:10px;">
+                                    <input type="text" ng-if="order.orderStatus != undefined" name="supplementaryFee"
+                                           id="supplementaryFee" ng-pattern="/^[1-9]\d*\b|0$/"
+                                           ng-model="order.supplementaryFee" ng-maxlength="10" required
+                                           class="form-control"/>
+                                    <input type="hidden" ng-if="order.orderStatus != undefined" name="orderNo"
+                                           id="orderNo" ng-model="order.orderNo" class="input-sm form-control"
+                                           readonly/>
+
+                                    <input type="text" ng-if="order.orderStatus == undefined" name="supplementaryFee"
+                                           id="supplementaryFee" ng-pattern="/^[1-9]\d*\b|0$/"
+                                           ng-model="order.recharge.supplementaryFee" ng-maxlength="10" required
+                                           class="form-control"/>
+                                    <input type="hidden" ng-if="order.orderStatus == undefined" name="orderNo"
+                                           id="orderNo" ng-model="order.recharge.orderNo"
+                                           class="input-sm form-control" readonly/>
+
+                                </div>
+
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                <label for="payDueAmount" class="control-label">* 交费日期</label>
+                                <div class="col-sm-6 col-md-5 col-lg-6" data-toggle="tooltip" data-placement="bottom"
+                                     data-original-title="按所选交费日期统计业绩">
+                                    <input ng-disabled="!isModyfied" ng-if="order.orderStatus != undefined" type="text"
+                                           datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"
+                                           onchange="" readonly ng-value="order.payDate | date:'yyyy-MM-dd HH:mm:ss'"
+                                           name="order.payDate"
+                                           id="order.payDate" ng-model="order.payDate" required class="form-control"
+                                           style="width:200px;"
+                                    />
+                                    <input ng-disabled="!isModyfied" ng-if="order.orderStatus == undefined" type="text"
+                                           datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"
+                                           onchange="" readonly
+                                           ng-value="order.recharge.payDate | date:'yyyy-MM-dd HH:mm:ss'"
+                                           name="order.payDate"
+                                           id="order.payDate" ng-model="order.recharge.payDate" required
+                                           class="form-control" style="width:200px;"
+                                    />
+                                </div>
+                                <label for="payDueAmount" class="control-label"></label>
+                                <!-- ( 收费日期可以修改 ) -->
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table "></table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+
+
+                    <button type="button" class="btn btn-success"
+                            ng-if="order.orderStatus != undefined && order.orderStatus != 15 && order.supplementaryFee > 0 && order.supplementaryFee <= (order.totalPrice*100 - order.privilegeAmount*100 - order.realPayAmount*100 )/100"
+                            ng-disabled="chargeOrderForm.$invalid" ng-click="chargeOrderT()">保存
+                    </button>
+
+                    <button type="button"
+                            ng-if="(order.orderStatus == undefined || order.orderStatus == 15) && ((order.recharge.totalPrice*100-order.recharge.privilegeAmount*100 - order.recharge.realPayAmount*100 -order.recharge.supplementaryFee*100)/100).toFixed(2)>=0"
+                            class="btn btn-success" ng-disabled="chargeOrderForm.$invalid"
+                            ng-click="saveTempChargeRecord()">保存
+
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $("[data-toggle='tooltip']").tooltip();
+    });
+
+</script>

@@ -1,0 +1,50 @@
+<div class="modal crm-invitationCommunication-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog mt-modal-600">
+        <div class="modal-content">
+            <form name="form">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group"
+                         ng-class="{ 'has-error': form.communicateTime.$dirty && form.communicateTime.$error.required }">
+                        <label for="communicateTime">* 沟通时间</label>
+                        <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"
+                               onchange="" readonly name="communicateTime" id="communicateTime"
+                               class="mt-input-1 " ng-model="CrmInvitationCommunicationVoForCreate.communicateTime"
+                               value="{{ CrmInvitationCommunicationVoForCreate.communicateTime | date:'yyyy-MM-dd'}}" required/>
+                        <span ng-show="form.communicateTime.$dirty && form.communicateTime.$error.required"
+                              class="help-block">请输入沟通时间</span>
+                    </div>
+                    <div class="form-group"
+                         ng-class="{ 'has-error': form.communicateContent.$dirty && form.communicateContent.$error.required }">
+                        <label for="communicateContent">* 沟通内容</label>
+                        <textarea name="communicateContent" id="communicateContent" placeholder="沟通内容..."
+                                  class="mt-textarea-gray" ng-maxlength="1000"
+                                  ng-model="CrmInvitationCommunicationVoForCreate.communicateContent" required/>
+                        <span ng-show="form.communicateContent.$dirty && form.communicateContent.$error.required"
+                              class="help-block">请输入沟通内容</span>
+                    </div>
+                    <div class="form-group"
+                         ng-class="{ 'has-error': form.nextTime.$dirty && form.communicateTime.$error.required }">
+                        <label for="nextTime">* 下次跟进时间</label>
+                        <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"
+                               onchange="" readonly name="nextTime" id="nextTime"
+                               class="mt-input-1 " ng-model="CrmInvitationCommunicationVoForCreate.nextTime"
+                               value="{{ CrmInvitationCommunicationVoForCreate.nextTime }}" required/>
+                        <span ng-show="form.nextTime.$dirty && form.nextTime.$error.required"
+                              class="help-block">请输入下次跟进时间</span>
+                    </div>
+                </div>
+                <div class="modal-footer mlr-15 mlr-0" style="background: #fff">
+                    <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                    <button type="submit" class="btn btn-success" ng-click="saveInvitationCommunication()"
+                            ng-disabled="form.$invalid" style="background: #67ba2f">保存
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

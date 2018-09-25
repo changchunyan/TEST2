@@ -1,0 +1,148 @@
+<style>
+    li {
+        display: inline;
+    }
+
+    li + li {
+        margin-left: 15px;
+    }
+
+    .table tr {
+        display: block;
+        width: 100%;
+    }
+
+    .table tr:nth-child(2n) {
+        background: #f5f5f5;
+    }
+
+    .table th {
+        line-height: 45px !important;
+        padding: 0 !important;
+    }
+
+    .table th, .table td {
+        /*width: 5.2631%;*/
+        width: 5.26%;
+        display: block;
+        float: left;
+        text-align: center;
+    }
+
+
+    .table tbody tr, .table td {
+        padding: 0 !important;
+        line-height: 40px !important;
+        height: 40px !important;
+    }
+
+    .of-text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .tooltip-inner {
+        word-wrap: break-word;
+        word-break: break-all;
+    }
+
+    .tool-bg {
+        background: none;
+    }
+    .mt-scroll {
+        min-width: 1666px;
+    }
+</style>
+<div class="view-frame">
+    <div class="view-left">
+        <!--<div ng-include="'partials/common/common.indexLeft.html'"></div>-->
+    </div>
+    <!-- show employee view -->
+    <div class="view-content mt-modal-recording">
+        <div>
+            <ul class="breadcrumb">
+                <!--<li><a href="">人员信息管理</a> <span class="divider"></span></li>-->
+                <li class="active">工资条</li>
+            </ul>
+        </div>
+       <!-- <div class="mt-student-m br-gray h-auto">
+            <h2 style="overflow: hidden">工资条
+            </h2>
+        </div>-->
+        <div class="br-gray mt-list">
+            <div class="overflow-x">
+                <table class="table table-bordered table-striped mt-scroll" style="background-color: #fff;"
+                       ng-init="findMePayrollList()" ng-class="type == 'update'?'':'update'">
+                    <thead style="display: block;">
+                    <tr>
+                        <th>序号</th>
+                        <th>月份</th>
+                        <th>校区</th>
+                        <th>固定工资</th>
+                        <th>绩效工资</th>
+                        <th>补贴</th>
+                        <th>奖金及提成</th>
+                        <th>补发</th>
+                        <th>请假/缺勤</th>
+                        <th>迟到/早退</th>
+                        <th>罚款</th>
+                        <th>工服</th>
+                        <th>社保</th>
+                        <th>公积金</th>
+                        <th><p style="line-height: 18px;">社保公积<br>金合计</p></th>
+                        <th>应发工资</th>
+                        <th>个税</th>
+                        <th>实发工资</th>
+                        <th>备注</th>
+                        <!--<th ng-if="type == 'update'">操作</th>-->
+                    </tr>
+                    </thead>
+                    <tbody ng-show="!isLoading"
+                           style="max-height: 80vh;overflow-y: auto; display: block;  width: 100%;">
+                    <tr ng-repeat="row in payrollItemDetailList" style="display: block;">
+                        <td>{{$index+1}}</td>
+                        <td>{{row.monthId}}</td>
+                        <td ng-init="findSchoolName(row)">{{row.schoolName}}</td>
+                        <td>{{row.basePay}}</td>
+                        <td>{{row.performancePay}}</td>
+                        <td>{{row.allowance}}</td>
+                        <td>{{row.bonus}}</td>
+                        <td>{{row.reissue}}</td>
+                        <td>{{row.dayoff}}</td>
+                        <td>{{row.fineLate}}</td>
+                        <td>{{row.penalty}}</td>
+                        <td>{{row.findSuit}}</td>
+                        <td>{{row.insurance}}</td>
+                        <td>{{row.housingFund}}</td>
+                        <td>{{row.insuranceFundSum}}</td>
+                        <td>{{row.grossPay}}</td>
+                        <td>{{row.tax}}</td>
+                        <td>{{row.finalPay}}</td>
+                        <td>
+                            <div class="tool-bg" title="" data-toggle="tooltip" data-placement="top"
+                                 data-original-title="{{row.remark}}">
+                                <p class="of-text">{{row.remark}}</p>
+                            </div>
+                        </td>
+                        <!--<td ng-if="type == 'update'">
+                            <ul>
+                                <li><a ng-click="editPayrollByRow(row)">编辑</a></li>
+                            </ul>
+                        </td>-->
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="mt-20 tc" ng-if="type == 'update'">
+            <!-- <button class="btn-base btn" ng-click="">保存</button>-->
+            <div style="width: 150px;margin: 0 auto">
+                <button class="btn btn-base mt-btn cf bg-color-blue br" ng-disabled="canSend"
+                        ng-click="sendPayrollConfirm()">发送工资条
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>

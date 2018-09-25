@@ -1,0 +1,102 @@
+<form id="search-form" class="c-select-text br-gray pl-0">
+    <table rules="none">
+        <tr>
+            <td>
+                <label for="name" class="search-form-label pl-10" style="width:inherit;">姓名</label>
+                <input ng-model="tbre.user.name" type="text" name="name" id="name" class="search-form-input"/>
+            </td>
+            <td>
+                <label for="mobile" class="search-form-label" style="width:inherit;">手机号</label>
+                <input ng-model="tbre.mobile" type="text" name="mobile" id="mobile" class="search-form-input"/>
+            </td>
+            <td>
+                <label for="department" class="search-form-label" style="width:inherit;">部门/校区</label>
+                <input ng-click="showSelectDepartment()" ng-model="employee.department.name" type="text"
+                       name="department" id="department" class="search-form-input"/>
+            </td>
+            <td>
+                <label for="position" class="search-form-label" style="width:inherit;">岗位</label>
+                <select ng-options="position.name for position in positions track by position.id"
+                        ng-model="tbre.position" name="position" id="position" class="search-form-input">
+                </select>
+            </td>
+        </tr>
+        <!--  <tr>
+              <td>
+                  <div style="margin-right:20px;">
+                      <button class="btn" ng-click="getEmployeesByFilters(2)">查询</button>
+                      <button class="btn" ng-click="reset(2)">重置</button>
+                  </div>
+              </td>
+          </tr>-->
+    </table>
+    <div class="c_center">
+        <button id="keydown-query" class="btn btn-success btn-select btn-base" ng-click="getEmployeesByFilters(2)">查询</button>
+        <button class="btn btn-reast btn-base" ng-click="reset(2)">重置</button>
+    </div>
+</form>
+<div class="table-responsive c-select-text br-gray pt-0 pl-0">
+    <h2 class="yws-left width100 mt-student-m"><span class="yws-left">列表</span>
+        <!--<ul class="f14 cf yws-left width80 ml15">
+            <li><a class="mt-purple" ng-click="showAddView()">添加员工</a></li>
+            <li><a class="mt-export" ng-click="exportToExcel()">导出花名册</a></li>
+        </ul>-->
+    </h2>
+    <table st-pipe="getToBeRecruitedEmployees" st-table="toBeRecruitedEmployees"
+           class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <!--<th>简历编号</th>-->
+            <th style="padding-left: 10px">序号</th>
+            <th>姓名</th>
+            <th>手机号</th>
+            <th>应聘部门/校区</th>
+            <th>应聘岗位</th>
+            <th>招聘状态</th>
+            <!--<th>登记时间</th>-->
+            <!--<th>最初登记人</th>-->
+            <!--<th>处理人</th>-->
+            <!--<th>流程状态</th>-->
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="employee in toBeRecruitedEmployees track by $index">
+            <!--<td>{{employee.talent.id}}</td>-->
+            <td style="padding-left: 10px">{{$index+1}}</td>
+            <td>{{employee.user.name}}</a></td>
+            <td>{{employee.mobile}}</td>
+            <td>{{employee.department.name}}</td>
+            <td>{{employee.position.name}}</td>
+            <td>{{employee.employmentStatus}}</td>
+            <!--<td>{{employee.talent.created_at | date : "yyyy-MM-dd HH:mm:ss"}}</td>-->
+            <!--<td>{{employee.talent.creator}}</td>-->
+            <!--<td>{{employee.talent.executors}}</td>-->
+            <!--<td>{{employee.talent.scheduleStatus}}</td>-->
+            <td>
+                <a ng-if="employee.talentId" ng-click="showTalentDetailView(employee.talent)" title="查询对应人才信息"><span
+                        class="glyphicon glyphicon-plus"></span></a>&nbsp;
+                <a ng-if="!employee.isTrained" ng-click="trained(employee)" title="参培"><span
+                        class="glyphicon glyphicon-road"></span></a>&nbsp;
+                <a ng-click="showSupplyView(employee)" title="入职"><span class="glyphicon glyphicon-yws-join"></span></a>&nbsp;
+                <a ng-if="employee.talentId" ng-click="showRecruitmentSchedule(employee.talent)" title="招聘记录查询"><span
+                        class="glyphicon glyphicon-yws-look-join"></span></a> &nbsp;
+            </td>
+        </tr>
+        </tbody>
+        <tbody ng-show="isLoading">
+        <tr>
+            <td colspan="13" class="text-center">
+                <div class="loading-indicator"></div>
+            </td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td class="text-center" st-pagination="" st-items-by-page="10"
+                st-template="partials/util/pagination.custom.html" colspan="7">
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>

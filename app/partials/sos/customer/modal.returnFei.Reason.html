@@ -1,0 +1,48 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+                <!-- <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle"></h4>
+                </div> -->
+                
+	<div class="sweet-alert showSweetAlert visible" data-custom-class="" data-has-cancel-button="false" data-has-confirm-button="true" data-allow-outside-click="false" data-has-done-function="false" data-animation="pop" data-timer="null" style="display: block; margin-top: -158px;"><div class="sa-icon sa-error animateErrorIcon" style="display: block;">
+    	<div class="sa-icon sa-error animateErrorIcon" style="display: block;">
+		      <span class="sa-x-mark animateXMark">
+		        <span class="sa-line sa-left"></span>
+		        <span class="sa-line sa-right"></span>
+		      </span>
+	  	 </div>
+    </div>
+                
+	       <div class="modal-body mt-modal-order pb-20 ">
+	              	退费原因<br/>
+			       <select ng-model="refundOrder.refundReasonType" ng-change="changing()"  name="refundReasonType" id="refundReasonType" class="input-sm form-control" required>
+			             <option value="">-- 请选择退费原因 --</option>
+			             <option value="1">高三毕业</option>
+			             <option value="2">效果不明显</option>
+			             <option value="3">回老家</option>
+			             <option value="4">出国留学</option>
+			             <option value="5">班主任不满意</option>
+			             <option value="6">家庭经济原因</option>
+			             <option value="7">孩子个人原因</option>
+			             <option value="8">环境不满意</option>
+			             <option value="9">其他原因</option>
+			      </select>
+	    	 </div>
+              
+              
+          <div ng-if=remark>
+         <textarea name="refundReason" id="refundReason" placeholder="请输入原因(限30字)" class="form-control" ng-maxlength="30"  ng-model="refundOrder.refundReason" onfocus="this.placeholder=''" onblur="this.placeholder='请输入原因(限30字)'" />
+       </div>
+          
+          <div class="modal-footer margin-top20">
+              <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+           <button type="button" class="btn btn-success" ng-click="refundConfirm()">提交</button>     
+          </div>
+              
+        </div>
+    </div>
+</div>
+
+

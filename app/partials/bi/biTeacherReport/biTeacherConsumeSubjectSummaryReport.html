@@ -1,0 +1,100 @@
+<div class="default-box">
+    <h4 class="bi-search-result-title">学科组汇总 <!--<button class="btn btn-success bi-list-head" ng-click="exportSubjectSummaryReport()">导出列表</button>--></h4>
+    <br/>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped" id="subjectSummaryReportTable">
+            <thead>
+                <tr>
+                    <th style="font-weight: bold;text-align:center;border: 1px solid #000000" colspan="{{subjectSummaryReport.subjectGroupReports.length * 3}}">
+                        {{searchModel.startTime}} - {{searchModel.endTime}}
+                    </th>
+                    <th style="font-weight: bold;text-align:center;border: 1px solid #000000" rowspan="3">
+                        教师人数<br/>不含主管
+                    </th>
+                    <th style="font-weight: bold;text-align:center;border: 1px solid #000000" rowspan="3">
+                        总课时
+                    </th>
+                    <th style="font-weight: bold;text-align:center;border: 1px solid #000000" rowspan="3">
+                        周中课时
+                    </th>
+                    <th style="font-weight: bold;text-align:center;border: 1px solid #000000" rowspan="3">
+                        人均课时
+                    </th>
+                    <th style="font-weight: bold;text-align:center;border: 1px solid #000000" rowspan="3">
+                        周中人均课时
+                    </th>
+                    <th style="font-weight: bold;text-align:center;border: 1px solid #000000" colspan="6">
+                        其他数据
+                    </th>
+                </tr>
+                <tr>
+                    <th style="font-weight: bold;text-align:center;border: 1px solid #000000" ng-repeat="subjectGroupReport in subjectSummaryReport.subjectGroupReports" colspan="3">
+                        {{subjectGroupReport.name}}
+                    </th>
+                    <th style="font-weight: bold;text-align:center;border: 1px solid #000000" rowspan="2">
+                        体验总课时
+                    </th>
+                    <th style="font-weight: bold;text-align:center;border: 1px solid #000000" rowspan="2">
+                        新签体验单数
+                    </th>
+                    <th style="font-weight: bold;text-align:center;border: 1px solid #000000" rowspan="2">
+                        新签成功单数
+                    </th>
+                    <th style="font-weight: bold;text-align:center;border: 1px solid #000000" rowspan="2">
+                        新签体验成功率
+                    </th>
+                    <th style="font-weight: bold;text-align:center;border: 1px solid #000000" rowspan="2">
+                        全日制学生数量
+                    </th>
+                    <th style="font-weight: bold;text-align:center;border: 1px solid #000000" rowspan="2">
+                        未转正教师数量
+                    </th>
+                </tr>
+                <tr>
+                    <th style="font-weight: bold;text-align:center;border: 1px solid #000000" ng-repeat="header in subjectThirdLevelHeader track by $index">
+                        {{header}}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="font-weight: bold;text-align:center;border: 1px solid #000000" ng-repeat="value in subjectData track by $index">
+                        {{$index % 3 == 0 ? value : value.toFixed(2)}}
+                    </td>
+                    <td style="font-weight: bold;text-align:center;border: 1px solid #000000">
+                        {{totalTeacherCount}}
+                    </td>
+                    <td style="font-weight: bold;text-align:center;border: 1px solid #000000">
+                        {{totalCourseHour.toFixed(2)}}
+                    </td>
+                    <td style="font-weight: bold;text-align:center;border: 1px solid #000000">
+                        {{totalWeekdayCourseHour.toFixed(2)}}
+                    </td>
+                    <td style="font-weight: bold;text-align:center;border: 1px solid #000000">
+                        {{(totalCourseHour / totalTeacherCount).toFixed(2)}}
+                    </td>
+                    <td style="font-weight: bold;text-align:center;border: 1px solid #000000">
+                        {{(totalWeekdayCourseHour / totalTeacherCount).toFixed(2)}}
+                    </td>
+                    <td style="font-weight: bold;text-align:center;border: 1px solid #000000">
+                        {{totalTrialCourseHour.toFixed(2)}}
+                    </td>
+                    <td style="font-weight: bold;text-align:center;border: 1px solid #000000">
+                        {{totalTrialOrderNumber}}
+                    </td>
+                    <td style="font-weight: bold;text-align:center;border: 1px solid #000000">
+                        {{totalSuccessTrialOrderNumber}}
+                    </td>
+                    <td style="font-weight: bold;text-align:center;border: 1px solid #000000">
+                        {{(totalSuccessTrialOrderNumber / totalTrialOrderNumber).toFixed(4) * 100}} %
+                    </td>
+                    <td style="font-weight: bold;text-align:center;border: 1px solid #000000">
+                    </td>
+                    <td style="font-weight: bold;text-align:center;border: 1px solid #000000">
+                        {{totalTrialTeacherNumber}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

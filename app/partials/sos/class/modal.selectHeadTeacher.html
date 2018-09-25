@@ -1,0 +1,43 @@
+<div class="modal crm-invitationDetail-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-small" style="width: 571px">
+        <div class="modal-content">
+        <form name="form">
+        <div class="modal-header">
+          <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" ng-bind="selectHeadTeacherModalTitle"></h4>
+        </div> 
+        <div class="modal-body mt-fenpei">
+                <div class="row">
+                    <div class="col-sm-12 form-group">
+                        <label for="selectedPositionId" class="col-sm-2 control-label">* 岗位</label>
+                        <div class="col-sm-10">
+                            <select ng-model="selectedInfo.positionId" name="selectedPositionId" id="selectedPositionId" class="input-sm form-control"
+                                    ng-options="option.id as option.name for option in selectablePositions" ng-change="positionChange()">
+                                <option value="">-- 请选择岗位 --</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12 form-group">
+                        <label for="selectedUserId" class="col-sm-2 control-label">* 员工</label>
+                        <div class="col-sm-10">
+                            <select ng-model="selectedInfo.userId"
+                                    name="selectedUserId" id="selectedUserId" class="input-sm form-control"
+                                    ng-options="option.id as option.name for option in selectableUsers">
+                                <option value="">-- 请选择员工 --</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+        	</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+	          	<button type="submit" class="btn btn-success c5-lable" ng-click="selectHeadTeacher()" >保存</button>
+	          	<img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+	        </div>
+        </form>
+        </div>
+    </div>
+</div>

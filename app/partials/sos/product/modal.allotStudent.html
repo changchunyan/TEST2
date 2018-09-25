@@ -1,0 +1,165 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="form" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="allotModalHide()"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="allotModalTitle"></h4>
+                </div>
+                <div class="modal-body pb-20">
+                    <div class="br-gray pl-0" style="overflow-x: auto">
+                        <table class="table table-bordered table-striped table-condensed mt-table1"
+                               st-pipe="getAllotStudentList" st-table="studentList">
+                            <thead class="table table-bordered table-striped table-condensed">
+                            <tr>
+                                <th>选择</th>
+                                <th>学员姓名</th>
+                                <th>学员电话</th>
+                                <th>学员年级</th>
+                                <th>渠道来源</th>
+                                <th>来源详情</th>
+                                <th>所属人</th>
+                                <th>处理状态</th>
+                            </tr>
+                            <tr>
+                                <th class="time-show-2">
+                                    <label ng-class="{'active':isAllSelected}" for="isAllSelected">
+                                        &nbsp;</label>
+                                    <input type="checkbox" class="hide" id="isAllSelected"
+                                           ng-click="selectAllStudent()"
+                                           name="isAllSelected" >
+                                    <!-- ng-disabled="row.state == 1" -->
+                                </th>
+                                <th>
+                                    <input type="search" name="studentName" id="studentName"
+                                           ng-model="studentFilter.studentName" placeholder="姓名查询"
+                                           st-search="studentName" class="input-sm form-control"/>
+                                </th>
+                                <th>
+                                    <input type="search" name="phone" id="phone" ng-model="studentFilter.phone"
+                                           placeholder="电话查询" st-search="phone" class="input-sm form-control"/>
+                                </th>
+                                <th>
+                                    <select st-search="gradeId" ng-model="studentFilter.gradeId" name="gradeId"
+                                            id="gradeId" class="input-sm form-control"
+                                            ng-options="option.id as option.name for option in gradeIds" type="search">
+                                        <option value="">-- 请选择查询班级--</option>
+                                    </select>
+                                </th>
+                                <th>
+                                    <select st-search="mediaChannelId1" ng-model="studentFilter.mediaChannelId1"
+                                            name="mediaChannelId1" id="schoolCrmLeadsStudentFilter.media_channel_id_1"
+                                            class="input-sm form-control"
+                                            ng-options="option.id as option.name for option in mediaChannel1List"
+                                            ng-change="mediaChannel1ChangeForFilter()" type="search">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </th>
+                                <th>
+                                    <select st-search="mediaChannelId2" ng-model="studentFilter.mediaChannelId2"
+                                            name="mediaChannelId2" id="mediaChannelId2" class="input-sm form-control"
+                                            ng-options="option.id as option.name for option in mediaChannel2List"
+                                            type="search">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </th>
+                                <th>&nbsp;</th>
+                                <th>
+                                    <select ng-model="studentFilter.state" st-search="state" name="state" id="state"
+                                            class="input-sm form-control" type="search">
+                                        <option value="">-- 请选择 --</option>
+                                        <option value="0">-- 未处理 --</option>
+                                        <option value="1">-- 已处理 --</option>
+                                    </select>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="row in studentList track by $index">
+                                <th class="time-show-2">
+                                    <label ng-class="{'active':row.isSelected}" for="studentCheckbox{{$index}}">
+                                        &nbsp;</label>
+                                    <input type="checkbox" class="hide" id="studentCheckbox{{$index}}"
+                                           ng-click="selectStudent(row)"
+                                           name="studentCheckbox" value="{{$index}}" ng-checked="isSelected(row)">
+                                    <!-- ng-disabled="row.state == 1" -->
+                                </th>
+                                <th>{{row.crmStudentName}}</th>
+                                <th>{{row.phone}}</th>
+                                <th>{{row.gradeName}}</th>
+                                <th>{{row.channel1Name}}</th>
+                                <th>{{row.channel2Name}}</th>
+                                <th>{{row.belong_user_name}}</th>
+                                <th>
+                                    <span ng-if="!row.state" class="glyphicon glyphicon-undo" title="未分配"></span>
+                                    <span ng-if="row.state" class="glyphicon glyphicon-done" title="已分配"></span>
+                                </th>
+
+                            </tr>
+                            </tbody>
+                            <tbody ng-show="isRemindLoading">
+                            <tr>
+                                <td colspan="8" class="text-center">
+                                    <div class="loading-indicator"></div>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="text-center" st-pagination="t1" st-items-by-page="10"
+                                    st-template="partials/util/pagination.custom.html" colspan="8">
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+
+                    </div>
+                    <div class="mt-10 margin-bottom-10">
+                        <ul class="row f14 pb-15 mt-aread-select">
+                            <li class="cf8 col-sm-4 pl-15">已选择学员</li>
+                            <a class="hk-blue-letter col-sm-8 text-right" ng-click="allRemains()">全部未处理学员保持当前</a>
+                        </ul>
+                        <div class="mt-delet-stu">
+                            <a ng-repeat="element in toBeAllotedStudentList track by $index"
+                               ng-click="selectStudent(element)">
+                                {{element.crmStudentName}}</a>
+                        </div>
+                        <!--<label ng-repeat="element in toBeAllotedStudentList track by $index"
+                               ng-click="selectStudent(element)">
+                            {{element.crmStudentName}}
+                        </label>-->
+                        <div style="BORDER-TOP: #00686b 1px dashed; OVERFLOW: hidden; HEIGHT: 1px; margin:margin: 20px 0px 20px 0px;"></div>
+                        <div style="margin-top: 10px;margin-bottom: 50px;">
+                            <select ng-model="employeeFilter.state" name="state" id="state"
+                                    class="input-sm form-control" style="width:200px;float: left;"
+                                    ng-options="option.id as option.name for option in methods" required>
+                            </select>
+                            <select ng-if="employeeFilter.state != 2" ng-model="employeeFilter.positionId"
+                                    name="positionId" id="positionId" class="input-sm form-control"
+                                    style="width:200px;float: left;margin-left:20px;"
+                                    ng-options="option.id as option.name for option in positionIdList"
+                                    ng-change="positionChangeForAllotDL()" required>
+                                <option value="">---请选择岗位---</option>
+                            </select>
+                            <select ng-if="employeeFilter.state != 2" ng-model="employeeFilter.userId" name="userId"
+                                    id="employeeFilter.userId" class="input-sm form-control"
+                                    style="width:200px;float: left;margin-left:20px;"
+                                    ng-options="option.id as option.name for option in allAllotUserDL" required>
+                                <option value="">---请选择员工---</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="allotModalHide()">取消</button>
+                    <button type="button" class="btn btn-success c5-lable" ng-disabled="form.$invalid"
+                            ng-click="allotStudent()">确定
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+

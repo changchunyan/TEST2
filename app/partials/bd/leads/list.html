@@ -1,0 +1,426 @@
+
+<div class="view-frame" ng-controller="BdLeadsController as lsc">
+    <div class="view-left">
+        <nav-side menu-data="menu.subMenu"></nav-side>
+    </div>
+    <!--Leads List view-->
+    <div ng-show="isList" class="view-content user-love">
+        <div>
+            <div>
+                <ul class="breadcrumb">
+                    <li><a href="#/">首页</a> <span class="divider"></span></li>
+                    <li><a href="#/bd-admin">招商客户关系管理</a> <span class="divider"></span></li>
+                    <li><a ng-click="showListView()">Leads管理</a> <span class="divider"></span></li>
+                    <li class="active">Leads列表</li>
+                </ul>
+            </div>
+
+        </div>
+		<div st-pipe="getBdLeadsList" st-table="bdLeadsList" class="lh21">
+			<!--TODO:查询条件-->
+			<div class="mt-student-m br-gray h-auto no-media ml-0">
+				<h2 class="h2-title">招商Leads</h2>
+				<ul class="f14 cf bb-1">
+					<li ng-if="showPermissions('BdLeadsAllot')"><a  class="mt-tousu" ng-click="checkBdLead()">Leads查重</a></li>
+					<li ng-if="showPermissions('BdLeadsAdd')"><a  class="mt-purple" ng-click="addBdLead()">新增Leads</a></li>
+					<li ng-if="showPermissions('BdLeadsAdd')"><a  class="mt-export" ng-href="{{domain}}/优胜教育招商Leads导入模版.xlsx">下载招商Leads导入模版</a></li>
+					<li ng-if="showPermissions('BdLeadsAdd')"><a  class="mt-back mr-0" ng-click="excelImport()">批量导入</a></li>
+					<li ng-if="showPermissions('BdLeadsAllot')"><a  class="mt-gree" ng-click="showAllotView()">分配Leads</a></li>
+					<li ng-if="showPermissions('BdLeadsAllot')"><a  class="mt-blue" ng-click="exportLeads()">导出</a></li>
+				</ul>
+				<ul class="one h-auto pr-0">
+					<div class="mt-select" style="min-height: 35px">
+						<div class="rbg mt-0" style="border: none;">
+							<ul class="h-auto" style="padding-right: 0">
+								<div class="of">
+									<li class="no-mar ml-0"><label>姓名</label>
+										<input placeholder="请输入" id="noMar" ng-model="mtSeach.name">
+									</li>
+									<li><label>电话</label>
+										<input placeholder="请输入" ng-model="mtSeach.phone"></li>
+									<li><label class="belongTo">性别</label>
+										<select st-search="bdLeadsFilter.gender" ng-model="mtSeach.gender" class="input-sm form-control"
+												ng-options="option.code as option.name for option in genderList" type="search">
+											<option value="">-- 请选择 --</option>
+										</select></li>
+									<ul class="inline-block time-show lh-auto span-54">
+										<a id="keydown-query" class="mt-btn cf bg-color-blue br ti-0 li-btn-1 pr-0 mt-0" href="javascript:void (0);" ng-click="getBdLeadsListFilterChange()">查询</a>
+										<a class="mt-btn ml15 brc3 li-btn-1 pr-0 mt-0 ti-0"  id="resetInputAll" ng-click="resetSelect()">重置</a>
+										<a class="more mr-14" style="color:#428bca;" ng-click="changeSelectMore(1,1)">{{selectMoreText}}</a>
+									</ul>
+									<!--更多选项-->
+									<li class="w1" ng-if="!selectMore">
+										<a ng-click="changeSelectMore(1)" href="javascript:void(0);" class="mt-more">&nbsp;</a>
+									</li>
+								</div>
+							</ul>
+						</div>
+					</div>
+				</ul>
+				<div class="rbg mt-select" ng-show="selectMore" style="border-top: 1px dotted #ccc;">
+					<ul class="h-auto">
+						<li class="ml-0 frist" style="line-height: 28px"><label>沟通类型</label>
+                            <select st-search="bdLeadsFilter.communicationType" ng-model="mtSeach.communicationType" ng-options="option.code as option.name for option in communicationTypeList">
+                                <option value="">请选择</option>
+                            </select>
+						</li>
+						<li style="line-height: 28px"><label>学历</label><select st-search="bdLeadsFilter.education" ng-model="mtSeach.education" ng-options="option.code as option.name for option in educationList">
+							<option value="">请选择</option>
+						</select></li>
+						<li style="line-height: 28px"><label>婚否</label><select st-search="bdLeadsFilter.marrey" ng-model="mtSeach.marrey" ng-options="option.code as option.name for option in marreyList">
+							<option value="">请选择</option>
+						</select></li>
+						<li style="line-height: 28px"><label>育否</label><select st-search="bdLeadsFilter.haveChild" ng-model="mtSeach.haveChild" ng-options="option.code as option.name for option in haveChildList">
+							<option value="">请选择</option>
+						</select></li>
+						<li style="line-height: 28px"><label>职业背景</label><select st-search="bdLeadsFilter.professionBackground" ng-model="mtSeach.professionBackground" ng-options="option.code as option.name for option in professionBackgroundList">
+							<option value="">请选择</option>
+						</select></li>
+						<li style="line-height: 28px"><label>兴趣</label><select st-search="bdLeadsFilter.interest" ng-model="mtSeach.interest" ng-options="option.code as option.name for option in interestList">
+							<option value="">请选择</option>
+						</select></li>
+						<li style="line-height: 28px"><label>客户类型</label><select st-search="bdLeadsFilter.course_property" ng-model="mtSeach.customer_type" ng-options="option.code as option.name for option in customerTypeList" type="search">
+							<option value="">请选择</option>
+						</select></li>
+						<li style="line-height: 28px"><label>客户状态</label><select st-search="bdLeadsFilter.customer_status" ng-model="mtSeach.customer_status" ng-options="option.code as option.name for option in customerStatusList" type="search">
+							<option value="">请选择</option>
+						</select></li>
+						<li style="line-height: 28px"><label>咨询项目</label><select st-search="bdLeadsFilter.project" ng-model="mtSeach.project" ng-options="option.code as option.name for option in projectList" type="search">
+							<option value="">请选择</option>
+						</select></li>
+						<li><label>意向区域</label><input ng-model="mtSeach.intentAddr"  placeholder="请输入"></li>
+						<li style="line-height: 28px"><label>真实意向</label><select st-search="bdLeadsFilter.intention" ng-model="mtSeach.intention" ng-options="option.code as option.name for option in intentionList">
+							<option value="">请选择</option>
+						</select></li>
+						<li style="line-height: 28px"><label>加盟原因</label><select st-search="bdLeadsFilter.joinReason" ng-model="mtSeach.joinReason" ng-options="option.code as option.name for option in joinReasonList">
+							<option value="">请选择</option>
+						</select></li>
+						<li style="line-height: 28px"><label>渠道来源</label><select st-search="bdLeadsFilter.mediaOrigin" ng-model="mtSeach.mediaOrigin"	ng-options="option.code as option.name for option in mediaOriginList" ng-change="originChangeForFilter()" type="search">
+							<option value="">请选择</option>
+						</select></li>
+						<li style="line-height: 28px"><label>来源详情</label><select st-search="bdLeadsFilter.mediaDetail" ng-model="mtSeach.mediaDetail"	ng-options="option.code as option.name for option in mediaDetailList" type="search">
+							<option value="">请选择</option>
+						</select></li>
+						<li style="line-height: 28px"><label>媒体影响</label><select st-search="bdLeadsFilter.mediaEffect" ng-model="mtSeach.mediaEffect"	ng-options="option.code as option.name for option in mediaEffectList" type="search">
+							<option value="">请选择</option>
+						</select></li>
+						<li style="line-height: 28px"><label>省</label><select st-search="bdLeadsFilter.province" ng-model="mtSeach.province"	ng-options="option.provinceCode as option.provinceName for option in provinceList" ng-change="privinceChangeForFilter()" type="search">
+							<option value="">请选择</option>
+						</select></li>
+						<li style="line-height: 28px"><label>市</label><select st-search="bdLeadsFilter.city" ng-model="mtSeach.city"	ng-options="option.cityCode as option.cityName for option in cityList" ng-change="cityChangeForFilter()" type="search">
+							<option value="">请选择</option>
+						</select></li>
+						<li style="line-height: 28px"><label>县（区）</label><select st-search="bdLeadsFilter.area" ng-model="mtSeach.area" ng-options="option.areaCode as option.areaName for option in areaList" type="search">
+							<option value="">请选择</option>
+						</select></li>
+						<li><label>所属人</label><input placeholder="请输入" ng-model="mtSeach.owner_name"></li>
+					</ul>
+					<div class="rbg br0">
+						<ul style="min-height:92px;">
+							<div class="of">
+								<li class="mt-three option no-mar" vr-select data-mt="{{ageDatas}}"  changefun="getBdLeadsListFilterChange"><label>年龄:</label>
+									<input class="three-1" ng-model="mtSeach.age" st-search="mtSeach.age">
+									<div class="three-1">不限</div>
+									<input class="three-2 bg-none" type="number" placeholder="" ng-model="mtSeach.ageBegin">
+									<div class="three-2"></div><span class="dao">到</span>
+									<input class="three-2 bg-none" type="number" name="" ng-model="mtSeach.ageEnd">
+									<div class="three-2"></div>
+									<!--<a class="mt-btn cf bg-color-blue br ti-0 li-btn pr-0" href="javascript:void (0);" ng-click="bdLeadsFilterChange()">查询</a>-->
+								</li>
+								<li class="mt-three option no-mar" vr-select data-mt="{{nextCourseDatas}}" changefun="getBdLeadsListFilterChange"><label>创建时间:</label>
+									<input class="three-1" ng-model="mtSeach.ceate_at" st-search="mtSeach.ceate_at">
+									<div class="three-1">不限</div>
+									<input class="three-2" readonly type="search" placeholder="" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})" ng-model="mtSeach.searchTimeStart">
+									<div class="three-2"></div><span class="dao">到</span>
+									<input class="three-2" readonly type="search" name="" placeholder="" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'2010-01-01',maxDate:'2030-12-31'})" ng-model="mtSeach.searchTimeEnd">
+									<div class="three-2"></div>
+									<!--<a class="mt-btn cf bg-color-blue br ti-0 li-btn pr-0" href="javascript:void (0);" ng-click="bdLeadsFilterChange()">查询</a>-->
+								</li>
+
+							</div>
+							<!--隐藏更多-->
+							<li class="w1 down">
+								<a ng-click="changeSelectMore(0)" class="mt-more">&nbsp;</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+<!--todo-->
+
+			<div class="br-gray pl-0 mt-list">
+				<h2><span class="h2-span">招商意向客户列表</span><a class="mt-blue select-col cf f14" ng-click="showCol(1)">选择列</a></h2>
+				<div class="br-gray edit-col" ng-if="_showCol" ng-style="$editColCss" event-listener-scroll="" data-parent-fixed="mt-list">
+					<h2 class="cf">编辑列<a class="close glyphicon glyphicon-remove" ng-click="showCol(0)"></a></h2>
+					<ul class="select-col-list">
+						<h2 ng-class="{'active':isAll}" ng-click="selectColAll()">全选</h2>
+						<div style="height:298px;overflow-y: auto;border-bottom: 1px #ccc solid">
+							<li ng-repeat="colList in lEditColList" ng-class="{'active':colList.select}" ng-click="selectCol($index)">{{colList.name}}</li>
+						</div>
+						<a class="btn reast" ng-click="reastCol()">恢复默认</a>
+					</ul>
+				</div>
+				<div class="overflow-x isShowCol">
+					<table class="table table-bordered table-striped mt-table1">
+						<thead>
+						<tr>
+							<th ng-if="!isAllot">操作</th>
+							<th ng-if="isAllot">分配</th>
+							<th>姓名</th>
+							<th>备注信息</th>
+							<th>电话</th>
+							<th>沟通类型</th>
+							<th>性别</th>
+							<th>年龄</th>
+							<th>学历</th>
+							<th>婚否</th>
+							<th>育否</th>
+							<th>职业背景</th>
+							<th>兴趣</th>
+							<th>客户类型</th>
+							<th>客户状态</th>
+							<th>咨询项目</th>
+							<th>意向区域</th>
+							<th>真实意向</th>
+							<th>加盟原因</th>
+							<th>渠道来源</th>
+							<th>渠道详情</th>
+							<th>媒体影响</th>
+							<th>省</th>
+							<th>市</th>
+							<th>县(区)</th>
+							<!-- <th>创建人</th> -->
+							<th ng-if="showPermissions('BdLeadsViewAll')" >所属人</th>
+							<th>创建时间</th>
+						</tr>
+						<!--tr>
+                            <th></th>
+                            <th>
+                                <input st-search="bdLeadsFilter.name" placeholder="姓名查询" ng-model="bdLeadsFilter.name" class="input-sm form-control" type="search" ng-maxlength="10"/>
+                            </th>
+                            <th></th>
+                            <th>
+                                <input ng-if="showPermissions('BdLeadsViewTel')" st-search="bdLeadsFilter.phone" placeholder="电话查询" value="{{bdLeadsFilter.phone}}" ng-model="bdLeadsFilter.phone" class="input-sm form-control" type="search" ng-maxlength="12"/>
+                            </th>
+                            <th>
+                                <select st-search="bdLeadsFilter.gender" ng-model="bdLeadsFilter.gender"
+                                        name="bdLeadsFilter.gender" id="bdLeadsFilter.gender" class="input-sm form-control"
+                                        ng-options="option.code as option.name for option in genderList" type="search">
+                                    <option value="">&#45;&#45; 请选择 &#45;&#45;</option>
+                                </select>
+                                &lt;!&ndash;  <select ng-model="BdLeadsVo.investAbility" name="investAbility" id="investAbility" class="form-control"
+                                    ng-options="option.code as option.name for option in investAbilityList" >
+                                <option value="">&#45;&#45; 请选择 &#45;&#45;</option> &ndash;&gt;
+                            </th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>
+                                <select st-search="bdLeadsFilter.customer_type" ng-model="bdLeadsFilter.customer_type"
+                                        name="bdLeadsFilter.customer_type" id="bdLeadsFilter.customer_type" class="input-sm form-control"
+                                        ng-options="option.code as option.name for option in customerTypeList" type="search">
+                                    <option value="">&#45;&#45; 请选择 &#45;&#45;</option>
+                                </select>
+                            </th>
+                            <th>
+                                <select st-search="bdLeadsFilter.customer_status" ng-model="bdLeadsFilter.customer_status"
+                                        name="bdLeadsFilter.customer_status" id="bdLeadsFilter.customer_status" class="input-sm form-control"
+                                        ng-options="option.code as option.name for option in customerStatusList" type="search">
+
+                                    <option value="">&#45;&#45; 请选择 &#45;&#45;</option>
+                                </select>
+                            </th>
+                            <th>
+                                <select st-search="bdLeadsFilter.project" ng-model="bdLeadsFilter.project"
+                                        name="bdLeadsFilter.project" id="bdLeadsFilter.project" class="input-sm form-control"
+                                        ng-options="option.code as option.name for option in projectList" type="search">
+                                    <option value="">&#45;&#45; 请选择 &#45;&#45;</option>
+                                </select>
+                            </th>
+                            <th>
+                                <input ng-model="bdLeadsFilter.intentAddr" st-search="bdLeadsFilter.intentAddr"
+                                       class="input-sm form-control" placeholder="意向区域" type="search" ng-maxlength="20"/>
+                            </th>
+                            <th></th>
+                            <th></th>
+                            <th>
+                                <select st-search="bdLeadsFilter.mediaOrigin" ng-model="bdLeadsFilter.mediaOrigin"
+                                        name="bdLeadsFilter.mediaOrigin" id="bdLeadsFilter.mediaOrigin" class="input-sm form-control"
+                                        ng-options="option.code as option.name for option in mediaOriginList" ng-change="originChangeForFilter()" type="search">
+                                    <option value="">&#45;&#45; 请选择 &#45;&#45;</option>
+                                </select>
+                            </th>
+                            <th>
+                                <select ng-model="bdLeadsFilter.mediaDetail" st-search="bdLeadsFilter.mediaDetail"
+                                        name="bdLeadsFilter.mediaDetail" id="bdLeadsFilter.mediaDetail" class="input-sm form-control"
+                                        ng-options="option.code as option.name for option in mediaDetailList" type="search">
+                                    <option value="">&#45;&#45; 请选择 &#45;&#45;</option>
+                                </select>
+                            </th>
+                            <th>
+                                <select ng-model="bdLeadsFilter.mediaEffect" st-search="bdLeadsFilter.mediaEffect"
+                                        name="bdLeadsFilter.mediaEffect" id="bdLeadsFilter.mediaEffect" class="input-sm form-control"
+                                        ng-options="option.code as option.name for option in mediaEffectList" type="search">
+                                    <option value="">&#45;&#45; 请选择 &#45;&#45;</option>
+                                </select>
+                            </th>
+                            <th>
+                                <select st-search="bdLeadsFilter.province" ng-model="bdLeadsFilter.province"
+                                        name="bdLeadsFilter.province" id="bdLeadsFilter.province" class="input-sm form-control"
+                                        ng-options="option.provinceCode as option.provinceName for option in provinceList" ng-change="privinceChangeForFilter()" type="search">
+                                    <option value="">&#45;&#45; 请选择 &#45;&#45;</option>
+                                </select>
+                            </th>
+                            <th>
+                                <select ng-model="bdLeadsFilter.city" st-search="bdLeadsFilter.city"
+                                        name="bdLeadsFilter.city" id="bdLeadsFilter.city" class="input-sm form-control"
+                                        ng-options="option.cityCode as option.cityName for option in cityList" ng-change="cityChangeForFilter()" type="search">
+                                    <option value="">&#45;&#45; 请选择 &#45;&#45;</option>
+                                </select>
+                            </th>
+                            <th>
+                                <select ng-model="bdLeadsFilter.area" st-search="bdLeadsFilter.area"
+                                        name="bdLeadsFilter.area" id="bdLeadsFilter.area" class="input-sm form-control"
+                                        ng-options="option.areaCode as option.areaName for option in areaList" type="search">
+                                    <option value="">&#45;&#45; 请选择 &#45;&#45;</option>
+                                </select>
+                            </th>
+                            &lt;!&ndash; <th>
+                                <input ng-model="bdLeadsFilter.creator_name" st-search="bdLeadsFilter.creator_name"
+                                       class="input-sm form-control" placeholder="创建人" type="search" ng-maxlength="20"/>
+                            </th> &ndash;&gt;
+                            <th ng-if="showPermissions('BdLeadsViewAll')">
+                                <input ng-model="bdLeadsFilter.owner_name" st-search="bdLeadsFilter.owner_name"
+                                       class="input-sm form-control" placeholder="所属人" type="search" ng-maxlength="20"/>
+                            </th>
+                            <th>&nbsp;
+                                &lt;!&ndash;<input type="date" ng-model="bdLeadsFilter.create_at" st-search="bdLeadsFilter.create_at" class="input-sm form-control" type="search"/>&ndash;&gt;
+                            </th>
+                        </tr>-->
+						</thead>
+						<tbody ng-show="!isBdLeadsLoading">
+						<tr ng-repeat="row in bdLeadsList">
+							<td ng-if="!isAllot">
+								<a ng-click="viewBdLead(row)" ng-if="showPermissions('BdLeadsView') && !showPermissions('BdLeadsAllot')"><span class="glyphicon glyphicon-search" title="查看Leads"></span></a>&nbsp;
+								<a ng-click="addFranchiser(row)" ng-if="showPermissions('BdLeadsNoticeAdd')"><span class="glyphicon glyphicon-plus" title="添加加盟信息"></span></a>&nbsp;
+								<a ng-click="editBdLead(row)" ng-if="showPermissions('BdLeadsEdit')"><span class="glyphicon glyphicon-pencil" title="编辑Leads"></span></a>
+							</td>
+							<td ng-if="isAllot">
+								<input type="checkbox" ng-checked="ifLeadChecked(row)" ng-click="changeLeadCheckbox(row)" ng-disabled="isBatchOperate">
+							</td>
+							<td>{{row.name}}</td>
+							<td style="width: 120px;max-width: 120px;overflow: hidden;"><a data-content="{{row.record}}" class="center-block" data-placement="top" webui-popover>{{row.record}}</a></td>
+							<td>{{row.phone}}</td>
+							<td><a class="open" id="gt+{{$index}}" ng-click="gt[$index]=true">{{row.communicationTypeName||'未标记'}}</a>
+                                <bubble  ng-if="gt[$index]" for="gt+{{$index}}" align="bottom" close="gt[$index]=false" close-action="outerchick " ng-mouseleave="gt[$index]=false;"><!--ng-mouseleave="nwj[$index]=false;"-->
+                                    <ul>
+                                        <li ng-class="{true: 'active', false: ''}[row.communicationType == el.code||!row.communicationType&&!el.code]" ng-repeat="el in communicationList" ng-click="changeUserType(row,'communicationtype',el.code)">
+                                            <a >{{el.name}}</a>
+                                        </li>
+                                    </ul>
+                                </bubble>
+
+                            </td>
+							<td>{{row.genderName}}</td>
+							<td>{{row.age}}</td>
+							<td>{{row.education_name}}</td>
+							<td>{{row.marreyName}}</td>
+							<td>{{row.haveChildName}}</td>
+							<td>{{row.professionBackgroundName}}</td>
+							<td>{{row.interestName}}</td>
+							<td>
+                                <a class="open" id="ct+{{$index}}" ng-click="ct[$index]=true">{{row.customer_type_name||'未标记'}}</a>
+                                <bubble  ng-if="ct[$index]" for="ct+{{$index}}" align="bottom" close="ct[$index]=false" close-action="outerchick " ng-mouseleave="ct[$index]=false;"><!--ng-mouseleave="nwj[$index]=false;"-->
+                                    <ul>
+                                        <li ng-class="{true: 'active', false: ''}[row.customer_type == el.code||!row.customer_type&&!el.code]" ng-repeat="el in _customerTypeList" ng-click="changeUserType(row,'CustomerType',el.code)">
+                                            <a >{{el.name}}</a>
+                                        </li>
+                                    </ul>
+                                </bubble>
+                            </td>
+							<td>{{row.customer_status_name}}</td>
+							<td>{{row.project_name}}</td>
+							<td>{{row.intentAddr}}</td>
+							<td>{{row.intentionName}}</td>
+							<td>{{row.joinReasonName}}</td>
+							<td>{{row.mediaOriginName}}</td>
+							<td>{{row.mediaDetailName}}</td>
+							<td>{{row.mediaEffectName}}</td>
+							<td>{{row.province_name}}</td>
+							<td>{{row.city_name}}</td>
+							<td>{{row.area_name}}</td>
+							<!-- <td>{{row.creator_name}}</td> -->
+							<td ng-if="showPermissions('BdLeadsViewAll')">{{row.owner_name}}</td>
+							<td>{{row.create_at | date:'yyyy-MM-dd'}}</td>
+						</tr>
+						</tbody>
+						<tbody ng-show="isBdLeadsLoading">
+						<tr>
+							<td colspan="13" class="text-center"><div class="loading-indicator"></div>
+							</td>
+						</tr>
+						</tbody>
+						<tfoot>
+						<tr>
+							<td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="18">
+							</td>
+						</tr>
+						</tfoot>
+					</table>
+
+
+				</div>
+			</div>
+		</div>
+        <!-- allocate Leads view -->
+        <div ng-show="isAllot">
+            <div class="table-responsive" style="overflow:scroll;overflow-y:hidden">
+                <table class="table table-bordered table-striped table-condensed" st-pipe="getBdManagerList" st-table="bdManagerList">
+                    <thead>
+                    <tr>
+                        <th><input type="checkbox" ng-click="ifBatchChecked()" >是否批量操作</th>
+                        <th ng-show="isBatchOperate">可分配条数：{{leadNum}}</th>
+                        <th ng-show="isBatchOperate"><input type="number" placeholder="输入数量可直接分配" class="form-control ng-pristine ng-valid ng-touched" ng-model="batchNum" ng-min="1" ng-max="leadNum"></th>
+                    </tr>
+                    <tr>
+                        <th>操作</th>
+                        <th>姓名</th>
+                        <th>岗位</th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th>
+                            <input st-search="userInfo.name" placeholder="姓名查询" ng-model="userInfo.name" class="input-sm form-control" type="search" ng-maxlength="20"/>
+                        </th>
+                        <th></th>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="row in bdManagerList">
+                        <td>
+                            <input type="checkbox" ng-checked="ifWorkChecked(row)" ng-click="changeWorkCheckbox(row)" >
+                        </td>
+                        <td>{{row.name}}</td>
+                        <td>招商经理</td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="text-center ng-scope">
+                <button ng-show="!isBatchOperate" type="button" class="btn btn-success" ng-click="distribute()">分配</button>
+                <button ng-show="isBatchOperate" type="button" class="btn btn-success" ng-click="batchDistribute()">批量分配</button>
+                <button type="button" class="btn btn-success" ng-click="gotoListView()">取消</button>
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+<script src="js/jqDom.js"></script>

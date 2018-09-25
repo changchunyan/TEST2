@@ -1,0 +1,33 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="form">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group" ng-class="{ 'has-error': form.name.$dirty && form.name.$error.required }">
+                        <label for="name">部门名称</label>
+                        <input type="text" name="name" id="name" class="form-control" ng-model="newDepartment.name" required />
+                        <span ng-show="form.name.$dirty && form.name.$error.required" class="help-block" required>请输入部门名称</span>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': form.contractCompany.$dirty && form.contractCompany.$error.required }">
+                        <label for="contractCompany">合同签署单位</label>
+                        <input type="text" name="contractCompany" id="contractCompany" class="form-control" ng-model="newDepartment.contractCompany" />
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': form.projectSettingId.$dirty && form.projectSettingId.$error.required }">
+                        <label for="contractCompany">所属项目</label>
+                        <select  ng-model="newDepartment.projectSettingId" ng-change="changeProjectSetting(newDepartment)" class="form-control" name="projectSettingId" id="projectSettingId" 
+                        ng-options="tl.id as tl.projectName for tl in projectSettings"></select>
+                        
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                    <button type="button" class="btn btn-success c5-lable" ng-click="saveRoot()"  ng-disabled="form.$invalid">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

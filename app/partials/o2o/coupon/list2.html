@@ -1,0 +1,125 @@
+<div class="view-frame">
+
+	<div class="view-left">
+		<nav-side menu-data="menu.subMenu"></nav-side>
+	</div>
+
+	<div class="view-content">
+		<div>
+			<div>
+				<ul class="breadcrumb">
+					<li><a href="#/">首页</a> <span class="divider"></span></li>
+					<li><a href="#/o2o-admin">o2o系统管理</a> <span class="divider"></span></li>
+					<li class="active">优惠券管理</li>
+				</ul>
+			</div>
+			<div class="tabs-title">优惠券列表
+				<div class="leads-top-btn">
+					<div class="operations-panel" >
+						<button class="btn btn-primary col-xs-offset-8" ng-click="toAdd()" style="width:90px;">添加优惠券</button>
+						<!--<button class="btn btn-primary col-xs-offset-8" ng-click="test()" style="width:90px;">test</button>-->
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<tabs>
+			<pane title="优惠券列表">
+				<div class="table-responsive" >
+					<div class="table-title">优惠券列表</div>
+					<table class="table table-bordered table-striped table-condensed" st-pipe="getCouponList" st-table="couponList">
+						<thead>
+						<tr>
+							<th>优惠券名称</th>
+							<th>优惠方式</th>
+							<th>领取限制</th>
+							<th>有效期</th>
+							<th>领取人次</th>
+							<th>已使用</th>
+							<th>状态</th>
+							<th>操作</th>
+						</tr>
+						<tr>
+							<!--<th style="line-height: 30px;"><span>查询条件</span></th>-->
+							<th>
+								<input st-search="couponFilter.couponName" placeholder="搜索优惠券" ng-model="couponFilter.couponName" class="input-sm form-control" type="search"/>
+							</th>
+							<th>
+								<select st-search="couponFilter.preferentialPolicy" ng-model="couponFilter.preferentialPolicy"
+										name="couponFilter.preferentialPolicy" id="couponFilter.preferentialPolicy" class="input-sm form-control"
+										ng-options="option.id as option.name for option in preferentialPolicyList" type="search">
+									<option value="">-- 全部 --</option>
+								</select>
+							</th>
+							<th></th>
+							<th></th>
+							<th></th>
+							<th></th>
+							<th>
+								<select st-search="couponFilter.status" ng-model="couponFilter.status"
+										name="couponFilter.status" id="couponFilter.status" class="input-sm form-control"
+										ng-options="option.id as option.name for option in statusList" type="search">
+									<option value="">-- 全部 --</option>
+								</select>
+							</th>
+							<th></th>
+						</tr>
+						</thead>
+						<tbody ng-show="!isCouponLoading">
+						<tr ng-repeat="row in couponList">
+							<td>
+								<a ng-click="toView(row)"><span>{{row.couponName}}</span></a>
+							</td>
+							<td>
+								<span ng-if="row.preferentialPolicy ==1">减{{row.couponReduction}}<br/><i style="color: #CCCCCC">满{{row.couponReductionActivation}}</i></span>
+								<span ng-if="row.preferentialPolicy ==2">打{{row.couponDiscount}}折<br/><i style="color: #CCCCCC">满{{row.couponDiscountActivation}}</i></span>
+							</td>
+							<td>
+								<span ng-if="row.isAmountLimit ==0">不限</span>
+								<span ng-if="row.isAmountLimit ==1">{{row.amountPerPerson}}张/账号</span>
+							</td>
+							<td>{{row.validitystarttime | date:'yyyy-MM-dd HH:mm:ss'}}<br/>-
+								<i ng-if="row.validityendtime < currentDate" style="color: red">{{row.validityendtime | date:'yyyy-MM-dd HH:mm:ss'}}</i>
+								<i ng-if="row.validityendtime >= currentDate">{{row.validityendtime | date:'yyyy-MM-dd HH:mm:ss'}}</i>
+							</td>
+							<td>
+								<span ng-if="!(row.limitAmount) || row.limitAmount <= 0 ">{{row.takeAmount}}</span>
+								<span ng-if="row.limitAmount > 0">{{row.takeAmount}}/{{row.limitAmount}}</span>
+							</td>
+							<td>{{row.usedAmount}}</td>
+							<td>
+								<span ng-if="row.validityendtime < currentDate"><i style="color: red">失效</i></span>
+								<span ng-if="row.validityendtime >= currentDate && row.isShelve == 1">上架</span>
+								<span ng-if="row.validityendtime >= currentDate && row.isShelve == 0">下架</span>
+							</td>
+							<td ng-if="row.validityendtime < currentDate">
+								<a ng-click="deleteCoupon(row)"><span title="删除">删除</span></a>&nbsp;
+							</td>
+							<td ng-if="row.validityendtime >= currentDate && row.isShelve == 1">
+								<a ng-click="offShelf(row)" ><span title="下架">下架</span></a>&nbsp;
+							</td>
+							<td ng-if="row.validityendtime >= currentDate && row.isShelve == 0">
+								<a ng-click="deleteCoupon(row)"><span title="删除">删除</span></a>&nbsp;
+								<a ng-click="onShelf(row)" ng-if="row.limitAmount == 0 || (row.limitAmount > 1 && row.limitAmount > row.takeAmount)"><span title="上架">上架</span></a>&nbsp;
+								<a ng-click="edit(row)" ng-if="row.usedAmount == 0"><span title="编辑">编辑</span></a>&nbsp;
+							</td>
+						</tr>
+						</tbody>
+						<tbody ng-show="isCouponLoading">
+						<tr>
+							<td colspan="20" class="text-center"><div class="loading-indicator"></div>
+							</td>
+						</tr>
+						</tbody>
+						<tfoot>
+						<tr>
+							<td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="20">
+							</td>
+						</tr>
+						</tfoot>
+					</table>
+				</div>
+			</pane>
+		</tabs>
+	</div>
+</div>

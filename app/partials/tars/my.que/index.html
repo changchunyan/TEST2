@@ -1,0 +1,107 @@
+<div class="view-frame" ng-controller="PreNotesController">
+    <div class="view-left">
+        <nav-side menu-data="menu.subMenu"></nav-side>
+    </div>
+    <div class="view-content user-love notes-lib">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="#/tars">教研系统</a> <span class="divider"></span></li>
+                <li class="active">我的组卷</li>
+            </ul>
+        </div>
+        <div ng-if="!paperDetail">
+            <div class="br-gray c3 pr-20 pb-20 ">
+                <h2 class="h2-title">我的组卷<i class="i-br">?</i></h2>
+                <ul class="f14 cf bb-1 of lh-40">
+                    <li><a class="mt-blue btn-zj cf br-4" ng-href="#/tars/que/lib"><img src="img/tars/zj.png">&nbsp;组卷</a></li>
+                </ul>
+                <div class="form-option pt-10">
+                    <div class="mt-input-group pra w-20 fl br-0">
+                        <label>学科学段</label>
+                        <select ng-model="$paperLib.paperMyTableState.subject" ng-options="option.id as option.name for option in subjectList">
+                            <option value="">请选择</option>
+                        </select>
+                    </div>
+                    <div class="mt-input-group pra w-20 fl br-0">
+                        <label>年级</label>
+                        <select ng-model="$paperLib.paperMyTableState.grade" ng-options="option.id as option.name for option in gradeList">
+                            <option value="">请选择</option>
+                        </select>
+                    </div>
+                    <!--<div class="mt-input-group pra w-20 fl br-0">
+                        <label>状态</label>
+                        <select><option></option></select>
+                    </div>-->
+                    <div class="mt-input-group pra w-30 fl br-0">
+                        <input name="" class="pl-10 f14" placeholder="输入试卷" ng-model="$paperLib.paperMyTableState.query" >
+                        <a><i class="glyphicon glyphicon-search"></i> </a>
+                    </div>
+                </div>
+            </div>
+            <div class="form-option of mt-20" st-pipe="$paperLib.pageFindMyPaperAll" st-table="myPaperAllList">
+                <div class="tars-right of m0">
+                    <!--top-->
+                    <div class="mt-input-group pra"><label class="c3 f16 strong pl-20">组卷列表</label>
+                    </div>
+                    <!--content-->
+                    <div class="tars-content of">
+                        <div class="tars-item" ng-repeat="el in myPaperAllList">
+                            <h3> <a ng-click="$paperLib.pageFindPaperView(el.id)">{{el.name}}</a><!--<a
+                                class="fr mt-clear f12">删除</a>--></h3>
+                            <p class="cf8 f14">
+                                <span class="mt-user mt-tm">科目：{{el.subject.name}}</span><span class="ml-10 pl-0 cf8">|</span><span>年级：{{el.grade.name}}</span><span class="ml-10 pl-0 cf8">|</span><span>创建人：{{el.uploaderName}}</span><span
+                                    class="ml-10 pl-0 cf8">|</span><span>创建时间：{{el.uploadTime}}</span><span class="fr">状态：{{el.state|paperState:el.state}}</span>
+                            </p>
+                        </div>
+                        <!--<div class="tars-item">
+                            <h3><a>测试用试题请勿操作</a><a class="fr mt-clear f12">删除</a></h3>
+                            <p class="cf8 f14">
+                                <span class="mt-user mt-tm">科目：语文</span><span class="ml-10 pl-0 cf8">|</span><span>年级：一年级</span><span class="ml-10 pl-0 cf8">|</span><span>创建人：超级管理员</span><span
+                                    class="ml-10 pl-0 cf8">|</span><span>创建时间：2015-12-12   18:30</span><span class="fr">状态：审核中</span>
+                            </p>
+                        </div>-->
+                    </div>
+                    <!--分页-->
+                    <div class="mt-page f14" id="mt_page"></div>
+                </div>
+            </div>
+        </div>
+        <!--试卷预览-->
+        <div class="form-option" ng-if="paperDetail">
+            <h3 class="bb-1"><label class="f16 c3 strong">试卷信息</label><a href="" class="fr mt-clear f12 ml15" ng-click="$paperLib.clearPaperDetail()">返回</a><a ng-click="$paperLib.download(paperDetail.name)" class="fr mt-cx mt-clear f12 br-0 download " style="    color: #fff;
+    text-indent: 17px;padding: 2px 12px;">下载</a></h3>
+            <p>&nbsp;</p>
+            <div class="tars-right of m0">
+                <div class="mt-input-group pra">
+                    <label class="c3 f16 strong">试卷预览</label>
+                </div>
+                <!--试题列表-->
+                <div class="tars-content of" id="mt_download">
+                    <div class="paper-item" ng-repeat="el in paperDetail.questions">
+                        <h2 class="f14 c5 bgc-3e"><i class="serial">{{$index+1}}</i><span class="ml-5">{{el.paperName}}</span></h2>
+                        <div class="topic">
+                            <div class="cf1b" ng-bind-html="getSceHtml(el.qBody)">
+                            </div>
+                            <div class="cf1b" ng-bind-html="getSceHtml(el.qOptions)">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-input-group pra">
+                        <label class="c3 f16 strong">试卷答案</label>
+                    </div>
+                    <div class="paper-item" ng-repeat="el in paperDetail.questions">
+                        <h2 class="f14 c5 bgc-3e"><i class="serial">{{$index+1}}</i><span class="ml-5">{{el.questionType}}</span></h2>
+                        <div class="topic">
+                            <div class="cf1b">
+                                <p class="mt-10 f14" ng-if="el.qAnswer" ng-bind-html="getSceHtml(el.qAnswer)"></p><p class="mt-10 f14" ng-if="el.qAnalysis" ng-bind-html="getSceHtml(el.qAnalysis)"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+

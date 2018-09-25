@@ -1,0 +1,119 @@
+<link href="css/smarty.css" rel="stylesheet">
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" style="min-width: 500px">
+        <div class="modal-content">
+            <form name="addOrderRenewalForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-if="printModal" ng-click="hidePrint()"><span
+                            aria-hidden="true">&times;</span></button><button type="button" class="close" aria-label="Close" ng-if="!printModal" ng-click="$hide()"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle"></h4>
+                </div>
+                <div class="modal-body" style="padding: 24px;width: 290px;margin: 0 auto;">
+                    <div class="mt-print f12" id="mt_print">
+                        <style type="text/css" media="print">
+                            @page {
+                                size: auto 58mm landscape;
+                                margin: 0mm;
+                            }
+
+                            @media print {
+                                div,
+                                ul,
+                                body {
+                                    margin: 0;
+                                    padding: 0;
+                                }
+                                #mt_print h2 {
+                                    margin: 20px 0 0;
+                                    font-size: 18px;
+                                    font-weight: 500;
+                                    text-align: center;
+                                }
+                                #mt_print ul {
+                                    border-bottom: 1px dashed #000;
+                                    padding-left: 20px;
+                                    padding-top: 10px
+                                }
+                                #mt_print li {
+                                    line-height: 28px;
+                                    font-size: 12px;
+                                }
+                                #mt_print li label {
+                                    display: inline-block;
+                                }
+                                ul,
+                                li {
+                                    list-style: none;
+                                }
+                            }
+                        </style>
+                        <!--startprint-->
+                        <div ng-repeat="printDetail in printDetailList">
+                            <h2 class="tc f16">上课凭单</h2>
+                            <ul>
+                                <li><label>学<i></i>员:</label><span>{{printDetail.student_name}}</span></li>
+                                <!-- <li><label style="">课程类型:</label><span>	{{printDetail.coursename}}</span></li> -->
+                                <li><label>课程类型:</label><span>{{printDetail.coursename != null ? printDetail.coursename :"试听课程"}}</span></li>
+                                <li><label>年<i></i>级:</label><span>{{printDetail.grade_name}}</span></li>
+                                <li><label>上课时间:</label><span>{{printDetail.start_time|date:'yyyy-MM-dd HH:mm:ss'}}</span></li>
+                                <li><label>下课时间:</label><span>{{printDetail.end_time|date:'yyyy-MM-dd HH:mm:ss'}}</span></li>
+                                <li><label>授课方式:</label><span>{{printDetail.group_type}}</span></li>
+                                <!--<li><label>折算系数:</label><span>{{printDetail.coefficient}}</span></li>
+                                <li class="li_1" ng-if="printDetail.order_rule!=2"><label>上课课时:</label><span>{{printDetail.course_num}}</span></li>
+                                <li class="li_1" ng-if="printDetail.order_rule==2"><label>上课课时:</label><span>{{printDetail.course_num_2}}</span></li>-->
+                                <li><label>课时数:</label><span>{{printDetail.course_num_end}}</span></li>
+                                <li ng-if="printDetail.type==8||printDetail.type==9"><label>消课金额:</label><span>{{printDetail.price}}</span></li>
+                                <li ng-if="printDetail.type!=8&&printDetail.type!=9"><label>消课金额:</label><span>{{printDetail.actual_price}}</span></li>
+                                <li><label>科<i></i>目:</label><span>{{printDetail.subject_name}}
+                                <li><label>授课老师:</label><span>{{printDetail.teacher_name}}</span></li>
+                                <li><label>班<i class="s-x"></i>主<i class="s-x"></i>任:</label><span>{{printDetail.xueguanname}}</span></li>
+                                <li class="mt-show" ng-if="printDetail.type==8||printDetail.type==9"><label>计费金额:</label><span>{{printDetail.price}}</span></li>
+                                <li class="mt-show"><label>打印时间:</label><span>{{printTime|date:'yyyy-MM-dd HH:mm:ss'}}</span></li>
+                                <li class="mt-show"><label>账户余额:</label><span>{{printDetail.amount_all}}</span></li>
+                                <li class="mt-show"><label>剩余课时:</label><span>{{printDetail.num_all}}</span></li>
+
+                            </ul>
+                            <ul class="pul">
+                                <li>课后无异议，请签字</li>
+                                <li><label style="">学员签字:</label></li>
+                                <li><label style="">老师签字:</label></li>
+                                <li class="mt-print-show" style="display: none;"><label>打印时间:</label><span>{{printDetail.nowTime|date:'yyyy-MM-dd HH:mm:ss'}}</span></li>
+                            </ul>
+                            <ul class="pul">
+                                <li>1.请将此票课前交予授课老师,课后老师交予审核。</li>
+                                <li>2.学员授课方式(一对一、一对二和一对三)的改变将会引起消费金额/消费课时的变动,课后老师交予审核。</li>
+                            </ul>
+                        </div>
+                        <!--endprint-->
+                    </div>
+                    <p style="height:40px;line-height: 40px;"><span class="mt-warning">!</span>&nbsp;请确保您的电脑连接到热敏打印机</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-if="printModal" ng-click="hidePrint()">取消</button>
+                    <button type="button" class="btn btn-default" ng-if="!printModal" ng-click="$hide()">取消</button>
+                    <button type="button" class="btn btn-success c5-lable" onclick="preview()">打印课票</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--<li class="mt-show" ng-if="printDetail.type!=8&&printDetail.type!=9"><label>储值余额:</label><span>{{printDetail.amount_all}}</span></li>-->
+
+    <script>
+        function preview() {
+            /*$('.mt-show').remove()
+            $('#h2_1').css({'border-bottom':'1px dashed #fff'})
+            $('.mt-print-show').show()
+            $('.li_1').css({'display':'block'})*/
+            /* bdhtml=window.document.body.innerHTML;
+             sprnstr="<!--startprint-->";
+             eprnstr="<!--endprint-->";
+             prnhtml=bdhtml.substring(bdhtml.indexOf(sprnstr)+17);
+             prnhtml=prnhtml.substring(0,prnhtml.indexOf(eprnstr));
+             window.document.body.innerHTML=prnhtml;
+             window.document.body.style.margin = 0
+             window.document.body.style.padding = 0*/
+            $('#mt_print').jqprint({ importCSS: false })
+        }
+    </script>
+</div>

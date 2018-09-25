@@ -1,0 +1,92 @@
+<div class="row"
+	ng-controller="InvitationCommunicationController as icc">
+
+
+	<div class="view-left">
+		<div ng-include="'partials/common/common.indexLeft.html'"></div>
+	</div>
+	
+	
+	<div ng-show="!isAdding" class="col-sm-10">
+		<div>
+			<ul class="breadcrumb">
+				<li><a href="#">首页</a> <span class="divider"></span></li>
+				<li><a href="#">邀约沟通管理</a> <span class="divider"></span></li>
+				<li class="active">邀约沟通列表</li>
+			</ul>
+		</div>
+		
+		<div class="yws-nav">
+			<div class="table-responsive"
+				style="overflow: scroll; overflow-y: hidden">
+				
+				<div class="operations-panel">
+					<button class="btn btn-primary" ng-click="add('2','1','9')">
+						<span class="glyphicon glyphicon-plus"></span>&nbsp;新增邀约沟通
+					</button>
+					<button class="btn btn-primary" ng-click="add('2','1','9')">
+						<span class="glyphicon glyphicon-plus"></span>&nbsp;到访确认
+					</button>
+				</div>
+				
+				<table class="table table-bordered table-striped" st-pipe="callServer" st-table="displayed">
+		            <thead>
+		            <tr>
+
+		                <th>被沟通的用户ID</th>
+		                <th>被沟通的用户类型</th>
+		                <th>被沟通的用户状态</th>
+		                <th>沟通人</th>
+		                <th>机构ID</th>
+		                <th>沟通时间</th>
+		                <th>沟通内容</th>
+						<th>操作</th>
+		            </tr>
+		            <tr>
+
+		                <th><input st-search="personId" placeholder="personId查询"/></th>
+		                <th><input st-search="personType" placeholder="personType查询"/></th>
+		                <th><input st-search="personState" placeholder="personState查询"/></th>
+		                <th><input st-search="userId" placeholder="沟通人查询"/></th>
+		                <th><input st-search="organizationId" placeholder="机构ID查询"/></th>
+		                <th><input st-search="communicateTime" placeholder="沟通时间查询"/></th>
+		                <th><input st-search="communicateContent" placeholder="沟通内容查询"/></th>
+						<th><input st-search="id" placeholder="操作"/></th>
+		            </tr>
+		            </thead>
+		            <tbody ng-show="!isLoading">
+		            <tr ng-repeat="row in displayed">
+
+		                <td>{{row.personId}}</td>
+		                <td>
+		                	<div ng-if="row.personType==1">学生</div>
+                			<div ng-if="row.personType==2">商户机构</div>
+		                </td>
+		                <td>
+		                	<div ng-if="row.personState==1">正式客户</div>
+                			<div ng-if="row.personState==2">未签约leads客户</div>
+		                </td>
+		                <td>{{row.userId}}</td>
+		                <td>{{row.organizationId}}</td>
+		                <td>{{ row.communicateTime | date:'yyyy-MM-dd' }}</td>
+		                <td>{{row.communicateContent}}</td>
+						<td>
+							<a ng-click="view(row)"><span class="glyphicon glyphicon-search"></span></a>  &nbsp;
+							<a ng-click="edit(row)"><span class="glyphicon glyphicon-pencil"></span></a> &nbsp;
+							<a ng-click="remove(row)"><span class="glyphicon glyphicon-delete"></span></a> &nbsp;
+						</td>
+		            </tr>
+		            </tbody>
+					<tfoot>
+						<tr>
+							<td class="text-center" st-pagination="" st-items-by-page="4"
+								colspan="12"></td>
+						</tr>  
+					</tfoot>
+				</table>
+			</div>
+		</div>
+	</div>
+	
+	
+</div>

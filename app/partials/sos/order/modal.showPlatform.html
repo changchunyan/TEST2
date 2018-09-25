@@ -1,0 +1,116 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="talent-add modal-dialog">
+		<form name="addPlatForm" role="form" class="form-horizontal showcase-form" novalidate="">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">审核</h4>
+				</div>
+				<div class="modal-body row m0">
+					<div class="row m0 mt-form-control mt-10">
+						<div class="col-sm-6 form-group m0">
+							<label class="lable-h2 fl bg-none">* 学生姓名</label>
+							<input type="text" ng-model="platform.crmStudentName" readonly class="form-control ng-pristine  col-sm-6 ng-untouched ng-valid needsclick"
+							/>
+						</div>
+					</div>
+					<div class="col-sm-12 form-group">
+						<div class="table-responsive">
+							<table class="table table-bordered table-striped table-condensed mt-table1" st-pipe="getPlatformOrders" st-table="platform">
+								<thead>
+									<tr>
+										<th>合同编号</th>
+										<th>订单类型</th>
+										<th>方式</th>
+										<th>签约日期</th>
+										<th>签约金额</th>
+										<th>实际金额</th>
+										<th>剩余课时</th>
+										<th>剩余金额</th>
+									</tr>
+								</thead>
+								<tbody ng-show="!isNormalOrderLoading">
+									<tr ng-repeat="row in passOrders">
+										<td ng-if="row.orderNo==row.originalOrderNo"></td>
+										<td ng-if="row.orderNo!=row.originalOrderNo">{{row.orderNo}}</td>
+										<td>{{row.orderType|orderType:row.orderType}}</td>
+										<td ng-if="row.orderCategory == 1">买课程</td>
+										<td ng-if="row.orderCategory == 3">充值</td>
+										<td>{{row.contractStartDate | date:'yyyy-MM-dd'}}</td>
+										<td>{{row.realPayAmount+row.privilegeAmount | number:2}}</td>
+										<td>{{row.realPayAmount | number:2}}</td>
+										<td ng-if="row.orderCategory == 3"></td>
+										<td ng-if="row.orderCategory != 3">{{row.totalCourseNum | number:2}}</td>
+										<td ng-if="row.orderCategory == 3">{{row.additionalAmount | number:2}}</td>
+										<td ng-if="row.orderCategory != 3">{{row.leaveCourseAmount | number:2}}</td>
+									</tr>
+								</tbody>
+								<tbody ng-show="isNormalOrderLoading">
+									<tr>
+										<td colspan="16" class="text-center">
+											<div class="loading-indicator"></div>
+										</td>
+									</tr>
+								</tbody>
+								<tfoot>
+									<tr>
+										<td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="16">
+										</td>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					</div>
+					<div class="row m0 mt-form-control mt-10">
+						<div class="col-sm-6 form-group m0">
+							<label class="lable-h2 fl bg-none">总实收金额</label>
+							<input type="text" class="form-control ng-pristine  col-sm-6 ng-untouched ng-valid needsclick" readonly ng-model="platform.totalActualAmount">
+						</div>
+						<div class="col-sm-6 form-group m0">
+							<label class="lable-h2 fl bg-none">总剩余金额</label>
+							<input type="text" class="form-control ng-pristine  col-sm-6 ng-untouched ng-valid needsclick" readonly ng-model="platform.totalSurplusAmount">
+						</div>
+					</div>
+					<div class="row m0 mt-form-control mt-10">
+						<div class="col-sm-6 form-group m0">
+							<label class="lable-h2 fl">转出校区</label>
+							<input type="text" class="form-control ng-pristine  col-sm-6 ng-untouched ng-valid needsclick" readonly ng-model="platform.oldPlatformName">
+						</div>
+						<div class="col-sm-6 form-group m0">
+							<label class="lable-h2 fl">转入校区</label>
+							<input type="text" class="form-control ng-pristine  col-sm-6 ng-untouched ng-valid needsclick" readonly ng-model="platform.newPlatformName"
+							/>
+						</div>
+					</div>
+					<div class="row m0 mt-form-control mt-10">
+						<div class="col-sm-6 form-group m0">
+							<label class="lable-h2 fl bg-none">转出平台业绩</label>
+							<input type="text" name="changePlatformAmount" id="changePlatformAmount" ng-model="platform.changePlatformAmount" class="form-control ng-pristine  col-sm-6 ng-untouched ng-valid needsclick">
+						</div>
+						<div class="col-sm-6 form-group m0">
+							<label class="lable-h2 fl bg-none">转平台日期</label>
+							<input type="text" ng-model="platform.changePlatformDate" ng-value="platform.changePlatformDate | date:'yyyy-MM-dd' " class="form-control ng-pristine  col-sm-6 ng-untouched ng-valid needsclick">
+						</div>
+					</div>
+					<div class="row m0 mt-form-control mt-10">
+						<div class="col-sm-12 form-group m0">
+							<label class="lable-h2 fl bg-none" ng-if="platform.status == 1">
+                    			<span class="glyphicon glyphicon-warning-sign"></span>&nbsp;&nbsp;通过双方校区审核后，该学员将会分配至转入校区运营主管
+                    		</label>
+							<label class="lable-h2 fl bg-none" ng-if="platform.status == 2">
+                    			<span class="glyphicon glyphicon-warning-sign"></span>&nbsp;&nbsp;通过审核后，该学员将会分配至本校区运营主管
+                    		</label>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="text-center">
+						<button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+						<button type="button" class="btn btn-success c5-lable" ng-if="platform.status == 1" ng-click="auditChangePlatformTemp()">审核通过</button>
+						<button type="button" class="btn btn-success c5-lable" ng-if="platform.status == 2" ng-click="auditChangePlatform()">审核通过</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

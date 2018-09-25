@@ -1,0 +1,102 @@
+<!-- 筛选条件 -->
+<!-- <div ng-include="baseHtmlUrl"></div>
+ -->
+ <search on-department-clicked="showSelectDepartment()"
+        department="selectdDepartment"
+        search-model="searchModel"
+        is-school-user="isSchoolUser"
+        provinces="provinces"
+        on-province-changed="getCitysByProvinceCode(searchModel.schoolProvince)"
+        cities="cities"
+        on-reset="reset(isQ)"
+        on-search="argJudgement(getSchoolPerfermence)"/>
+<!--统计图-->
+<div class="container-full mt-tongji pb-20"
+     ng-if="statisticsModels.length&&position_idFun()">
+    <div class="row">
+        <div class="col-lg-12">
+            <div style="float: left; " ng-repeat="el in iframeList">
+                <h3>{{el.title}}</h3>
+                <div style="height: {{el.height||'630px'}};overflow: hidden;">
+                    <iframe id="f1" src="{{el.url}}" width="550" height="3000" seamless='seamless'
+                            scrolling='no' style="position: relative;top: {{el.top||'-1500px'}};left: -20px; background: url('./img/Loading_icon.gif') no-repeat center;background-position-y: {{el.bgpy||'1500px !important'}}"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 表格 -->
+<div class="default-box">
+    <h4>
+                        校区业绩   - 明细
+       <!--  <span ng-if="!isDay">（从 {{modelStartTime | date : 'yyyy-MM-dd'}} 至 {{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+        <span ng-if="isDay">（{{modelEndTime | date : 'yyyy-MM-dd'}}）</span>
+        <span ng-if="presentTime">最新统计时间：{{presentTime}}</span> -->
+        <button class="btn btn-success bi-list-head" ng-click="exportSchoolPerfermence()">导出列表</button>
+    </h4>
+    <br/>
+    <div class="table-responsive">
+        <table st-pipe="getStatisticsForST" st-table="tableModel" class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th style="font-weight: bold;" rowspan="2">区域/校区</th>
+                <th class="bi-th1" style="font-weight: bold;" colspan="4">营销数据</th>
+                <th class="bi-th2" style="font-weight: bold;" colspan="4">续费数据</th>
+                <th class="bi-th3" style="font-weight: bold;" colspan="2">教务数据</th>
+                <th class="bi-th4" style="font-weight: bold;">转平台数据</th>
+                <th class="bi-th5" style="font-weight: bold;">总实收数据</th>
+            </tr>
+            <tr>
+                <td class="bi-th1" data-content="订单类型为“新签”和“推荐”的订单数总和"
+                	data-placement="top" webui-popover>签单数</td>
+                <td class="bi-th1" data-content="订单类型为“新签”和“推荐”的订单金额总和"
+                	data-placement="top" webui-popover>签单金额</td>
+                <td class="bi-th1" data-content="订单类型为“新签”和“推荐”且订单状态为“已退费”的退费金额总和"
+                	data-placement="top" webui-popover>退费金额</td>
+                <td class="bi-th1" data-content="实收金额=订单类型为“新签”和“推荐”的（交费金额总数—退费金额）"
+                	data-placement="top" webui-popover>实收金额</td>
+                <td class="bi-th2" data-content="订单类型为“续费”的订单数总和"
+                	data-placement="top" webui-popover>签单数</td>
+                <td class="bi-th2" data-content="订单类型为“续费”的订单金额总和"
+                	data-placement="top" webui-popover>签单金额</td>
+                <td class="bi-th2" data-content="订单类型为“续费”且订单状态为“已退费”的退费金额总和"
+                	data-placement="top" webui-popover>退费金额</td>
+                <td class="bi-th2" data-content="实收金额=订单类型为“续费”的（交费金额总数—退费金额）"
+                	data-placement="top" webui-popover>实收金额</td>
+                <td class="bi-th3" data-content="非体验班且状态为“已消课”的排课记录的数量总和"
+                	data-placement="left" webui-popover>消课课次</td>
+                <td class="bi-th3" data-content="非体验班且状态为“已消课”的排课记录上课时长总和"
+                	data-placement="left" webui-popover>时长</td>
+                <td class="bi-th4">转平台金额</td>
+                <td class="bi-th5" data-content="总实收金额=营销数据实收金额值+续费数据实收金额值"
+                    data-placement="left" webui-popover>总实收金额</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="statisticsModel in statisticsModels">
+                <td>{{statisticsModel.schoolName}}</td>
+                <td>{{statisticsModel.marketOrderCount}}</td>
+                <td>{{statisticsModel.marketOrderAmount}}</td>
+                <td>{{statisticsModel.marketRefundAmount}}</td>
+                <td>{{statisticsModel.marketRealAmount}}</td>
+                <td>{{statisticsModel.managementOrderCount}}</td>
+                <td>{{statisticsModel.managementOrderAmount}}</td>
+                <td>{{statisticsModel.managementRefundAmount}}</td>
+                <td>{{statisticsModel.managementRealAmount}}</td>
+                <td>{{statisticsModel.courseNum | number : 1}}</td>
+                <td>{{statisticsModel.courseHours | number : 1}}小时</td>
+                <td>{{statisticsModel.changePlatformAmount}}</td>
+                <td>{{statisticsModel.totalRealAmount}}</td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="30" class="text-center" st-pagination="" st-items-by-page="10"
+                    st-template="partials/util/pagination.custom.html">
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<span>注：所有展示的数据均是在指定周期内的指定校区所统计出的数值</span>

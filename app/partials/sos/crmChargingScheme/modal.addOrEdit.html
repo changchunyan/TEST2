@@ -1,0 +1,64 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <form name="form" class="modal-dialog form-horizontal mt-w-min-1200" style="width:948px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="closeAddOrEditModal()">
+                	<span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" ng-bind="addOrEditModalTitle"></h4>
+            </div>
+            <div class="modal-body f16 mt-update mt-detail" style="padding: 20px;">
+				<div class="row pl-20">
+					<div class="col-sm-12 form-group m0">
+						<label class="lable-h2 fl">方案名称</label>
+						<input type="text" class="col-sm-11 col-md-11 col-lg-11 ml-5" placeholder="最多输入30个字符" ng-maxlength="30" ng-readonly="__look" ng-model="chargingScheme.schemeName" required >
+					</div>
+
+				</div>
+				<div class="row pl-20 mt-10">
+					<div class="col-sm-12 form-group m0">
+						<label class="lable-h2 fl">授权机构</label>
+						<input type="text" ng-readonly="__look" ng-disabled="__look" ng-model="selectDpartment.name" required class="col-sm-5 col-md-5 col-lg-5 ml-5 mt-0" id="departName" placeholder="请选择" ng-click="showSelectDepartment()">
+                        <span  class="exception margin-left-20" style="display: inline-block;width:auto;line-height: 1.5;height:auto;">选择授权机构后其下全部校区能够使用此计费方案</span>
+					</div>
+				</div>
+				<div class="row pl-20 mt-10">
+					<div class="col-sm-12 form-group m0 vr">
+						<label class="lable-h2 fl">方案状态</label>
+                        <label for="schemeStatus_1" class="radio-vr ml-5" ng-class="{'active':chargingScheme.schemeStatus}">启用</label>
+                        <input type="radio" ng-readonly="__look" ng-disabled="__look" class="hide" id="schemeStatus_1" ng-click="chargingScheme.schemeStatus=1" ng-model="chargingScheme.schemeStatus" value="1" required >
+                        <label for="schemeStatus_2" class="radio-vr ml-5" ng-class="{'active':!chargingScheme.schemeStatus}">停用</label>
+                        <input type="radio" ng-readonly="__look" ng-disabled="__look" class="hide" id="schemeStatus_2" ng-click="chargingScheme.schemeStatus=0" ng-model="chargingScheme.schemeStatus" value="0" required >
+					</div>
+				</div>
+                <div class="row pl-20 mt-10 pr-20">
+                    <div class="br-gray col-sm-12" style="padding: 0;">
+                        <h3 class="mt-h3 c3" ng-if="!priceUpdate">
+                            <span ng-click="chargeRule(1)"><i class="glyphicon glyphicon-plus-sign c6">&nbsp;</i>新增课程</span>
+                            <span ng-click="chargeRule(-1)"><i class="glyphicon glyphicon-minus-sign ce-i">&nbsp;</i>删除课程</span></h3>
+                        <ul class="charge-rule">
+                            <h4 class="c5">年级</h4>
+                            <li ng-repeat="el in grades" class="c2-f f12">{{el.name}}</li>
+                        </ul>
+                        <div class="mt-scroll">
+                            <div style="height:516px;" id="scroll_1">
+                                <ul class="charge-rule mt-operating" ng-repeat="el in schemeJson">
+                                    <h4 class="cf8 f14">课程名称<input class="input-h4" ng-readonly="priceUpdate" required ng-model="el.title"></h4>
+                                    <li ng-repeat="p in el.prices" class="cf8 f12">单价<input ng-pattern="doubleNumReg" type="text" required ng-model="p.price"></li><!-- ng-readonly="priceUpdate"-->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" ng-click="closeAddOrEditModal()">取消</button>
+                <button type="button" class="btn btn-success c5-lable" ng-click="createOrUpdate(chargingScheme)" ng-disabled="form.$invalid" ng-if="!__look">确认</button>
+            </div>
+        </div>
+    </form>
+    <script>
+        $('#scroll_1').css({'width': window._len_ * 200})
+    </script>
+</div>
+

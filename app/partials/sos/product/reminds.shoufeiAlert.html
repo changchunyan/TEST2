@@ -1,0 +1,29 @@
+<div class="modal oms-course-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog hk-needs-fee">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" ng-bind="modalTitleForShouFeeAlert"></h4>
+            </div>
+            <div class="hk-tab-content hk-none-bor hk-fee-content">
+                <p class="hk-needs-money"><span>订单实际价格:<i>{{remindsFeeDetail.realTotalAmount|number:2}}</i></span><span>已付价格<i>{{remindsFeeDetail.realPayAmount|number:2}}</i></span><span>尾款金额<i>{{(remindsFeeDetail.realTotalAmount-remindsFeeDetail.realPayAmount)|number:2}}</i></span>
+                </p>
+
+                <p class="hk-needs-money hk-none-bor">
+                    <label for="hk-money-num">本次收费金额
+                        <input type="number" id="hk-money-num" ng-model="PayMoneyNum" value=""/></label>
+                    <label for="hk-money-num">* 交费日期</label>
+                        <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"
+                                   onchange="" readonly ng-value="payDate | date:'yyyy-MM-dd' "
+                                   name="payDate" id="payDate" ng-model="payDate"
+                                   required />
+                </p>
+            </div>
+            <div class="hk-ok-con">
+                <button class="hk-ok-click" ng-click="payMentMoney(remindsFeeDetail.orderID,remindsFeeDetail.orderCategory,PayMoneyNum,payDate )">确定</button>
+                <button class="hk-cancel-click" ng-click="$hide()">取消</button>
+            </div>
+        </div>
+    </div>
+</div>

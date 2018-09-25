@@ -1,0 +1,47 @@
+<!-- 顶部logo -->
+<style>
+    .help_header,.help_search,.help_content{font-family: '微软雅黑';}
+    .help_content_right img{max-width: 100% !important;}
+    /*.help_content_left a{display: inline-block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:200px;}*/
+
+    /*.help-thirdMenu a{margin-left: -40px;}*/
+</style>
+<div class="help_header">
+    <ul>
+        <li>
+            <img src="img/help/youwinlogo.png" />
+        </li>
+        <li class="help_header_lastLi">
+            <span>优胜大事件</span>
+        </li>
+    </ul>
+    <a href="#/">返回首页</a>
+</div>
+
+<div class="event_content" ng-controller="eventController" >
+    <div class="row">
+      <div class="col-md-6 text-center">
+            <div class="btn-group">
+              <button class="btn btn-primary" mwl-date-modifier date="date" decrement="calendarView" ng-click="getEvents()">
+                上一月
+              </button>
+              <button class="btn btn-default" mwl-date-modifier date="date" set-to-today ng-click="cellIsOpen = false" style="margin-top:0px;margin-right:0px">
+                今天
+              </button>
+              <button class="btn btn-primary" mwl-date-modifier date="date" increment="calendarView" ng-click="getEvents()">
+                下一月
+              </button>
+            </div>
+      </div>
+      <div class="col-md-6">
+        {{date | date:'yyyy-MM'}}
+      </div>
+    </div>
+    <div class="event_content_right" style="margin-top:10px">
+      <mwl-calendar
+          view="calendarView"
+          view-date="date"
+          events="events">
+      </mwl-calendar>
+    </div>
+</div>

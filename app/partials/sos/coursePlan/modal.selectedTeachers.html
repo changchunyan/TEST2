@@ -1,0 +1,119 @@
+<div class="modal oms-record-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <form name="form">
+        <div class="modal-header">
+          <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" ng-bind="modalTitle"></h4>
+        </div>
+        <div class="modal-body yws-container" ng-controller="TimesController as tcl">
+            <div class="width80 yws-left">
+                <table class="table table-bordered table-striped table-condensed" st-pipe="ttc.getTeacherLists" st-table="teacherLists">
+                    <thead class="table table-bordered table-striped table-condensed">
+                    <tr>
+                        <th>选择</th>
+                        <th>老师姓名</th>
+                        <th>手机</th>
+                        <th>全职/兼职</th>
+                        <th>校区</th>
+                        <th>科目</th>
+                        <th>年级段</th>
+                        <th>师资等级</th>
+                    </tr>
+                    <tr>
+                        <th>
+
+                        </th>
+                        <th>
+                            <input type="search" name="teacherName" id="teacherName" ng-model="teacherFilter.teacherName" placeholder="姓名查询" st-search="teacherName" class="input-sm form-control"  />
+                        </th>
+                        <th>
+                            <input type="search" name="mobile" id="mobile" ng-model="teacherFilter.mobile" placeholder="手机号查询" st-search="mobile" class="input-sm form-control" />
+                        </th>
+                        <th>
+                            <select name="partFull" id="partFull" ng-model="teacherFilter.partFull" st-search="partFull" class="input-sm form-control">
+                                <option value ="" >--请选择--</option>
+                                <option value ="1">兼职</option>
+                                <option value ="2">全职</option>
+                            </select>
+                        </th>
+                        <th ng-if="isTeacherMaster()">
+                            <input type="search" name="departmentName" id="departmentName1" ng-model="teacherFilter.departmentName" st-search="departmentName" style="display: inline-block;" class="input-sm form-control" disabled/>
+                            <img src="img/icon/util/wen.png" class="icon-wen" style="width: 16px;height: 16px" title="可输入其他校区进行查询">
+                        </th>
+                        <th ng-if="!isTeacherMaster()">
+                            <input type="search" name="departmentName" id="departmentName1" ng-model="teacherFilter.departmentName" st-search="departmentName" style="display: inline-block;" class="input-sm form-control"/>
+                            <img src="img/icon/util/wen.png" class="icon-wen" style="width: 16px;height: 16px" title="可输入其他校区进行查询">
+                        </th>
+                        <th><!--科目-->
+                            <select st-search="subSt" ng-model="teacherFilter.subjectId"
+                                    name="teacherFilter.subSt" id="teacherFilter.subjectId" class="input-sm form-control"
+                                    ng-options="option.id as option.name for option in ttc.allSubject" type="search">
+                                <option value="">-- 请选择 --</option>
+                            </select>
+                        </th>
+                        <th>
+                            <select name="teacherGrade" id="teacherGrade" ng-model="teacherFilter.teacherGrade" st-search="teacherGrade"  class="input-sm form-control"  >
+                                <option value="" >--请选择--</option>
+                                <option value="1">小学</option>
+                                <option value="2">初中</option>
+                                <option value="3">高中</option>
+                            </select>
+                        </th>
+                        <th>
+                           <!-- 1:特级教师  2:金牌教师  3:全优教师  4:优秀教师-->
+                            <select name="teacherGrade"  ng-model="teacherFilter.teacherLevel" st-search="teacherGrade"  class="input-sm form-control" >
+                                <option value="" >--请选择--</option>
+                                <option value="1">特级教师</option>
+                                <option value="2">金牌教师</option>
+                                <option value="3">全优教师</option>
+                                <option value="4">优秀教师</option>
+                            </select>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="row in teacherLists">
+                        <td><input type="checkbox" ng-checked="ttc.isSelectedTeacher(row)" ng-click="ttc.checkedTeacher(row,$event)"></td>
+                        <td>{{row.username}}</td>
+                        <td>{{row.mobile}}</td>
+                        <td><span ng-if="row.part_full == 1">兼职</span>
+                            <span ng-if="row.part_full == 2">全职</span>
+                        </td>
+                        <td>{{row.deptname}}</td>
+                        <td style="white-space: normal;">{{row.subject_name}}</td>
+                        <td>{{row.teacher_grade}}</td>
+                        <td ng-if="row.teacher_level == 1">特级教师</td>
+                        <td ng-if="row.teacher_level == 2">金牌教师</td>
+                        <td ng-if="row.teacher_level == 3">全优教师</td>
+                        <td ng-if="row.teacher_level == 4">优秀教师</td>
+						<td ng-if="!row.teacher_level"></td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td class="text-center" st-pagination="t1" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="8">
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="width20 yws-right border-ccc">
+                <div class="padding10"><span class="width80 text-center inline-block">已选择</span> <a ng-click="ttc.deleteSelectedAllTeacher()"><span class="glyphicon glyphicon-delete" title="删除全部"></span></a></div>
+                <div ng-repeat="row in selected.persons" class="border-top1">
+                    <span class="width80 text-center inline-block">{{row.username}}</span>
+                    <a ng-click="ttc.deleteSelectedTeacher(row)"><span class="glyphicon glyphicon-delete" title="删除"></span></a>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <div class="text-center">
+                <button class="btn btn-success" ng-click="$hide()">确定</button>
+            </div>
+        </div>
+        </form>
+        </div>
+    </div>
+</div>

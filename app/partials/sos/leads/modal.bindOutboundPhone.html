@@ -1,0 +1,32 @@
+<div class="modal crm-bindPhone-modal" ng-controller="LeadsStudentController" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog mt-modal-600">
+        <div class="modal-content" >
+            <form name="addPhoneForm">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitleForBindPhone"></h4>
+                </div>
+                <div class="modal-body">
+                 
+                    <div class="form-group">
+                        <label for="outboundphone">* 电话号码</label>
+                        <input type="text" name="outboundphone" id="outboundphone"
+                               class="mt-input-1 " ng-model="employee.outboundphone"
+                               ng-maxlength="20" ng-minlength="1" required/>
+                    
+                        
+                    </div>
+                  
+                </div>
+                <div class="modal-footer mlr-15 mlr-0" style="background: #fff">
+                    <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+                    <button type="submit" class="btn btn-success" ng-click="saveOutboundPhone();$hide()"
+                            ng-disabled="addPhoneForm.$invalid" style="background: #67ba2f">保存
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

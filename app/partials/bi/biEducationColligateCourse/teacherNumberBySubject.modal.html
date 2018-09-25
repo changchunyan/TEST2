@@ -1,0 +1,27 @@
+<div class="modal crm-importOrders-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" ng-bind="modalTitle"></h4>
+        </div>
+        <div class="modal-body mt-modal-order">
+          <div>教师总数：{{total}}</div>
+          <hr>
+          <div class="row">
+            <canvas id="pie" class="chart chart-pie" style="height: 200px;" chart-data="pieData" chart-labels="pieLabels" chart-options="options"></canvas>
+          </div>
+          <br/>
+          <div class="row">
+            <div ng-repeat="number in numbers" class="col-lg-4">{{number.subject}} : {{number.number}}</div>
+          </div>
+          <div class="row" style="color: lightgray;margin-top: 20px">* 一名教师授多科的情况，涉及的科目教师数分别+1</div>
+        </div>
+        <div class="modal-footer text-center ">
+            <div class="yws-right">
+                <button class="btn btn-default"  ng-click="$hide()">关闭</button>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,101 @@
+<div class="modal orderModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="addTransferForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="title"></h4>
+                </div>
+                <div class="modal-body pb-20">
+                    <div class="br-gray pl-0 mt-list">
+                            <h2 class="pl-20">订单列表</h2>
+                            <div class="modal-input">
+                                <table class="table table-bordered table-striped table-condensed mt-table1" st-pipe="callServerAllOrderReturnFei" st-table="allOrders">
+                                    <thead>
+                                    <tr>
+                                        <th>合同编号</th>
+                                        <th>订单类型</th>
+                                        <th>方式</th>
+                                        <th>订单状态</th>
+                                        <th>总课时</th>
+                                        <th>剩余课时</th>
+                                        <!-- <th>总价</th> -->
+                                        <th>充值金额</th>
+                                        <th>剩余金额</th>
+                                        <th>实际总价</th>
+                                        <th>优惠金额</th>
+                                        <th>实付金额</th>
+                                        <th>尾款金额</th>
+                                        <th class="pr-20">操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody ng-show="!isNormalOrderLoading">
+                                    <tr ng-repeat="row in allOrders">
+                                        <!--<td>{{row.orderNo}}</td>-->
+                                        <td ng-if="row.orderNo==row.originalOrderNo"></td>
+                                        <td ng-if="row.orderNo!=row.originalOrderNo">{{row.orderNo}}</td>
+                                        <td ng-show="row.orderType == 1">新签</td>
+                                        <td ng-show="row.orderType == 2">续费 </td>
+                                        <td ng-show="row.orderType == 3">返课</td>
+                                        <td ng-show="row.orderType == 4">转课</td>
+                                        <td ng-show="row.orderType == 5">推荐</td>
+                                        <td ng-show="row.orderType == 6">试听</td>
+                                        <td ng-show="row.orderType == 7">线上O2O</td>
+                                        <td ng-if="row.orderCategory == 1">买课</td>
+                                        <td ng-if="row.orderCategory == 2">app</td>
+                                		<td ng-if="row.orderCategory == 3">充值</td>
+                                        <td ng-show="row.orderStatus == 1">录入订单</td>
+                                        <td ng-show="row.orderStatus == 2">支付定金 </td>
+                                        <td ng-show="row.orderStatus == 3">审核通过</td>
+                                        <!--<td ng-show="row.orderStatus == 4">审核未通过 </td>-->
+                                        <td ng-show="row.orderStatus == 5">已退单</td>
+                                        <td ng-show="row.orderStatus == 6">已转课</td>
+                                        <td ng-show="row.orderStatus == 7">已生成合同</td>
+                                        <td ng-show="row.orderStatus == 8">已结课</td>
+                                        <td ng-show="row.orderStatus == 9">已退费</td>
+                                        <td ng-show="row.orderStatus == 10">退费中</td>
+                                        <td ng-show="row.orderStatus == 11">转课中</td>
+                                        <td>{{row.originalNumSum}}</td>
+                                        <td>{{row.courseNumSum}}</td>
+                                        <td ng-if="row.orderCategory == 1"></td>
+                                        <td ng-if="row.orderCategory == 2">{{row.realTotalAmount}}</td>
+                                        <td ng-if="row.orderCategory == 3">{{row.totalPrice}}</td>
+                                        <!-- 剩余金额 -->
+                                        <td ng-if="row.orderCategory == 1"></td>
+                                        <td ng-if="row.orderCategory == 2">{{row.realTotalAmount}}</td>
+                                        <td ng-if="row.orderCategory == 3">{{row.additionalAmount}}</td>
+                                        
+                                        <td ng-if="row.orderCategory != 2">{{row.realTotalAmount}}</td>
+                                        <td ng-if="row.orderCategory == 2">{{row.realPayAmount}}</td>
+                                        <td>{{row.privilegeAmount}}</td>
+                                        <td>{{row.realPayAmount}}</td>
+                                        <td>{{row.payDueAmount}}</td>
+                                        <td>
+                                            <a ng-click="showOrderDetails(row)"><span class="glyphicon glyphicon-plus" title="订单详情"></span></a>
+                                            <a ng-if="row.orderStatus != 10 && row.orderStatus != 9 && row.orderStatus != 5 && row.orderStatus != 6 && row.orderType != 3 && row.orderType != 4 && showPermissions('RefundApply')"
+                                               ng-click="applyRefund(row)">
+                                                <span class="glyphicon glyphicon-tui" title="申请退费"></span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                    <tbody ng-show="isNormalOrderLoading">
+                                    <tr>
+                                        <td colspan="7" class="text-center"><div class="loading-indicator"></div></td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" st-template="partials/util/pagination.custom.html" colspan="12">
+                                        </td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                </div>
+                <div class="modal-footer"></div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,598 @@
+<style>
+    .modal-body{
+        background-color: #fff;
+        padding: 20px;
+    }
+    .modal-li{
+        /*margin: 20px 0;*/
+        padding: 20px;
+    }
+        .modal-li-title{
+            font-size: 20px;
+        }
+    .form-horizontal .form-group{
+        margin: 0 0 20px 0;
+    }
+    .bg-f1{
+        background-color: #fff;
+        margin-left: -15px;
+        margin-right: -15px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+</style>
+<div class="modal crm-importLeads-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" style="min-width:800px;">
+    <div class="modal-content">
+      <!--<form name="importLeadsForm" role="form" class="form-horizontal showcase-form" novalidate="">-->
+        <div class="modal-header">
+          <button type="button" class="close" aria-label="Close" ng-click="$hide();hidetextchang()"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" ng-bind="modalTitleForImport"></h4>
+        </div>
+        <div class="modal-body">
+            <!-- <div class="form-group" ng-class="{ 'has-error': importLeadsForm.importFile.name.$dirty && importLeadsForm.importFile.name.$error.required }">
+                <label for="importFile.name">excel文件</label>
+                <input type="file" name="importFile.name" id="importFile.name" class="form-control" ng-model="importFile.name" ng-maxlength="20" required />
+            </div>-->
+            <div class="modal-li"  ng-class="{true: 'bg-f1', false: ''}[isOneChecked]">
+                <div  class="modal-li-title">
+                    <!--<div class="yes-radio radio-checked" ng-click="checkedAddType(0)" >-->
+                        <!--<input type="radio" >-->
+                    <!--</div>-->
+                    基本信息
+                </div>
+                <div class="modal-li-content label-85" >
+                    <form name="addLeadsForm" role="form" class="form-horizontal showcase-form" novalidate="novalidate">
+                            <div class="row ml-0">
+                                <div class="col-sm-4 form-group">
+                                    <label for="leadsName"  class="col-sm-4 control-label">* 姓名</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" ng-disabled="!isOneChecked" name="leadsName2"  id="leadsName2" placeholder="1到20个字符" class="form-control" ng-model=" CrmLeadsStudentVoForCreate.name" ng-maxlength="20" ng-minlength="1" required/>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 form-group">
+                                    <label for="phone" class="col-sm-4 control-label">* 手机号</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" ng-disabled="!isOneChecked"  name="phone2" id="phone2" class="form-control" ng-model=" CrmLeadsStudentVoForCreate.phone" required ng-pattern="/^[0-9]*$/" ng-maxlength="11" ng-minlength="7" ng-change="repeatFroCreate(CrmLeadsStudentVoForCreate.phone)"/>
+                                    </div>
+                                </div>
+                              <!--  <div class="col-sm-4 form-group">
+                                    <label for="state_id_1" class="col-sm-4 control-label">* 客户状态</label>
+                                    <div class="col-sm-8">
+                                        <select ng-disabled="!isOneChecked" ng-model="CrmLeadsStudentVoForCreate.state_id_1" name="state_id_1" id="state_id_1" class="form-control"
+                                                ng-options="option.id as option.name for option in state1List" ng-change="state1Change()" required disabled="disabled">
+                                            <option value="">&#45;&#45; 请选择 &#45;&#45;</option>
+                                        </select>
+                                    </div>
+                                </div>-->
+                                <div class="col-sm-4 form-group">
+                                    <label for="grade_id" class="col-sm-4 control-label">* 年级</label>
+                                    <div class="col-sm-8">
+                                        <select ng-disabled="!isOneChecked" ng-model="CrmLeadsStudentVoForCreate.grade_id" name="grade_id" id="grade_id" class="form-control" ng-options="option.id as option.name for option in gradeIds" required>
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 form-group">
+                                    <label for="media_channel_id_1" class="col-sm-4 control-label">* 一级渠道</label>
+                                    <div class="col-sm-8">
+                                        <select ng-disabled="!isOneChecked" ng-model="CrmLeadsStudentVoForCreate.media_channel_id_1" name="media_channel_id_1" id="media_channel_id_1" class="form-control"
+                                                ng-options="option.id as option.name for option in mediaChannel1List" ng-change="mediaChannel1Change()" required>
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 form-group" ng-if="mediaChannel2List.length > 0">
+                                    <label for="media_channel_id_2" class="col-sm-4 control-label">* 二级渠道</label>
+                                    <div class="col-sm-8">
+                                        <select ng-disabled="!isOneChecked" ng-model="CrmLeadsStudentVoForCreate.media_channel_id_2" name="media_channel_id_2" id="media_channel_id_2" class="form-control"
+                                                ng-options="option.id as option.name for option in mediaChannel2List" ng-change="mediaChannel2Change()" required>
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 form-group" ng-if="mediaChannel3List.length > 0">
+                                    <label for="media_channel_id_3" class="col-sm-4 control-label">* 渠道详情</label>
+                                    <div class="col-sm-8">
+                                        <select ng-disabled="!isOneChecked" ng-model="CrmLeadsStudentVoForCreate.media_channel_id_3" name="media_channel_id_3" id="media_channel_id_3" class="form-control"
+                                                ng-options="option.id as option.name for option in mediaChannel3List" required>
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-sm-4 form-group">
+                                    <label for="isPurpose" class="col-sm-4 control-label">* 是否意向</label>
+                                    <div class="col-sm-8">
+                                        <select ng-disabled="!isOneChecked" ng-model="CrmLeadsStudentVoForCreate.isPurpose" name="isPurpose" id="isPurpose" class="form-control" required>
+                                            <option value="">-- 请选择 --</option>
+                                            <option value="true">是</option>
+                                            <option value="false">否</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 form-group" ng-if="CrmLeadsStudentVoForCreate.isPurpose == 'true'">
+                                    <label for="purposeMony" class="col-sm-4 control-label">* 意向金额</label>
+                                    <div class="col-sm-8">
+                                        <input type="number" name="purposeMony" id="purposeMony" class="form-control" ng-model="CrmLeadsStudentVoForCreate.purposeMony" ng-pattern="/^[0-9]*$/" ng-maxlength="10" required/>
+                                    </div>
+                                </div> -->
+
+
+
+
+                            </div>
+                            <div class="yws-container" ng-if="isOneChecked">
+                                <div class="btn btn-primary yws-right" ng-click="showMoreLeadsInfo()">{{leadsInfoBtnTitle || '填写更多信息'}}</div>
+                            </div>
+
+
+
+                            <div class="row ml-0" ng-if="isAddLeadsInfo && isOneChecked">
+
+                                <div class="col-sm-4 form-group" >
+                                    <label for="CrmLeadsStudentVoForCreate.gender" class="col-sm-4 control-label">* 性别</label>
+                                    <div class="col-sm-8">
+                                        <select ng-disabled="!isOneChecked" ng-model="CrmLeadsStudentVoForCreate.gender" name="gender" id="CrmLeadsStudentVoForCreate.gender" class="form-control" ng-options="option.value as option.name for option in genders">
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 form-group">
+                                    <label for="age" class="col-sm-4 control-label">* 年龄</label>
+                                    <div class="col-sm-8">
+                                        <input type="number" name="age" id="age" class="form-control" ng-model=" CrmLeadsStudentVoForCreate.age" ng-maxlength="2" ng-pattern="/^[0-9]{0,10}$/"/>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 form-group">
+                                    <label for="CrmLeadsStudentVoForCreate.purposeLevel" class="col-sm-4 control-label">* 意向程度</label>
+                                    <div class="col-sm-8">
+                                        <select ng-disabled="!isOneChecked" ng-model="CrmLeadsStudentVoForCreate.purposeLevel"
+                                            name="CrmLeadsStudentVoForCreate.purposeLevel" id="CrmLeadsStudentVoForCreate.purposeLevel" class="form-control"
+                                            ng-options="option.value as option.name for option in purposeLevel">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 form-group">
+                                    <label for="school_name" class="col-sm-4 control-label">* 在读学校</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" ng-disabled="!isOneChecked" name="school_name" id="school_name" class="form-control" ng-model="CrmLeadsStudentVoForCreate.school_name" ng-maxlength="50"/>
+                                    </div>
+                                </div>
+                                <div class="cl">
+                                    <hr color="#aaa" size="1">
+                                </div>
+
+                                <div class="col-sm-4 form-group">
+                                    <label for="CrmLeadsStudentVoForCreate.purposeLevel" class="col-sm-4 control-label">* 亲属关系</label>
+                                    <div class="col-sm-8">
+                                        <select  ng-model="CrmLeadsStudentVoForCreate.relativesType"
+                                                name="CrmLeadsStudentVoForCreate.relativesType" id="CrmLeadsStudentVoForCreate.relativesType" class="form-control"
+                                                >
+                                            <option value="">-- 请选择 --</option>
+                                            <option value="1"> 爸爸 </option>
+                                            <option value="2"> 妈妈 </option>
+                                            <option value="3">爷爷 </option>
+                                            <option value="4"> 奶奶 </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 form-group">
+                                    <label for="mother_name" class="col-sm-4 control-label">* 家长姓名</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" ng-disabled="!isOneChecked" name="mother_name" id="mother_name" class="form-control" ng-model="CrmLeadsStudentVoForCreate.mother_name" ng-maxlength="20" ng-minlength="1" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 form-group">
+                                    <label for="mother_phone" class="col-sm-4 control-label">* 家长电话</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" ng-disabled="!isOneChecked" name="mother_phone" id="mother_phone" class="form-control" ng-model="CrmLeadsStudentVoForCreate.mother_phone" ng-pattern="/^[0-9]*$/" ng-maxlength="11" ng-minlength="7" ng-change="repeatFroCreate(CrmLeadsStudentVoForCreate.mother_phone)"/>
+                                    </div>
+                                </div>
+
+                                <!--<div class="col-sm-4 form-group">-->
+                                    <!--<label for="father_name" class="col-sm-4 control-label">* 父亲姓名</label>-->
+                                    <!--<div class="col-sm-8">-->
+                                        <!--<input type="text" ng-disabled="!isOneChecked" name="father_name" id="father_name" class="form-control" ng-model="CrmLeadsStudentVoForCreate.father_name" ng-maxlength="20" ng-minlength="1" />-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="col-sm-4 form-group">-->
+                                    <!--<label for="father_phone" class="col-sm-4 control-label">* 父亲电话</label>-->
+                                    <!--<div class="col-sm-8">-->
+                                        <!--<input type="text" ng-disabled="!isOneChecked" name="father_phone" id="father_phone" class="form-control" ng-model="CrmLeadsStudentVoForCreate.father_phone" ng-pattern="/^[0-9]*$/" ng-maxlength="11" ng-minlength="7" ng-change="repeatFroCreate(CrmLeadsStudentVoForCreate.father_phone)"/>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+
+
+                                <!--<div class="col-sm-4 form-group">-->
+                                    <!--<label for="subject_id" class="col-sm-4 control-label">* 咨询科目</label>-->
+                                    <!--<div class="col-sm-8">-->
+                                        <!--<select ng-disabled="!isOneChecked" ng-model="CrmLeadsStudentVoForCreate.subject_id" name="subject_id" id="subject_id" class="form-control" ng-options="option.id as option.name for option in subjectIds">-->
+                                            <!--<option value="">&#45;&#45; 请选择 &#45;&#45;</option>-->
+                                        <!--</select>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+
+
+                              <!--  <div class="col-sm-4 form-group">
+                                    <label for="state_id_2" class="col-sm-4 control-label">* 状态详情</label>
+                                    <div class="col-sm-8">
+                                        <select ng-disabled="!isOneChecked" ng-model="CrmLeadsStudentVoForCreate.state_id_2" name="state_id_2" id="state_id_2" class="form-control"
+                                                ng-options="option.id as option.name for option in state2List" disabled="disabled">
+                                            <option value="">&#45;&#45; 请选择 &#45;&#45;</option>
+                                        </select>
+                                    </div>
+                                </div>-->
+                                <!--<div class="col-sm-4 form-group">
+                                    <label for="time" class="col-sm-4 control-label">* 时间选择</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" ng-disabled="!isOneChecked" name="time" id="time" class="form-control" value="{{mytime | date:'HH:mm:ss'}}" ng-click="showTimePiker()"/>
+                                        <section style="display:inline-block; min-height:240px;position: absolute;z-index: 99;" ng-show="timePikerShow">
+                                            <div ng-model="mytime" ng-change="changed()" class="well well-small" style="display:inline-block;">
+                                                <timepicker hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+                                                <button class="btn btn-danger" ng-click="clear()">清除</button>
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>-->
+
+
+                                <!--<div class="col-sm-4 form-group">
+                                    <label for="dt" class="col-sm-4 control-label">* 日期选择</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" ng-disabled="!isOneChecked" name="dt" id="dt" class="form-control" value="{{dt | date:'yyyy-MM-dd'}}" ng-click="showDatePiker()"/>
+                                        <section style="display:inline-block; min-height:240px;position: absolute;z-index: 99;background: white" ng-show="datePikerShow">
+                                            <datepicker ng-model="dt" min-date="minDate" show-weeks="false" class="wellwell-sm" ng-change="dateChange()"></datepicker>
+                                            <div style="text-align: center">
+                                                <button type="button" class="btn btn-success btn-sm" ng-click="today()">今天</button>
+                                                <button type="button" class="btn btn-sm btn-danger" ng-click="clear()" >清除</button>
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>-->
+
+
+
+
+                                <div class="col-sm-4 form-group">
+                                    <label for="province_code" class="col-sm-4 control-label">所属省</label>
+                                    <div class="col-sm-8">
+                                        <select ng-disabled="!isOneChecked" ng-model="CrmLeadsStudentVoForCreate.province_code" name="province_code" id="province_code" class="form-control"
+                                                ng-options="option.provinceCode as option.provinceName for option in provinceList" ng-change="provinceChange()">
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 form-group">
+                                    <label for="city_code" class="col-sm-4 control-label">所属市</label>
+                                    <div class="col-sm-8">
+                                        <select ng-disabled="!isOneChecked" ng-model="CrmLeadsStudentVoForCreate.city_code" name="city_code" id="city_code" class="form-control"
+                                                ng-options="option.cityCode as option.cityName for option in cityList" ng-change="cityChange()">
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 form-group">
+                                    <label for="area_code" class="col-sm-4 control-label">所属区(县)</label>
+                                    <div class="col-sm-8">
+                                        <select ng-disabled="!isOneChecked" ng-model="CrmLeadsStudentVoForCreate.area_code" name="area_code" id="area_code" class="form-control"
+                                                ng-options="option.areaCode as option.areaName for option in areaList">
+                                            <option value="">-- 请选择 --</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-4 form-group">
+                                    <label for="detailaddress" class="col-sm-4 control-label">详细地址</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" name="age" id="age" class="form-control" ng-model=" CrmLeadsStudentVoForCreate.address"  id="detailaddress" placeholder="清输入详细地址">
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-12 ">
+                                    <textarea style="width: 80%;"  ng-model="CrmLeadsStudentVoForCreate.customer_requirement" name="customer_requirement" id="customer_requirement" placeholder="用户需求..." class="form-control" rows="3" ng-maxlength="500"/>
+                                </div>
+
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+            <!--<div  class="modal-li"  ng-class="{true: 'bg-f1', false: ''}[isBeachChecked]">-->
+                <!--<div  class="modal-li-title"><div class="yes-radio" ng-click="checkedAddType(1)"><input type="radio" ></div>批量导入</div>-->
+                <!--<div class="modal-li-content">-->
+
+                    <!--<div nv-file-drop="" uploader="uploader" filters="queueLimit, customFilter">-->
+
+                        <!--<div class="row" style="margin: 0 20px">-->
+
+                            <!--<div style="position: relative">-->
+                              <!--&lt;!&ndash;  <h3>请选择《优胜教育Leads导入模版.xls》</h3>&ndash;&gt;-->
+                                <!--&lt;!&ndash; Example: nv-file-select="" uploader="{Object}" options="{Object}" filters="{String}" &ndash;&gt;-->
+                                <!--&lt;!&ndash; <label>多文件上传</label>-->
+                                <!--<input type="file" nv-file-select="" uploader="uploader" multiple  /><br/> &ndash;&gt;-->
+                                <!--&lt;!&ndash; <label>单文件上传</label> &ndash;&gt;-->
+                                <!--<input type="file" ng-if="!isOneChecked" nv-file-select="" uploader="uploader" multiple/>-->
+                                <!--<div ng-if="!isOneChecked" style="position: absolute; top: -15px;right: 20px;"> <a class="btn btn-primary" ng-href="{{domain}}/优胜教育Leads导入模版.xls">下载意向客户导入模版</a></div>-->
+                            <!--</div>-->
+
+                            <!--<div style="margin-bottom: 40px">-->
+
+                                <!--&lt;!&ndash; <h3>上传队列</h3>-->
+                                <!--<p>队列长度: {{ uploader.queue.length }}</p> &ndash;&gt;-->
+
+                                <!--<table class="table">-->
+                                    <!--<thead>-->
+                                    <!--<tr>-->
+                                        <!--<th width="30%">名称</th>-->
+                                        <!--<th ng-show="uploader.isHTML5">大小</th>-->
+                                        <!--<th width="30%" ng-show="uploader.isHTML5">进度</th>-->
+                                        <!--<th>状态</th>-->
+                                        <!--<th>操作</th>-->
+                                    <!--</tr>-->
+                                    <!--</thead>-->
+                                    <!--<tbody>-->
+                                    <!--<tr ng-repeat="item in uploader.queue">-->
+                                        <!--<td><strong>{{ item.file.name }}</strong></td>-->
+                                        <!--<td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>-->
+                                        <!--<td ng-show="uploader.isHTML5">-->
+                                            <!--<div class="progress" style="margin-bottom: 0;">-->
+                                                <!--<div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>-->
+                                            <!--</div>-->
+                                        <!--</td>-->
+                                        <!--<td class="text-center">-->
+                                            <!--<span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>-->
+                                            <!--<span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>-->
+                                            <!--<span ng-show="item.isError"><i class="glyphicon glyphicon-delete"></i></span>-->
+                                        <!--</td>-->
+                                        <!--<td nowrap>-->
+                                            <!--<button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">-->
+                                                <!--<span class="glyphicon glyphicon-upload"></span> 上传文件-->
+                                            <!--</button>-->
+                                            <!--<button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">-->
+                                                <!--<span class="glyphicon glyphicon-ban-circle"></span> 取消上传-->
+                                            <!--</button>-->
+                                            <!--<button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">-->
+                                                <!--<span class="glyphicon glyphicon-trash"></span> 删除文件-->
+                                            <!--</button>-->
+                                        <!--</td>-->
+                                    <!--</tr>-->
+                                    <!--</tbody>-->
+                                <!--</table>-->
+
+                                <!--<div>-->
+                                    <!--<div>-->
+                                        <!--总上传进度:-->
+                                        <!--<div class="progress" style="">-->
+                                            <!--<div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                    <!--&lt;!&ndash; <button type="button" class="btn btn-success btn-s" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length">-->
+                                        <!--<span class="glyphicon glyphicon-upload"></span> Upload all-->
+                                    <!--</button>-->
+                                    <!--<button type="button" class="btn btn-warning btn-s" ng-click="uploader.cancelAll()" ng-disabled="!uploader.isUploading">-->
+                                        <!--<span class="glyphicon glyphicon-ban-circle"></span> Cancel all-->
+                                    <!--</button>-->
+                                    <!--<button type="button" class="btn btn-danger btn-s" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length">-->
+                                        <!--<span class="glyphicon glyphicon-trash"></span> Remove all-->
+                                    <!--</button> &ndash;&gt;-->
+                                <!--</div>-->
+
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+
+            <!--<div  class="modal-li"  ng-class="{true: 'bg-f1', false: ''}[isSmartChecked]" ng-controller="LeadsStudentSmartImportController">-->
+                <!--<div  class="modal-li-title"><div class="yes-radio" ng-click="checkedAddType(2)"><input type="radio" ></div>智能导入</div>-->
+
+                    <!--<div class="row ml-0">-->
+                        <!--<div class="col-sm-4 form-group">-->
+                            <!--<label for="gradeId" class="col-sm-4 control-label">导入提示</label>-->
+                            <!--<span id="hint" class="glyphicon glyphicon-yichang2" data-target="webuiPopover1"></span>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="row label-115 ml-0">-->
+                        <!--<div class="col-sm-4 form-group">-->
+                            <!--<label for="gradeId" class="col-sm-4 control-label">* 默认所在年级</label>-->
+                            <!--<div class="col-sm-7">-->
+                                <!--<select ng-model="gradeId" ng-disabled="!isSmartChecked" name="gradeId" id="gradeId" class="form-control" ng-options="option.id as option.name for option in gradeIds" required>-->
+                                    <!--<option value="">&#45;&#45; 请选择 &#45;&#45;</option>-->
+                                <!--</select>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="col-sm-4 form-group">-->
+                            <!--<label for="mediaChannelId1" class="col-sm-4 control-label">* 默认渠道来源</label>-->
+                            <!--<div class="col-sm-7">-->
+                                <!--<select ng-model="mediaChannelId1" ng-disabled="!isSmartChecked" name="media_channel_id_1" id="mediaChannelId1" class="form-control"-->
+                                        <!--ng-options="option.id as option.name for option in mediaChannel1List" ng-change="mediaChannel1Change()" required>-->
+                                    <!--<option value="">&#45;&#45; 请选择 &#45;&#45;</option>-->
+                                <!--</select>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="col-sm-4 form-group" ng-if="mediaChannel2List.length > 0">-->
+                            <!--<label for="media.mediaChannelId2" class="col-sm-4 control-label">* 默认渠道详情</label>-->
+                            <!--<div class="col-sm-7">-->
+                                <!--<select  ng-model="media.mediaChannelId2" ng-disabled="!isSmartChecked" name="media.mediaChannelId2" id="media.mediaChannelId2" class="form-control"-->
+                                         <!--ng-options="option.id as option.name for option in mediaChannel2List" required>-->
+                                    <!--<option value="">&#45;&#45; 请选择 &#45;&#45;</option>-->
+                                <!--</select>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<hr>-->
+
+                    <!--<div nv-file-drop="" uploader="uploader" filters="queueLimit, customFilter">-->
+                        <!--<div class="row" style="margin: 0 20px">-->
+                            <!--<div style="position: relative">-->
+                                <!--&lt;!&ndash;  <h3>请选择《优胜教育Leads导入模版.xls》</h3>&ndash;&gt;-->
+                                <!--&lt;!&ndash; Example: nv-file-select="" uploader="{Object}" options="{Object}" filters="{String}" &ndash;&gt;-->
+                                <!--&lt;!&ndash; <label>多文件上传</label>-->
+                                <!--<input type="file" nv-file-select="" uploader="uploader" multiple  /><br/> &ndash;&gt;-->
+                                <!--&lt;!&ndash; <label>单文件上传</label> &ndash;&gt;-->
+                                <!--<input ng-if="isDefaultSelected()" type="file" ng-disabled=" !isSmartChecked" nv-file-select="" uploader="uploader" multiple/>-->
+                                <!--<div ng-if="excelDownloadUrl" style="position: absolute; top: -15px;right: 20px;"> <a class="btn btn-primary" href="{{excelDownloadUrl}}" target="_blank">下载已解析excel</a></div>-->
+                                <!--<div ng-if="errorFileUrl" style="position: absolute; top: -15px;right: 180px;"> <a class="btn btn-primary" href="{{errorFileUrl}}" target="_blank">下载异常数据excel</a></div>-->
+                            <!--</div>-->
+                            <!--<div style="margin-bottom: 40px">-->
+                                <!--&lt;!&ndash; <h3>上传队列</h3>-->
+                                <!--<p>队列长度: {{ uploader.queue.length }}</p> &ndash;&gt;-->
+                                <!--<table class="table">-->
+                                    <!--<thead>-->
+                                    <!--<tr>-->
+                                        <!--<th width="30%">名称</th>-->
+                                        <!--<th ng-show="uploader.isHTML5">大小</th>-->
+                                        <!--<th width="30%" ng-show="uploader.isHTML5">进度</th>-->
+                                        <!--<th>状态</th>-->
+                                        <!--<th>操作</th>-->
+                                    <!--</tr>-->
+                                    <!--</thead>-->
+                                    <!--<tbody>-->
+                                    <!--<tr ng-repeat="item in uploader.queue">-->
+                                        <!--<td><strong>{{ item.file.name }}</strong></td>-->
+                                        <!--<td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>-->
+                                        <!--<td ng-show="uploader.isHTML5">-->
+                                            <!--<div class="progress" style="margin-bottom: 0;">-->
+                                                <!--<div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>-->
+                                            <!--</div>-->
+                                        <!--</td>-->
+                                        <!--<td class="text-center">-->
+                                            <!--<span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>-->
+                                            <!--<span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>-->
+                                            <!--<span ng-show="item.isError"><i class="glyphicon glyphicon-delete"></i></span>-->
+                                        <!--</td>-->
+                                        <!--<td nowrap>-->
+                                            <!--<button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">-->
+                                                <!--<span class="glyphicon glyphicon-upload"></span> 上传文件-->
+                                            <!--</button>-->
+                                            <!--<button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">-->
+                                                <!--<span class="glyphicon glyphicon-ban-circle"></span> 取消上传-->
+                                            <!--</button>-->
+                                            <!--<button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">-->
+                                                <!--<span class="glyphicon glyphicon-trash"></span> 删除文件-->
+                                            <!--</button>-->
+                                        <!--</td>-->
+                                    <!--</tr>-->
+                                    <!--</tbody>-->
+                                <!--</table>-->
+
+                                <!--<div>-->
+                                    <!--<div>-->
+                                        <!--总上传进度:-->
+                                        <!--<div class="progress" style="">-->
+                                            <!--<div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<hr>-->
+                    <!--<div class="table-responsive border-ccc" ng-if="fullStudentList.length > 0">-->
+                        <!--<div class="table-title">解析出如下数据</div>-->
+                        <!--<table class="table table-bordered table-striped table-condensed" st-pipe="getStudentList" st-table="studentList">-->
+                            <!--<thead>-->
+                            <!--<tr>-->
+                                <!--<th>姓名</th>-->
+                                <!--<th>手机号</th>-->
+                                <!--<th>母亲姓名</th>-->
+                                <!--<th>母亲手机号</th>-->
+                                <!--<th>父亲姓名</th>-->
+                                <!--<th>父亲手机号</th>-->
+                                <!--<th>年级</th>-->
+                                <!--<th>性别</th>-->
+                                <!--<th>渠道来源</th>-->
+                                <!--<th>来源详情</th>-->
+                                <!--<th>省</th>-->
+                            <!--</tr>-->
+                            <!--</thead>-->
+                            <!--<tbody ng-show="!isStudentListLoading">-->
+                            <!--<tr ng-repeat="row in studentList">-->
+                                <!--<td>{{row.name}}</td>-->
+                                <!--<td>{{row.phone}}</td>-->
+                                <!--<td>{{row.motherName}}</td>-->
+                                <!--<td>{{row.motherPhone}}</td>-->
+                                <!--<td>{{row.fatherName}}</td>-->
+                                <!--<td>{{row.fatherPhone}}</td>-->
+                                <!--<td>{{getGradeName(row.gradeId)}}</td>-->
+                                <!--<td>{{getGenderName(row.gender)}}</td>-->
+                                <!--<td>{{getMediaChannelName(row.mediaChannelId1)}}</td>-->
+                                <!--<td>{{getMediaChannelName(row.mediaChannelId2)}}</td>-->
+                                <!--<td>{{getProvinceName(row.provinceCode)}}</td>-->
+                            <!--</tr>-->
+                            <!--</tbody>-->
+                            <!--<tbody ng-show="isStudentListLoading">-->
+                            <!--<tr>-->
+                                <!--<td colspan="14" class="text-center"><div class="loading-indicator"></div>-->
+                                <!--</td>-->
+                            <!--</tr>-->
+                            <!--</tbody>-->
+                            <!--<tfoot>-->
+                            <!--<tr>-->
+                                <!--<td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="14"></td>-->
+                            <!--</tr>-->
+                            <!--</tfoot>-->
+                        <!--</table>-->
+                    <!--</div>-->
+
+                    <!--<div class="text-center">-->
+                        <!--<button class="btn btn-default" ng-click="doImport()" ng-disabled="!key || !isSmartChecked">确认导入</button>-->
+                        <!--&lt;!&ndash;<button class="btn btn-default" ng-click="$hide()">取消</button>&ndash;&gt;-->
+                    <!--</div>-->
+
+
+
+
+
+
+
+
+
+            <!--</div>-->
+        </div>
+          <div class="modal-footer">
+              <div class="text-center">
+                  <button class="btn btn-success c5-lable" ng-if="isOneChecked" ng-disabled="addLeadsForm.$invalid" ng-click="createLeadsStudent();$hide()">保存</button>
+                  <!--<button class="btn btn-success" ng-click="createLeadsStudent(form)">保存</button>-->
+                  <button class="btn btn-default" ng-click="$hide();hidetextchang()">取消</button>
+              </div>
+          </div>
+        <!-- <div class="modal-footer">
+          <button type="button" class="btn btn-default" ng-click="$hide()">取消</button>
+          <button type="submit" class="btn btn-success" ng-click="saveImport()" ng-disabled="importLeadsForm.$invalid">导入</button>
+          <img ng-if="dataLoadingForProductType" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+
+        </div> -->
+      <!--</form>-->
+    </div>
+
+  </div>
+</div>
+<script style="display:none">
+    $(function(){
+            $(".yes-radio").on("click",function() {
+                if (!$(this).hasClass("radio-checked")) {
+                    $(this).parents('.modal-body').find(".radio-checked").removeClass("radio-checked");
+                    $(this).addClass("radio-checked");
+                }
+            })
+        });
+</script>
+<script type="text/javascript">
+    window.load = pause();
+    function pause(){
+        window.setTimeout("tooltipShow()", 1000);
+    }
+    function tooltipShow() {
+        var node = $("#hint");
+        var content = '1. 步骤：填写默认信息 -> 上传文件（可下载处理过的excel查看无法解析部分） -> 确认导入（如有重复或异常数据可下载excel查看）。<br/>2. 系统将按照手机号（客户、母亲、父亲）、年级、省、姓名（客户、母亲、父亲）、性别尽量解析数据，少数顺序错乱不影响。<br/>3. 录入人、录入地点等无效信息请删除，以免影响数据正确性。<br/> ';
+        node.webuiPopover({content:content,trigger:'hover'});
+    }
+</script>

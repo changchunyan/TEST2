@@ -1,0 +1,64 @@
+<div class="modal orderModal"  tabindex="-1" role="dialog" aria-hidden="true" ng-controller="OrderRefundController">
+    <div class="modal-dialog">
+        <div class="modal-content" >
+            <form name="refundOrderForm" role="form" class="form-horizontal showcase-form" novalidate="">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="modalTitle"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="col-sm-12">
+                        <div>
+                            <table class="table table-bordered table-striped" st-table="orderTransferAvailableOrders" >
+                                <thead></thead>
+                                <tr>
+                                    <th>学生姓名</th>
+                                    <th>{{order.name}}</th>
+                                    <th>电子账户余额</th>
+                                    <th>{{order.accountBalance}}</th>
+                                    <input type="hidden"ng-model="order.crmStudentId" />
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row"></div><hr>
+                    <div>
+                        <div class="row">
+                            <div class="col-sm-4 " >
+
+                                <label for="refundAmount" class="col-sm-6 control-label">退费金额</label>
+                                <div class="col-sm-6">
+                                    <input type="text" ng-pattern="/^[1-9]\d*\b|0$/" name="refundAmount" id="refundAmount" integer  ng-model="order.refundAmount"  ng-maxlength="10" class="form-control"/> <!--ng-value="order.totalPrice - order.privilegeAmount - order.realPayAmount -order.supplementaryFee | number:2"-->
+                                </div>
+                            </div>
+                            <div class="col-sm-4 " >
+                                <label for="refundType" class="col-sm-6 control-label">退款方式</label>
+                                <div class="col-sm-6">
+                                    <select ng-model="order.refundType" name="refundType" id="refundType" class="form-control"
+                                            ng-options="option.id as option.name for option in orderRefundTypeSelect">
+                                        <option value="">-- 请选择 --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 ">
+                                <label for="order.refundDate" class="col-sm-6 control-label">* 退款时间</label>
+                                <div class="col-sm-6">
+                                    <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" onchange="" readonly   ng-value="order.refundDate | date:'yyyy-MM-dd' " name="order.refundDate" id="order.refundDate"  ng-model="order.refundDate" required class=" form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default"  ng-click="$hide()">取消</button>
+                        <button type="button" class="btn btn-success" ng-disabled="refundOrderForm.$invalid"  ng-click="auditRefundTopup()">确认退款</button>
+                        <img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                    </div>
+            </form>
+        </div>
+    </div>
+</div>
+<style>
+    .col-sm-4{
+        margin-top:20px;
+    }
+</style>

@@ -1,0 +1,863 @@
+<div class="view-frame" ng-controller="TeacherTimesController as ttc">
+    <div class="view-left">
+        <div ng-include="'partials/common/common.indexLeft.html'"></div>
+    </div>
+    <div  class="view-content">
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="#">首页</a> <span class="divider"></span></li>
+                <li><a href="#/fb-admin">前台业务</a> <span class="divider"></span></li>
+                <li class="active">老师时间表</li>
+            </ul>
+        </div>
+        <div class="tabs-title br-gray-t c3">
+            老师时间表<i>?</i>
+            <!--<div class="operations-panel" >-->
+            <!--<button class="btn btn-success" ng-click="ttc.back()">返回</button>-->
+            <!--</div>-->
+        </div>
+        <div class="plan-details br-gray" ng-controller="TimesController as tcl">
+            <div class="">
+                <!--查询条件模块-->
+                <div class="times-selected">
+                    <div class="selected-teachers">
+                        <input type="text"  ng-model="selected.personsNameShow" disabled="disabled" class="width49">
+                        <button ng-if="!isTeacher()" class="btn btn-success" ng-click="tcl.selectedPersons()">全部老师</button>
+                    </div>
+      
+	      			<div ng-if="teacherGroup.length > 0" class="bg-gray">
+
+	      				<div style="margin-top: 20px;border-bottom: 1px solid #cfd8dc">
+                            <label style="font-size:20px;font-weight:600;">本校区老师</label><span class="glyphicon glyphicon-yichang ml15 caveat" style="background-position: center 4px"></span>
+                            <span style="color:#f8d398;">为避免响应时间过长，最多可选5位老师</span>
+	      				</div>
+		               	<div class="group-list" ng-repeat="element in teacherGroup track by $index" ng-if="element.subjectId<12" >
+		               		<div style="margin-bottom:5px;overflow: hidden;">
+			               		<!--<label style="font-size:17px;font-weight:500;display: inline-block;width: 50px;float: left;width: 4%;" class="ng-binding">
+			               			{{element.subjectName}}
+			               		</label>-->
+                                <div style="width:4%;float: left;overflow: hidden;margin-top: 20px"><img ng-src="{{'img/teacherTime/time-'+element.subjectId+'.png'}}" title="{{element.subjectName}}" alt="{{element.subjectName}}" ></div>
+			               		<div style="width: 95%;float: left;">
+				               		<div ng-repeat="teacher in element.teachers track by $index" class="btn btn-default lable-btn" ng-click="checkItem(teacher)"
+				               			ng-class="{selected:teacher.selected, unselected:!teacher.selected}">
+				               			{{teacher.nameDisplay}}
+				               		</div>
+			               		</div>
+			               		
+		               		</div>
+		               	</div>
+	               	</div>
+      
+                    <div class="select-time">
+                        <div class="inline-block width49" style="width:192px;overflow: hidden;">
+                            <div class="yes-radio " ng-class="{true:'radio-checked',false:''}[selected.isWeekShow]" ng-click="tcl.checkedShowCycle('week')" >
+                                <input type="radio" >
+                            </div>按周查看
+                            <div class="yes-radio " ng-class="{true:'radio-checked',false:''}[selected.isDayShow]" ng-click="tcl.checkedShowCycle('day')" >
+                                <input type="radio" >
+                            </div>按天查看
+                        </div>
+                        <div class="inline-block width49 time-show">
+                            <span ng-class="{'active':selected.isShowAm}" ng-click="timeIsShow('am')">上午</span>
+                            <span ng-class="{'active':selected.isShowPm}" ng-click="timeIsShow('pm')">下午</span>
+                            <span ng-class="{'active':selected.isShowNight}" ng-click="timeIsShow('nt')">晚上</span>
+                            <!--<input type="checkbox" ng-model="selected.isShowAm">上午
+                            <input type="checkbox" ng-model="selected.isShowPm">下午
+                            <input type="checkbox" ng-model="selected.isShowNight">晚上-->
+                        </div>
+                        <div ng-if="selected.isDayShow">
+                            <input type="radio" value="1" ng-model="selected.dayShowOfWeek" >星期一
+                            <input type="radio" value="2" ng-model="selected.dayShowOfWeek" >星期二
+                            <input type="radio" value="3" ng-model="selected.dayShowOfWeek" >星期三
+                            <input type="radio" value="4" ng-model="selected.dayShowOfWeek" >星期四
+                            <input type="radio" value="5" ng-model="selected.dayShowOfWeek" >星期五
+                            <input type="radio" value="6" ng-model="selected.dayShowOfWeek" >星期六
+                            <input type="radio" value="7" ng-model="selected.dayShowOfWeek" >星期日
+                        </div>
+
+                    </div>
+                    <div class="br-f-m">
+                        <div class="text-center">
+                            <button class="btn btn-success ng-scope"  ng-click="tcl.selectPersons()" ng-disabled="!selected.personsNameShow">查询</button>
+                            <!-- <button class="btn btn-success ng-scope"  ng-click="tcl.selectPersons()" >查询</button>-->
+                            <button class="btn btn-default" ng-click="tcl.resetSelectPersons()">重置</button>
+                        </div>
+                    </div>
+                </div>
+                <!--显示时间模块-->
+                <div class="times-contents border-ccc padding-20" ng-if="selected.isSelectedData">
+                    <!--头部-->
+                    <div>
+                        <div class="text-center font-size-20">
+                            <span>{{tcl.requestDate.timeLists[0] |date :'yyyy-MM-dd'}}</span>到<span>{{tcl.requestDate.timeLists[6] |date :'yyyy-MM-dd'}}</span>
+                        </div>
+                        <ul class="time-show of pl-0 bold-200" style="border-left: none;line-height: 50px;">
+                            <li class="inline-block mt-abtn f14">
+                                <a class="pre" ng-click="getForwardTime()">往前</a>
+                                <a class="next" ng-click="getBackTime()">往后</a>
+                                <a ng-class="{'active':timeNow}" ng-click="getCurrentTimes()">当前</a>
+                            </li>
+                            <li class="inline-block fr span-auto">
+                                <label for="span-2" class="label-span" ng-class="{'active':selected.isShowPlanTimes}">显示已排课时间</label>
+                                <label for="span-1" class="label-span" ng-class="{'active':selected.isShowNotPlanTimes}">显示未排课时间</label>
+                                <input id="span-2" type="checkbox" class="hide" ng-model="selected.isShowPlanTimes">
+                                <input id="span-1" type="checkbox" class="hide" ng-model="selected.isShowNotPlanTimes">
+                            </li>
+
+                        </ul>
+                        <!--<div class="yws-container">
+                            <div class="yws-left">
+                                <a class="btn btn-success" ng-click="getForwardTime()">往前</a>
+                                <a class="btn btn-success" ng-click="getBackTime()">往后</a>
+                                &lt;!&ndash;&nbsp;&nbsp;&ndash;&gt;
+                                <a class="btn btn-success" ng-click="getCurrentTimes()">当前</a>
+                            </div>
+                            <div class="yws-right">
+                                <input type="checkbox" ng-model="selected.isShowPlanTimes">显示已排课时间
+                                &nbsp;&nbsp;
+                                <input type="checkbox" ng-model="selected.isShowNotPlanTimes">显示未排课时间
+                            </div>
+                        </div>-->
+                        <div class="yws-container">
+                            <div class="yws-right font-color-blue" ng-click="showExplainModal()">图形说明</div>
+                        </div>
+                    </div>
+                    <!--表格部分-->
+                    <div>
+                        <table class="table table-bordered table-striped table-condensed" ng-controller="CoursePlanController as cpc">
+                            <thead>
+                            <tr >
+                                <th colspan="2" >老师</th>
+                                <th ng-repeat="row in tcl.requestDate.timeLists">{{tcl.showWeek(row)}}({{row | date:'MM-dd'}})</th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <div>
+                                <tr  ng-if="personsData[0].persons ">
+                                    <td rowspan="3">
+                                        <div style="text-align:left">
+                                            <div style="font-size:20px;font-weight: 400;">{{personsData[0].teachername}}<br/></div>
+                                            <br/>
+                                            <div ng-if="personsData[0].teacherInfo.subjects">{{personsData[0].teacherInfo.subjects}}<br/></div>
+                                            <div ng-if="personsData[0].teacherInfo.grade">{{personsData[0].teacherInfo.grade}}<br/></div>
+                                            <div ng-if="personsData[0].teacherInfo.mobile">{{personsData[0].teacherInfo.mobile}}<br/></div>
+                                            <div ng-if="personsData[0].teacherInfo.schoolName">{{personsData[0].teacherInfo.schoolName}}</div>
+                                        </div>
+                                    </td>
+                                    <td ng-if="selected.isShowAm">上午</td>
+                                    <td ng-if="selected.isShowAm" ng-repeat="noots in personsData[0].persons" ng-init="sectionIndex = $index">
+                                        <span ng-if="isShowPlan(afternoon)"  class="td-time"
+                                              ng-repeat="afternoon in noots.noon[0].forenoon"
+                                              ng-class="{'time-green-blue':afternoon.pasttype==5,'time-black-blue':afternoon.pasttype==6,'time-xiao':afternoon.pasttype==3,'time-gray':afternoon.pasttype==4,
+                                              'time-no':afternoon.pasttype==1, 'time-kong':afternoon.pasttype==2, 'time-green-yellow':afternoon.pasttype==7, 'time-black-yellow':afternoon.pasttype==8}">
+                                                <a ng-click="bubble.open = true" class="mt-tool-tip" id="nw01+{{sectionIndex}}+{{$index}}"   style="display: inline-block;width: 100%;" title="{{afternoon.infoTile}}"  data-toggle="tooltip"><!--ng-click="bubble.open = true"-->
+                                                    {{afternoon.start_time |date:'HH:mm'}}-{{afternoon.end_time |date:'HH:mm'}}
+                                                </a>
+                                                 <bubble  ng-if="bubble.open" for="nw01+{{sectionIndex}}+{{$index}}" align="right" close="bubble.open=false" close-action="outerchick " ng-mouseleave="bubble.open=false;" class="mt-toolTip" ng-click="bubble.open=false"><!-- class="mt-toolTip"-->
+                                                     <ul>
+                                                         <li ng-if="afternoon.pasttype==5 || afternoon.pasttype==6 || afternoon.pasttype==1 || afternoon.pasttype==2 || afternoon.pasttype==7 || afternoon.pasttype==8"><!--pasttype：1未消课，2已消课  3,未排课-->
+                                                             <a ng-click="tcl.showPlanDetail(afternoon)" >查看</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                             <a ng-click="yesconsume(afternoon)" >消课</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                             <a ng-click="showEditCoursePlan(afternoon)" >编辑</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                             <a ng-click="remove(afternoon)" >删除</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==6 && afternoon.is_satisfied!=0">
+                                                             <a ng-click="addUnsatisfied(afternoon,0)" >取消</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacherMaster2() && !isTeacherMaster3() && !isTeacher() && afternoon.pasttype==3">
+                                                             <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                             <a ng-click="showSelectedTeacherPaikeView(personsData[0].teacherID, personsData[0].teachername, noots.date)" >排课</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==3">
+                                                             <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                             <a ng-click="showSelectedTeacherPaikeView2(personsData[0].teacherID, personsData[0].teachername, noots.date)" >排试听课</a>
+                                                         </li>
+
+                                                     </ul>
+                                                 </bubble>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr ng-if="personsData[0].persons ">
+                                    <td ng-if="selected.isShowPm">下午</td>
+                                    <td ng-if="selected.isShowPm" ng-repeat="noots in personsData[0].persons" ng-init="sectionIndex = $index">
+
+                                               <span ng-if="isShowPlan(afternoon)" ng-repeat="afternoon in noots.noon[0].afternoon" class="td-time"
+                                                     ng-class="{'time-green-blue':afternoon.pasttype==5,'time-black-blue':afternoon.pasttype==6,'time-xiao':afternoon.pasttype==3,'time-gray':afternoon.pasttype==4,
+                                              		'time-no':afternoon.pasttype==1, 'time-kong':afternoon.pasttype==2, 'time-green-yellow':afternoon.pasttype==7, 'time-black-yellow':afternoon.pasttype==8}">
+                                              		<a  class="showUI mt-tool-tip" id="nw02+{{sectionIndex}}+{{$index}}"  ng-click="bubble.open=true" style="display: inline-block;width: 100%;"  title="{{afternoon.infoTile}}"  data-toggle="tooltip">
+                                                        {{afternoon.start_time |date:'HH:mm'}}-{{afternoon.end_time |date:'HH:mm'}}
+                                                    </a>
+                                                    <bubble  ng-if="bubble.open" class="mt-toolTip" for="nw02+{{sectionIndex}}+{{$index}}"  align="right" close="bubble.open=false" close-action="outerchick "  ng-mouseleave="bubble.open=false;" ng-click="bubble.open=false">
+                                                       <ul>
+                                                         <li ng-if="afternoon.pasttype==5 || afternoon.pasttype==6 || afternoon.pasttype==1 || afternoon.pasttype==2 || afternoon.pasttype==7 || afternoon.pasttype==8"><!--pasttype：1未消课，2已消课  3,未排课-->
+                                                               <a ng-click="tcl.showPlanDetail(afternoon)" >查看</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="yesconsume(afternoon)" >消课</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="showEditCoursePlan(afternoon)" >编辑</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="remove(afternoon)" >删除</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==6&&afternoon.is_satisfied!=0">
+                                                               <a ng-click="addUnsatisfied(afternoon,0)" >取消</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacherMaster2() && !isTeacherMaster3() && !isTeacher() && afternoon.pasttype==3">
+                                                               <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                               <a ng-click="showSelectedTeacherPaikeView(personsData[0].teacherID, personsData[0].teachername, noots.date)" >排课</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==3">
+                                                               <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                               <a ng-click="showSelectedTeacherPaikeView2(personsData[0].teacherID, personsData[0].teachername, noots.date)" >排试听课</a>
+                                                           </li>
+
+                                                       </ul>
+                                                   </bubble>
+                                               </span>
+                                    </td>
+                                </tr>
+                                <tr ng-if="personsData[0].persons">
+                                    <td ng-if="selected.isShowNight">晚上</td>
+                                    <td ng-if="selected.isShowNight" ng-repeat="noots in personsData[0].persons" ng-init="sectionIndex = $index">
+
+                                               <span ng-if="isShowPlan(afternoon)" ng-repeat="afternoon in noots.noon[0].night" class="td-time"
+                                                     ng-class="{'time-green-blue':afternoon.pasttype==5,'time-black-blue':afternoon.pasttype==6,'time-xiao':afternoon.pasttype==3,'time-gray':afternoon.pasttype==4,
+                                              		'time-no':afternoon.pasttype==1, 'time-kong':afternoon.pasttype==2, 'time-green-yellow':afternoon.pasttype==7, 'time-black-yellow':afternoon.pasttype==8}">
+                                              		<a class="showUI mt-tool-tip" id="nw03+{{sectionIndex}}+{{$index}}"  ng-click="bubble.open=true" style="display: inline-block;width: 100%;"  title="{{afternoon.infoTile}}"  data-toggle="tooltip">
+                                                        {{afternoon.start_time |date:'HH:mm'}}-{{afternoon.end_time |date:'HH:mm'}}
+                                                    </a>
+                                                    <bubble  ng-if="bubble.open" class="mt-toolTip" for="nw03+{{sectionIndex}}+{{$index}}"  align="right" close="bubble.open=false" close-action="outerchick "  ng-mouseleave="bubble.open=false;" ng-click="bubble.open=false">
+                                                       <ul>
+                                                           <li ng-if="afternoon.pasttype==5 || afternoon.pasttype==6 || afternoon.pasttype==1 || afternoon.pasttype==2 || afternoon.pasttype==7 || afternoon.pasttype==8"><!--pasttype：1未消课，2已消课  3,未排课-->
+                                                               <a ng-click="tcl.showPlanDetail(afternoon)" >查看</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="yesconsume(afternoon)" >消课</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="showEditCoursePlan(afternoon)" >编辑</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="remove(afternoon)" >删除</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==6 && afternoon.is_satisfied!=0">
+                                                               <a ng-click="addUnsatisfied(afternoon,0)" >取消</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacherMaster2() && !isTeacherMaster3() && !isTeacher() && afternoon.pasttype==3">
+                                                               <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                               <a ng-click="showSelectedTeacherPaikeView(personsData[0].teacherID, personsData[0].teachername, noots.date)" >排课</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==3">
+                                                               <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                               <a ng-click="showSelectedTeacherPaikeView2(personsData[0].teacherID, personsData[0].teachername, noots.date)" >排试听课</a>
+                                                           </li>
+
+                                                       </ul>
+                                                   </bubble>
+                                               </span>
+                                    </td>
+                                </tr>
+                            </div>
+                            <div>
+                                <tr  ng-if="personsData[1].persons">
+                                    <td rowspan="3">
+                                        <div style="text-align:left">
+                                            <div style="font-size:20px;font-weight: 400;">{{personsData[1].teachername}}<br/></div>
+                                            <br/>
+                                            <div ng-if="personsData[1].teacherInfo.subjects">{{personsData[1].teacherInfo.subjects}}<br/></div>
+                                            <div ng-if="personsData[1].teacherInfo.grade">{{personsData[1].teacherInfo.grade}}<br/></div>
+                                            <div ng-if="personsData[1].teacherInfo.mobile">{{personsData[1].teacherInfo.mobile}}<br/></div>
+                                            <div ng-if="personsData[1].teacherInfo.schoolName">{{personsData[1].teacherInfo.schoolName}}</div>
+                                        </div>
+                                    </td>
+                                    <td ng-if="selected.isShowAm">上午</td>
+                                    <td ng-if="selected.isShowAm" ng-repeat="noots in personsData[1].persons" ng-init="sectionIndex = $index">
+                                        <span ng-if="isShowPlan(afternoon)"  class="td-time"
+                                              ng-repeat="afternoon in noots.noon[0].forenoon"
+                                              ng-class="{'time-green-blue':afternoon.pasttype==5,'time-black-blue':afternoon.pasttype==6,'time-xiao':afternoon.pasttype==3,'time-gray':afternoon.pasttype==4,
+                                              'time-no':afternoon.pasttype==1, 'time-kong':afternoon.pasttype==2, 'time-green-yellow':afternoon.pasttype==7, 'time-black-yellow':afternoon.pasttype==8}">
+                                                <a   class="mt-tool-tip" id="nw11+{{sectionIndex}}+{{$index}}"  ng-click="bubble.open = true" style="display: inline-block;width: 100%;"  title="{{afternoon.infoTile}}"  data-toggle="tooltip">
+                                                    {{afternoon.start_time |date:'HH:mm'}}-{{afternoon.end_time |date:'HH:mm'}}
+                                                </a>
+                                                  <bubble  ng-if="bubble.open" class="mt-toolTip" for="nw11+{{sectionIndex}}+{{$index}}"  align="right" close="bubble.open=false" close-action="outerchick "  ng-mouseleave="bubble.open=false;" ng-click="bubble.open=false">
+                                                     <ul>
+                                                         <li ng-if="afternoon.pasttype==5 || afternoon.pasttype==6 || afternoon.pasttype==1 || afternoon.pasttype==2 || afternoon.pasttype==7 || afternoon.pasttype==8"><!--pasttype：1未消课，2已消课  3,未排课-->
+                                                             <a ng-click="tcl.showPlanDetail(afternoon)" >查看</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                             <a ng-click="yesconsume(afternoon)" >消课</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                             <a ng-click="showEditCoursePlan(afternoon)" >编辑</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                             <a ng-click="remove(afternoon)" >删除</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==6&&afternoon.is_satisfied!=0">
+                                                             <a ng-click="addUnsatisfied(afternoon,0)" >取消</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacherMaster2() && !isTeacherMaster3() && !isTeacher() && afternoon.pasttype==3">
+                                                             <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                             <a ng-click="showSelectedTeacherPaikeView(personsData[1].teacherID, personsData[1].teachername, noots.date)" >排课</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==3">
+                                                             <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                             <a ng-click="showSelectedTeacherPaikeView2(personsData[0].teacherID, personsData[0].teachername, noots.date)" >排试听课</a>
+                                                         </li>
+
+                                                     </ul>
+                                                 </bubble>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr ng-if="personsData[1].persons">
+                                    <td ng-if="selected.isShowPm">下午</td>
+                                    <td ng-if="selected.isShowPm" ng-repeat="noots in personsData[1].persons" ng-init="sectionIndex = $index">
+
+                                               <span ng-if="isShowPlan(afternoon)" ng-repeat="afternoon in noots.noon[0].afternoon" class="td-time"
+                                                     ng-class="{'time-green-blue':afternoon.pasttype==5,'time-black-blue':afternoon.pasttype==6,'time-xiao':afternoon.pasttype==3,'time-gray':afternoon.pasttype==4,
+                                              'time-no':afternoon.pasttype==1, 'time-kong':afternoon.pasttype==2, 'time-green-yellow':afternoon.pasttype==7, 'time-black-yellow':afternoon.pasttype==8}">
+                                                    <a class="showUI mt-tool-tip" id="nw12+{{sectionIndex}}+{{$index}}"  ng-click="bubble.open=true" style="display: inline-block;width: 100%;"  title="{{afternoon.infoTile}}"  data-toggle="tooltip">
+                                                        {{afternoon.start_time |date:'HH:mm'}}-{{afternoon.end_time |date:'HH:mm'}}
+                                                    </a>
+                                                    <bubble  ng-if="bubble.open" class="mt-toolTip" for="nw12+{{sectionIndex}}+{{$index}}"  align="right" close="bubble.open=false" close-action="outerchick "  ng-mouseleave="bubble.open=false;" ng-click="bubble.open=false">
+                                                       <ul>
+                                                           <li ng-if="afternoon.pasttype==5 || afternoon.pasttype==6 || afternoon.pasttype==1 || afternoon.pasttype==2 || afternoon.pasttype==7 || afternoon.pasttype==8"><!--pasttype：1未消课，2已消课  3,未排课-->
+                                                               <a ng-click="tcl.showPlanDetail(afternoon)" >查看</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="yesconsume(afternoon)" >消课</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="showEditCoursePlan(afternoon)" >编辑</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="remove(afternoon)" >删除</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==6&&afternoon.is_satisfied!=0">
+                                                               <a ng-click="addUnsatisfied(afternoon,0)" >取消</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacherMaster2() && !isTeacherMaster3() && !isTeacher() && afternoon.pasttype==3">
+                                                               <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                               <a ng-click="showSelectedTeacherPaikeView(personsData[1].teacherID, personsData[1].teachername, noots.date)" >排课</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==3">
+                                                               <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                               <a ng-click="showSelectedTeacherPaikeView2(personsData[0].teacherID, personsData[0].teachername, noots.date)" >排试听课</a>
+                                                           </li>
+
+                                                       </ul>
+                                                   </bubble>
+                                               </span>
+                                    </td>
+                                </tr>
+                                <tr ng-if="personsData[1].persons">
+                                    <td ng-if="selected.isShowNight">晚上</td>
+                                    <td ng-if="selected.isShowNight" ng-repeat="noots in personsData[1].persons" ng-init="sectionIndex = $index">
+
+                                               <span ng-if="isShowPlan(afternoon)" ng-repeat="afternoon in noots.noon[0].night" class="td-time"
+                                                     ng-class="{'time-green-blue':afternoon.pasttype==5,'time-black-blue':afternoon.pasttype==6,'time-xiao':afternoon.pasttype==3,'time-gray':afternoon.pasttype==4,
+                                              'time-no':afternoon.pasttype==1, 'time-kong':afternoon.pasttype==2, 'time-green-yellow':afternoon.pasttype==7, 'time-black-yellow':afternoon.pasttype==8}">
+                                                    <a class="showUI mt-tool-tip" id="nw13+{{sectionIndex}}+{{$index}}"  ng-click="bubble.open=true" style="display: inline-block;width: 100%;"  title="{{afternoon.infoTile}}"  data-toggle="tooltip">
+                                                        {{afternoon.start_time |date:'HH:mm'}}-{{afternoon.end_time |date:'HH:mm'}}
+                                                    </a>
+                                                    <bubble  ng-if="bubble.open" class="mt-toolTip" for="nw13+{{sectionIndex}}+{{$index}}"  align="right" close="bubble.open=false" close-action="outerchick "  ng-mouseleave="bubble.open=false;" ng-click="bubble.open=false">
+                                                       <ul>
+                                                           <li ng-if="afternoon.pasttype==5 || afternoon.pasttype==6 || afternoon.pasttype==1 || afternoon.pasttype==2 || afternoon.pasttype==7 || afternoon.pasttype==8"><!--pasttype：1未消课，2已消课  3,未排课-->
+                                                               <a ng-click="tcl.showPlanDetail(afternoon)" >查看</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="yesconsume(afternoon)" >消课</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="showEditCoursePlan(afternoon)" >编辑</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="remove(afternoon)" >删除</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==6&&afternoon.is_satisfied!=0">
+                                                               <a ng-click="addUnsatisfied(afternoon,0)" >取消</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacherMaster2() && !isTeacherMaster3() && !isTeacher() && afternoon.pasttype==3">
+                                                               <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                               <a ng-click="showSelectedTeacherPaikeView(personsData[1].teacherID, personsData[1].teachername, noots.date)" >排课</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==3">
+                                                               <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                               <a ng-click="showSelectedTeacherPaikeView2(personsData[0].teacherID, personsData[0].teachername, noots.date)" >排试听课</a>
+                                                           </li>
+
+                                                       </ul>
+                                                   </bubble>
+                                               </span>
+                                    </td>
+                                </tr>
+                            </div>
+                            <div >
+                                <tr  ng-if="personsData[2].persons">
+                                    <td rowspan="3">
+                                        <div style="text-align:left">
+                                            <div style="font-size:20px;font-weight: 400;">{{personsData[2].teachername}}<br/></div>
+                                            <br/>
+                                            <div ng-if="personsData[2].teacherInfo.subjects">{{personsData[2].teacherInfo.subjects}}<br/></div>
+                                            <div ng-if="personsData[2].teacherInfo.grade">{{personsData[2].teacherInfo.grade}}<br/></div>
+                                            <div ng-if="personsData[2].teacherInfo.mobile">{{personsData[2].teacherInfo.mobile}}<br/></div>
+                                            <div ng-if="personsData[2].teacherInfo.schoolName">{{personsData[2].teacherInfo.schoolName}}</div>
+                                        </div>
+                                    </td>
+                                    <td ng-if="selected.isShowAm">上午{{$index}}</td>
+                                    <td ng-if="selected.isShowAm" ng-repeat="noots in personsData[2].persons" ng-init="sectionIndex = $index">
+                                        <span ng-if="isShowPlan(afternoon)"  class="td-time"
+                                              ng-repeat="afternoon in noots.noon[0].forenoon"
+                                              ng-class="{'time-green-blue':afternoon.pasttype==5,'time-black-blue':afternoon.pasttype==6,'time-xiao':afternoon.pasttype==3,'time-gray':afternoon.pasttype==4,
+                                              'time-no':afternoon.pasttype==1, 'time-kong':afternoon.pasttype==2, 'time-green-yellow':afternoon.pasttype==7, 'time-black-yellow':afternoon.pasttype==8}">
+                                                <a   class="mt-tool-tip" id="nw21+{{sectionIndex}}+{{$index}}"  ng-click="bubble.open = true" style="display: inline-block;width: 100%;"  title="{{afternoon.infoTile}}"  data-toggle="tooltip">
+                                                    {{afternoon.start_time |date:'HH:mm'}}-{{afternoon.end_time |date:'HH:mm'}}
+                                                </a>
+                                                  <bubble  ng-if="bubble.open" class="mt-toolTip" for="nw21+{{sectionIndex}}+{{$index}}"  align="right" close="bubble.open=false" close-action="outerchick "  ng-mouseleave="bubble.open=false;" ng-click="bubble.open=false">
+                                                     <ul>
+                                                         <li ng-if="afternoon.pasttype==5 || afternoon.pasttype==6 || afternoon.pasttype==1 || afternoon.pasttype==2 || afternoon.pasttype==7 || afternoon.pasttype==8"><!--pasttype：1未消课，2已消课  3,未排课-->
+                                                             <a ng-click="tcl.showPlanDetail(afternoon)" >查看</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                             <a ng-click="yesconsume(afternoon)" >消课</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                             <a ng-click="showEditCoursePlan(afternoon)" >编辑</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                             <a ng-click="remove(afternoon)" >删除</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==6&&afternoon.is_satisfied!=0">
+                                                             <a ng-click="addUnsatisfied(afternoon,0)" >取消</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacherMaster2() && !isTeacherMaster3() && !isTeacher() && afternoon.pasttype==3">
+                                                             <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                             <a ng-click="showSelectedTeacherPaikeView(personsData[2].teacherID, personsData[2].teachername, noots.date)" >排课</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==3">
+                                                             <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                             <a ng-click="showSelectedTeacherPaikeView2(personsData[0].teacherID, personsData[0].teachername, noots.date)" >排试听课</a>
+                                                         </li>
+
+                                                     </ul>
+                                                 </bubble>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr ng-if="personsData[2].persons">
+                                    <td ng-if="selected.isShowPm">下午</td>
+                                    <td ng-if="selected.isShowPm" ng-repeat="noots in personsData[2].persons" ng-init="sectionIndex = $index">
+
+                                               <span ng-if="isShowPlan(afternoon)" ng-repeat="afternoon in noots.noon[0].afternoon" class="td-time"
+                                                     ng-class="{'time-green-blue':afternoon.pasttype==5,'time-black-blue':afternoon.pasttype==6,'time-xiao':afternoon.pasttype==3,'time-gray':afternoon.pasttype==4,
+                                              'time-no':afternoon.pasttype==1, 'time-kong':afternoon.pasttype==2, 'time-green-yellow':afternoon.pasttype==7, 'time-black-yellow':afternoon.pasttype==8}">
+                                                    <a class="showUI mt-tool-tip" id="nw22+{{sectionIndex}}+{{$index}}"  ng-click="bubble.open=true" style="display: inline-block;width: 100%;"  title="{{afternoon.infoTile}}"  data-toggle="tooltip">
+                                                        {{afternoon.start_time |date:'HH:mm'}}-{{afternoon.end_time |date:'HH:mm'}}
+                                                    </a>
+                                                    <bubble  ng-if="bubble.open" class="mt-toolTip" for="nw22+{{sectionIndex}}+{{$index}}"  align="right" close="bubble.open=false" close-action="outerchick "  ng-mouseleave="bubble.open=false;" ng-click="bubble.open=false">
+                                                       <ul>
+                                                           <li ng-if="afternoon.pasttype==5 || afternoon.pasttype==6 || afternoon.pasttype==1 || afternoon.pasttype==2 || afternoon.pasttype==7 || afternoon.pasttype==8"><!--pasttype：1未消课，2已消课  3,未排课-->
+                                                               <a ng-click="tcl.showPlanDetail(afternoon)" >查看</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="yesconsume(afternoon)" >消课</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="showEditCoursePlan(afternoon)" >编辑</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="remove(afternoon)" >删除</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==6&&afternoon.is_satisfied!=0">
+                                                               <a ng-click="addUnsatisfied(afternoon,0)" >取消</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacherMaster2() && !isTeacherMaster3() && !isTeacher() && afternoon.pasttype==3">
+                                                               <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                               <a ng-click="showSelectedTeacherPaikeView(personsData[2].teacherID, personsData[2].teachername, noots.date)" >排课</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==3">
+                                                               <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                               <a ng-click="showSelectedTeacherPaikeView2(personsData[0].teacherID, personsData[0].teachername, noots.date)" >排试听课</a>
+                                                           </li>
+
+                                                       </ul>
+                                                   </bubble>
+                                               </span>
+                                    </td>
+                                </tr>
+                                <tr ng-if="personsData[2].persons">
+                                    <td ng-if="selected.isShowNight">晚上</td>
+                                    <td ng-if="selected.isShowNight" ng-repeat="noots in personsData[2].persons" ng-init="sectionIndex = $index">
+
+                                               <span ng-if="isShowPlan(afternoon)" ng-repeat="afternoon in noots.noon[0].night" class="td-time"
+                                                     ng-class="{'time-green-blue':afternoon.pasttype==5,'time-black-blue':afternoon.pasttype==6,'time-xiao':afternoon.pasttype==3,'time-gray':afternoon.pasttype==4,
+                                              'time-no':afternoon.pasttype==1, 'time-kong':afternoon.pasttype==2, 'time-green-yellow':afternoon.pasttype==7, 'time-black-yellow':afternoon.pasttype==8}">
+                                                    <a class="showUI mt-tool-tip" id="nw23+{{sectionIndex}}+{{$index}}"  ng-click="bubble.open=true" style="display: inline-block;width: 100%;"  title="{{afternoon.infoTile}}"  data-toggle="tooltip">
+                                                        {{afternoon.start_time |date:'HH:mm'}}-{{afternoon.end_time |date:'HH:mm'}}
+                                                    </a>
+                                                    <bubble  ng-if="bubble.open" class="mt-toolTip" for="nw23+{{sectionIndex}}+{{$index}}"  align="right" close="bubble.open=false" close-action="outerchick "  ng-mouseleave="bubble.open=false;" ng-click="bubble.open=false">
+                                                       <ul>
+                                                           <li ng-if="afternoon.pasttype==5 || afternoon.pasttype==6 || afternoon.pasttype==1 || afternoon.pasttype==2 || afternoon.pasttype==7 || afternoon.pasttype==8"><!--pasttype：1未消课，2已消课  3,未排课-->
+                                                               <a ng-click="tcl.showPlanDetail(afternoon)" >查看</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="yesconsume(afternoon)" >消课</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="showEditCoursePlan(afternoon)" >编辑</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="remove(afternoon)" >删除</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==6&&afternoon.is_satisfied!=0">
+                                                               <a ng-click="addUnsatisfied(afternoon,0)" >取消</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacherMaster2() && !isTeacherMaster3() && !isTeacher() && afternoon.pasttype==3">
+                                                               <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                               <a ng-click="showSelectedTeacherPaikeView(personsData[2].teacherID, personsData[2].teachername, noots.date)" >排课</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==3">
+                                                               <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                               <a ng-click="showSelectedTeacherPaikeView2(personsData[0].teacherID, personsData[0].teachername, noots.date)" >排试听课</a>
+                                                           </li>
+
+                                                       </ul>
+                                                   </bubble>
+                                               </span>
+                                    </td>
+                                </tr>
+                            </div>
+                            <div>
+                                <tr  ng-if="personsData[3].persons">
+                                    <td rowspan="3">
+                                        <div style="text-align:left">
+                                            <div style="font-size:20px;font-weight: 400;">{{personsData[3].teachername}}<br/></div>
+                                            <br/>
+                                            <div ng-if="personsData[3].teacherInfo.subjects">{{personsData[3].teacherInfo.subjects}}<br/></div>
+                                            <div ng-if="personsData[3].teacherInfo.grade">{{personsData[3].teacherInfo.grade}}<br/></div>
+                                            <div ng-if="personsData[3].teacherInfo.mobile">{{personsData[3].teacherInfo.mobile}}<br/></div>
+                                            <div ng-if="personsData[3].teacherInfo.schoolName">{{personsData[3].teacherInfo.schoolName}}</div>
+                                        </div>
+                                    </td>
+                                    <td ng-if="selected.isShowAm">上午{{$index}}</td>
+                                    <td ng-if="selected.isShowAm" ng-repeat="noots in personsData[3].persons" ng-init="sectionIndex = $index">
+                                        <span ng-if="isShowPlan(afternoon)"  class="td-time"
+                                              ng-repeat="afternoon in noots.noon[0].forenoon"
+                                              ng-class="{'time-green-blue':afternoon.pasttype==5,'time-black-blue':afternoon.pasttype==6,'time-xiao':afternoon.pasttype==3,'time-gray':afternoon.pasttype==4,
+                                              'time-no':afternoon.pasttype==1, 'time-kong':afternoon.pasttype==2, 'time-green-yellow':afternoon.pasttype==7, 'time-black-yellow':afternoon.pasttype==8}">
+                                                <a   class="mt-tool-tip" id="nw31+{{sectionIndex}}+{{$index}}"  ng-click="bubble.open = true" style="display: inline-block;width: 100%;"  title="{{afternoon.infoTile}}"  data-toggle="tooltip">
+                                                    {{afternoon.start_time |date:'HH:mm'}}-{{afternoon.end_time |date:'HH:mm'}}
+                                                </a>
+                                                  <bubble  ng-if="bubble.open" class="mt-toolTip" for="nw31+{{sectionIndex}}+{{$index}}"  align="right" close="bubble.open=false" close-action="outerchick "  ng-mouseleave="bubble.open=false;" ng-click="bubble.open=false">
+                                                     <ul>
+                                                         <li ng-if="afternoon.pasttype==5 || afternoon.pasttype==6 || afternoon.pasttype==1 || afternoon.pasttype==2 || afternoon.pasttype==7 || afternoon.pasttype==8"><!--pasttype：1未消课，2已消课  3,未排课-->
+                                                             <a ng-click="tcl.showPlanDetail(afternoon)" >查看</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                             <a ng-click="yesconsume(afternoon)" >消课</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                             <a ng-click="showEditCoursePlan(afternoon)" >编辑</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                             <a ng-click="remove(afternoon)" >删除</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==6&&afternoon.is_satisfied!=0">
+                                                             <a ng-click="addUnsatisfied(afternoon,0)" >取消</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacherMaster2() && !isTeacherMaster3() && !isTeacher() && afternoon.pasttype==3">
+                                                             <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                             <a ng-click="showSelectedTeacherPaikeView(personsData[3].teacherID, personsData[3].teachername, noots.date)" >排课</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==3">
+                                                             <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                             <a ng-click="showSelectedTeacherPaikeView2(personsData[0].teacherID, personsData[0].teachername, noots.date)" >排试听课</a>
+                                                         </li>
+
+                                                     </ul>
+                                                 </bubble>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr ng-if="personsData[3].persons">
+                                    <td ng-if="selected.isShowPm">下午</td>
+                                    <td ng-if="selected.isShowPm" ng-repeat="noots in personsData[3].persons" ng-init="sectionIndex = $index">
+
+                                               <span ng-if="isShowPlan(afternoon)" ng-repeat="afternoon in noots.noon[0].afternoon" class="td-time"
+                                                     ng-class="{'time-green-blue':afternoon.pasttype==5,'time-black-blue':afternoon.pasttype==6,'time-xiao':afternoon.pasttype==3,'time-gray':afternoon.pasttype==4,
+                                              'time-no':afternoon.pasttype==1, 'time-kong':afternoon.pasttype==2, 'time-green-yellow':afternoon.pasttype==7, 'time-black-yellow':afternoon.pasttype==8}">
+                                                    <a class="showUI mt-tool-tip" id="nw32+{{sectionIndex}}+{{$index}}"  ng-click="bubble.open=true" style="display: inline-block;width: 100%;"  title="{{afternoon.infoTile}}"  data-toggle="tooltip">
+                                                        {{afternoon.start_time |date:'HH:mm'}}-{{afternoon.end_time |date:'HH:mm'}}
+                                                    </a>
+                                                    <bubble  ng-if="bubble.open" class="mt-toolTip" for="nw32+{{sectionIndex}}+{{$index}}"  align="right" close="bubble.open=false" close-action="outerchick "  ng-mouseleave="bubble.open=false;" ng-click="bubble.open=false">
+                                                       <ul>
+                                                           <li ng-if="afternoon.pasttype==5 || afternoon.pasttype==6 || afternoon.pasttype==1 || afternoon.pasttype==2 || afternoon.pasttype==7 || afternoon.pasttype==8"><!--pasttype：1未消课，2已消课  3,未排课-->
+                                                               <a ng-click="tcl.showPlanDetail(afternoon)" >查看</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="yesconsume(afternoon)" >消课</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==6">
+                                                               <a ng-click="showEditCoursePlan(afternoon)" >编辑</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="remove(afternoon)" >删除</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==6&&afternoon.is_satisfied!=0">
+                                                               <a ng-click="addUnsatisfied(afternoon,0)" >取消</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacherMaster2() && !isTeacherMaster3() && !isTeacher() && afternoon.pasttype==3">
+                                                               <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                               <a ng-click="showSelectedTeacherPaikeView(personsData[3].teacherID, personsData[3].teachername, noots.date)" >排课</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==3">
+                                                               <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                               <a ng-click="showSelectedTeacherPaikeView2(personsData[0].teacherID, personsData[0].teachername, noots.date)" >排试听课</a>
+                                                           </li>
+
+                                                       </ul>
+                                                   </bubble>
+                                               </span>
+                                    </td>
+                                </tr>
+                                <tr ng-if="personsData[3].persons">
+                                    <td ng-if="selected.isShowNight">晚上</td>
+                                    <td ng-if="selected.isShowNight" ng-repeat="noots in personsData[3].persons" ng-init="sectionIndex = $index">
+
+                                               <span ng-if="isShowPlan(afternoon)" ng-repeat="afternoon in noots.noon[0].night" class="td-time"
+                                                     ng-class="{'time-green-blue':afternoon.pasttype==5,'time-black-blue':afternoon.pasttype==6,'time-xiao':afternoon.pasttype==3,'time-gray':afternoon.pasttype==4,
+                                              'time-no':afternoon.pasttype==1, 'time-kong':afternoon.pasttype==2, 'time-green-yellow':afternoon.pasttype==7, 'time-black-yellow':afternoon.pasttype==8}">
+                                                    <a class="showUI mt-tool-tip" id="nw33+{{sectionIndex}}+{{$index}}"  ng-click="bubble.open=true" style="display: inline-block;width: 100%;"  title="{{afternoon.infoTile}}"  data-toggle="tooltip">
+                                                        {{afternoon.start_time |date:'HH:mm'}}-{{afternoon.end_time |date:'HH:mm'}}
+                                                    </a>
+                                                    <bubble  ng-if="bubble.open" class="mt-toolTip" for="nw33+{{sectionIndex}}+{{$index}}"  align="right" close="bubble.open=false" close-action="outerchick "  ng-mouseleave="bubble.open=false;" ng-click="bubble.open=false">
+                                                       <ul>
+                                                           <li ng-if="afternoon.pasttype==5 || afternoon.pasttype==6 || afternoon.pasttype==1 || afternoon.pasttype==2 || afternoon.pasttype==7 || afternoon.pasttype==8"><!--pasttype：1未消课，2已消课  3,未排课-->
+                                                               <a ng-click="tcl.showPlanDetail(afternoon)" >查看</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="yesconsume(afternoon)" >消课</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="showEditCoursePlan(afternoon)" >编辑</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="remove(afternoon)" >删除</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==6&&afternoon.is_satisfied!=0">
+                                                               <a ng-click="addUnsatisfied(afternoon,0)" >取消</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacherMaster2() && !isTeacherMaster3() && !isTeacher() && afternoon.pasttype==3">
+                                                               <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                               <a ng-click="showSelectedTeacherPaikeView(personsData[3].teacherID, personsData[3].teachername, noots.date)" >排课</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==3">
+                                                               <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                               <a ng-click="showSelectedTeacherPaikeView2(personsData[0].teacherID, personsData[0].teachername, noots.date)" >排试听课</a>
+                                                           </li>
+
+                                                       </ul>
+                                                   </bubble>
+                                               </span>
+                                    </td>
+                                </tr>
+                            </div>
+                            <div>
+                                <tr  ng-if="personsData[4].persons">
+                                    <td rowspan="3">
+                                        <div style="text-align:left">
+                                            <div style="font-size:20px;font-weight: 400;">{{personsData[4].teachername}}<br/></div>
+                                            <br/>
+                                            <div ng-if="personsData[4].teacherInfo.subjects">{{personsData[4].teacherInfo.subjects}}<br/></div>
+                                            <div ng-if="personsData[4].teacherInfo.grade">{{personsData[4].teacherInfo.grade}}<br/></div>
+                                            <div ng-if="personsData[4].teacherInfo.mobile">{{personsData[4].teacherInfo.mobile}}<br/></div>
+                                            <div ng-if="personsData[4].teacherInfo.schoolName">{{personsData[4].teacherInfo.schoolName}}</div>
+                                        </div>
+                                    </td>
+                                    <td ng-if="selected.isShowAm">上午{{$index}}</td>
+                                    <td ng-if="selected.isShowAm" ng-repeat="noots in personsData[4].persons" ng-init="sectionIndex = $index">
+                                        <span ng-if="isShowPlan(afternoon)"  class="td-time"
+                                              ng-repeat="afternoon in noots.noon[0].forenoon"
+                                              ng-class="{'time-green-blue':afternoon.pasttype==5,'time-black-blue':afternoon.pasttype==6,'time-xiao':afternoon.pasttype==3,'time-gray':afternoon.pasttype==4,
+                                              'time-no':afternoon.pasttype==1, 'time-kong':afternoon.pasttype==2, 'time-green-yellow':afternoon.pasttype==7, 'time-black-yellow':afternoon.pasttype==8}">
+                                                <a   class="mt-tool-tip" id="nw41+{{sectionIndex}}+{{$index}}"  ng-click="bubble.open = true" style="display: inline-block;width: 100%;"  title="{{afternoon.infoTile}}"  data-toggle="tooltip">
+                                                    {{afternoon.start_time |date:'HH:mm'}}-{{afternoon.end_time |date:'HH:mm'}}
+                                                </a>
+                                                  <bubble  ng-if="bubble.open" class="mt-toolTip" for="nw41+{{sectionIndex}}+{{$index}}"  align="right" close="bubble.open=false" close-action="outerchick "  ng-mouseleave="bubble.open=false;" ng-click="bubble.open=false">
+                                                     <ul>
+                                                         <li ng-if="afternoon.pasttype==5 || afternoon.pasttype==6 || afternoon.pasttype==1 || afternoon.pasttype==2 || afternoon.pasttype==7 || afternoon.pasttype==8"><!--pasttype：1未消课，2已消课  3,未排课-->
+                                                             <a ng-click="tcl.showPlanDetail(afternoon)" >查看</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                             <a ng-click="yesconsume(afternoon)" >消课</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                             <a ng-click="showEditCoursePlan(afternoon)" >编辑</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                             <a ng-click="remove(afternoon)" >删除</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==6&&afternoon.is_satisfied!=0">
+                                                             <a ng-click="addUnsatisfied(afternoon,0)" >取消</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacherMaster2() && !isTeacherMaster3() && !isTeacher() && afternoon.pasttype==3">
+                                                             <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                             <a ng-click="showSelectedTeacherPaikeView(personsData[4].teacherID, personsData[4].teachername, noots.date)" >排课</a>
+                                                         </li>
+                                                         <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==3">
+                                                             <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                             <a ng-click="showSelectedTeacherPaikeView2(personsData[0].teacherID, personsData[0].teachername, noots.date)" >排试听课</a>
+                                                         </li>
+
+                                                     </ul>
+                                                 </bubble>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr ng-if="personsData[4].persons">
+                                    <td ng-if="selected.isShowPm">下午</td>
+                                    <td ng-if="selected.isShowPm" ng-repeat="noots in personsData[4].persons" ng-init="sectionIndex = $index">
+
+                                               <span ng-if="isShowPlan(afternoon)" ng-repeat="afternoon in noots.noon[0].afternoon" class="td-time"
+                                                     ng-class="{'time-green-blue':afternoon.pasttype==5,'time-black-blue':afternoon.pasttype==6,'time-xiao':afternoon.pasttype==3,'time-gray':afternoon.pasttype==4,
+                                              'time-no':afternoon.pasttype==1, 'time-kong':afternoon.pasttype==2, 'time-green-yellow':afternoon.pasttype==7, 'time-black-yellow':afternoon.pasttype==8}">
+                                                    <a class="showUI mt-tool-tip" id="nw42+{{sectionIndex}}+{{$index}}"  ng-click="bubble.open=true" style="display: inline-block;width: 100%;"  title="{{afternoon.infoTile}}"  data-toggle="tooltip">
+                                                        {{afternoon.start_time |date:'HH:mm'}}-{{afternoon.end_time |date:'HH:mm'}}
+                                                    </a>
+                                                    <bubble  ng-if="bubble.open" class="mt-toolTip" for="nw42+{{sectionIndex}}+{{$index}}"  align="right" close="bubble.open=false" close-action="outerchick "  ng-mouseleave="bubble.open=false;" ng-click="bubble.open=false">
+                                                       <ul>
+                                                           <li ng-if="afternoon.pasttype==5 || afternoon.pasttype==6 || afternoon.pasttype==1 || afternoon.pasttype==2 || afternoon.pasttype==7 || afternoon.pasttype==8"><!--pasttype：1未消课，2已消课  3,未排课-->
+                                                               <a ng-click="tcl.showPlanDetail(afternoon)" >查看</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="yesconsume(afternoon)" >消课</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="showEditCoursePlan(afternoon)" >编辑</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="remove(afternoon)" >删除</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==6&&afternoon.is_satisfied!=0">
+                                                               <a ng-click="addUnsatisfied(afternoon,0)" >取消</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacherMaster2() && !isTeacherMaster3() && !isTeacher() && afternoon.pasttype==3">
+                                                               <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                               <a ng-click="showSelectedTeacherPaikeView(personsData[4].teacherID, personsData[4].teachername, noots.date)" >排课</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==3">
+                                                               <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                               <a ng-click="showSelectedTeacherPaikeView2(personsData[0].teacherID, personsData[0].teachername, noots.date)" >排试听课</a>
+                                                           </li>
+
+                                                       </ul>
+                                                   </bubble>
+                                               </span>
+                                    </td>
+                                </tr>
+                                <tr ng-if="personsData[4].persons">
+                                    <td ng-if="selected.isShowNight">晚上</td>
+                                    <td ng-if="selected.isShowNight" ng-repeat="noots in personsData[4].persons" ng-init="sectionIndex = $index">
+                                               <span ng-if="isShowPlan(afternoon)" ng-repeat="afternoon in noots.noon[0].night" class="td-time"
+                                                     ng-class="{'time-green-blue':afternoon.pasttype==5,'time-black-blue':afternoon.pasttype==6,'time-xiao':afternoon.pasttype==3,'time-gray':afternoon.pasttype==4,
+                                              'time-no':afternoon.pasttype==1, 'time-kong':afternoon.pasttype==2, 'time-green-yellow':afternoon.pasttype==7, 'time-black-yellow':afternoon.pasttype==8}">
+                                                    <a class="showUI mt-tool-tip" id="nw43+{{sectionIndex}}+{{$index}}"  ng-click="bubble.open=true" style="display: inline-block;width: 100%;"  title="{{afternoon.infoTile}}"  data-toggle="tooltip">
+                                                        {{afternoon.start_time |date:'HH:mm'}}-{{afternoon.end_time |date:'HH:mm'}}
+                                                    </a>
+                                                    <bubble  ng-if="bubble.open" class="mt-toolTip" for="nw43+{{sectionIndex}}+{{$index}}"  align="right" close="bubble.open=false" close-action="outerchick "  ng-mouseleave="bubble.open=false;" ng-click="bubble.open=false">
+                                                       <ul>
+                                                           <li ng-if="afternoon.pasttype==5 || afternoon.pasttype==6 || afternoon.pasttype==1 || afternoon.pasttype==2 || afternoon.pasttype==7 || afternoon.pasttype==8"><!--pasttype：1未消课，2已消课  3,未排课-->
+                                                               <a ng-click="tcl.showPlanDetail(afternoon)" >查看</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="yesconsume(afternoon)" >消课</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="showEditCoursePlan(afternoon)" >编辑</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==5">
+                                                               <a ng-click="remove(afternoon)" >删除</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==6&&afternoon.is_satisfied!=0">
+                                                               <a ng-click="addUnsatisfied(afternoon,0)" >取消</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacherMaster2() && !isTeacherMaster3() && !isTeacher() && afternoon.pasttype==3">
+                                                               <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                               <a ng-click="showSelectedTeacherPaikeView(personsData[4].teacherID, personsData[4].teachername, noots.date)" >排课</a>
+                                                           </li>
+                                                           <li ng-if="!isTeacherMaster() && !isTeacher() && afternoon.pasttype==3">
+                                                               <!-- <a ng-click="showPaikeView(1)" >排课</a> -->
+                                                               <a ng-click="showSelectedTeacherPaikeView2(personsData[0].teacherID, personsData[0].teachername, noots.date)" >排试听课</a>
+                                                           </li>
+                                                       </ul>
+                                                   </bubble>
+                                               </span>
+                                    </td>
+                                </tr>
+                            </div>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script type="text/javascript">
+    var ary1 = [];
+    $(document).on('mouseenter','.mt-tool-tip',function () {//document.getElementsByTagName('popup')[0].remove();
+        $(this).click();
+        mtReseat(this)
+    })
+    $(document).on('click','.mt-tool-tip',function () {//document.getElementsByTagName('popup')[0].remove();
+        mtReseat(this)
+    })
+    var mtReseat = function (obj) {
+        var _this = $(obj),
+                _$parent = _this.parent('span')
+        $(document).find('.mt-toolTip').hide()
+        setTimeout(function () {
+            $(document).find('.mt-toolTip').css({top:_$parent.offset().top,left:(_$parent.offset().left+_$parent.width()+3)}).show()
+        },50)
+    }
+</script>
+<style type="text/css">
+    .ui-popup-right-bottom .ui-bubble, .ui-popup-right-top .ui-bubble, .ui-popup-right .ui-bubble{
+        left:0;
+    }
+    .ui-popup-right .ui-bubble:after, .ui-popup-right .ui-bubble:before {
+        margin-top: 0;
+        top: 0;
+    }
+    .ui-popup-right-bottom .ui-bubble:before, .ui-popup-right-top .ui-bubble:before, .ui-popup-right .ui-bubble:before {
+        left: 0;
+        border-right: none;
+    }
+    .ui-bubble:after, .ui-bubble:before {
+        content: '';
+        position: absolute;
+        display: none;
+        width: 0;
+        height: 0;
+        overflow: hidden;
+        border: none;
+    }
+    popup ul li{
+        padding: 0;
+    }
+    .mt-toolTip ul{
+        padding-bottom: 5px;
+    }
+</style>

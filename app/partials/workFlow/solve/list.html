@@ -1,0 +1,265 @@
+<div class="view-frame" ng-controller="AllWorkFlowCtl">
+    <div class="view-left">
+        <nav-side menu-data="menu.subMenu"></nav-side>
+    </div>
+    <div  class="view-content" >
+        <div>
+            <ul class="breadcrumb">
+                <li><a href="#/">首页</a> <span class="divider"></span></li>
+                <li><a href="#/workflowManager-admin">工作流管理</a> <span class="divider"></span></li>
+                <li class="active">我处理</li>
+            </ul>
+        </div>
+        <div>
+            <div class="tabs-title">我处理列表</div>
+            <tabs>
+               <!-- <pane title="全部" >
+                    <div class="table-responsive" >
+                        <div class="table-title">全部列表</div>
+                        <button class="btn btn-success table-top-button" ng-click="submitBeach()" ng-if="filterSolve.status==1 && ifBeach()">提交批量处理</button>
+                        <table class="table table-bordered table-striped"  st-pipe="getSolveLists" st-table="solveLists" >
+                            <thead>
+                                <tr>
+                                    <th>状态</th>
+                                    <th>名称</th>
+                                    <th>步骤</th>
+                                    <th>发起时间</th>
+                                    <th>操作</th>
+                                </tr>
+
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="row in solveLists">
+
+                                <td ng-if="row.status == flowStatusSELECT[0].id">{{flowStatusSELECT[0].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[1].id">{{flowStatusSELECT[1].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[2].id">{{flowStatusSELECT[2].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[3].id">{{flowStatusSELECT[3].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[4].id">{{flowStatusSELECT[4].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[5].id">{{flowStatusSELECT[5].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[6].id">{{flowStatusSELECT[6].name}}</td>
+
+
+                                <td>{{row.nameData}}</td>
+                                <td>{{row.stepData}}</td>
+                                <td>{{row.initOperateTime | date:'yyyy-MM-dd H:mm'}}</td>
+                                <td>
+                                    <a ng-click="detailFlowRoute(row)"><span class="glyphicon glyphicon-plus" title="查看"></span></a>
+                                    <a ng-if="!row.star" ng-click="starFlowRoute(row)"><span class="glyphicon glyphicon-star" title="收藏"></span></a>
+                                    <a ng-if="row.star" ng-click="cancelStarFlowRoute(row)"><span class="glyphicon glyphicon-star2" title="取消收藏"></span></a>
+                                    <a ng-if="!row.urgent" ng-click="kuaiFlowRoute(row)"><span class="glyphicon glyphicon-kuai" title="加急"></span></a>
+                                    <a ng-if="row.urgent" ng-click="cancelKuaiFlowRoute(row)"><span class="glyphicon glyphicon-kuai2" title="取消加急"></span></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="5"></td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </pane>-->
+                <pane title="待我主办" >
+                    <div class="table-responsive" >
+                        <div class="table-title">待我主办</div>
+                        <button class="btn btn-success table-top-button" ng-click="submitBeach()" ng-if=" ifBeach()">提交批量处理</button>
+                        <table class="table table-bordered table-striped"  st-pipe="getSolveListsType1" st-table="solveLists" >
+                            <thead>
+                            <tr>
+                                <th  ng-if="ifBeach()">批量</th>
+                                <th>状态</th>
+                                <th>部门</th>
+                                <th>名称</th>
+                                <th>步骤</th>
+                                <th>发起时间</th>
+                                <th>更新时间</th>
+                                <th>操作</th>
+                            </tr>
+
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="row in solveListsBy1">
+                                <td  ng-if="ifBeach()"><input type="checkbox" ng-model="test" ng-checked="ifChecked(row)" ng-change="changeCheckbox(row)"></td>
+
+                                <td ng-if="row.status == flowStatusSELECT[0].id">{{flowStatusSELECT[0].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[1].id">{{flowStatusSELECT[1].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[2].id">{{flowStatusSELECT[2].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[3].id">{{flowStatusSELECT[3].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[4].id">{{flowStatusSELECT[4].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[5].id">{{flowStatusSELECT[5].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[6].id">{{flowStatusSELECT[6].name}}</td>
+
+                                <td>{{row.initUserOrgName}}</td>
+                                <td>{{row.nameData}}</td>
+                                <td>{{row.stepData}}</td>
+                                <td>{{row.initOperateTime | date:'yyyy-MM-dd H:mm'}}</td>
+                                <td >{{row.updateTime | date:'yyyy-MM-dd H:mm'}}</td>
+                                <td>
+                                    <a ng-click="detailFlowRoute(row)"><span class="glyphicon glyphicon-plus" title="查看"></span></a>
+                                    <a ng-click="detailFlowRoute(row,1)"><span class="glyphicon glyphicon-pencil" title="编辑"></span></a>
+                                    <a ng-if="!row.star" ng-click="starFlowRoute(row)"><span class="glyphicon glyphicon-star" title="收藏"></span></a>
+                                    <a ng-if="row.star" ng-click="cancelStarFlowRoute(row)"><span class="glyphicon glyphicon-star2" title="取消收藏"></span></a>
+                                    <a ng-if="!row.urgent" ng-click="kuaiFlowRoute(row)"><span class="glyphicon glyphicon-kuai" title="加急"></span></a>
+                                    <a ng-if="row.urgent" ng-click="cancelKuaiFlowRoute(row)"><span class="glyphicon glyphicon-kuai2" title="取消加急"></span></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="5"></td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </pane>
+                <pane title="我已主办" >
+                    <div class="table-responsive" >
+                        <div class="table-title">我已主办</div>
+                        <table class="table table-bordered table-striped"  st-pipe="getSolveListsType2" st-table="solveLists" >
+                            <thead>
+                            <tr>
+                                <th>状态</th>
+                                <th>部门</th>
+                                <th>名称</th>
+                                <th>步骤</th>
+                                <th>发起时间</th>
+                                <th>更新时间</th>
+                                <th>操作</th>
+                            </tr>
+
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="row in solveListsBy2">
+
+                                <td ng-if="row.status == flowStatusSELECT[0].id">{{flowStatusSELECT[0].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[1].id">{{flowStatusSELECT[1].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[2].id">{{flowStatusSELECT[2].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[3].id">{{flowStatusSELECT[3].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[4].id">{{flowStatusSELECT[4].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[5].id">{{flowStatusSELECT[5].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[6].id">{{flowStatusSELECT[6].name}}</td>
+
+                                <td>{{row.initUserOrgName}}</td>
+                                <td>{{row.nameData}}</td>
+                                <td>{{row.stepData}}</td>
+                                <td>{{row.initOperateTime | date:'yyyy-MM-dd H:mm'}}</td>
+                                <td >{{row.updateTime | date:'yyyy-MM-dd H:mm'}}</td>
+
+                                <td>
+                                    <a ng-click="detailFlowRoute(row)"><span class="glyphicon glyphicon-plus" title="查看"></span></a>
+                                    <a ng-if="filterSolve.status==1" ng-click="detailFlowRoute(row,1)"><span class="glyphicon glyphicon-pencil" title="编辑"></span></a>
+                                    <a ng-if="!row.star" ng-click="starFlowRoute(row)"><span class="glyphicon glyphicon-star" title="收藏"></span></a>
+                                    <a ng-if="row.star" ng-click="cancelStarFlowRoute(row)"><span class="glyphicon glyphicon-star2" title="取消收藏"></span></a>
+                                    <a ng-if="!row.urgent" ng-click="kuaiFlowRoute(row)"><span class="glyphicon glyphicon-kuai" title="加急"></span></a>
+                                    <a ng-if="row.urgent" ng-click="cancelKuaiFlowRoute(row)"><span class="glyphicon glyphicon-kuai2" title="取消加急"></span></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="5"></td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </pane>
+              <!--  <pane title="待我会签" >
+                    <div class="table-responsive" >
+                        <div class="table-title">待我会签列表</div>
+                        <table class="table table-bordered table-striped"  st-pipe="getSolveListsType3" st-table="solveLists" >
+                            <thead>
+                            <tr>
+                                <th  ng-if="filterSolve.status==1 && ifBeach()">批量</th>
+                                <th>状态</th>
+                                <th>名称</th>
+                                <th>步骤</th>
+                                <th>发起时间</th>
+                                <th>操作</th>
+                            </tr>
+
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="row in solveListsBy3">
+
+                                <td ng-if="row.status == flowStatusSELECT[0].id">{{flowStatusSELECT[0].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[1].id">{{flowStatusSELECT[1].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[2].id">{{flowStatusSELECT[2].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[3].id">{{flowStatusSELECT[3].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[4].id">{{flowStatusSELECT[4].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[5].id">{{flowStatusSELECT[5].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[6].id">{{flowStatusSELECT[6].name}}</td>
+
+
+                                <td>{{row.nameData}}</td>
+                                <td>{{row.stepData}}</td>
+                                <td>{{row.initOperateTime | date:'yyyy-MM-dd H:mm'}}</td>
+                                <td>
+                                    <a ng-click="detailFlowRoute(row)"><span class="glyphicon glyphicon-plus" title="查看"></span></a>
+                                    <a ng-if="!row.star" ng-click="starFlowRoute(row)"><span class="glyphicon glyphicon-star" title="收藏"></span></a>
+                                    <a ng-if="row.star" ng-click="cancelStarFlowRoute(row)"><span class="glyphicon glyphicon-star2" title="取消收藏"></span></a>
+                                    <a ng-if="!row.urgent" ng-click="kuaiFlowRoute(row)"><span class="glyphicon glyphicon-kuai" title="加急"></span></a>
+                                    <a ng-if="row.urgent" ng-click="cancelKuaiFlowRoute(row)"><span class="glyphicon glyphicon-kuai2" title="取消加急"></span></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="5"></td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </pane>
+                <pane title="我已会签" >
+                    <div class="table-responsive" >
+                        <div class="table-title">我已会签列表</div>
+                        <table class="table table-bordered table-striped"  st-pipe="getSolveListsType4" st-table="solveLists" >
+                            <thead>
+                            <tr>
+                                <th>状态</th>
+                                <th>名称</th>
+                                <th>步骤</th>
+                                <th>发起时间</th>
+                                <th>操作</th>
+                            </tr>
+
+                            </thead>
+                            <tbody >
+                            <tr ng-repeat="row in solveListsBy4">
+
+                                <td ng-if="row.status == flowStatusSELECT[0].id">{{flowStatusSELECT[0].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[1].id">{{flowStatusSELECT[1].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[2].id">{{flowStatusSELECT[2].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[3].id">{{flowStatusSELECT[3].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[4].id">{{flowStatusSELECT[4].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[5].id">{{flowStatusSELECT[5].name}}</td>
+                                <td ng-if="row.status == flowStatusSELECT[6].id">{{flowStatusSELECT[6].name}}</td>
+
+
+                                <td>{{row.nameData}}</td>
+                                <td>{{row.stepData}}</td>
+                                <td>{{row.initOperateTime | date:'yyyy-MM-dd H:mm'}}</td>
+                                <td>
+                                    <a ng-click="detailFlowRoute(row)"><span class="glyphicon glyphicon-plus" title="查看"></span></a>
+                                    <a ng-if="!row.star" ng-click="starFlowRoute(row)"><span class="glyphicon glyphicon-star" title="收藏"></span></a>
+                                    <a ng-if="row.star" ng-click="cancelStarFlowRoute(row)"><span class="glyphicon glyphicon-star2" title="取消收藏"></span></a>
+                                    <a ng-if="!row.urgent" ng-click="kuaiFlowRoute(row)"><span class="glyphicon glyphicon-kuai" title="加急"></span></a>
+                                    <a ng-if="row.urgent" ng-click="cancelKuaiFlowRoute(row)"><span class="glyphicon glyphicon-kuai2" title="取消加急"></span></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="text-center" st-pagination="" st-items-by-page="10" st-template="partials/util/pagination.custom.html" colspan="5"></td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </pane>-->
+            </tabs>
+        </div>
+
+    </div>
+</div>
+

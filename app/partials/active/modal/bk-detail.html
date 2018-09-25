@@ -1,0 +1,47 @@
+<div class="modal alone-buke" tabindex="-1" role="dialog"  style="display: block">
+    <form class="modal-dialog form-horizontal" name="coursePlan">
+        <div class="modal-content mt-label-h2">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">补课详情</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row ml-0">
+                    <div class="form-group col-sm-12">
+                        <ul class="row mt-li-bg">
+                            <li class="col-sm-6">学生姓名：<span >{{supplementShowFilter.studentName}}</span></li>
+                            <li class="col-sm-6"  ng-if="supplementShowFilter.type == 1">班级名称：<span>{{supplementShowFilter.supplementClassName}}</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row paike">
+                    <ul class="paike-ul-1">
+                        <li  ng-if="supplementShowFilter.type == 1"><span>排课科目：</span><span >{{supplementShowFilter.supplementSubjectName}}</span> </li>
+                        <li  ng-if="supplementShowFilter.type == 2"><span>排课科目：</span><span >{{supplementShowFilter.subjectName}}</span> </li>
+                        <li><span>授课老师：</span><span >{{supplementShowFilter.supplementTeacherName}}</span></li>
+                        <li  ng-if="supplementShowFilter.type == 1"><span>出勤状态：</span><span >{{supplementShowFilter.isAttendence|attendenceState:supplementShowFilter.isAttendence}}</span></li>
+                        <li><span>计费状态：</span><span >{{supplementShowFilter.isCharging|chargingState:supplementShowFilter.isCharging}}</span></li>
+                        <li ng-if="supplementShowFilter.type == 1"><span>上课日期：</span><span >{{supplementShowFilter.supplementStartTime|date:'yyyy-MM-dd'}}</span></li>
+                        <li ng-if="supplementShowFilter.type == 2"><span>上课日期：</span><span >{{supplementShowFilter.supplementDate|date:'yyyy-MM-dd'}}</span></li>
+                        <li  ng-if="supplementShowFilter.type == 1"><span>上课时间：</span><span >{{supplementShowFilter.supplementStartTime|date:'HH:mm'}}</span></li>
+                        <li  ng-if="supplementShowFilter.type == 1"><span>下课时间：</span><span >{{supplementShowFilter.supplementEndTime|date:'HH:mm'}}</span></li>
+                        <li  ng-if="supplementShowFilter.type == 1"><span>上课时长：</span><span >{{supplementShowFilter.ks}}&nbsp;小时</span></li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 20px">
+                <button type="button" class="btn btn-success c5-lable" ng-click="$hide()" ng-disabled="coursePlan.$invalid">
+                    确定
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+
+
+

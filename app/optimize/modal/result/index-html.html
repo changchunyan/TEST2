@@ -1,0 +1,28 @@
+<div class="modal crm-invitationDetail-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-small" ng-style="mtWidth">
+        <div class="modal-content">
+            <form name="form">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" ng-bind="mtTitle"></h4>
+                </div>
+                <div class="modal-body text-center" ng-style="mtHeight">
+                    <img src="{{mtImg}}" style="width: 176px;height: 118px;" ng-if="mtImg">
+                    <h1 class="f24" ng-if="mtContent">{{mtContent}}</h1>
+                    <div ng-bind-html="mtHtml" class="of" ng-if="mtHtml"></div>
+                    <div ng-include="mtSrc" class="of"></div>
+                </div>
+                <div class="modal-footer">
+                    <div class="text-center">
+                        <button type="button" ng-show="isShow" class="btn btn-success c5-lable" ng-if="!hasNext" ng-click="$hide()">确定</button>
+                        <button type="button" class="btn btn-default" ng-if="hasNext" ng-click="cancelModal()">取消</button>
+                        <button type="button" ng-show="isShow" class="btn btn-success c5-lable" ng-if="hasNext" ng-click="hasNext()" ng-disabled="form.$invalid">确定</button>
+                        <!--这个下面按钮是为了 学员管理点击进去的 没有确认按钮设置的，因为找不到isshow的值，取其相反的值-->
+                        <button type="button" ng-show="isShow?false:true" class="btn btn-success c5-lable" ng-if="hasNext" ng-click="hasNext()" ng-disabled="form.$invalid">确定</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

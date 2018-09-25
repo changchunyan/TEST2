@@ -1,0 +1,138 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="form">
+                <div class="modal-header">
+                    <!-- <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button> -->
+                    <h4 class="modal-title" ng-bind="addModalTitle"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.trainingType.$dirty && form.trainingType.$error.required }">
+                            <label for="trainingType" class="col-sm-4 control-label">培训类别</label>
+                            <div class="col-sm-8">
+                                <input name="trainingType" id="trainingType" class="form-control"
+                                       ng-model="training.trainingType.name" ng-click="showTrainingType2()" required />
+                            </div>
+                        </div>
+                        <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.trainingName.$dirty && form.trainingName.$error.required }">
+                            <label for="trainingName" class="col-sm-4 control-label">培训名称</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="trainingName" id="trainingName" class="form-control" ng-model="training.name" required/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.trainingDeadline.$dirty && form.trainingDeadline.$error.required }">
+                            <label for="trainingDeadline" class="col-sm-4 control-label">报名截止时间</label>
+                            <div class="col-sm-8">
+	                            <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" onchange="" name="trainingDeadline" id="trainingDeadline" class="form-control"
+		                           		ng-model="training.trainingDeadline"  required/>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.trainingDate.$dirty && form.trainingDate.$error.required }">
+                            <label for="trainingDate" class="col-sm-4 control-label">培训时间</label>
+                            <div class="col-sm-8">
+	                            <input type="text" datepicker onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" onchange="" name="trainingDate" id="trainingDate" class="form-control"
+	                           		ng-model="training.trainingDate"  required/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.trainingHour.$dirty && form.trainingHour.$error.required }">
+                            <label for="trainingHour" class="col-sm-4 control-label">学时</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="trainingHour" id="trainingHour" class="form-control" ng-model="training.trainingHour"/>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.trainingNature.$dirty && form.trainingNature.$error.required }">
+                            <label for="trainingNature" class="col-sm-4 control-label">培训性质</label>
+                            <div class="col-sm-8">
+								<select ng-model="training.trainingNature" name="trainingNature" id="trainingNature"
+				                    class="form-control" ng-options="tl.id as tl.name for tl in dictData.trainingNature" required>
+				                	<option value="">------请选择------</option>
+				            	</select>                            
+			            	</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                    	<div class="col-sm-12 form-group" ng-class="{ 'has-error': form.trainingAddress.$dirty && form.trainingAddress.$error.required }">
+                            <label for="trainingAddress" class="col-sm-2 control-label">培训地点</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="trainingAddress" id="trainingAddress" class="form-control" ng-model="training.trainingAddress"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">    
+                        <div class="col-sm-6 form-group" ng-class="{ 'has-error': form.trainingTeacher.$dirty && form.trainingTeacher.$error.required }">
+                            <label for="trainingTeacher" class="col-sm-4 control-label">培训师</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="trainingTeacher" id="trainingTeacher" class="form-control" ng-model="training.trainingTeacher"/>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 form-group" ng-class="{ 'has-error': trainingCost && trainingCost }">
+                            <label for="trainingCost" class="col-sm-4 control-label">培训费用</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="trainingCost" id="trainingCost" class="form-control" ng-model="training.trainingCost" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                    	<div class="col-sm-12 form-group" ng-class="{ 'has-error': form.trainingCrowd.$dirty && form.trainingCrowd.$error.required }">
+                            <label for="trainingCrowd" class="col-sm-2 control-label">适合人群</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="trainingCrowd" id="trainingCrowd" class="form-control" ng-model="training.trainingCrowd" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row"> 
+                        <div class="col-sm-12 form-group">
+                            <label for="trainingDescription" class="col-sm-2 control-label">内容描述</label>
+                            <textarea class="col-sm-10" rows="5" name="trainingDescription" id="trainingDescription" ng-model="training.trainingDescription">
+                            </textarea>
+                        </div>
+                    </div>
+                    <div class="row"> 
+                        <div class="col-sm-6 form-group">
+                            <label for="trainingAppendix" class="col-sm-4 control-label">上传附件</label>
+                            <div class="col-sm-8">
+		                        <input id="trainingAppendix" type="file" file-model="training.trainingAppendix"/>
+		                        <label class="control-label" ng-if="training.trainingAppendix!=null && training.trainingAppendix.name==undefined">{{training.trainingAppendix}}</label>
+		                    	<label class="control-label" ng-if="training.trainingAppendix.name!=undefined">{{training.trainingAppendix.name}}</label>
+		                    </div>
+                        </div>
+                        <div class="col-sm-6 form-group">
+                            <label for="trainingPaper" class="col-sm-4 control-label">上传考核试卷：</label>
+		                    <div class="col-sm-8">
+		                        <input id="trainingPaper" type="file" file-model="training.trainingPaper"/>
+		                        <label class="control-label" ng-if="training.trainingPaper!=null && training.trainingPaper.name==undefined">{{training.trainingPaper}}</label>
+		                        <label class="control-label" ng-if="training.trainingPaper.name!=undefined">{{training.trainingPaper.name}}</label>
+		                    </div>
+                        </div>
+                    </div> 
+                    <hr>
+                    <div class="row"> 
+                        <div class="col-sm-12 form-group">
+                            <label class="col-sm-2 control-label">通知范围</label>
+                 			<div class="col-sm-10">
+                            	已选员工：
+                            	<button type="button" class="btn btn-success" style="background:rgb(180, 240, 150);" ng-click="selectRemindPerson()">添加提醒人员</button>
+                            	<div ng-repeat="existRemindUser in existRemindUsers track by $index" class="btn btn-default" disabled>
+					                {{existRemindUser.name}}
+					            </div>
+                            </div>
+                        </div>
+                    </div> 
+                 	
+                 	
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="hideAddView()">取消</button>
+                    <button type="button" class="btn btn-success c5-lable" ng-click="saveTraining()"  ng-disabled="form.$invalid">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
