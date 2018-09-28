@@ -50,7 +50,6 @@ angular.module('ywsApp').controller('LoginController', ['$cookieStore', '$timeou
          * The login function. It is triggered when login button is clicked.
          */
         $scope.login = function () {
-           debugger
             if ($scope.isMobile) {
                 $scope.user.verifyCode = "1234";
             }
