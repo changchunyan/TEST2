@@ -78,7 +78,7 @@
                     <div class="row">
                         <!-- 不使用电子印章的时候可以修改合同编号 -->
                         <div ng-if="!isUseEContract" class="col-sm-12 col-md-6 col-lg-4 form-group">
-                            <label for="orderNo" class="control-label">* 合同编号</label>
+                            <label for="orderNo" class="control-label">合同编号</label>
                             <input type="text" ng-maxlength="40" ng-minlength="1" name="orderNo"
                                    placeholder="请输入合同编号"
                                    id="orderNo" ng-model="order.orderNo"
@@ -110,7 +110,7 @@
                                    style="background: #2fb0ee;color: #fff;border-radius: 4px;border: none;">
                         </div>
                         <div class="col-sm-12 col-md-6 col-lg-4 form-group">
-                            <label for="name" class="control-label">* 当前年级</label><!--recharge-->
+                            <label for="name" class="control-label"> 当前年级</label><!--recharge-->
                             <select ng-model="order.gradeId" name="currentGrade" id="currentGrade"
                                     ng-change="changeChargingV3(1,-1)"
                                     class="form-control"
