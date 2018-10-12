@@ -12,29 +12,36 @@
 			        	<label class="col-sm-6 control-label">选择月份：</label>
 			        	<div class="col-sm-6 form-group">
 				            <select ng-model="searchModel.goalMonth" name="goalMonth" id="goalMonth" class="form-control"
-				            	ng-options="month.value as month.name for month in months" required="required">
+				            	ng-options="month.value as month.name for month in months" disabled>
 				            </select>
 				        </div>
 			        </div>
+					<!--为什么要加下面的代码 <div class="row"></div>-->
 			        <div class="row"></div>
-			        <div class="col-sm-4">
+			        <div class="col-sm-3">
 			        	<label class="col-sm-6 control-label">营销实收目标：</label>
 			        	<div class="col-sm-6 form-group">
-			        		<input placeholder="请输入（万元）" type="number" min="0" step="1" maxlength="8" ng-model="searchModel.marketGoal" name="marketGoal" id="marketGoal" class="form-control" required="required"/>
+			        		<input placeholder="请输入（万元）" type="number" min="0" step="1" maxlength="8" ng-model="searchModel.marketGoal" name="marketGoal" id="marketGoal" class="form-control" required/>
 			        	</div>
 			        </div>
-			        <div class="col-sm-4">
+			        <div class="col-sm-3">
 			        	<label class="col-sm-6 control-label">学管实收目标：</label>
 			        	<div class="col-sm-6 form-group">
-			        		<input placeholder="请输入（万元）" type="number" min="0" step="1" maxlength="8" ng-model="searchModel.managementGoal" name="managementGoal" id="managementGoal" class="form-control" required="required"/>
+			        		<input placeholder="请输入（万元）" type="number" min="0" step="1" maxlength="8" ng-model="searchModel.managementGoal" name="managementGoal" id="managementGoal" class="form-control" required/>
 			        	</div>
 			        </div>
-			        <div class="col-sm-4">
+			        <div class="col-sm-3">
 			        	<label class="col-sm-6 control-label">消课课时目标：</label>
 			        	<div class="col-sm-6 form-group">
-			        		<input placeholder="请输入（小时）" type="number" min="0" step="0.5" maxlength="8" ng-model="searchModel.consumeGoal" name="consumeGoal" id="consumeGoal" class="form-control" required="required"/>
+			        		<input placeholder="请输入（小时）" type="number" min="0" step="0.5" maxlength="8" ng-model="searchModel.consumeGoal" name="consumeGoal" id="consumeGoal" class="form-control" required/>
 			        	</div>
 			        </div>
+					<div class="col-sm-3">
+						<label class="col-sm-6 control-label">消课课时目标：</label>
+						<div class="col-sm-6 form-group">
+							<input placeholder="请输入（小时）" type="number" min="0" step="0.5" maxlength="8" ng-model="searchModel.consumeGoal" name="consumeGoal" id="consumeGoal" class="form-control" required/>
+						</div>
+					</div>
 				</form>
 		        <div class="col-sm-12">
 					<button type="button" ng-click="submit()" class="btn btn-success" style="float: right;margin-right: 15px;" ng-disabled="addOrUpdateForm.$invalid">提交</button>
@@ -43,6 +50,7 @@
 			<div class="modal-body row m0">
 				<h4>
 					历史目标
+					<!--bi-list-head 的意思？？？-->
 					<button class="btn btn-xs bi-list-head" ng-click="currentYear()">今年</button>
 					<button class="btn btn-xs bi-list-head" ng-click="preYear()">上一年</button>
 				</h4>
