@@ -144,7 +144,6 @@ angular.module('ywsApp')
                     }
                 }
             }
-
             /**
              * 一对多储值排课处理构建用户对应的价格和ordcourse_id和学生id
              * @param stu
@@ -2323,7 +2322,7 @@ angular.module('ywsApp')
              * 提交排课
              */
             function submitPlan() {
-
+debugger
                 if ($scope.MyCrmCustomerStudentListOk) {
                     if ($scope.MyCrmCustomerStudentListOk.length > 1) {
                         for (var i = 0; i < $scope.MyCrmCustomerStudentListOk.length; i++) {

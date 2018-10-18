@@ -2189,7 +2189,6 @@ angular.module('ywsApp').controller('SNPCoursePlanController', ['$scope', '$loca
                 backdrop: "static"
             });
         }
-
         // 模糊搜索逻辑
         var timerGo = '';
         $scope.gusseyourresult = function () {

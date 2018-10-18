@@ -3032,6 +3032,7 @@ angular.module('ywsApp')
 
             // 拆分出来的试听排课功能
             $scope.New_showPaikeView = function (type) {
+                debugger
                 // $scope.recording = ''
                 if (type == 3) {
                     $scope.coursePlanModalTitle = '试听排课'
