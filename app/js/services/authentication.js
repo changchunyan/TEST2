@@ -44,7 +44,7 @@ angular.module('ywsApp').factory(
              * @return a promise
              */
             function login(username, password) {
-                var deferred = $q.defer();
+                var deferred = $q.defer(); //$q:username="";password
                 $http.post(config.endpoints.login, {
                     "account": username,
                     "password": password

@@ -51,8 +51,8 @@
         </div>
     </div>
 </div>
-<div ng-if="!isMobile" class="pa">
-    <link rel="stylesheet" href="css/login.css?v=1.2">
+<div ng-if="!isMobile" class="pa">    <!--为什么isMobile要逻辑非运算，isMobile 是什么？-->
+    <link rel="stylesheet" href="css/login.css?v=1.2"> <!--css 样式-->
     <!--TODO:登录页面-->
     <div class="login-body">
         <div class="left">
@@ -66,8 +66,8 @@
         </ul>
     </div>
         <div class="right">
-            <form name="form" ng-submit="login()" role="form">
-                <ul class="login-name" ng-class="{'active':nameFocus}">
+            <form name="form" ng-submit="login()" role="form"> <!--role="form" 强制转化为form表单-->
+                <ul class="login-name" ng-class="{'active':nameFocus}"><!--ng-class="{'active':nameFocus}" 的？？？-->
                     <lable for="login-name" class="label-name lable-com">&nbsp;</lable>
                     <input id="login-name" ng-focus="userNameFocus()" ng-blur="userNameBlur()" ng-model="user.username" required type="text" placeholder="请输入账号"
                            maxlength="50">
