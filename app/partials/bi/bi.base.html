@@ -32,11 +32,13 @@
     <div class="col-sm-4">
         <label for="schoolCity" class="col-sm-4 control-label">城市：</label>
         <div class="col-sm-8 form-group">
-            <select ng-model="searchModel.schoolCity" name="schoolCity" id="schoolCity" class="form-control"
+           <!-- <select ng-model="searchModel.schoolCity" name="schoolCity" id="schoolCity" class="form-control"
                     ng-options="city.cityCode as city.cityName for city in cities"
                     ng-disabled="isSchoolUser">
                 <option value="">------全部------</option>
-            </select>
+            </select>-->
+            <！--不能加type类型 限制城市，只可读，红色线标记-->
+            <input name="schoolCity" id="schoolCity" class="form-control ng-invalid" value="北京市" readonly/>
         </div>
     </div>
     <div class="col-sm-4">
